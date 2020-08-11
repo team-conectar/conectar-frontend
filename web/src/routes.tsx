@@ -1,8 +1,15 @@
-import React from 'react'
+import React from 'react';
+import { Route, BrowserRouter } from 'react-router-dom';
+import Home from './pages/Home';
 
 
-const routes = () => {
 
-  
+function Routes() {
+  return (
+    <BrowserRouter>
+      <Route exact path="/" component={Home} />
+    </BrowserRouter>
+  )
+
 }
-export default routes;
+export default Routes;
