@@ -7,11 +7,11 @@ export const BodyNavBar = styled.header`
   margin:0 auto;
   background:var(--green-bg);
   display: flex;
-  justify-content: space-around;
+  justify-content:space-between;
   align-items: center;
-  padding: 1.2rem 0;
+  padding: 1.2rem ;
   img{
-    width:8.4rem;
+    width:10.6rem;
   }
   input{
     border: 2px solid var(--green);
@@ -24,8 +24,20 @@ export const BodyNavBar = styled.header`
     padding: 0 1.6rem;
   }
   aside {
-    display: flex;
-     button + button {
+    a{
+      text-decoration:none;
+      font:500 1rem Roboto;
+      color:var(--white);
+    }
+    .create{
+      padding: 0.2rem 0.6rem;
+
+      border-radius:0.2rem;
+      background-color:var(--green);
+      transition: background-color 0.2s;
+    }
+
+     a + a {
        margin-left: 20px;
      }
   }
