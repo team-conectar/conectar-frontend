@@ -1,0 +1,41 @@
+:root {
+    /* font-size: 60%; */
+    --yellow: #E9AB3B;
+    --yellow-dark: #E9AB3B;
+    --green: #99b876;
+    --green-bg: #072F3F;
+    --red: ##d8252c;
+    --white: #ffff;
+    --gray: #545A5C;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* html,
+body,
+#root {
+    height: 100vh;
+} */
+
+#root {
+    font-family: Roboto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 90vw;
+    max-width: 1100px;
+}
+
+@media (min-width: 700px) {
+     :root {
+        /* font-size: 62.5%; */
+    }
+}
