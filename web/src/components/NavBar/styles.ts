@@ -11,22 +11,40 @@ export const BodyNavBar = styled.header`
   align-items: center;
   padding: 1.2rem ;
   img{
-    width:10.6rem;
+    width:12rem;
   }
-  input{
+  .searchBlock{
     border: 2px solid var(--green);
-    background:transparent;
-    height: 1.6rem;
-    color:var(--white);
+    height: 2rem;
     margin-top: 0.2rem;
+    padding:0;
     border-radius: 0.3rem;
-    outline: 0;
-    padding: 0 1.6rem;
+    display:flex;
+    align-items:center;
+    input{
+      border:0;
+      width:20vw;
+      background:transparent;
+      height: 2rem;
+      color:var(--white);
+      outline: 0;
+      padding: 0 0.6rem;
+    }
+    button{
+      border:0;
+      background:transparent;
+      padding:0 0.4rem;
+      border-right:2px solid var(--green);
+      cursor: pointer;
+      img {
+        width:16px;
+      }
+    }
   }
   aside {
     a{
       text-decoration:none;
-      font:500 1rem Roboto;
+      font:500 0.8rem Roboto;
       color:var(--white);
     }
     .create{
