@@ -1,53 +1,48 @@
 import React from 'react';
-import Input from '../../components/Input';
-import { Link } from 'react-router-dom';
 import NavBar from '../../components/NavBar';
 import { BodyHome } from './styles';
-import FacebookLogin, { ReactFacebookFailureResponse, ReactFacebookLoginInfo } from 'react-facebook-login';
-import { TiSocialFacebookCircular } from 'react-icons/ti';
-import GoogleLogin from 'react-google-login';
-import Button from '../../components/Button';
+import Login from '../../components/Login';
+import ProjectCards from '../../components/ProjectCards';
 
 
 function Home() {
-  function handleLoginWithFacebook() {
 
-  }
-  const responseFacebook = (resposta: ReactFacebookLoginInfo) => {
-    console.log(resposta);
-  }
-  const responseGoogle = (response: any) => {
-    console.log(response);
-  }
   return (
     <BodyHome >
       < NavBar logged={true} />
-      <main className='container'>
-        <form>
-          <h1>Find your <br /> dreamteam!</h1>
-          <Input name="email" label="E-mail ou nome de usuário" />
-          <Input name="senha" type="password" label="Senha" subLabel="Esqueceu a senha?" pathSubLabel="#" />
-          <Button type="submit">Entrar</Button>
-          <p>ou</p>
+      <main>
+        <div className="area-login">
+            <h1>Find your <br /> dreamteam!</h1>
+            <Login />
+        </div>
+        <div className="saiba-como-acontece">
 
-          <FacebookLogin
-            appId="1088597931155576"
-            autoLoad={true}
-            fields="name,email,picture"
-            callback={responseFacebook}
-            cssClass="my-facebook-button-class"
-            icon={<TiSocialFacebookCircular />}
-          />
-          <GoogleLogin
-            clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-            onSuccess={responseGoogle}
-            onFailure={responseGoogle}
-            cookiePolicy={'single_host_origin'}
-          />
-          <p>Novo no Conectar? <Link to="/signup">Crie uma conta</Link></p>
-        </form>
+          <h3>Saiba como tudo acontece:</h3>
+          <p>Tire sua ideia do papel e encontre em segundos o time ideal para realizá-la com sucesso.</p>
+          <section className="depoimentos">
+
+          </section>
+        </div>
+        <div className="projetos-em-alta">
+
+          <h3>Projetos em alta</h3>
+          <section className="cards-em-altas">
+            <ProjectCards />
+          </section>
+          
+        </div>
+        <div className="quem-ja-usou">
+
+          <h3><strong>QUEM JÁ USOU </strong>O CONECTAR</h3>
+          <section className="depoimentos">
+
+          </section>
+        </div>
 
       </main>
+      <footer>
+
+      </footer>
     </BodyHome>
   )
 }

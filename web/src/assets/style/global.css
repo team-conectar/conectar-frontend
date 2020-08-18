@@ -29,10 +29,6 @@ body,
     justify-content: center;
 }
 
-.container {
-    width: 100vw;
-}
-
 @media (min-width: 700px) {
      :root {
         /* font-size: 62.5%; */

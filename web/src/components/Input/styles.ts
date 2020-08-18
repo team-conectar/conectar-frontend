@@ -20,7 +20,7 @@ export const BodyInput = styled.div`
   }
   input{
     border: 2px solid var(--yellow);
-    width: 100%;
+    width:100%;
     height: 2rem;
     margin-top: 0.2rem;
     border-radius: 0.3rem;

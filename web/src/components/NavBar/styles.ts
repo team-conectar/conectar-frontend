@@ -44,12 +44,11 @@ export const BodyNavBar = styled.header`
   aside {
     a{
       text-decoration:none;
-      font:500 0.8rem Roboto;
+      font:500 0.9rem Roboto;
       color:var(--white);
     }
     .create{
-      padding: 0.2rem 0.6rem;
-
+      padding: 0.4rem 0.6rem;
       border-radius:0.2rem;
       background-color:var(--green);
       transition: background-color 0.2s;
