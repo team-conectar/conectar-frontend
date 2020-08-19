@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 
 export const BodyInput = styled.div`
-  position: relative;
+  width:100%;
   margin: 0.3rem 0 ;
   label{
     display:flex;

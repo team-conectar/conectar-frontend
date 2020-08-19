@@ -10,7 +10,7 @@ function Home() {
   return (
     <BodyHome >
       < NavBar logged={true} />
-      <main>
+      <main className="container">
         <div className="area-login">
             <h1>Find your <br /> dreamteam!</h1>
             <Login />
@@ -26,7 +26,12 @@ function Home() {
         <div className="projetos-em-alta">
 
           <h3>Projetos em alta</h3>
-          <section className="cards-em-altas">
+          <section className="cards-em-alta">
+            <ProjectCards />
+            <ProjectCards />
+            <ProjectCards />
+            <ProjectCards />
+            <ProjectCards />
             <ProjectCards />
           </section>
           
@@ -35,7 +40,25 @@ function Home() {
 
           <h3><strong>QUEM JÁ USOU </strong>O CONECTAR</h3>
           <section className="depoimentos">
-
+            
+            <aside>
+              <img src="https://f.i.uol.com.br/fotografia/2017/12/08/15127517365a2ac27864415_1512751736_3x4_md.jpg" alt=""/>
+              <i>O conenectar me possibilitou montar o time ideal para dar presentes pelo mundo todo</i>
+              <strong>Noel</strong>
+              <p>Doador de presentes</p>
+            </aside>
+            <aside>
+              <img src="https://f.i.uol.com.br/fotografia/2017/12/08/15127517365a2ac27864415_1512751736_3x4_md.jpg" alt=""/>
+              <i>O conenectar me possibilitou montar o time ideal para dar presentes pelo mundo todo</i>
+              <strong>Noel</strong>
+              <p>Doador de presentes</p>
+            </aside>
+            <aside>
+              <img src="https://f.i.uol.com.br/fotografia/2017/12/08/15127517365a2ac27864415_1512751736_3x4_md.jpg" alt=""/>
+              <i>O conenectar me possibilitou montar o time ideal para dar presentes pelo mundo todo</i>
+              <strong>Noel</strong>
+              <p>Doador de presentes</p>
+            </aside>
           </section>
         </div>
 
