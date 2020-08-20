@@ -13,4 +13,15 @@ export const BodyButton = styled.button`
   background:var(--yellow);
   font:500 1rem Roboto;
   color:var(--green-bg);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  :hover{
+    
+  }
+  :active{
+    border:0;
+    background:var(--yellow-dark);
+  }
 `;

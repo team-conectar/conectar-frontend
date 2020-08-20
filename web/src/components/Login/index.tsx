@@ -2,8 +2,10 @@ import React from 'react';
 import { BodyLogin } from './styles';
 import { Link } from 'react-router-dom';
 import Input from '../Input';
-import FacebookLogin, { ReactFacebookLoginInfo, ReactFacebookLoginProps, ReactFacebookLoginState, ReactFacebookFailureResponse } from 'react-facebook-login';
+import FacebookLogin, { ReactFacebookLoginInfo, ReactFacebookFailureResponse } from 'react-facebook-login';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+import {FcGoogle } from 'react-icons/fc';
+import {FaFacebook} from 'react-icons/fa';
 import Button from '../Button';
 
 import { TiSocialFacebookCircular } from 'react-icons/ti';
@@ -33,12 +35,12 @@ const Login: React.FC = () => {
           fields="name,email,picture"
           callback={responseFacebook}
           cssClass="facebook-button"
-          icon="fa-facebook"
+          icon={<FaFacebook/>}
         />
         <GoogleLogin
           clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
           render={renderProps => (
-            <button className="google-button" onClick={renderProps.onClick} disabled={renderProps.disabled}>G</button>
+            <button className="google-button" onClick={renderProps.onClick} disabled={renderProps.disabled}><FcGoogle /></button>
           )}
           buttonText="Login"
           onSuccess={responseGoogle}

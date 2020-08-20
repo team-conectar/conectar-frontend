@@ -10,93 +10,106 @@ export const BodyHome = styled.div`
     flex-direction:column;
     justify-content:center;
     align-items:center;
-    .container{
-        background:url(${backgroundMain});
-        background-size: 100%;
-        background-repeat:no-repeat;
-        display: grid;
-        grid-template-rows: 50rem auto auto auto auto;
-        grid-template-columns: 1fr 3fr ;
-        grid-template-areas: "login ah" "guia guia" "projeto projeto"  "experiencia experiencia" "footer footer";
-        width:min(1100px, 90vw);
-        .area-login{
-            grid-area:login ;
-            h1{
-                padding-bottom:1.4rem ;
-                font:500 3.4rem Roboto;
-                color:var(--white);
-            }  
-        }
-        .saiba-como-acontece{
-            
-            grid-area:guia;
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:flex-start;
+    
+    main{
+        background:var(--green-bg);
+        width:100%;
+        display:flex;
+        justify-content:center;
+        clip-path: polygon(0 0, 100% 0, 100% 85%, 80% 85%, 75% 77%, 55% 77%, 50% 69%, 0 69%);
+        .topo{
 
-            p{
-                text-align:center;
+            display: grid;
+            grid-template-rows: 50rem;
+            grid-template-columns: 1fr 3fr ;
+            grid-template-areas: "login hero";
+            .area-login{
+                grid-area:login ;
+                h1{
+                    padding-bottom:1.4rem ;
+                    font:500 3.4rem Roboto;
+                    color:var(--white);
+                }  
             }
-            h3{
-                font:700 1.4rem Roboto;
-                color:var(--green-bg);
-                
+            .hero{
+                grid-area:hero;
+                display:flex;
+                justify-content:flex-end;
+                align-items:flex-start;
+                img{
+                    width:70%;
+                }
             }
         }
-        .projetos-em-alta{
-            grid-area:projeto;
-            display:flex;
-            flex-direction:column;
-            align-items:flex-start;
-            h3{
-                font-size: 1.4rem;
-                color:var(--green-bg);
-                border-bottom:2px solid var(--green);
-                padding-bottom:0.8rem;
-                margin:0 0 2rem 2rem;
-            }
-            .cards-em-alta{
-                display:flex;
-                flex-wrap:wrap;
-                justify-content:center;
-            }
+    }
+    .saiba-como-acontece{
+        
+        grid-area:guia;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:flex-start;
+
+        p{
+            text-align:center;
         }
-        .quem-ja-usou{
-            background:url(${backgroundDepoimentos});
-            background-size: 100%;
-            background-repeat:no-repeat;
-            grid-area:experiencia;
+        h3{
+            font:700 1.4rem Roboto;
+            color:var(--green-bg);
+            
+        }
+    }
+    .projetos-em-alta{
+        grid-area:projeto;
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        h3{
+            font-size: 1.4rem;
+            color:var(--green-bg);
+            border-bottom:2px solid var(--green);
+            padding-bottom:0.8rem;
+            margin:0 0 2rem 2rem;
+        }
+        .cards-em-alta{
             display:flex;
-            flex-direction:column;
-            align-items:center;
-            justify-content:flex-start;
-            h3{
-                font:400 1.4rem Roboto;
-                color:var(--green-bg);
-            }
-            .depoimentos{
+            flex-wrap:wrap;
+            justify-content:center;
+        }
+    }
+    .quem-ja-usou{
+        grid-area:experiencia;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:flex-start;
+        h3{
+            font:400 1.4rem Roboto;
+            color:var(--green-bg);
+            margin:2rem 0;
+        }
+        .depoimentos{
+            display:flex;
+            justify-content:center;
+            flex-flow: row wrap;
+            aside{
+                max-width:220px;
                 display:flex;
-                justify-content:center;
-                flex-flow: row wrap;
-                aside{
-                    max-width:220px;
-                    display:flex;
-                    flex-direction:column;
-                    align-items:center;
-                    justify-content:space-between;
-                    i{
-                        text-align:center;
-                    }
-                    strong {
-                        text-transform:uppercase;
-                    }
-                    img{
-                        border-radius:50%;
-                        border:3px solid var(--yellow);
-                        width:5rem;
-                        height:5rem;
-                    }
+                flex-direction:column;
+                align-items:center;
+                justify-content:space-between;
+                i{
+                    text-align:center;
+                    margin:1.5rem 0;
+                }
+                strong {
+                    text-transform:uppercase;
+                }
+                img{
+                    border-radius:50%;
+                    border:3px solid var(--yellow);
+                    width:5rem;
+                    height:5rem;
                 }
             }
         }
