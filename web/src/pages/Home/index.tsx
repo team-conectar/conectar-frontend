@@ -10,16 +10,15 @@ function Home() {
   return (
     <BodyHome >
       < NavBar logged={false} />
-      <main>
+      <main className="topo-background">
         <div className="container topo">
-
-          <div className="area-login">
+          <section className="area-login">
             <h1>Find your <br /> dreamteam!</h1>
             <Login />
-          </div>
-          <div className="hero">
+          </section>
+          <section className="hero">
             <img src={hero} alt="imagem de redes neurais" />
-          </div>
+          </section>
         </div>
       </main>
       <div className="saiba-como-acontece container">

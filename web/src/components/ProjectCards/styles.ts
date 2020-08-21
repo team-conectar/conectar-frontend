@@ -8,7 +8,7 @@ export const BodyCard = styled.div`
   height:288px;
   border-radius:0.5rem;
   display:flex;
-  margin:1rem;
+  margin:calc(1vw - 0.1rem) 0.2rem;
   flex-direction:column;
   justify-content:flex-start;
   align-items:center;
