@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 
 
-export const BodyInput = styled.div`
+export const BodySelect = styled.div`
   width:100%;
   margin: 0.3rem 0 ;
   label{
@@ -18,7 +18,7 @@ export const BodyInput = styled.div`
       font-size:0.7rem;
     }
   }
-  input{
+  select{
     border: 2px solid var(--yellow);
     width:100%;
     height: 2rem;
@@ -27,7 +27,5 @@ export const BodyInput = styled.div`
     outline: 0;
     padding: 0 0.8rem;
     font: 1.6rem;
-    
   }
-  
 `;

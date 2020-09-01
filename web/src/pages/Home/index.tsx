@@ -8,7 +8,7 @@ import hero from '../../assets/image/hero.svg';
 function Home() {
 
   return (
-    <BodyHome >
+    <BodyHome>
       < NavBar logged={false} />
       <main className="topo-background">
         <div className="container topo">

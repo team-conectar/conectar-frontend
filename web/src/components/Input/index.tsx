@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  label: string;
+  label?: string;
   subLabel?: string;
   pathSubLabel?: string;
 }
