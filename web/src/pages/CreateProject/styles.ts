@@ -1,0 +1,110 @@
+import styled, { css } from 'styled-components';
+
+
+
+
+
+
+export const BodyCreateProject = styled.div`
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    width:100vw;
+    background:var(--green-bg);
+    .area-central{
+        background:var(--white);
+        padding:2.4rem;
+        border-radius:0.8rem;
+        border:2px solid var(--green);
+        
+        h1{
+            margin:1.4rem 0;
+            color: var(--green-bg);
+        }
+        section{
+            display:flex;
+            justify-content:space-between;
+            align-items: center;
+            margin:0.6rem 0;
+            div + div {
+                margin-left:0.8rem;
+            }
+        }
+        main{
+            display:grid;
+            grid-template-columns:2fr 3fr;
+            grid-template-rows:1fr;
+            >section{
+                grid-row:2;
+                grid-column:1/-1;
+                
+            }
+
+
+
+
+
+
+            .area-select{
+                justify-content:space-around;
+            }
+                    .area-toggle{
+                        justify-content:center;
+                        >label{
+                            display:flex;
+                            justify-content:space-between;
+                            align-items:center;
+                            font: 400 1rem Roboto;
+                            color:var(--orange);
+                        }
+                    }
+            
+                    .upload-img{
+                        
+                        width:100%;
+                        >label{
+                            display:flex;
+                            justify-content:space-between;
+                            align-items:center;
+                            font: 400 1rem Roboto;
+                            color:var(--orange);
+                        }
+                        .view-img{
+                            margin-top: 0.2rem;
+                            border:2px dashed var(--yellow);
+                            display:flex;
+                            flex-direction:column;
+                            align-items:center;
+                            justify-content:space-around;
+                            padding:0.8rem;
+                            label{
+                                padding:0.6em;
+                                cursor:pointer;
+                                border-radius:0.4rem;
+                                background:var(--green-bg);
+                                color:white;
+                                font:500 1rem Roboto;
+                            }
+                            input{
+                                display:none;
+                            }
+                            p{
+                                color:gray;
+                                font-size:.8rem;
+                            }
+                        }
+                    }
+                    
+        }
+
+        .primeira-etapa{
+        }
+        .segunda-etapa {
+            
+            
+    
+            
+        }
+    }
+`;

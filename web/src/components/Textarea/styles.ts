@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
 
-
-export const BodySelect = styled.div`
+export const BodyTextarea = styled.div`
   width:100%;
+  height:100%;
   min-width:10rem;
-  margin: 0.3rem 0 ;
+  margin: 0.4rem 0 ;
   label{
     display:flex;
     justify-content:space-between;
@@ -15,19 +15,19 @@ export const BodySelect = styled.div`
     a{
       justify-content:flex-end;
       text-decoration:none;
-      color: var(--gray);
+      color: gray;
       font-size:0.7rem;
     }
   }
-  select{
+  textarea{
     border: 2px solid var(--yellow);
     width:100%;
-    height: 2rem;
+    min-height: 8rem;
     margin-top: 0.2rem;
     border-radius: 0.3rem;
     outline: 0;
-    padding: 0 0.8rem;
+    padding: 0.4rem 0.8rem;
     font: 1.6rem;
-    background:white;
+    resize: vertical;
   }
 `;

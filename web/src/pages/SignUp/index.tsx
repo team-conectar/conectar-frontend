@@ -1,57 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, {  useState } from 'react';
 import { BodySignUp } from './styles';
 import logo from '../../assets/image/logo_fundoClaro.svg';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
+import ToggleSwitch from '../../components/ToggleSwitch';
 import { ReactFacebookLoginInfo, ReactFacebookFailureResponse } from 'react-facebook-login';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
-import {closestIndexTo, addYears, getISODay, isToday} from 'date-fns';
-
+import { useHistory } from 'react-router';
+import { monthOptions, yearOptions } from '../../utils/dates';
 interface renderFacebook {
   onClick: () => void;
   disabled?: boolean;
 }
-interface options {
-  value:string;
-  label:string;
-}
+
 
 function SignUp() {
-  
-  
-  const monthOptions: options[]= [
-    {value: "0", label: "Janeiro"},
-    {value: "1", label: "Janeiro"},
-    {value: "2", label: "Fevereiro"},
-    {value: "3", label: "Março"},
-    {value: "4", label: "Abril"},
-    {value: "5", label: "Maio"},
-    {value: "6", label: "Junho"},
-    {value: "7", label: "Julho"},
-    {value: "8", label: "Agosto"},
-    {value: "9", label: "Setembro"},
-    {value: "10", label: "Outubro"},
-    {value: "11", label: "Novembro"},
-    {value: "12", label: "Dezembro"},
-    
-  ];
-  
-  var yearOptions: options[] = [{
-    label: "2020",
-    value: "0",
-  },];
-  for (let index = 1; index < 100; index++) {
-    yearOptions.push({
-      value:String(index),
-      label:String(2019-index),
-    })
-  }
-  
+
+  const history = useHistory();
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
+
+  const handleSubmit = async (_: React.MouseEvent) => {
+    // Password confirmation validation
+
+    try {
+      // //const data = await signUp(email, password, passwordConfirmation);
+
+      // if (data) {
+      //   history.push('/');
+      // }
+    } catch (err) {
+      if (err instanceof Error) {
+        // handle errors thrown from frontend
+        setError(err.message);
+      } else {
+        // handle errors thrown from backend
+        setError(err);
+      }
+    }
+  };
+
   const [step, setStep] = useState<string>("primeira");
 
   const responseFacebook = (resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse) => {
@@ -138,13 +132,7 @@ function SignUp() {
               options={monthOptions}
             />
             <Input type="number" name="day" placeholder="Dia"></Input>
-            
-            {/* /*
-            <Select
-              label="Data de Nascimento"
-              name="year"
-              options={}
-            /> */ }
+
           </section>
           <section>
             <legend>Tipo de Perfil</legend>
@@ -156,10 +144,7 @@ function SignUp() {
               <legend>Idealizador</legend>
               <aside>
                 <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
-                <label className="switch">
-                  <input type="checkbox" />
-                  <span className="slider"></span>
-                </label>
+                <ToggleSwitch />
 
               </aside>
             </fieldset>
@@ -168,10 +153,8 @@ function SignUp() {
               <legend>Colaborador</legend>
               <aside>
                 <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
-                <label className="switch">
-                  <input type="checkbox" />
-                  <span className="slider"></span>
-                </label>
+                <ToggleSwitch />
+
 
               </aside>
             </fieldset>
@@ -179,16 +162,14 @@ function SignUp() {
               <legend>Aliado</legend>
               <aside>
                 <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
-                <label className="switch">
-                  <input type="checkbox" />
-                  <span className="slider"></span>
-                </label>
+                <ToggleSwitch />
+
               </aside>
             </fieldset>
           </section>
           <section>
             <button className="voltar" type="button" onClick={() => setStep("primeira")}>Voltar</button>
-            <Button>Enviar</Button>
+            <Button onClick={() => history.push("/profilefeatures")}>Enviar</Button>
           </section>
         </div>
       </form>

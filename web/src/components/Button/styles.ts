@@ -9,7 +9,7 @@ export const BodyButton = styled.button`
   align-items: center;
   justify-content: center;
   border:0;
-  margin:1.4rem 0;
+  margin:0;
   align-self:center;  
   width:12rem; 
   padding:0.6rem;
@@ -19,5 +19,10 @@ export const BodyButton = styled.button`
   color:var(--green-bg);
   :hover{
     background:var(--yellow-dark);
+  }
+  :disabled{
+    cursor: no-drop;
+    background: #ccc;
+    color:var(--gray);
   }
 `;

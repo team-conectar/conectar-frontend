@@ -37,7 +37,7 @@ export const BodySignUp = styled.div<StepProps>`
             section{
                 display:flex;
                 justify-content:space-between;
-                align-items:center;
+                align-items: center;
                 div + div {
                     margin-left:0.8rem;
                 }
@@ -103,7 +103,7 @@ export const BodySignUp = styled.div<StepProps>`
                 align-items:flex-end;
                 margin:0.6rem 0;
                 div + div {
-                    margin-left:0.4rem;
+                    margin-left:0.8rem;
                     width:auto;     
                 }
                 legend{
@@ -122,6 +122,7 @@ export const BodySignUp = styled.div<StepProps>`
                     margin-top:0.4rem;
                     width: max(30% ,150px);
                     legend{
+                        border-radius:0.3rem 0.3rem 0 0;
                         width:100%;
                         background:var(--green-bg);
                         padding:0.2rem;
@@ -130,6 +131,7 @@ export const BodySignUp = styled.div<StepProps>`
                         margin-bottom:0;
                     }
                     aside{
+                        border-radius:0 0 0.3rem 0.3rem ;
                         display:flex;
                         flex-direction:column;
                         justify-content:space-around;
@@ -141,55 +143,7 @@ export const BodySignUp = styled.div<StepProps>`
                         p{
                             margin-bottom:0.8rem;
                         }
-                        .switch {
-                            position: relative;
-                            display: inline-block;
-                            width: 56px;
-                            height: 30px;
-                            input {
-                                opacity: 0;
-                                width: 0;
-                                height: 0;
-                            }
-                            input:checked + .slider {
-                                background-color: var(--green-bg);
-                            }
-                            input:focus + .slider {
-                                box-shadow: 0 0 1px #2196F3;
-                            }
-                            input:checked + .slider:before {
-                                -webkit-transform: translateX(26px);
-                                -ms-transform: translateX(26px);
-                                transform: translateX(26px);
-                            }
-                            .slider {
-                                border:2px solid var(--green-bg);
-                                position: absolute;
-                                cursor: pointer;
-                                top: 0;
-                                left: 0;
-                                right: 0;
-                                bottom: 0;
-                                background-color: var(--white);
-                                -webkit-transition: .2s;
-                                transition: .2s;
-                                border-radius: 34px;
-                            }
-
-                            .slider:before {
-                                border:2px solid var(--green-bg);
-                                position: absolute;
-                                content: "";
-                                height: 26px;
-                                width: 26px;
-                                left: -2px;
-                                bottom: -2px;
-                                background-color: var(--green);
-                                -webkit-transition: .2s;
-                                transition: .2s;
-                                border-radius: 50%;
-                            }  
-                        }
+                        
                     }
                 }
             }

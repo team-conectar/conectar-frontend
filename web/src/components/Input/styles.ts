@@ -1,16 +1,16 @@
 import styled from 'styled-components';
 
 
-
 export const BodyInput = styled.div`
   width:100%;
+  min-width:10rem;
   margin: 0.3rem 0 ;
   label{
     display:flex;
     justify-content:space-between;
     align-items:center;
     font: 400 1rem Roboto;
-    color:var(--yellow-dark);
+    color:var(--orange);
     a{
       justify-content:flex-end;
       text-decoration:none;
@@ -29,5 +29,4 @@ export const BodyInput = styled.div`
     font: 1.6rem;
     
   }
-  
 `;

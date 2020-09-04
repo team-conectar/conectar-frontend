@@ -5,7 +5,10 @@ import styled from 'styled-components';
 export const BodyLogin = styled.form`
   display:flex;
   flex-direction:column;
-  align-items:center;   
+  align-items:center;
+  button{
+    margin:1.2rem 0;
+  }   
   aside{
     display:flex;
     justify-content:space-evenly;
@@ -13,6 +16,7 @@ export const BodyLogin = styled.form`
       display:flex;
       justify-content:center;
       align-items:center;
+      margin:1.2rem;
     }
     .google-button{
       font-size:3rem;
@@ -21,10 +25,8 @@ export const BodyLogin = styled.form`
       height:3rem;
       background-color: var(--white);
       border-radius:50%;
-      margin:1rem;
     }
     .facebook-button{
-      cursor:pointer;
       color:#3b5998;
       font-size:3rem;
       border: 3px solid var(--white);
@@ -32,7 +34,6 @@ export const BodyLogin = styled.form`
       height:3rem;
       background-color:var(--white);
       border-radius:50%;
-      margin:1rem;
     }
   }
   p{
