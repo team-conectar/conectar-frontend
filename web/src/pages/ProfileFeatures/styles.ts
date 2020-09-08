@@ -1,14 +1,8 @@
 import styled, { css } from 'styled-components';
 
-export interface PropsBodyStyle {
-    showStep :{
-        first:boolean;
-        second:boolean;
-        third:boolean;
-    }
-}
 
-export const BodyProfileFeatures = styled.div<PropsBodyStyle>`
+
+export const BodyProfileFeatures = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;
@@ -24,6 +18,7 @@ export const BodyProfileFeatures = styled.div<PropsBodyStyle>`
     .area-central{
         
         border-radius:0.8rem;
+        margin:2rem;
         .caracteristicas{
             background:white;
             padding:0.8rem;
@@ -34,30 +29,57 @@ export const BodyProfileFeatures = styled.div<PropsBodyStyle>`
             align-items: flex-start;
             border-radius:0.4rem;
             border:2px solid var(--green);
+            .experiencias{
+                    width:100%;
+                .experiencia-cadastrada{
+                    border-radius:0.4rem;
+                    border:2px solid var(--green);
+                    display:flex;
+                    justify-content:flex-start;
+                    align-items:center;
+                    margin:0.8rem 0;
+                    fieldset{
+                        margin-left:1.2rem;
+                        legend{
+                            font:500 1.4rem Roboto;
+                        }
+                        font:400 1.2rem Roboto;
+                        color:var(--green-bg);
+                        
+                    }
+                    .icones{
+                        border-right:2px solid var(--green);
+                        display:flex;
+                        flex-direction:column;
+                        justify-content:space-between;
+                        align-items:center;
+                        padding:0.6rem;
+                        img{
+                            height:3rem;
+                            cursor:pointer;
+                        }
+                    }
+                }
+                button{
+                    border:0;
+                    background:none;
+                    font:500 1rem Roboto;
+                    color:var(--yellow);
+                    span{
+                        font:500 1.2rem Roboto;
+                    }
+                }
+            }
             h2{
                 margin:1.4rem 0;
                 color: var(--green-bg);
             }
-            .area-educacao{
-                ${props => 
-                    props.showStep.first? css`display:grid;` : css`display:none;`
-                }
-            }
-            .area-trabalho{
-                ${props => 
-                    props.showStep.second? css`display:grid;` : css`display:none;`
-                }
-            }
-            .area-projeto{
-                ${props => 
-                    props.showStep.third? css`display:grid;` : css`display:none;`
-                }
-            }
-            .area-trabalho, .area-projeto, .area-educacao{
+            .area-registro{
+                display:grid;
                 width:100%;
                 grid-template-columns: 2fr 1fr 2fr;
                 grid-gap: 20px;
-                .botoes{
+                .area-botoes{
                     grid-column:1/-1;
                     display:flex;
                     justify-content:space-evenly;
@@ -80,7 +102,6 @@ export const BodyProfileFeatures = styled.div<PropsBodyStyle>`
                     margin:0;
                     div + div{
                         margin-left:.4rem;
-                        
                     }
                 }
                 
@@ -99,15 +120,6 @@ export const BodyProfileFeatures = styled.div<PropsBodyStyle>`
             }
             
 
-            button{
-                border:0;
-                background:none;
-                font:500 1rem Roboto;
-                color:var(--yellow);
-                span{
-                    font:500 1.2rem Roboto;
-                }
-            }
             
         }
         footer{
@@ -116,5 +128,4 @@ export const BodyProfileFeatures = styled.div<PropsBodyStyle>`
             margin-top: 1rem;
         }
     }
-
 `;

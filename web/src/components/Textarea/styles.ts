@@ -22,7 +22,7 @@ export const BodyTextarea = styled.div`
   textarea{
     border: 2px solid var(--yellow);
     width:100%;
-    min-height: 8rem;
+    min-height: 80%;
     margin-top: 0.2rem;
     border-radius: 0.3rem;
     outline: 0;

@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { BodyCreateProject } from './styles';
-import logo from '../../assets/image/logo_fundoClaro.svg';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Textarea from '../../components/Textarea';
-import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 import ToggleSwitch from '../../components/ToggleSwitch';
-import { ReactFacebookLoginInfo, ReactFacebookFailureResponse } from 'react-facebook-login';
-import FacebookLogin from 'react-facebook-login';
-import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
-import { FcGoogle } from 'react-icons/fc';
-import { FaFacebookF } from 'react-icons/fa';
 import { useHistory } from 'react-router';
-import { monthOptions, yearOptions } from '../../utils/dates';
+
 import SelectArea from '../../components/SelecArea';
 interface renderFacebook {
   onClick: () => void;
@@ -56,8 +49,8 @@ function CreateProject() {
               <Input name="#" label="Público alvo" />
               <section className="area-toggle">
 
-                <ToggleSwitch id="private" />
-                <label htmlFor="private">Tornar este projeto privado</label>
+                <ToggleSwitch name="private" label="Tornar este projeto privado" />
+                
               </section>
 
 

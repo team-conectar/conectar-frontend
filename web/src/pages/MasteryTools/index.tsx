@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { BodyMasteryTools } from './styles';
-import Input from '../../components/Input';
-import Textarea from '../../components/Textarea';
-import Select, { OptionsTypes } from '../../components/Select';
 import Button from '../../components/Button';
-import ToggleSwitch from '../../components/ToggleSwitch';
-import { yearOptions, monthOptions } from '../../utils/dates';
 import { useHistory } from 'react-router-dom';
 
 

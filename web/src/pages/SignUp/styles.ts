@@ -130,7 +130,7 @@ export const BodySignUp = styled.div<StepProps>`
                         text-align:center;
                         margin-bottom:0;
                     }
-                    aside{
+                    >aside{
                         border-radius:0 0 0.3rem 0.3rem ;
                         display:flex;
                         flex-direction:column;

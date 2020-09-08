@@ -67,29 +67,34 @@ export const BodySelectArea = styled.div`
             color:var(--green-bg);
           }
         }
-        form{
+        fieldset{
           height:90%;
           overflow-y:auto;
-          >label{
+          >button{
+            margin-top:1px;
             width:100%;
             cursor:pointer;
             background:none;
             display: flex;
             justify-content:space-between;
             align-items:center;
-            height:11%;
+            height:10%;
             border:0;
             border-bottom:2px solid var(--yellow);
             padding:0 1.4rem;
-            color:var(--orange);
             font:500 1.2rem Roboto;
             strong{
               color:var(--green);
-              font-size:1.4rem;
+              font-size:1.3rem;
             }
             legend{
+              color:var(--orange);
+              display:flex;
+              align-items:center;
+              justify-content:center;
               margin-left:0.4rem; 
               width:100%;
+              
             }
           }
           

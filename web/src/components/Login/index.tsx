@@ -11,9 +11,7 @@ import Button from '../Button';
 import { TiSocialFacebookCircular } from 'react-icons/ti';
 
 const Login: React.FC = () => {
-  function handleLoginWithFacebook() {
 
-  }
   const responseFacebook = (resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse) => {
     console.log(resposta);
   }

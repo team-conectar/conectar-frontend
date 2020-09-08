@@ -1,78 +1,63 @@
 import React, { useState } from 'react';
 import { BodySelectArea } from './styles';
-import {BsCheck} from 'react-icons/bs';
+import { GoCheck } from 'react-icons/go';
 
+interface SubareasType {
+  name: string;
+  id: number;
 
+}
 interface AreaTypes {
   name: string;
-  subareas: string[];
+  subareas: SubareasType[];
 }
 interface ShowSubareaTypes {
   show: boolean;
-  selected:boolean;
   area: AreaTypes;
 }
 interface SelectAreaProps {
   label?: string;
-
-
-
 }
-const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
-  const [showSubareas, setShowSubreas] = useState<ShowSubareaTypes>({
 
+
+
+const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
+  const [selectedIdsSubareas, setSelectedIdsSubareas] = useState<number[]>([]);
+  const [showSubareas, setShowSubareas] = useState<ShowSubareaTypes>({
     show: false,
-    selected:false,
     area: {
       name: "",
-      subareas: [""]
+      subareas: [{ name: "", id: -1 }]
     }
   });
   const areas: AreaTypes[] = [{
     name: "area a",
-    subareas: ["sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area b",
-    subareas: ["sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area c",
-    subareas: ["sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area b",
-    subareas: ["sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area c",
-    subareas: ["sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area b",
-    subareas: ["sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area c",
-    subareas: ["sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area b",
-    subareas: ["sub a", "sub b", "sub c"]
-  },
-  {
-    name: "area c",
-    subareas: ["sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c", "sub a", "sub b", "sub c"]
+    subareas: [{ name: "sub a", id: 0 }, { name: "sub b", id: 1 }, { name: "sub c", id: 2 }]
+  }]
+  function handleSelectedSubareas(id: number) {
+    if (selectedIdsSubareas.includes(id)) {
+      setSelectedIdsSubareas(selectedIdsSubareas.filter(sub => sub !== id))
+    }
+    else {
+      setSelectedIdsSubareas([...selectedIdsSubareas, id]);
+    }
   }
-  ];
-
   return (
     <BodySelectArea>
       <label>{label}</label>
       <div>
         <div className="area-selecionadas">
           <legend>Áreas selecionadas</legend>
+          <fieldset>
+            {areas.map(area => (
+              area.subareas.map(subarea => (
+                selectedIdsSubareas.includes(subarea.id) &&
+                <legend>{area.name}</legend>
 
+
+              ))
+            ))}
+          </fieldset>
         </div>
         <div className="area-selecao">
           {!showSubareas.show ?
@@ -80,7 +65,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
               {areas.map(area => (
                 <button
                   key={area.name}
-                  onClick={() => { setShowSubreas({...showSubareas, show: true, area: area }) }}
+                  onClick={() => { setShowSubareas({ ...showSubareas, show: true, area: area }) }}
                 >{area.name}
                 </button>
               ))}
@@ -89,23 +74,21 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
               <header>
 
                 <button
-                  onClick={() => { setShowSubreas({ ...showSubareas, show: false }) }}
+                  onClick={() => { setShowSubareas({ ...showSubareas, show: false }) }}
                 >Voltar</button>
                 <legend>{showSubareas.area.name}</legend>
               </header>
-              <form>
+              <fieldset>
                 {showSubareas.area.subareas.map(subarea => (
-                  <label key={subarea}>
-                    <div className="check-box">
-                      <input type="checkbox" id={subarea} />
-                      <label htmlFor={subarea} />
-                    </div>
-
-                    <legend>{subarea}</legend>
+                  <button key={subarea.name} onClick={() => { handleSelectedSubareas(subarea.id) }}>
+                    <strong>
+                      {selectedIdsSubareas?.includes(subarea.id) && <GoCheck />}
+                    </strong>
+                    <legend>{subarea.name}</legend>
                     <strong>+</strong>
-                  </label>
+                  </button>
                 ))}
-              </form>
+              </fieldset>
             </aside>
           }
         </div>
