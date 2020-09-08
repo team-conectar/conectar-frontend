@@ -35,16 +35,12 @@ export const BodyCreateProject = styled.div`
             display:grid;
             grid-template-columns:2fr 3fr;
             grid-template-rows:1fr;
+            grid-gap:2rem;
             >section{
                 grid-row:2;
                 grid-column:1/-1;
                 
             }
-
-
-
-
-
 
             .area-select{
                 justify-content:space-around;
@@ -61,7 +57,6 @@ export const BodyCreateProject = styled.div`
                     }
             
                     .upload-img{
-                        
                         width:100%;
                         >label{
                             display:flex;
@@ -73,12 +68,14 @@ export const BodyCreateProject = styled.div`
                         .view-img{
                             margin-top: 0.2rem;
                             border:2px dashed var(--yellow);
+                            border-radius:0.4rem;
                             display:flex;
                             flex-direction:column;
                             align-items:center;
-                            justify-content:space-around;
+                            justify-content:flex-start;
                             padding:0.8rem;
                             label{
+                                margin:2rem;
                                 padding:0.6em;
                                 cursor:pointer;
                                 border-radius:0.4rem;
@@ -90,6 +87,7 @@ export const BodyCreateProject = styled.div`
                                 display:none;
                             }
                             p{
+                                margin-top:.8rem;
                                 color:gray;
                                 font-size:.8rem;
                             }

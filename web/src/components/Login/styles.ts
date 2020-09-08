@@ -9,6 +9,7 @@ export const BodyLogin = styled.form`
   button{
     margin:1.2rem 0;
   }   
+  
   aside{
     display:flex;
     justify-content:space-evenly;
@@ -37,7 +38,7 @@ export const BodyLogin = styled.form`
     }
   }
   p{
-    color:var(--white);
+    color:white;
     align-self:center;
     margin:0.5rem 0;
     a{

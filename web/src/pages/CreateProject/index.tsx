@@ -14,6 +14,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebookF } from 'react-icons/fa';
 import { useHistory } from 'react-router';
 import { monthOptions, yearOptions } from '../../utils/dates';
+import SelectArea from '../../components/SelecArea';
 interface renderFacebook {
   onClick: () => void;
   disabled?: boolean;
@@ -52,7 +53,7 @@ function CreateProject() {
                   <p>Tamanho mínimo de 805x632px</p>
                 </div>
               </div>
-              <Input name="projectTitle" label="Título do projeto" />
+              <Input name="#" label="Público alvo" />
               <section className="area-toggle">
 
                 <ToggleSwitch id="private" />
@@ -62,7 +63,7 @@ function CreateProject() {
 
             </div>
             <div className="coluna-dois">
-
+              <SelectArea label="Área de desenvolvimento" />
             </div>
             <section>
               <Button type="button" onClick={history.goBack}>Cancelar</Button>

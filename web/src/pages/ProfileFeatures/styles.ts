@@ -22,7 +22,7 @@ export const BodyProfileFeatures = styled.div<PropsBodyStyle>`
     }
     
     .area-central{
-        padding:2.4rem;
+        
         border-radius:0.8rem;
         .caracteristicas{
             background:white;
