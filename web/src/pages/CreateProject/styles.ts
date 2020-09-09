@@ -2,10 +2,13 @@ import styled, { css } from 'styled-components';
 
 
 
+interface StepProps {
+    showSecondStep: boolean;
+}
 
 
 
-export const BodyCreateProject = styled.div`
+export const BodyCreateProject = styled.div<StepProps>`
     display:flex;
     justify-content:center;
     align-items:center;
@@ -31,8 +34,17 @@ export const BodyCreateProject = styled.div`
                 margin-left:0.8rem;
             }
         }
+        .primeira-etapa{
+            ${props =>
+                props.showSecondStep ? css`display:none;` : css`display:grid;`
+            } 
+        }
+        .segunda-etapa {
+            ${props =>
+                props.showSecondStep ? css`display:grid;` : css`display:none;`
+            }  
+        }
         main{
-            display:grid;
             grid-template-columns:2fr 3fr;
             grid-template-rows:1fr;
             grid-gap:2rem;
@@ -96,13 +108,6 @@ export const BodyCreateProject = styled.div`
                     
         }
 
-        .primeira-etapa{
-        }
-        .segunda-etapa {
-            
-            
-    
-            
-        }
+        
     }
 `;

@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components';
 
 
 interface StepProps {
-    segunda: boolean;
+    showSecondStep: boolean;
 }
 
 export const BodySignUp = styled.div<StepProps>`
@@ -28,12 +28,13 @@ export const BodySignUp = styled.div<StepProps>`
         }
         .primeira-etapa{
             ${props =>
-        props.segunda ? css`display:none;` : css`display:grid;`
-    } 
+                props.showSecondStep ? css`display:none;` : css`display:grid;`
+            } 
             
             grid-template-rows: 500px;
             grid-template-columns: 60% 40%;
             grid-template-areas:"form img";
+            grid-gap: 1.8rem;
             section{
                 display:flex;
                 justify-content:space-between;
@@ -44,7 +45,7 @@ export const BodySignUp = styled.div<StepProps>`
             }
             .area-form{
                 grid-area:form;
-                .google-button ,.facebook-button {
+                .google-button, .facebook-button {
                     display: flex;
                     align-items: center;
                     cursor: pointer;
@@ -94,7 +95,7 @@ export const BodySignUp = styled.div<StepProps>`
         }
         .segunda-etapa {
             ${props =>
-                props.segunda ? css`display:flex;` : css`display:none;`
+                props.showSecondStep ? css`display:flex;` : css`display:none;`
             }       
             flex-direction:column;
             section{
@@ -107,11 +108,11 @@ export const BodySignUp = styled.div<StepProps>`
                     width:auto;     
                 }
                 legend{
-                    font:400 1.2rem Roboto;
-                    color:var(--yellow);
+                    font:400 1rem Roboto;
+                    color:var(--orange);
                 }
                 span{
-                    font:400 1rem Roboto;
+                    font:400 .8rem Roboto;
                     color:var(--gray);
                 }
             }

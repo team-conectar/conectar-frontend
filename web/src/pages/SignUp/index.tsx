@@ -47,7 +47,7 @@ function SignUp() {
     }
   };
 
-  const [step, setStep] = useState<string>("primeira");
+  const [showNextStep, setShowNextStep] = useState<boolean>(false);
 
   const responseFacebook = (resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse) => {
     console.log(resposta);
@@ -57,7 +57,7 @@ function SignUp() {
   }
 
   return (
-    <BodySignUp segunda={(step == "segunda") ? true : false}>
+    <BodySignUp showSecondStep={showNextStep}>
       <form className="area-central container">
         <Link to="/"><img src={logo} alt="logo" /></Link>
         <div className="primeira-etapa">
@@ -79,7 +79,7 @@ function SignUp() {
 
             <section>
               <Link to="login">Já tem uma conta?</Link>
-              <Button type="button" onClick={() => setStep("segunda")}>Continuar</Button>
+              <Button type="button" onClick={() => setShowNextStep(true)}>Continuar</Button>
             </section>
             <section>
 
@@ -169,7 +169,7 @@ function SignUp() {
             </fieldset>
           </section>
           <section>
-            <button className="voltar" type="button" onClick={() => setStep("primeira")}>Voltar</button>
+            <button className="voltar" type="button" onClick={() => setShowNextStep(false)}>Voltar</button>
             <Button onClick={() => history.push("/profilefeatures")}>Enviar</Button>
           </section>
         </div>
