@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 
 
-
 export const BodyButton = styled.button`
-
   cursor: pointer;
   display: flex;
   align-items: center;
