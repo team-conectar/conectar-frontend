@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, ChangeEvent } from 'react';
+import React, { FormEvent, useState, useCallback, ChangeEvent } from 'react';
 import { BodyLogin } from './styles';
 import { Link } from 'react-router-dom';
 import Input from '../Input';
@@ -11,6 +11,8 @@ import Button from '../Button';
 import axios, { AxiosError } from 'axios';
 
 import { TiSocialFacebookCircular } from 'react-icons/ti';
+
+import { inputChange } from '../../utils/inputChange';
 
 
 const Login: React.FC = () => {
@@ -27,12 +29,16 @@ const Login: React.FC = () => {
     console.log(response);
   }
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
-    setFormData({...formData, [name]: value });
-  }
+  const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    inputChange(event, setFormData, formData);
+  }, [formData]);
 
   async function handleSubmit(event: FormEvent) {
+    /**
+     * Handle form submition by creating FormData object, appends
+     * data from formData state and send it to backend by using axios
+     * @param {FormEvent} event
+     */
     event.preventDefault();
 
     const { email, senha } = formData;

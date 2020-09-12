@@ -13,7 +13,7 @@ const Textarea: React.FC<TextareaProps> = ({ name, label, subLabel, pathSubLabel
   return (
     <BodyTextarea>
       <label htmlFor={name}>{label}<Link to={`/${pathSubLabel}`}>{subLabel}</Link> </label>
-      <textarea id={name} {...rest} />
+      <textarea id={name} name={name} {...rest} />
     </BodyTextarea>
 
   )
