@@ -86,8 +86,9 @@ export const BodyCreateProject = styled.div<StepProps>`
                             align-items:center;
                             justify-content:flex-start;
                             padding:0.8rem;
+                            outline:0;
                             label{
-                                margin:2rem;
+                                margin-top:1.6rem;
                                 padding:0.6em;
                                 cursor:pointer;
                                 border-radius:0.4rem;

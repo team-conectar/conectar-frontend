@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BodyExperienceAreas } from './styles';
 import Button from '../../components/Button';
 import { useHistory } from 'react-router-dom';
-import SelectArea from '../../components/SelecArea';
+import SelectArea from '../../components/SelectArea';
 
 
 interface AreaTypes {
