@@ -21,14 +21,15 @@ export const monthOptions: OptionsTypes[] = [
 
 function createYearOptions() {
 
-  var years: OptionsTypes[] = [{
+  const years: OptionsTypes[] = [{
     label: "2020",
-    value: "0",
+    value: "2020",
   },];
   for (let index = 1; index < 100; index++) {
+    const year = String(2019 - index);
     years.push({
-      value: String(index),
-      label: String(2019 - index),
+      value: year,
+      label: year,
     })
   }
   return years;

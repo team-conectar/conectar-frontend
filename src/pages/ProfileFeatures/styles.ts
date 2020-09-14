@@ -17,6 +17,10 @@ export const BodyProfileFeatures = styled.div`
     .area-central{  
         border-radius:0.8rem;
         margin:2rem;
+
+        .form--experiencia {
+            width: 100%;
+        }
         .caracteristicas{
             background:white;
             padding:0.8rem;

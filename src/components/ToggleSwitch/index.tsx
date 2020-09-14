@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, useState } from 'react';
+import React, { InputHTMLAttributes } from 'react';
 import { BodySwitch } from './styles';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -11,7 +11,7 @@ const Input: React.FC<InputProps> = ({ name, label, ...rest }) => {
     <BodySwitch>
       <label htmlFor={name}>{label}</label>
       <aside>
-        <input type="checkbox" id={name} {...rest} />
+        <input type="checkbox" id={name} name={name} {...rest} />
         <span className="slider"></span>
       </aside>
     </BodySwitch>
