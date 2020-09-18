@@ -57,16 +57,7 @@ export const BodyCreateProject = styled.div<StepProps>`
             .area-select{
                 justify-content:space-around;
             }
-                    .area-toggle{
-                        justify-content:center;
-                        >label{
-                            display:flex;
-                            justify-content:space-between;
-                            align-items:center;
-                            font: 400 1rem Roboto;
-                            color:var(--orange);
-                        }
-                    }
+                    
             
                     .upload-img{
                         width:100%;

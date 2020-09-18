@@ -70,7 +70,7 @@ export const BodySignUp = styled.div<StepProps>`
                 }
                 .facebook-button{              
                     border: 1px solid var(--green);
-                    background-color:var(--white);
+                    background-color:var(--blue);
                     margin: 2rem 0.2rem 0.5rem 0;
                 }
                 a{

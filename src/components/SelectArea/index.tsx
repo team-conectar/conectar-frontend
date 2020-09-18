@@ -81,9 +81,9 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
               <fieldset>
                 {showSubareas.area.subareas.map(subarea => (
                   <button key={subarea.name} onClick={() => { handleSelectedSubareas(subarea.id) }}>
-                    <strong>
+                    <span>
                       {selectedIdsSubareas?.includes(subarea.id) && <GoCheck />}
-                    </strong>
+                    </span>
                     <legend>{subarea.name}</legend>
                     <strong>+</strong>
                   </button>

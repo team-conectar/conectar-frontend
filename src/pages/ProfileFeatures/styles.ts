@@ -106,7 +106,13 @@ export const BodyProfileFeatures = styled.div`
                         margin-left:.4rem;
                     }
                 }
-                
+                .area-toggle{
+                    display:flex;
+                    flex-direction:column;
+                    align-items:flex-start;
+                    justify-content:center;
+                    height:100%;
+                }
                 .bloco-um{
                     grid-column:1/-2;
                 }
@@ -114,7 +120,7 @@ export const BodyProfileFeatures = styled.div`
                     grid-column:-2;
                 }
                 .bloco-tres{
-                    grid-column:1;
+                    grid-column:1; 
                 }
                 .bloco-quatro{
                     grid-column:2/-1

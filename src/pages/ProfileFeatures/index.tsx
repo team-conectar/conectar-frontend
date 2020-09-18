@@ -102,6 +102,7 @@ function ProfileFeatures() {
     details: "",
   });
 
+
   const [projectFormData, setProfessionalFormData] = useState({
     position: "",
     projectName: "",
@@ -247,7 +248,7 @@ function ProfileFeatures() {
       situacao: situation
     };
 
-    if(!currentlyWorking) {
+    if (!currentlyWorking) {
       delete data["data_fim"];
     }
 
@@ -300,7 +301,7 @@ function ProfileFeatures() {
       vinculo: bond,
     };
 
-    if(!currentlyWorking) {
+    if (!currentlyWorking) {
       delete data["data_fim"];
     }
 
@@ -403,14 +404,14 @@ function ProfileFeatures() {
                         </p>
                       </text>
                     ) : (
-                      <text>
-                        <p>
-                          {experience.initialMonth} de {experience.initialYear}{" "}
+                        <text>
+                          <p>
+                            {experience.initialMonth} de {experience.initialYear}{" "}
                           - {experience.finalMonth} de {experience.finalYear}
-                        </p>
-                        <p>Projeto finalizado</p>
-                      </text>
-                    )}
+                          </p>
+                          <p>Projeto finalizado</p>
+                        </text>
+                      )}
                   </fieldset>
                 </div>
               ))}
@@ -420,89 +421,90 @@ function ProfileFeatures() {
               </button>
             </div>
           ) : (
-            /**
-             * COMMENT
-             * Please make separate components for each experience
-             */
-            <form className="form--experiencia" onSubmit={handleAcademicSubmit}>
-              <aside className="area-registro">
-                <section className="bloco-um">
-                  <Input
-                    label="Instituição de ensino"
-                    name="institution"
-                    required
-                    onChange={handleAcademicInputChange}
-                  />
-                  <Input
-                    label="Curso"
-                    name="course"
-                    required
-                    onChange={handleAcademicInputChange}
-                  />
-                </section>
-                <section className="bloco-dois">
-                  <Select
-                    label="Nível de formação"
-                    name="schooling"
-                    required
-                    options={vinculos}
-                    defaultOption="Selecione"
-                    onChange={handleAcademicSelectChange}
-                    value={academicFormData.schooling}
-                  />
-                  <aside>
-                    <Select
-                      label="Ano incial"
-                      name="initialYear"
+              /**
+               * COMMENT
+               * Please make separate components for each experience
+               */
+              <form className="form--experiencia" onSubmit={handleAcademicSubmit}>
+                <aside className="area-registro">
+                  <section className="bloco-um">
+                    <Input
+                      label="Instituição de ensino"
+                      name="institution"
                       required
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleAcademicSelectChange}
-                      value={academicFormData.initialYear}
+                      onChange={handleAcademicInputChange}
                     />
+                    <Input
+                      label="Curso"
+                      name="course"
+                      required
+                      onChange={handleAcademicInputChange}
+                    />
+                  </section>
+                  <section className="bloco-dois">
                     <Select
-                      label="Ano final"
-                      name="finalYear"
-                      options={yearOptions}
+                      label="Nível de formação"
+                      name="schooling"
+                      required
+                      options={vinculos}
                       defaultOption="Selecione"
                       onChange={handleAcademicSelectChange}
-                      value={academicFormData.finalYear}
+                      value={academicFormData.schooling}
                     />
-                  </aside>
-                </section>
-                <section className="bloco-tres">
-                  <form action="">
-                    {/**
-                     * COMMENT
-                     * why is the form only here ?
-                     * These are checkboxes, when the user can input only one of them
-                     * you may use a radio button
-                     * */}
+                    <aside>
+                      <Select
+                        label="Ano inicial"
+                        name="initialYear"
+                        required
+                        options={yearOptions}
+                        defaultOption="Selecione"
+                        onChange={handleAcademicSelectChange}
+                        value={academicFormData.initialYear}
+                      />
+                      <Select
+                        label="Ano final"
+                        name="finalYear"
+                        options={yearOptions}
+                        defaultOption="Selecione"
+                        onChange={handleAcademicSelectChange}
+                        value={academicFormData.finalYear}
+                      />
+                    </aside>
+                  </section>
+                  <section className="bloco-tres area-toggle">
+
+
                     <ToggleSwitch label="Incompleto" name="incomplete" />
                     <ToggleSwitch label="Em andamento" name="current" />
                     <ToggleSwitch label="Concluído" name="finished" />
-                  </form>
-                </section>
-                <section className="bloco-quatro">
-                  <Textarea
-                    name="details"
-                    label="Detalhes"
-                    required
-                    onChange={handleAcademicTextAreaChange}
-                  ></Textarea>
-                </section>
-                <section className="area-botoes">
-                  <Button type="submit">Salvar</Button>
-                  <Button>Excluir</Button>
-                  <Button
-                    onClick={() => setRegister({ ...register, first: false })}
-                  >
-                    Calcelar
+
+
+                  </section>
+                  <section className="bloco-quatro">
+                    <Textarea
+                      name="details"
+                      label="Detalhes"
+                      required
+                      onChange={handleAcademicTextAreaChange}
+                    />
+                  </section>
+                  <section className="area-botoes">
+                    <Button
+                      type="submit"
+                      theme="primary-green"
+                    >Salvar</Button>
+                    <Button
+                      theme="secondary-green"
+                    >Excluir</Button>
+                    <Button
+                      onClick={() => setRegister({ ...register, first: false })}
+                    >
+                      Cancelar
                   </Button>
-                </section>
-              </aside>
-            </form>
-          )}
+                  </section>
+                </aside>
+              </form>
+            )}
         </section>
         <section className="caracteristicas">
           <h2>Atuação Profissional</h2>
@@ -531,14 +533,14 @@ function ProfileFeatures() {
                         </p>
                       </text>
                     ) : (
-                      <text>
-                        <p>
-                          {experience.initialMonth} de {experience.initialYear}{" "}
+                        <text>
+                          <p>
+                            {experience.initialMonth} de {experience.initialYear}{" "}
                           - {experience.finalMonth} de {experience.finalYear}
-                        </p>
-                        <p>Projeto finalizado</p>
-                      </text>
-                    )}
+                          </p>
+                          <p>Projeto finalizado</p>
+                        </text>
+                      )}
                   </fieldset>
                 </div>
               ))}
@@ -550,92 +552,92 @@ function ProfileFeatures() {
               </button>
             </div>
           ) : (
-            <form className="form--experiencia" onSubmit={handleProfessionalSubmit}>
-              <aside className="area-registro">
-                <section className="bloco-um">
-                  <Input
-                    label="Organização"
-                    name="organization"
-                    onChange={handleProfessionalInputChange}
-                  />
-                  <Input
-                    label="Cargo"
-                    name="position"
-                    onChange={handleProfessionalInputChange}
-                  />
-                </section>
-                <section className="bloco-dois">
-                  <Select
-                    label="Vínculo"
-                    name="bond"
-                    options={vinculos}
-                    defaultOption="Selecione"
-                    onChange={handleProfessionalSelectChange}
-                  />
-                  {/* 
+              <form className="form--experiencia" onSubmit={handleProfessionalSubmit}>
+                <aside className="area-registro">
+                  <section className="bloco-um">
+                    <Input
+                      label="Organização"
+                      name="organization"
+                      onChange={handleProfessionalInputChange}
+                    />
+                    <Input
+                      label="Cargo"
+                      name="position"
+                      onChange={handleProfessionalInputChange}
+                    />
+                  </section>
+                  <section className="bloco-dois">
+                    <Select
+                      label="Vínculo"
+                      name="bond"
+                      options={vinculos}
+                      defaultOption="Selecione"
+                      onChange={handleProfessionalSelectChange}
+                    />
+                    {/* 
                     This will not be used
                     <Input label="Localização" name="" /> 
                   */}
-                </section>
-                <section className="bloco-tres">
-                  <aside>
-                    <Select
-                      label="Mês incial"
-                      name="initialMonth"
-                      options={monthOptions}
-                      defaultOption="Selecione"
+                  </section>
+                  <section className="bloco-tres">
+                    <aside>
+                      <Select
+                        label="Mês inicial"
+                        name="initialMonth"
+                        options={monthOptions}
+                        defaultOption="Selecione"
                       // onChange={handleProfessionalSelectChange}
+                      />
+                      <Select
+                        label="Ano inicial"
+                        name="initialYear"
+                        options={yearOptions}
+                        defaultOption="Selecione"
+                        onChange={handleProfessionalSelectChange}
+                      />
+                    </aside>
+                    <aside>
+                      <ToggleSwitch
+                        label="Trabalho atual"
+                        name="currentlyWorking"
+                        onChange={handleProfessionalInputChange}
+                      />
+                    </aside>
+                    <aside>
+                      <Select
+                        label="Mês final"
+                        name="initialMonth"
+                        options={monthOptions}
+                        defaultOption="Selecione"
+                      />
+                      <Select
+                        label="Ano final"
+                        name="finalYear"
+                        options={yearOptions}
+                        defaultOption="Selecione"
+                        onChange={handleProfessionalSelectChange}
+                      />
+                    </aside>
+                  </section>
+                  <section className="bloco-quatro">
+                    <Textarea
+                      name="details"
+                      label="Detalhes"
+                      onChange={handleProfessionalTextAreaChange}
                     />
-                    <Select
-                      label="Ano incial"
-                      name="initialYear"
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleProfessionalSelectChange}
-                    />
-                  </aside>
-                  <aside>
-                    <ToggleSwitch
-                      label="Trabalho atual"
-                      name="currentlyWorking"
-                      onChange={handleProfessionalInputChange}
-                    />
-                  </aside>
-                  <aside>
-                    <Select
-                      label="Mês final"
-                      name="initialMonth"
-                      options={monthOptions}
-                      defaultOption="Selecione"
-                    />
-                    <Select
-                      label="Ano final"
-                      name="finalYear"
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleProfessionalSelectChange}
-                    />
-                  </aside>
-                </section>
-                <section className="bloco-quatro">
-                  <Textarea
-                    name="details"
-                    label="Detalhes"
-                    onChange={handleProfessionalTextAreaChange}
-                  />
-                </section>
-                <section className="area-botoes">
-                  <Button type="submit" >Salvar</Button>
-                  <Button>Excluir</Button>
-                  <Button
-                    onClick={() => setRegister({ ...register, second: false })}
-                  >
-                    Calcelar
+                  </section>
+                  <section className="area-botoes">
+                    <Button type="submit" theme="primary-green">Salvar</Button>
+                    <Button theme="secondary-green">Excluir</Button>
+                    <Button
+                      onClick={() => setRegister({ ...register, second: false })}
+                    >
+                      Cancelar
                   </Button>
-                </section>
-              </aside>
-            </form>
-          )}
+                  </section>
+                </aside>
+              </form>
+            )}
         </section>
         <section className="caracteristicas">
           <h2>Projetos</h2>
@@ -665,14 +667,14 @@ function ProfileFeatures() {
                         </p>
                       </text>
                     ) : (
-                      <text>
-                        <p>
-                          {experience.initialMonth} de {experience.initialYear}{" "}
+                        <text>
+                          <p>
+                            {experience.initialMonth} de {experience.initialYear}{" "}
                           - {experience.finalMonth} de {experience.finalYear}
-                        </p>
-                        <p>Projeto finalizado</p>
-                      </text>
-                    )}
+                          </p>
+                          <p>Projeto finalizado</p>
+                        </text>
+                      )}
                   </fieldset>
                 </div>
               ))}
@@ -682,15 +684,15 @@ function ProfileFeatures() {
               </button>
             </div>
           ) : (
-            <form className="form--experiencia" onSubmit={handleProjectSubmit}>
-              <aside className="area-registro">
-                <section className="bloco-um">
-                  <Input
-                    label="Nome do projeto"
-                    name="projectName"
-                    onChange={handleProjectInputChange}
-                  />
-                  {/* 
+              <form className="form--experiencia" onSubmit={handleProjectSubmit}>
+                <aside className="area-registro">
+                  <section className="bloco-um">
+                    <Input
+                      label="Nome do projeto"
+                      name="projectName"
+                      onChange={handleProjectInputChange}
+                    />
+                    {/* 
                    COMMENT
                    Is this gonna be used ? As i don't recall the project having an institution
                   <Input
@@ -698,94 +700,95 @@ function ProfileFeatures() {
                     name=""
                     // onChange={handleInputChange}
                   /> */}
-                </section>
-                <section className="bloco-dois">
-                  <Select
-                    label="Situação"
-                    name="situation"
-                    options={vinculos}
-                    defaultOption="Selecione"
-                  />
-  
-                  <Input
-                    label="Cargo"
-                    name="position"
-                    onChange={handleProjectInputChange}
-                  />
-                </section>
-                <section className="bloco-tres">
-                  <aside>
-                    {/*
+                  </section>
+                  <section className="bloco-dois">
+                    <Select
+                      label="Situação"
+                      name="situation"
+                      options={vinculos}
+                      defaultOption="Selecione"
+                    />
+
+                    <Input
+                      label="Cargo"
+                      name="position"
+                      onChange={handleProjectInputChange}
+                    />
+                  </section>
+                  <section className="bloco-tres">
+                    <aside>
+                      {/*
                       COMMENT 
                       I'll keep this, but this is not how the backend was structured
                       As it was structured to be a full date, we may have to just change it
                       to be a string instead, but it will be more demanding to make queries by year
                     */}
-                    <Select
-                      label="Mês incial"
-                      name="initialMonth"
-                      options={monthOptions}
-                      defaultOption="Selecione"
+                      <Select
+                        label="Mês inicial"
+                        name="initialMonth"
+                        options={monthOptions}
+                        defaultOption="Selecione"
                       // onChange={handleProjectSelectChange}
+                      />
+                      <Select
+                        label="Ano inicial"
+                        name="initialYear"
+                        options={yearOptions}
+                        defaultOption="Selecione"
+                        onChange={handleProjectSelectChange}
+                        value={projectFormData.initialYear}
+                      />
+                    </aside>
+                    <aside>
+                      <ToggleSwitch
+                        label="Estou nesse projeto atualmente"
+                        name="currentlyWorking"
+                      />
+                    </aside>
+                    <aside>
+                      <Select
+                        label="Mês final"
+                        name="initialMonth"
+                        options={monthOptions}
+                        defaultOption="Selecione"
+                      />
+                      <Select
+                        label="Ano final"
+                        name="finalYear"
+                        options={yearOptions}
+                        defaultOption="Selecione"
+                        onChange={handleProjectSelectChange}
+                        value={projectFormData.finalYear}
+                      />
+                    </aside>
+                  </section>
+                  <section className="bloco-quatro">
+                    <Textarea
+                      name="details"
+                      label="Detalhes"
+                      onChange={handleProjectTextAreaChange}
                     />
-                    <Select
-                      label="Ano incial"
-                      name="initialYear"
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleProjectSelectChange}
-                      value={projectFormData.initialYear}
-                    />
-                  </aside>
-                  <aside>
-                    <ToggleSwitch
-                      label="Estou nesse projeto atualmente"
-                      name="currentlyWorking"
-                    />
-                  </aside>
-                  <aside>
-                    <Select
-                      label="Mês final"
-                      name="initialMonth"
-                      options={monthOptions}
-                      defaultOption="Selecione"
-                    />
-                    <Select
-                      label="Ano final"
-                      name="finalYear"
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleProjectSelectChange}
-                      value={projectFormData.finalYear}
-                    />
-                  </aside>
-                </section>
-                <section className="bloco-quatro">
-                  <Textarea
-                    name="details"
-                    label="Detalhes"
-                    onChange={handleProjectTextAreaChange}
-                  />
-                </section>
-                <section className="area-botoes">
-                  <Button type="submit" >Salvar</Button>
-                  <Button>Excluir</Button>
-                  <Button
-                    onClick={() => setRegister({ ...register, third: false })}
-                  >
-                    Calcelar
+                  </section>
+                  <section className="area-botoes">
+                    <Button type="submit" theme="primary-green">Salvar</Button>
+                    <Button theme="secondary-green">Excluir</Button>
+                    <Button
+                      onClick={() => setRegister({ ...register, third: false })}
+                    >
+                      Cancelar
                   </Button>
-                </section>
-              </aside>
-            </form>
-          )}
+                  </section>
+                </aside>
+              </form>
+            )}
         </section>
         <footer>
-          <Button>Pular</Button>{" "}
+          <Button theme="secondary-yellow">Pular</Button>{" "}
           <Button
             onClick={() => {
               history.push("/experienceareas");
             }}
+            theme="primary-yellow"
           >
             Continuar
           </Button>

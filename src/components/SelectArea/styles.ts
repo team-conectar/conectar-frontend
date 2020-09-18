@@ -58,13 +58,14 @@ export const BodySelectArea = styled.div`
             font:500 1.2rem Roboto;
           }
           button{
-            position:relative;
-            right:30%;
+            float:left;
+            right:0px;
             border:1px solid var(--green-bg);
             border-radius:0.2rem;
             padding:0.2rem;
             background:none;
             color:var(--green-bg);
+            
           }
         }
         fieldset{
@@ -83,9 +84,12 @@ export const BodySelectArea = styled.div`
             border-bottom:2px solid var(--yellow);
             padding:0 1.4rem;
             font:500 1.2rem Roboto;
-            strong{
+            strong,span{
               color:var(--green);
               font-size:1.3rem;
+            }
+            span{
+              position:absolute;
             }
             legend{
               color:var(--orange);

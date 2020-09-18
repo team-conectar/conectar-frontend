@@ -34,7 +34,7 @@ function ExperienceAreas() {
 
       </div>
       <footer >
-        <Button>Pular</Button> <Button onClick={() => { history.push("/masterytools") }}>Continuar</Button>
+        <Button theme="secondary-yellow">Pular</Button> <Button onClick={() => { history.push("/masterytools") }} theme="primary-yellow">Continuar</Button>
       </footer>
     </BodyExperienceAreas >
   )

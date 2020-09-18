@@ -79,7 +79,12 @@ function SignUp() {
 
             <section>
               <Link to="login">Já tem uma conta?</Link>
-              <Button type="button" onClick={() => setShowNextStep(true)}>Continuar</Button>
+              <Button 
+              type="button" 
+              onClick={() => setShowNextStep(true)}
+              theme="primary-yellow"
+              >Continuar
+              </Button>
             </section>
             <section>
 
@@ -170,7 +175,9 @@ function SignUp() {
           </section>
           <section>
             <button className="voltar" type="button" onClick={() => setShowNextStep(false)}>Voltar</button>
-            <Button onClick={() => history.push("/profilefeatures")}>Enviar</Button>
+            <Button onClick={() => history.push("/profilefeatures")}
+            theme="primary-yellow"
+            >Continuar</Button>
           </section>
         </div>
       </form>

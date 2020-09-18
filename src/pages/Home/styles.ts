@@ -12,12 +12,16 @@ export const BodyHome = styled.div`
         width:100%;
         display:flex;
         justify-content:center;
+        flex-direction:column;
+        align-items:center;
+        
         clip-path: polygon(0 0, 100% 0, 100% 90%, 80% 90%, 74% 79%, 52% 79%, 48% 72%, 0 72%);
         .topo{
             display: grid;
             grid-template-rows: 50rem;
             grid-template-columns: 1fr 3fr ;
             grid-template-areas: "login hero";
+            margin:0.8rem 0;
             .area-login{
                 grid-area:login ;
                 h1{

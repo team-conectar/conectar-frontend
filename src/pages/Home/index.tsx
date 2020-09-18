@@ -9,8 +9,8 @@ function Home() {
 
   return (
     <BodyHome>
-      < NavBar logged={false} />
       <main className="topo-background">
+        < NavBar logged={false} />
         <div className="container topo">
           <section className="area-login">
             <h1>Find your <br /> dreamteam!</h1>

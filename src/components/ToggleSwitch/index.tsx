@@ -10,10 +10,11 @@ const Input: React.FC<InputProps> = ({ name, label, ...rest }) => {
   return (
     <BodySwitch>
       <label htmlFor={name}>{label}</label>
-      <aside>
-        <input type="checkbox" id={name} name={name} {...rest} />
-        <span className="slider"></span>
-      </aside>
+
+      <input type="checkbox" id={name} name={name} className="checkbox" {...rest} />
+      <label htmlFor={name} className="switch"></label>
+
+
     </BodySwitch>
   )
 }

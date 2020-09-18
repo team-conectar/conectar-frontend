@@ -23,11 +23,11 @@ export const BodyButton = styled.button<PropsBodyButton>`
     }
   `}
   ${props => props.theme === "secondary-yellow" && css`
-    border: 1.5px solid var(--yellow);
+    border:2px solid var(--yellow);
     color:var(--yellow);
     background:transparent;
     :hover{
-      border: 1.5px solid var(--yellow-dark);
+      border:2px solid var(--yellow-dark);
     }
   `}
   ${props => props.theme === "primary-green" && css`
@@ -35,7 +35,7 @@ export const BodyButton = styled.button<PropsBodyButton>`
     color:white;
   `}
   ${props => props.theme === "secondary-green" && css`
-    border: 1.5px solid var(--green-bg);
+    border:2px solid var(--green-bg);
     color:var(--green-bg);
     background:transparent;
   `}

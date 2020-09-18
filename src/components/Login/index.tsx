@@ -79,6 +79,7 @@ const Login: React.FC = () => {
       />
       <Button 
         type="submit"
+        theme="primary-yellow"
         >
           Entrar
       </Button>
