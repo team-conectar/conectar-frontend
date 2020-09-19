@@ -6,13 +6,13 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
 }
 
-const Input: React.FC<InputProps> = ({ name, label, ...rest }) => {
+const Input: React.FC<InputProps> = ({id, name, label, ...rest }) => {
   return (
     <BodySwitch>
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={id}>{label}</label>
 
-      <input type="checkbox" id={name} name={name} className="checkbox" {...rest} />
-      <label htmlFor={name} className="switch"></label>
+      <input type="checkbox" id={id} name={name} className="checkbox" {...rest} />
+      <label htmlFor={id} className="switch"></label>
 
 
     </BodySwitch>

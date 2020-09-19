@@ -150,7 +150,7 @@ function SignUp() {
               <legend>Idealizador</legend>
               <aside>
                 <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
-                <ToggleSwitch name="" />
+                <ToggleSwitch name="" id="idealizador" />
 
               </aside>
             </fieldset>
@@ -159,7 +159,7 @@ function SignUp() {
               <legend>Colaborador</legend>
               <aside>
                 <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
-                <ToggleSwitch name=""/>
+                <ToggleSwitch name="" id="colaborador" />
 
 
               </aside>
@@ -168,7 +168,7 @@ function SignUp() {
               <legend>Aliado</legend>
               <aside>
                 <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
-                <ToggleSwitch name=""/>
+                <ToggleSwitch name="" id="aliado"/>
 
               </aside>
             </fieldset>

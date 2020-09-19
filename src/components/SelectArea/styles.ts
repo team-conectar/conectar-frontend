@@ -47,6 +47,7 @@ export const BodySelectArea = styled.div`
       .area-subarea{    
         height:100%;
         header{
+          position:relative;
           display: flex;
           justify-content:center;
           align-items:center;
@@ -58,8 +59,8 @@ export const BodySelectArea = styled.div`
             font:500 1.2rem Roboto;
           }
           button{
-            float:left;
-            right:0px;
+            position:absolute; 
+            left:1rem;
             border:1px solid var(--green-bg);
             border-radius:0.2rem;
             padding:0.2rem;

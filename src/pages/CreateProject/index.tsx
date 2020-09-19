@@ -101,6 +101,7 @@ function CreateProject() {
 
               <ToggleSwitch
                 name="visibilidade"
+                id="visibilidade"
                 label="Tornar este projeto privado"
                 onChange={handleInputChange}
               />

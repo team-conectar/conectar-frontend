@@ -19,6 +19,7 @@ export const BodySwitch = styled.div`
         background-color: white;
         border:solid 2px var(--green-bg);
         border-radius: 20px;
+        cursor: pointer;
         ::after {
             content: '';
             position: absolute;
