@@ -1,4 +1,4 @@
-import React, { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { BodyCreateProject } from './styles';
 import Input from '../../components/Input';
 import Select from '../../components/Select';
@@ -9,8 +9,6 @@ import { useHistory } from 'react-router';
 import { useDropzone } from 'react-dropzone'
 import SelectArea from '../../components/SelectArea';
 import SelectTool from '../../components/SelectTools';
-import { inputChange } from '../../utils/inputChange';
-import { textareaChange } from '../../utils/textareaChange';
 import axios, { AxiosError } from "axios";
 interface renderFacebook {
   onClick: () => void;

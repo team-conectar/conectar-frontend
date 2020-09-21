@@ -4,26 +4,19 @@ import Textarea from '../Textarea';
 import Select, { OptionsTypes } from '../Select';
 import ToggleSwitch from '../ToggleSwitch';
 import Button from '../Button';
-import { BodyAcademicForm } from './styles';
+import { BodyExperiences } from './styles';
 import { inputChange } from "../../utils/inputChange";
 import { selectChange } from "../../utils/selectChange";
 import { textareaChange } from "../../utils/textareaChange";
-import { yearOptions,monthOptions } from "../../utils/dates";
+import { yearOptions, monthOptions } from "../../utils/dates";
 import axios, { AxiosError } from "axios";
 
 const ProjectExperiences: React.FC = () => {
   const [register, setRegister] = useState<boolean>(false)
-  const vinculos: OptionsTypes[] = [
-    { label: "Trainee", value: "Trainee" },
-    { label: "Terceirizado", value: "Terceirizado" },
-    { label: "Intermitente", value: "Intermitente" },
-    { label: "Aprendiz", value: "Aprendiz" },
-    { label: "Estágio", value: "Estágio" },
-    { label: "Temporário", value: "Temporário" },
-    { label: "Freelance", value: "Freelance" },
-    { label: "Autônomo", value: "Autônomo" },
-    { label: "Meio Período", value: "Meio Período" },
-    { label: "Tempo Integral", value: "Tempo Integral" },
+  const situacao: OptionsTypes[] = [
+    { label: "Desativado", value: "desativado" },
+    { label: "Em andamento", value: "em andamento" },
+    { label: "Conluído", value: "conluido" },
   ];
 
   const [projectFormData, setProjectFormData] = useState({
@@ -36,7 +29,7 @@ const ProjectExperiences: React.FC = () => {
     currentlyWorking: false,
   });
 
-  
+
 
   /**
    * The useCallback hook will act as the bind method so we can
@@ -131,9 +124,6 @@ const ProjectExperiences: React.FC = () => {
     // Do something
   }
 
-  
-
-  // Project functions
   function handleProjectInputChange(event: ChangeEvent<HTMLInputElement>) {
     handleInputChange(event, setProjectFormData, projectFormData);
   }
@@ -147,114 +137,118 @@ const ProjectExperiences: React.FC = () => {
   }
 
   return (
-    <BodyAcademicForm>
+    <BodyExperiences>
 
-      <section className="caracteristicas">
-        <h2>Projetos</h2>
 
-        {!register ? (
-          <div className="experiencias">
-            
-            <button onClick={() => setRegister(true)}>
-              <span>+ </span>
+      <h2>Projetos</h2>
+
+      {!register ? (
+        <div className="experiencias">
+
+          <button onClick={() => setRegister(true)}>
+            <span>+ </span>
                 Adicionar
               </button>
-          </div>
-        ) : (
-            <form className="form--experiencia" onSubmit={handleProjectSubmit}>
-              <aside className="area-registro">
-                <section className="bloco-um">
-                  <Input
-                    label="Nome do projeto"
-                    name="projectName"
-                    onChange={handleProjectInputChange}
-                  />
-                </section>
-                <section className="bloco-dois">
-                  <Select
-                    label="Situação"
-                    name="situation"
-                    options={vinculos}
-                    defaultOption="Selecione"
-                  />
+        </div>
+      ) : (
+          <form className="form--experiencia" onSubmit={handleProjectSubmit}>
+            <aside className="area-registro">
+              <section className="bloco-um">
+                <Input
+                  label="Nome do projeto"
+                  name="projectName"
+                  onChange={handleProjectInputChange}
+                />
+              </section>
+              <section className="bloco-dois">
+                <Select
+                  label="Situação"
+                  name="situation"
+                  options={situacao}
+                  defaultOption="Selecione"
+                />
 
-                  <Input
-                    label="Cargo"
-                    name="position"
-                    onChange={handleProjectInputChange}
-                  />
-                </section>
-                <section className="bloco-tres">
-                  <aside>
-                    {/*
+                <Input
+                  label="Cargo"
+                  name="position"
+                  onChange={handleProjectInputChange}
+                />
+              </section>
+              <section className="bloco-tres">
+                <aside>
+                  {/*
                       COMMENT 
                       I'll keep this, but this is not how the backend was structured
                       As it was structured to be a full date, we may have to just change it
                       to be a string instead, but it will be more demanding to make queries by year
                     */}
-                    <Select
-                      label="Mês inicial"
-                      name="initialMonth"
-                      options={monthOptions}
-                      defaultOption="Selecione"
-                    // onChange={handleProjectSelectChange}
-                    />
-                    <Select
-                      label="Ano inicial"
-                      name="initialYear"
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleProjectSelectChange}
-                      value={projectFormData.initialYear}
-                    />
-                  </aside>
-                  <aside>
-                    <ToggleSwitch
-                      label="Estou nesse projeto atualmente"
-                      name="currentlyWorking"
-                      id="currentlyWorking"
-                    />
-                  </aside>
-                  <aside>
-                    <Select
-                      label="Mês final"
-                      name="initialMonth"
-                      options={monthOptions}
-                      defaultOption="Selecione"
-                    />
-                    <Select
-                      label="Ano final"
-                      name="finalYear"
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleProjectSelectChange}
-                      value={projectFormData.finalYear}
-                    />
-                  </aside>
-                </section>
-                <section className="bloco-quatro">
-                  <Textarea
-                    name="details"
-                    label="Detalhes"
-                    onChange={handleProjectTextAreaChange}
+                  <Select
+                    label="Mês inicial"
+                    name="initialMonth"
+                    options={monthOptions}
+                    defaultOption="Selecione"
+                  // onChange={handleProjectSelectChange}
                   />
-                </section>
-                <section className="area-botoes">
-                  <Button type="submit" theme="primary-green">Salvar</Button>
-                  <Button theme="secondary-green">Excluir</Button>
-                  <Button
-                    onClick={() => setRegister(false)}
-                  >
-                    Cancelar
+                  <Select
+                    label="Ano inicial"
+                    name="initialYear"
+                    options={yearOptions}
+                    defaultOption="Selecione"
+                    onChange={handleProjectSelectChange}
+                    value={projectFormData.initialYear}
+                  />
+                </aside>
+                <aside>
+                  <ToggleSwitch
+                    label="Estou nesse projeto atualmente"
+                    name="currentlyWorking"
+                    id="currentlyWorking"
+                  />
+                </aside>
+                <aside>
+                  <Select
+                    label="Mês final"
+                    name="initialMonth"
+                    options={monthOptions}
+                    defaultOption="Selecione"
+                  />
+                  <Select
+                    label="Ano final"
+                    name="finalYear"
+                    options={yearOptions}
+                    defaultOption="Selecione"
+                    onChange={handleProjectSelectChange}
+                    value={projectFormData.finalYear}
+                  />
+                </aside>
+              </section>
+              <section className="bloco-quatro">
+                <Textarea
+                  name="details"
+                  label="Detalhes"
+                  onChange={handleProjectTextAreaChange}
+                />
+              </section>
+              <section className="area-botoes">
+                <Button
+                  type="submit"
+                  theme="primary-green"
+                >Salvar</Button>
+                <Button
+                  theme="secondary-green"
+                >Excluir</Button>
+                <Button
+                  onClick={() => setRegister(false)}
+                  theme="primary-green"
+                >
+                  Cancelar
                   </Button>
-                </section>
-              </aside>
-            </form>
-          )}
-      </section>
+              </section>
+            </aside>
+          </form>
+        )}
 
-
-    </BodyAcademicForm>
+    </BodyExperiences>
 
   )
 

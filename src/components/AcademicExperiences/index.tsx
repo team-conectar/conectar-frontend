@@ -4,26 +4,26 @@ import Textarea from '../Textarea';
 import Select, { OptionsTypes } from '../Select';
 import ToggleSwitch from '../ToggleSwitch';
 import Button from '../Button';
-import { BodyAcademicForm } from './styles';
+import { BodyExperiences } from './styles';
 import { inputChange } from "../../utils/inputChange";
 import { selectChange } from "../../utils/selectChange";
 import { textareaChange } from "../../utils/textareaChange";
-import { yearOptions} from "../../utils/dates";
+import { yearOptions } from "../../utils/dates";
 import axios, { AxiosError } from "axios";
 
 const AcademicExperiences: React.FC = () => {
   const [register, setRegister] = useState<boolean>(false)
-  const vinculos: OptionsTypes[] = [
-    { label: "Trainee", value: "Trainee" },
-    { label: "Terceirizado", value: "Terceirizado" },
-    { label: "Intermitente", value: "Intermitente" },
-    { label: "Aprendiz", value: "Aprendiz" },
-    { label: "Estágio", value: "Estágio" },
-    { label: "Temporário", value: "Temporário" },
-    { label: "Freelance", value: "Freelance" },
-    { label: "Autônomo", value: "Autônomo" },
-    { label: "Meio Período", value: "Meio Período" },
-    { label: "Tempo Integral", value: "Tempo Integral" },
+  const niveisFormacao: OptionsTypes[] = [
+    { label: "Ensino Fundamental", value: "Ensino Fundamental" },
+    { label: "Ensino Médio", value: "Ensino Médio" },
+    { label: "Ensino Técnico", value: "Ensino Técnico" },
+    { label: "Graduação", value: "Graduação" },
+    { label: "Mestrado", value: "Mestrado" },
+    { label: "Mestrado Profissional", value: "Mestrado Profissional" },
+    { label: "Doutorado", value: "Doutorado" },
+    { label: "Especialização", value: "Especialização" },
+    { label: "Residência Médica", value: "Residência Médica" },
+    { label: "Aperfeiçoamento", value: "Aperfeiçoamento" },
   ];
   async function handleAcademicSubmit(event: FormEvent) {
     event.preventDefault();
@@ -130,169 +130,166 @@ const AcademicExperiences: React.FC = () => {
     handleTextAreaChange(event, setAcademicFormData, academicFormData);
   }
   return (
-    <BodyAcademicForm>
+    <BodyExperiences>
 
 
-      <section className="caracteristicas">
-        <h2>Educação</h2>
 
-        {!register ? (
-          <div className="experiencias">
-            {//dataProjects.map((experience) => (
-              /**
-               * We need to find an actual key for this
-               */
-              // <div
-              //   key={Math.floor(Math.random() * (99999 - 0 + 1) + 1)}
-              //   className="experiencia-cadastrada"
-              // >
-              //   <section className="icones">
-              //     <img src={edit} alt="editar experiencia" />
-              //     <img src={trash} alt="apagar experiencia" />
-              //   </section>
-              //   <fieldset className="info-experiencias">
-              //     <legend>{experience.name}</legend>
-              //     <p>
-              //       {experience.institution} | {experience.office}
-              //     </p>
-              //     {experience.current ? (
-              //       /**
-              //        * COMMENT
-              //        * Interestingly, there's no reference to an text tag for html5
-              //        * and its referenced as an SVGElement on React
-              //        * */
-              //       <p>
-              //         <p>Projeto em andamento</p>
-              //         <p>
-              //           {experience.initialMonth} de {experience.initialYear}{" "}
-              //             - Até o momento
-              //           </p>
-              //       </p>
-              //     ) : (
-              //         <p>
-              //           <p>
-              //             {experience.initialMonth} de {experience.initialYear}{" "}
-              //             - {experience.finalMonth} de {experience.finalYear}
-              //           </p>
-              //           <p>Projeto finalizado</p>
-              //         </p>
-              //       )}
-              //   </fieldset>
-              // </div>
+      <h2>Educação</h2>
+
+      {!register ? (
+        <div className="experiencias">
+          {//dataProjects.map((experience) => (
+            /**
+             * We need to find an actual key for this
+             */
+            // <div
+            //   key={Math.floor(Math.random() * (99999 - 0 + 1) + 1)}
+            //   className="experiencia-cadastrada"
+            // >
+            //   <section className="icones">
+            //     <img src={edit} alt="editar experiencia" />
+            //     <img src={trash} alt="apagar experiencia" />
+            //   </section>
+            //   <fieldset className="info-experiencias">
+            //     <legend>{experience.name}</legend>
+            //     <p>
+            //       {experience.institution} | {experience.office}
+            //     </p>
+            //     {experience.current ? (
+            //       /**
+            //        * COMMENT
+            //        * Interestingly, there's no reference to an text tag for html5
+            //        * and its referenced as an SVGElement on React
+            //        * */
+            //       <p>
+            //         <p>Projeto em andamento</p>
+            //         <p>
+            //           {experience.initialMonth} de {experience.initialYear}{" "}
+            //             - Até o momento
+            //           </p>
+            //       </p>
+            //     ) : (
+            //         <p>
+            //           <p>
+            //             {experience.initialMonth} de {experience.initialYear}{" "}
+            //             - {experience.finalMonth} de {experience.finalYear}
+            //           </p>
+            //           <p>Projeto finalizado</p>
+            //         </p>
+            //       )}
+            //   </fieldset>
+            // </div>
             // ))
-            }
+          }
 
-            <button onClick={() => setRegister(true )}>
-              <span>+ </span>
+          <button onClick={() => setRegister(true)}>
+            <span>+ </span>
                 Adicionar
               </button>
-          </div>
-        ) : (
-            /**
-             * COMMENT
-             * Please make separate components for each experience
-             */
-            <form className="form--experiencia" onSubmit={handleAcademicSubmit}>
-              <aside className="area-registro">
-                <section className="bloco-um">
-                  <Input
-                    label="Instituição de ensino"
-                    name="institution"
-                    required
-                    onChange={handleAcademicInputChange}
-                  />
-                  <Input
-                    label="Curso"
-                    name="course"
-                    required
-                    onChange={handleAcademicInputChange}
-                  />
-                </section>
-                <section className="bloco-dois">
+        </div>
+      ) : (
+
+          <form className="form--experiencia" onSubmit={handleAcademicSubmit}>
+            <aside className="area-registro">
+              <section className="bloco-um">
+                <Input
+                  label="Instituição de ensino"
+                  name="institution"
+                  required
+                  onChange={handleAcademicInputChange}
+                />
+                <Input
+                  label="Curso"
+                  name="course"
+                  required
+                  onChange={handleAcademicInputChange}
+                />
+              </section>
+              <section className="bloco-dois">
+                <Select
+                  label="Nível de formação"
+                  name="schooling"
+                  required
+                  options={niveisFormacao}
+                  defaultOption="Selecione"
+                  onChange={handleAcademicSelectChange}
+                  value={academicFormData.schooling}
+                />
+                <aside>
                   <Select
-                    label="Nível de formação"
-                    name="schooling"
+                    label="Ano inicial"
+                    name="initialYear"
                     required
-                    options={vinculos}
+                    options={yearOptions}
                     defaultOption="Selecione"
                     onChange={handleAcademicSelectChange}
-                    value={academicFormData.schooling}
+                    value={academicFormData.initialYear}
                   />
-                  <aside>
-                    <Select
-                      label="Ano inicial"
-                      name="initialYear"
-                      required
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleAcademicSelectChange}
-                      value={academicFormData.initialYear}
-                    />
-                    <Select
-                      label="Ano final"
-                      name="finalYear"
-                      options={yearOptions}
-                      defaultOption="Selecione"
-                      onChange={handleAcademicSelectChange}
-                      value={academicFormData.finalYear}
-                    />
-                  </aside>
-                </section>
-                <section className="bloco-tres area-toggle">
-                  <ToggleSwitch
-                    label="Incompleto"
-                    name="situation"
-                    type="radio"
-                    value="incomplete"
-                    id="incomplete"
-                    onChange={handleAcademicInputChange}
+                  <Select
+                    label="Ano final"
+                    name="finalYear"
+                    options={yearOptions}
+                    defaultOption="Selecione"
+                    onChange={handleAcademicSelectChange}
+                    value={academicFormData.finalYear}
                   />
-                  <ToggleSwitch
-                    label="Em andameAcademicnto"
-                    name="situation"
-                    type="radio"
-                    onChange={handleAcademicInputChange}
-                    value="current"
-                    id="current"
-                  />
-                  <ToggleSwitch
-                    label="Concluído"
-                    name="situation"
-                    type="radio"
-                    value="finished"
-                    id="finished"
-                    onChange={handleAcademicInputChange}
-                  />
+                </aside>
+              </section>
+              <section className="bloco-tres area-toggle">
+                <ToggleSwitch
+                  label="Incompleto"
+                  name="situation"
+                  type="radio"
+                  value="incomplete"
+                  id="incomplete"
+                  onChange={handleAcademicInputChange}
+                />
+                <ToggleSwitch
+                  label="Em andameAcademicnto"
+                  name="situation"
+                  type="radio"
+                  onChange={handleAcademicInputChange}
+                  value="current"
+                  id="current"
+                />
+                <ToggleSwitch
+                  label="Concluído"
+                  name="situation"
+                  type="radio"
+                  value="finished"
+                  id="finished"
+                  onChange={handleAcademicInputChange}
+                />
 
-                </section>
-                <section className="bloco-quatro">
-                  <Textarea
-                    name="details"
-                    label="Detalhes"
-                    required
-                    onChange={handleAcademicTextAreaChange}
-                  />
-                </section>
-                <section className="area-botoes">
-                  <Button
-                    type="submit"
-                    theme="primary-green"
-                  >Salvar</Button>
-                  <Button
-                    theme="secondary-green"
-                  >Excluir</Button>
-                  <Button
-                    onClick={() => setRegister(false )}
-                  >
-                    Cancelar
+              </section>
+              <section className="bloco-quatro">
+                <Textarea
+                  name="details"
+                  label="Detalhes"
+                  required
+                  onChange={handleAcademicTextAreaChange}
+                />
+              </section>
+              <section className="area-botoes">
+                <Button
+                  type="submit"
+                  theme="primary-green"
+                >Salvar</Button>
+                <Button
+                  theme="secondary-green"
+                >Excluir</Button>
+                <Button
+                  onClick={() => setRegister(false)}
+                >
+                  Cancelar
                   </Button>
-                </section>
-              </aside>
-            </form>
-          )}
-      </section>
+              </section>
+            </aside>
+          </form>
+        )}
 
-    </BodyAcademicForm>
+
+    </BodyExperiences>
 
   )
 
