@@ -260,7 +260,6 @@ const AcademicExperiences: React.FC = () => {
                   id="finished"
                   onChange={handleAcademicInputChange}
                 />
-
               </section>
               <section className="bloco-quatro">
                 <Textarea

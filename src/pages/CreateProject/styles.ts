@@ -53,7 +53,6 @@ export const BodyCreateProject = styled.div<StepProps>`
                 grid-column:1/-1;
                 
             }
-
             .area-select{
                 justify-content:space-around;
             }

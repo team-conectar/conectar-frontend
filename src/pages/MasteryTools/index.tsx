@@ -24,7 +24,14 @@ function MasteryTools() {
 
       </div>
       <footer >
-        <Button theme="secondary-yellow" >Pular</Button> <Button onClick={() => { history.push("/ExperienceAreas") }} theme="primary-yellow" >Continuar</Button>
+        <Button 
+        theme="secondary-yellow" 
+        onClick={() => { history.push("/profilefeatures") }}
+        >Pular</Button> 
+        <Button 
+        onClick={() => { history.push("/profilefeatures") }}
+        theme="primary-yellow" 
+        >Continuar</Button>
       </footer>
     </BodyMasteryTools>
   )

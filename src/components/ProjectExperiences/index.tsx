@@ -26,7 +26,7 @@ const ProjectExperiences: React.FC = () => {
     finalYear: "",
     details: "",
     situation: "",
-    currentlyWorking: false,
+    currentlyProject: false,
   });
 
 
@@ -75,7 +75,7 @@ const ProjectExperiences: React.FC = () => {
     event.preventDefault();
 
     const {
-      currentlyWorking,
+      currentlyProject,
       projectName,
       position,
       details,
@@ -85,7 +85,7 @@ const ProjectExperiences: React.FC = () => {
     }: {
       projectName: string;
       details: string;
-      currentlyWorking: boolean;
+      currentlyProject: boolean;
       position: string;
       situation: string;
       initialYear: string;
@@ -102,7 +102,7 @@ const ProjectExperiences: React.FC = () => {
       situacao: situation
     };
 
-    if (!currentlyWorking) {
+    if (!currentlyProject) {
       delete data["data_fim"];
     }
 
@@ -201,8 +201,8 @@ const ProjectExperiences: React.FC = () => {
                 <aside>
                   <ToggleSwitch
                     label="Estou nesse projeto atualmente"
-                    name="currentlyWorking"
-                    id="currentlyWorking"
+                    name="currentlyProject"
+                    id="currentlyProject"
                   />
                 </aside>
                 <aside>

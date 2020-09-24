@@ -1,7 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { BodyCreateProject } from './styles';
 import Input from '../../components/Input';
-import Select from '../../components/Select';
 import Textarea from '../../components/Textarea';
 import Button from '../../components/Button';
 import ToggleSwitch from '../../components/ToggleSwitch';
@@ -10,10 +9,6 @@ import { useDropzone } from 'react-dropzone'
 import SelectArea from '../../components/SelectArea';
 import SelectTool from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
-interface renderFacebook {
-  onClick: () => void;
-  disabled?: boolean;
-}
 
 
 
@@ -26,8 +21,18 @@ function CreateProject() {
     visibilidade: true,
     objetivo: "",
   });
+
+  // function handleCheckBoxChange(event: ChangeEvent<HTMLInputElement>) {
+  //   const { name, value } = event.target;
+
+  //   setFormData({...formData, [name]: value });
+  //   console.log(formData.visibilidade);
+  // }
+
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
+    const target = event.target;
+    const { name } = target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
 
     setFormData({ ...formData, [name]: value })
   }
@@ -35,7 +40,7 @@ function CreateProject() {
   function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value })
-    console.log(formData);
+
   }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -95,15 +100,17 @@ function CreateProject() {
                 <p>Tamanho mínimo de 805x632px</p>
               </div>
             </div>
-            <label>
 
-              <ToggleSwitch
-                name="visibilidade"
-                id="visibilidade"
-                label="Tornar este projeto privado"
-                onChange={handleInputChange}
-              />
-            </label>
+
+            <ToggleSwitch
+              name="visibilidade"
+              id="visibilidade"
+              label="Tornar este projeto privado"
+              onChange={handleInputChange}
+              checked={formData.visibilidade}
+            />
+
+
 
           </div>
           <div className="coluna-dois">
@@ -127,11 +134,6 @@ function CreateProject() {
         </main>
         <main className="segunda-etapa">
           <div className="coluna-um">
-            <Input
-              name="#"
-              label="Empresa, marca ou instituição"
-              placeholder="Para quem o projeto será feito?"
-            />
             <Textarea
               label="Objetivo do projeto"
               name="objetivo"
