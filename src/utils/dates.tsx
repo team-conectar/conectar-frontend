@@ -20,13 +20,14 @@ export const monthOptions: OptionsTypes[] = [
 // preciso revisar
 
 function createYearOptions() {
+  const yearPlusFive = `${new Date().getFullYear() + 5}`;
 
   const years: OptionsTypes[] = [{
-    label: "2020",
-    value: "2020",
+    label: yearPlusFive,
+    value: yearPlusFive,
   },];
   for (let index = 1; index < 100; index++) {
-    const year = String(2019 - index);
+    const year = String(Number(yearPlusFive) - index);
     years.push({
       value: year,
       label: year,

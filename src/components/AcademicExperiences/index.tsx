@@ -1,10 +1,10 @@
-import React, { ChangeEvent, FormEvent, useState, useCallback } from 'react';
-import Input from '../Input';
-import Textarea from '../Textarea';
-import Select, { OptionsTypes } from '../Select';
-import ToggleSwitch from '../ToggleSwitch';
-import Button from '../Button';
-import { BodyExperiences } from './styles';
+import React, { ChangeEvent, FormEvent, useState, useCallback } from "react";
+import Input from "../Input";
+import Textarea from "../Textarea";
+import Select, { OptionsTypes } from "../Select";
+import ToggleSwitch from "../ToggleSwitch";
+import Button from "../Button";
+import { BodyExperiences } from "./styles";
 import { inputChange } from "../../utils/inputChange";
 import { selectChange } from "../../utils/selectChange";
 import { textareaChange } from "../../utils/textareaChange";
@@ -12,7 +12,7 @@ import { yearOptions } from "../../utils/dates";
 import axios, { AxiosError } from "axios";
 
 const AcademicExperiences: React.FC = () => {
-  const [register, setRegister] = useState<boolean>(false)
+  const [register, setRegister] = useState<boolean>(false);
   const niveisFormacao: OptionsTypes[] = [
     { label: "Ensino Fundamental", value: "Ensino Fundamental" },
     { label: "Ensino Médio", value: "Ensino Médio" },
@@ -33,34 +33,41 @@ const AcademicExperiences: React.FC = () => {
       schooling,
       course,
       details,
-      finalYear,
-      initialYear,
+      data_fim,
+      data_inicio,
+      situacao,
     }: {
       institution: string;
       schooling: string;
       course: string;
       details: string;
-      initialYear: string;
+      data_inicio: string;
+      situacao: string;
       // Supressing "The operand of a 'delete' operator must be optional" warning
-      finalYear: any;
+      data_fim: any;
     } = academicFormData;
+
+    let data_final;
+    if (data_fim) {
+      data_final = `${data_fim}-01-01`;
+    }
+
+    const data_inicial = `${data_inicio}-01-01`;
 
     const data = {
       instituicao: institution,
       descricao: details,
-      data_inicio: initialYear,
-      data_fim: finalYear,
+      data_inicio: data_inicial,
+      data_fim: data_final,
       escolaridade: schooling,
       curso: course,
+      situacao,
     };
 
     /**
-     * In case finalYear has been set, it should not be sent to backend
+     * In case data_fim has been set, it should not be sent to backend
      * So it will be null and not listed when not needed
      */
-    if (!finalYear) {
-      delete data["data_fim"];
-    }
 
     /**
      * Sends data to backend
@@ -115,8 +122,8 @@ const AcademicExperiences: React.FC = () => {
     institution: "",
     schooling: "",
     course: "",
-    initialYear: "",
-    finalYear: "",
+    data_inicio: "",
+    data_fim: "",
     details: "",
     situacao: "",
   });
@@ -126,19 +133,19 @@ const AcademicExperiences: React.FC = () => {
   function handleAcademicSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     handleSelectChange(event, setAcademicFormData, academicFormData);
   }
-  function handleAcademicTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
+  function handleAcademicTextAreaChange(
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) {
     handleTextAreaChange(event, setAcademicFormData, academicFormData);
   }
   return (
     <BodyExperiences>
-
-
-
       <h2>Educação</h2>
 
       {!register ? (
         <div className="experiencias">
-          {//dataProjects.map((experience) => (
+          {
+            //dataProjects.map((experience) => (
             /**
              * We need to find an actual key for this
              */
@@ -184,115 +191,102 @@ const AcademicExperiences: React.FC = () => {
 
           <button onClick={() => setRegister(true)}>
             <span>+ </span>
-                Adicionar
-              </button>
+            Adicionar
+          </button>
         </div>
       ) : (
-
-          <form className="form--experiencia" onSubmit={handleAcademicSubmit}>
-            <aside className="area-registro">
-              <section className="bloco-um">
-                <Input
-                  label="Instituição de ensino"
-                  name="institution"
-                  required
-                  onChange={handleAcademicInputChange}
-                />
-                <Input
-                  label="Curso"
-                  name="course"
-                  required
-                  onChange={handleAcademicInputChange}
-                />
-              </section>
-              <section className="bloco-dois">
+        <form className="form--experiencia" onSubmit={handleAcademicSubmit}>
+          <aside className="area-registro">
+            <section className="bloco-um">
+              <Input
+                label="Instituição de ensino"
+                name="institution"
+                required
+                onChange={handleAcademicInputChange}
+              />
+              <Input
+                label="Curso"
+                name="course"
+                required
+                onChange={handleAcademicInputChange}
+              />
+            </section>
+            <section className="bloco-dois">
+              <Select
+                label="Nível de formação"
+                name="schooling"
+                required
+                options={niveisFormacao}
+                defaultOption="Selecione"
+                onChange={handleAcademicSelectChange}
+                value={academicFormData.schooling}
+              />
+              <aside>
                 <Select
-                  label="Nível de formação"
-                  name="schooling"
+                  label="Ano inicial"
+                  name="data_inicio"
                   required
-                  options={niveisFormacao}
+                  options={yearOptions}
                   defaultOption="Selecione"
                   onChange={handleAcademicSelectChange}
-                  value={academicFormData.schooling}
+                  value={academicFormData.data_inicio}
                 />
-                <aside>
-                  <Select
-                    label="Ano inicial"
-                    name="initialYear"
-                    required
-                    options={yearOptions}
-                    defaultOption="Selecione"
-                    onChange={handleAcademicSelectChange}
-                    value={academicFormData.initialYear}
-                  />
-                  <Select
-                    label="Ano final"
-                    name="finalYear"
-                    options={yearOptions}
-                    defaultOption="Selecione"
-                    onChange={handleAcademicSelectChange}
-                    value={academicFormData.finalYear}
-                  />
-                </aside>
-              </section>
-              <section className="bloco-tres area-toggle">
-                <ToggleSwitch
-                  label="Incompleto"
-                  name="situation"
-                  type="radio"
-                  value="incomplete"
-                  id="incomplete"
-                  onChange={handleAcademicInputChange}
+                <Select
+                  label="Ano final"
+                  name="data_fim"
+                  options={yearOptions}
+                  defaultOption="Selecione"
+                  onChange={handleAcademicSelectChange}
+                  value={academicFormData.data_fim}
                 />
-                <ToggleSwitch
-                  label="Em andameAcademicnto"
-                  name="situation"
-                  type="radio"
-                  onChange={handleAcademicInputChange}
-                  value="current"
-                  id="current"
-                />
-                <ToggleSwitch
-                  label="Concluído"
-                  name="situation"
-                  type="radio"
-                  value="finished"
-                  id="finished"
-                  onChange={handleAcademicInputChange}
-                />
-
-              </section>
-              <section className="bloco-quatro">
-                <Textarea
-                  name="details"
-                  label="Detalhes"
-                  required
-                  onChange={handleAcademicTextAreaChange}
-                />
-              </section>
-              <section className="area-botoes">
-                <Button
-                  type="submit"
-                  theme="primary-green"
-                >Salvar</Button>
-                <Button
-                  theme="secondary-green"
-                >Excluir</Button>
-                <Button
-                  onClick={() => setRegister(false)}
-                >
-                  Cancelar
-                  </Button>
-              </section>
-            </aside>
-          </form>
-        )}
-
-
+              </aside>
+            </section>
+            <section className="bloco-tres area-toggle">
+              <ToggleSwitch
+                label="Incompleto"
+                name="situacao"
+                type="radio"
+                id="incomplete"
+                value="Incompleto"
+                onChange={handleAcademicInputChange}
+              />
+              <ToggleSwitch
+                label="Em andamento"
+                name="situacao"
+                type="radio"
+                onChange={handleAcademicInputChange}
+                value="Em andamento"
+                id="current"
+              />
+              <ToggleSwitch
+                label="Concluído"
+                name="situacao"
+                type="radio"
+                value="Concluído"
+                id="finished"
+                onChange={handleAcademicInputChange}
+              />
+            </section>
+            <section className="bloco-quatro">
+              <Textarea
+                name="details"
+                label="Detalhes"
+                required
+                onChange={handleAcademicTextAreaChange}
+              />
+            </section>
+            <section className="area-botoes">
+              <Button type="submit" theme="primary-green">
+                Salvar
+              </Button>
+              <Button theme="secondary-green">Excluir</Button>
+              <Button onClick={() => setRegister(false)}>Cancelar</Button>
+            </section>
+          </aside>
+        </form>
+      )}
     </BodyExperiences>
-
-  )
-
-}
+  );
+};
 
 export default AcademicExperiences;
