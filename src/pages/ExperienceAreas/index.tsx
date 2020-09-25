@@ -13,7 +13,7 @@ interface AreaTypes {
 
 function ExperienceAreas() {
   const history = useHistory();
-  
+
 
   const [selectedAreas, setSelectedAreas] = useState<AreaTypes[]>([{
     name: "",
@@ -34,7 +34,14 @@ function ExperienceAreas() {
 
       </div>
       <footer >
-        <Button theme="secondary-yellow">Pular</Button> <Button onClick={() => { history.push("/masterytools") }} theme="primary-yellow">Continuar</Button>
+        <Button
+          theme="secondary-yellow"
+          onClick={() => { history.push("/masterytools") }}
+        >Pular</Button>
+        <Button
+          onClick={() => { history.push("/masterytools") }}
+          theme="primary-yellow"
+        >Continuar</Button>
       </footer>
     </BodyExperienceAreas >
   )

@@ -9,7 +9,7 @@ import ProjectExperiences from "../../components/ProjectExperiences";
 
 function ProfileFeatures() {
   const history = useHistory();
- 
+
   return (
     <BodyProfileFeatures>
       <div className="area-central container">
@@ -18,11 +18,12 @@ function ProfileFeatures() {
         <ProfessionalExperiences />
         <ProjectExperiences />
         <footer>
-          <Button theme="secondary-yellow">Pular</Button>{" "}
           <Button
-            onClick={() => {
-              history.push("/experienceareas");
-            }}
+            theme="secondary-yellow"
+            onClick={() => history.push("/")}
+          >Pular</Button>{" "}
+          <Button
+            onClick={() => history.push("/")}
             theme="primary-yellow"
           >
             Continuar

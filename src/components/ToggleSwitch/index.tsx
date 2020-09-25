@@ -11,7 +11,7 @@ const Input: React.FC<InputProps> = ({id, name, label, ...rest }) => {
     <BodySwitch>
       <label htmlFor={id}>{label}</label>
 
-      <input type="checkbox" id={id} name={name} className="checkbox" {...rest} />
+      <input type="checkbox" id={id} name={name} className="checkbox"{...rest} />
       <label htmlFor={id} className="switch"></label>
 
 

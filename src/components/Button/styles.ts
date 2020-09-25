@@ -41,7 +41,6 @@ export const BodyButton = styled.button<PropsBodyButton>`
   `}
   :disabled{
     cursor: no-drop;
-    background: #ccc;
-    color:gray;
+    opacity:0.5;
   }
 `;
