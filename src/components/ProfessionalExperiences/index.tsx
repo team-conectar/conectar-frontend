@@ -1,18 +1,18 @@
-import React, { ChangeEvent, FormEvent, useState, useCallback } from 'react';
-import Input from '../Input';
-import Textarea from '../Textarea';
-import Select, { OptionsTypes } from '../Select';
-import ToggleSwitch from '../ToggleSwitch';
-import Button from '../Button';
-import { BodyExperiences } from './styles';
+import React, { ChangeEvent, FormEvent, useState, useCallback } from "react";
+import Input from "../Input";
+import Textarea from "../Textarea";
+import Select, { OptionsTypes } from "../Select";
+import ToggleSwitch from "../ToggleSwitch";
+import Button from "../Button";
+import { BodyExperiences } from "./styles";
 import { inputChange } from "../../utils/inputChange";
 import { selectChange } from "../../utils/selectChange";
 import { textareaChange } from "../../utils/textareaChange";
 import { yearOptions, monthOptions } from "../../utils/dates";
 import axios, { AxiosError } from "axios";
 
-const AcademicExperiences: React.FC = () => {
-  const [register, setRegister] = useState<boolean>(false)
+const ProfessionalExperiences: React.FC = () => {
+  const [register, setRegister] = useState<boolean>(false);
   const vinculos: OptionsTypes[] = [
     { label: "Trainee", value: "Trainee" },
     { label: "Terceirizado", value: "Terceirizado" },
@@ -31,8 +31,10 @@ const AcademicExperiences: React.FC = () => {
     position: "",
     initialYear: "",
     finalYear: "",
+    initialMonth: "",
+    finalMonth: "",
     details: "",
-    currentlyWorking: false
+    currentlyWorking: false,
   });
   const handleInputChange = useCallback(
     (
@@ -69,7 +71,6 @@ const AcademicExperiences: React.FC = () => {
   async function handleProfessionalSubmit(event: FormEvent) {
     event.preventDefault();
 
-
     const {
       bond,
       currentlyWorking,
@@ -78,6 +79,8 @@ const AcademicExperiences: React.FC = () => {
       details,
       finalYear,
       initialYear,
+      initialMonth,
+      finalMonth,
     }: {
       bond: string;
       currentlyWorking: boolean;
@@ -85,22 +88,27 @@ const AcademicExperiences: React.FC = () => {
       organization: string;
       details: string;
       initialYear: string;
+      initialMonth: string;
       // Supressing "The operand of a 'delete' operator must be optional" warning
       finalYear: any;
+      finalMonth: any;
     } = professionalFormData;
+
+    let data_fim;
+    const data_inicio = `${initialYear}-${initialMonth}-01`;
+
+    if (!currentlyWorking) {
+      data_fim = `${finalYear}-${finalMonth}-01`;
+    }
 
     const data = {
       organizacao: organization,
       descricao: details,
-      data_inicio: initialYear,
-      data_fim: finalYear,
+      data_inicio,
+      data_fim,
       cargo: position,
       vinculo: bond,
     };
-
-    if (!currentlyWorking) {
-      delete data["data_fim"];
-    }
 
     /**
      * Sends data to backend
@@ -108,7 +116,7 @@ const AcademicExperiences: React.FC = () => {
      * so it will send the JWT token as cookie
      * */
     const res = await axios
-      .post("/api/v1/experiencias/professional", data, {
+      .post("/api/v1/experiencias/profissional", data, {
         withCredentials: true,
       })
       .catch((err: AxiosError) => {
@@ -133,71 +141,71 @@ const AcademicExperiences: React.FC = () => {
   }
   return (
     <BodyExperiences>
-
       <h2>Atuação Profissional</h2>
       {!register ? (
         <div className="experiencias">
           <button onClick={() => setRegister(true)}>
             <span>+ </span>
-                Adicionar
-              </button>
+            Adicionar
+          </button>
         </div>
       ) : (
-          <form className="form--experiencia" onSubmit={handleProfessionalSubmit}>
-            <aside className="area-registro">
-              <section className="bloco-um">
-                <Input
-                  label="Organização"
-                  name="organization"
-                  onChange={handleProfessionalInputChange}
-                />
-                <Input
-                  label="Cargo"
-                  name="position"
-                  onChange={handleProfessionalInputChange}
-                />
-              </section>
-              <section className="bloco-dois">
+        <form className="form--experiencia" onSubmit={handleProfessionalSubmit}>
+          <aside className="area-registro">
+            <section className="bloco-um">
+              <Input
+                label="Organização"
+                name="organization"
+                onChange={handleProfessionalInputChange}
+              />
+              <Input
+                label="Cargo"
+                name="position"
+                onChange={handleProfessionalInputChange}
+              />
+            </section>
+            <section className="bloco-dois">
+              <Select
+                label="Vínculo"
+                name="bond"
+                options={vinculos}
+                defaultOption="Selecione"
+                onChange={handleProfessionalSelectChange}
+              />
+            </section>
+            <section className="bloco-tres">
+              <aside>
                 <Select
-                  label="Vínculo"
-                  name="bond"
-                  options={vinculos}
+                  label="Mês inicial"
+                  name="initialMonth"
+                  options={monthOptions}
                   defaultOption="Selecione"
                   onChange={handleProfessionalSelectChange}
                 />
-
-              </section>
-              <section className="bloco-tres">
-                <aside>
-                  <Select
-                    label="Mês inicial"
-                    name="initialMonth"
-                    options={monthOptions}
-                    defaultOption="Selecione"
-                  // onChange={handleProfessionalSelectChange}
-                  />
-                  <Select
-                    label="Ano inicial"
-                    name="initialYear"
-                    options={yearOptions}
-                    defaultOption="Selecione"
-                    onChange={handleProfessionalSelectChange}
-                  />
-                </aside>
-                <aside>
-                  <ToggleSwitch
-                    label="Trabalho atual"
-                    name="currentlyWorking"
-                    id="currentlyWorking"
-                    onChange={handleProfessionalInputChange}
-                  />
-                </aside>
+                <Select
+                  label="Ano inicial"
+                  name="initialYear"
+                  options={yearOptions}
+                  defaultOption="Selecione"
+                  onChange={handleProfessionalSelectChange}
+                />
+              </aside>
+              <aside>
+                <ToggleSwitch
+                  label="Trabalho atual"
+                  name="currentlyWorking"
+                  id="currentlyWorking"
+                  onChange={handleProfessionalInputChange}
+                />
+              </aside>
+              {!professionalFormData.currentlyWorking && (
                 <aside>
                   <Select
                     label="Mês final"
-                    name="initialMonth"
+                    name="finalMonth"
                     options={monthOptions}
                     defaultOption="Selecione"
+                    onChange={handleProfessionalSelectChange}
                   />
                   <Select
                     label="Ano final"
@@ -207,30 +215,27 @@ const AcademicExperiences: React.FC = () => {
                     onChange={handleProfessionalSelectChange}
                   />
                 </aside>
-              </section>
-              <section className="bloco-quatro">
-                <Textarea
-                  name="details"
-                  label="Detalhes"
-                  onChange={handleProfessionalTextAreaChange}
-                />
-              </section>
-              <section className="area-botoes">
-                <Button type="submit" theme="primary-green">Salvar</Button>
-                <Button theme="secondary-green">Excluir</Button>
-                <Button
-                  onClick={() => setRegister(false)}
-                >
-                  Cancelar
-                  </Button>
-              </section>
-            </aside>
-          </form>
-        )}
+              )}
+            </section>
+            <section className="bloco-quatro">
+              <Textarea
+                name="details"
+                label="Detalhes"
+                onChange={handleProfessionalTextAreaChange}
+              />
+            </section>
+            <section className="area-botoes">
+              <Button type="submit" theme="primary-green">
+                Salvar
+              </Button>
+              <Button theme="secondary-green">Excluir</Button>
+              <Button onClick={() => setRegister(false)}>Cancelar</Button>
+            </section>
+          </aside>
+        </form>
+      )}
     </BodyExperiences>
+  );
+};
 
-  )
-
-}
-
-export default AcademicExperiences;
+export default ProfessionalExperiences;

@@ -2,7 +2,6 @@ import { OptionsTypes } from '../components/Select';
 
 
 export const monthOptions: OptionsTypes[] = [
-  { value: "0", label: "Janeiro" },
   { value: "1", label: "Janeiro" },
   { value: "2", label: "Fevereiro" },
   { value: "3", label: "Março" },

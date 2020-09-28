@@ -1,10 +1,10 @@
-import React, { ChangeEvent, FormEvent, useState, useCallback } from 'react';
-import Input from '../Input';
-import Textarea from '../Textarea';
-import Select, { OptionsTypes } from '../Select';
-import ToggleSwitch from '../ToggleSwitch';
-import Button from '../Button';
-import { BodyExperiences } from './styles';
+import React, { ChangeEvent, FormEvent, useState, useCallback } from "react";
+import Input from "../Input";
+import Textarea from "../Textarea";
+import Select, { OptionsTypes } from "../Select";
+import ToggleSwitch from "../ToggleSwitch";
+import Button from "../Button";
+import { BodyExperiences } from "./styles";
 import { inputChange } from "../../utils/inputChange";
 import { selectChange } from "../../utils/selectChange";
 import { textareaChange } from "../../utils/textareaChange";
@@ -12,7 +12,7 @@ import { yearOptions, monthOptions } from "../../utils/dates";
 import axios, { AxiosError } from "axios";
 
 const ProjectExperiences: React.FC = () => {
-  const [register, setRegister] = useState<boolean>(false)
+  const [register, setRegister] = useState<boolean>(false);
   const situacao: OptionsTypes[] = [
     { label: "Desativado", value: "desativado" },
     { label: "Em andamento", value: "em andamento" },
@@ -24,12 +24,12 @@ const ProjectExperiences: React.FC = () => {
     projectName: "",
     initialYear: "",
     finalYear: "",
+    initialMonth: "",
+    finalMonth: "",
     details: "",
-    situation: "",
-    currentlyProject: false,
+    situacao: "",
+    currentProject: false,
   });
-
-
 
   /**
    * The useCallback hook will act as the bind method so we can
@@ -70,41 +70,47 @@ const ProjectExperiences: React.FC = () => {
     []
   );
 
-
   async function handleProjectSubmit(event: FormEvent) {
     event.preventDefault();
 
     const {
-      currentlyProject,
+      currentProject,
       projectName,
       position,
       details,
       finalYear,
       initialYear,
-      situation
+      finalMonth,
+      initialMonth,
+      situacao,
     }: {
       projectName: string;
       details: string;
-      currentlyProject: boolean;
+      currentProject: boolean;
       position: string;
-      situation: string;
+      situacao: string;
       initialYear: string;
+      initialMonth: string;
       // Supressing "The operand of a 'delete' operator must be optional" warning
       finalYear: any;
+      finalMonth: any;
     } = projectFormData;
+
+    let data_fim;
+    const data_inicio = `${initialYear}-${initialMonth}-01`;
+
+    if (!currentProject) {
+      data_fim = `${finalYear}-${finalMonth}-01`;
+    }
 
     const data = {
       nome: projectName,
       descricao: details,
-      data_inicio: initialYear,
-      data_fim: finalYear,
+      data_inicio,
+      data_fim,
       cargo: position,
-      situacao: situation
+      situacao,
     };
-
-    if (!currentlyProject) {
-      delete data["data_fim"];
-    }
 
     /**
      * Sends data to backend
@@ -138,77 +144,77 @@ const ProjectExperiences: React.FC = () => {
 
   return (
     <BodyExperiences>
-
-
       <h2>Projetos</h2>
 
       {!register ? (
         <div className="experiencias">
-
           <button onClick={() => setRegister(true)}>
             <span>+ </span>
-                Adicionar
-              </button>
+            Adicionar
+          </button>
         </div>
       ) : (
-          <form className="form--experiencia" onSubmit={handleProjectSubmit}>
-            <aside className="area-registro">
-              <section className="bloco-um">
-                <Input
-                  label="Nome do projeto"
-                  name="projectName"
-                  onChange={handleProjectInputChange}
-                />
-              </section>
-              <section className="bloco-dois">
-                <Select
-                  label="Situação"
-                  name="situation"
-                  options={situacao}
-                  defaultOption="Selecione"
-                />
+        <form className="form--experiencia" onSubmit={handleProjectSubmit}>
+          <aside className="area-registro">
+            <section className="bloco-um">
+              <Input
+                label="Nome do projeto"
+                name="projectName"
+                onChange={handleProjectInputChange}
+              />
+            </section>
+            <section className="bloco-dois">
+              <Select
+                label="Situação"
+                name="situacao"
+                options={situacao}
+                defaultOption="Selecione"
+                onChange={handleProjectSelectChange}
+              />
 
-                <Input
-                  label="Cargo"
-                  name="position"
-                  onChange={handleProjectInputChange}
-                />
-              </section>
-              <section className="bloco-tres">
-                <aside>
-                  {/*
+              <Input
+                label="Cargo"
+                name="position"
+                onChange={handleProjectInputChange}
+              />
+            </section>
+            <section className="bloco-tres">
+              <aside>
+                {/*
                       COMMENT 
                       I'll keep this, but this is not how the backend was structured
                       As it was structured to be a full date, we may have to just change it
                       to be a string instead, but it will be more demanding to make queries by year
                     */}
-                  <Select
-                    label="Mês inicial"
-                    name="initialMonth"
-                    options={monthOptions}
-                    defaultOption="Selecione"
-                  // onChange={handleProjectSelectChange}
-                  />
-                  <Select
-                    label="Ano inicial"
-                    name="initialYear"
-                    options={yearOptions}
-                    defaultOption="Selecione"
-                    onChange={handleProjectSelectChange}
-                    value={projectFormData.initialYear}
-                  />
-                </aside>
-                <aside>
-                  <ToggleSwitch
-                    label="Estou nesse projeto atualmente"
-                    name="currentlyProject"
-                    id="currentlyProject"
-                  />
-                </aside>
+                <Select
+                  label="Mês inicial"
+                  name="initialMonth"
+                  options={monthOptions}
+                  defaultOption="Selecione"
+                  onChange={handleProjectSelectChange}
+                />
+                <Select
+                  label="Ano inicial"
+                  name="initialYear"
+                  options={yearOptions}
+                  defaultOption="Selecione"
+                  onChange={handleProjectSelectChange}
+                  value={projectFormData.initialYear}
+                />
+              </aside>
+              <aside>
+                <ToggleSwitch
+                  label="Estou nesse projeto atualmente"
+                  name="currentProject"
+                  id="currentProject"
+                  onChange={handleProjectInputChange}
+                />
+              </aside>
+              {!projectFormData.currentProject && (
                 <aside>
                   <Select
                     label="Mês final"
-                    name="initialMonth"
+                    name="finalMonth"
                     options={monthOptions}
                     defaultOption="Selecione"
                   />
@@ -221,37 +227,29 @@ const ProjectExperiences: React.FC = () => {
                     value={projectFormData.finalYear}
                   />
                 </aside>
-              </section>
-              <section className="bloco-quatro">
-                <Textarea
-                  name="details"
-                  label="Detalhes"
-                  onChange={handleProjectTextAreaChange}
-                />
-              </section>
-              <section className="area-botoes">
-                <Button
-                  type="submit"
-                  theme="primary-green"
-                >Salvar</Button>
-                <Button
-                  theme="secondary-green"
-                >Excluir</Button>
-                <Button
-                  onClick={() => setRegister(false)}
-                  theme="primary-green"
-                >
-                  Cancelar
-                  </Button>
-              </section>
-            </aside>
-          </form>
-        )}
-
+              )}
+            </section>
+            <section className="bloco-quatro">
+              <Textarea
+                name="details"
+                label="Detalhes"
+                onChange={handleProjectTextAreaChange}
+              />
+            </section>
+            <section className="area-botoes">
+              <Button type="submit" theme="primary-green">
+                Salvar
+              </Button>
+              <Button theme="secondary-green">Excluir</Button>
+              <Button onClick={() => setRegister(false)} theme="primary-green">
+                Cancelar
+              </Button>
+            </section>
+          </aside>
+        </form>
+      )}
     </BodyExperiences>
-
-  )
-
-}
+  );
+};
 
 export default ProjectExperiences;
