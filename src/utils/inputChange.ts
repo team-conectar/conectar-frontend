@@ -8,7 +8,7 @@ export function inputChange(event: ChangeEvent<HTMLInputElement>, setFormData: F
    * @param {Object} formData
    */
   const target = event.target;
-  const { name } = target;
+  const name = target.name;
   const value = target.type === 'checkbox' ? target.checked : target.value;
-  setFormData({ ...formData, [name]: value });
+  setFormData({...formData, [name]: value });
 }

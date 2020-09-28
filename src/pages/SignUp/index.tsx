@@ -44,7 +44,7 @@ function SignUp() {
     const target = event.target;
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    console.log(`name = ${name}\n value = ${value} `);
+
     setFormData({ ...formData, [name]: value })
   };
 
@@ -78,9 +78,7 @@ function SignUp() {
     data.append('celular', celular);
     try {
       const res = await axios
-        .post("/api/signup", data, {
-          withCredentials: true,
-        });
+        .post("/api/signup", data);
       history.push("/experienceareas");
     } catch (error) {
       return error.response.data.detail;
@@ -181,7 +179,12 @@ function SignUp() {
               options={monthOptions}
               onChange={handleSelectChange}
             />
-            <Input type="number" name="day" placeholder="Dia" onChange={handleInputChange}></Input>
+            <Input 
+              type="number" 
+              name="day" 
+              placeholder="Dia" 
+              onChange={handleInputChange}
+            />
 
           </section>
           <section>

@@ -1,3 +1,4 @@
+
 import React, { ChangeEvent, FormEvent, useState, useCallback, useEffect, OptionHTMLAttributes } from 'react';
 import Input from '../Input';
 import Textarea from '../Textarea';
@@ -26,6 +27,7 @@ interface AcademicType {
 }
 
 const AcademicExperiences: React.FC = () => {
+
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [tempEditExperience, setTempEditExperience] = useState<AcademicType>();
   const [control, setControl] = useState<number>(0);
@@ -100,7 +102,15 @@ const AcademicExperiences: React.FC = () => {
       situacao,
     }: AcademicType = academicFormData;
 
+    let data_final;
+    if (data_fim) {
+      data_final = `${data_fim}-01-01`;
+    }
+
+    const data_inicial = `${data_inicio}-01-01`;
+
     const data = {
+
       instituicao,
       descricao,
       data_inicio,
@@ -114,6 +124,7 @@ const AcademicExperiences: React.FC = () => {
      * In case data_fim has been set, it should not be sent to backend
      * So it will be null and not listed when not needed
      */
+
     if (!data_fim) {
       delete data["data_fim"];
     }
@@ -169,6 +180,17 @@ const AcademicExperiences: React.FC = () => {
     },
     []
   );
+
+  const [academicFormData, setAcademicFormData] = useState({
+    institution: "",
+    schooling: "",
+    course: "",
+    data_inicio: "",
+    data_fim: "",
+    details: "",
+    situacao: "",
+  });
+
   function handleAcademicInputChange(event: ChangeEvent<HTMLInputElement>) {
     handleInputChange(
       event,
@@ -192,13 +214,11 @@ const AcademicExperiences: React.FC = () => {
   }
   return (
     <BodyExperiences>
-
-
-
       <h2>Educação</h2>
 
       {!showRegister ? (
         <div className="experiencias">
+
           {academicRecords?.map((experience: AcademicType) => (
             <div
               key={experience.id}
@@ -236,10 +256,11 @@ const AcademicExperiences: React.FC = () => {
 
           <button onClick={() => setShowRegister(true)}>
             <span>+ </span>
-                Adicionar
-              </button>
+            Adicionar
+          </button>
         </div>
       ) : (
+
 
           <form
             className="form--experiencia"
@@ -356,12 +377,8 @@ const AcademicExperiences: React.FC = () => {
             </aside>
           </form>
         )}
-
-
     </BodyExperiences>
-
-  )
-
-}
+  );
+};
 
 export default AcademicExperiences;

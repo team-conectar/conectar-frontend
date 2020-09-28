@@ -112,7 +112,7 @@ export const BodyHome = styled.div`
     footer{
         background:var(--green-bg);
         clip-path: polygon(20% 0%, 0 0, 0 100%, 100% 100%, 100% 40%, 43% 40%, 40% 25%, 25% 25%);
-        width:100vw;
+        width:99.1vw;
         height:20vh;
     }
 `;
