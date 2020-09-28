@@ -16,9 +16,9 @@ const ProjectExperiences: React.FC = () => {
 
   const [register, setRegister] = useState<boolean>(false)
   const situacao: OptionHTMLAttributes<HTMLOptionElement>[] = [
-    { label: "Desativado", value: "desativado" },
-    { label: "Em andamento", value: "em andamento" },
-    { label: "Conluído", value: "conluido" },
+    { label: "Desativado", value: "Desativado" },
+    { label: "Em andamento", value: "Em andamento" },
+    { label: "Conluído", value: "Conluído" },
   ];
 
   const [projectFormData, setProjectFormData] = useState({
@@ -182,12 +182,6 @@ const ProjectExperiences: React.FC = () => {
             </section>
             <section className="bloco-tres">
               <aside>
-                {/*
-                      COMMENT 
-                      I'll keep this, but this is not how the backend was structured
-                      As it was structured to be a full date, we may have to just change it
-                      to be a string instead, but it will be more demanding to make queries by year
-                    */}
                 <Select
                   label="Mês inicial"
                   name="initialMonth"
