@@ -181,16 +181,6 @@ const AcademicExperiences: React.FC = () => {
     []
   );
 
-  const [academicFormData, setAcademicFormData] = useState({
-    institution: "",
-    schooling: "",
-    course: "",
-    data_inicio: "",
-    data_fim: "",
-    details: "",
-    situacao: "",
-  });
-
   function handleAcademicInputChange(event: ChangeEvent<HTMLInputElement>) {
     handleInputChange(
       event,

@@ -23,7 +23,7 @@ function createYearOptions() {
   const yearPlusFive = `${new Date().getFullYear() + 5}`;
 
 
-  const years: OptionsTypes[] = [{
+  const years: OptionHTMLAttributes<HTMLOptionElement>[] = [{
     label: yearPlusFive,
     value: yearPlusFive,
   },];
