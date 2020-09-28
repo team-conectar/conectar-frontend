@@ -1,19 +1,21 @@
-import React, { ChangeEvent, FormEvent, useState, useCallback } from "react";
-import Input from "../Input";
-import Textarea from "../Textarea";
-import Select, { OptionsTypes } from "../Select";
-import ToggleSwitch from "../ToggleSwitch";
-import Button from "../Button";
-import { BodyExperiences } from "./styles";
+
+import React, { ChangeEvent, FormEvent, useState, useCallback, OptionHTMLAttributes } from 'react';
+import Input from '../Input';
+import Textarea from '../Textarea';
+import Select from '../Select';
+import ToggleSwitch from '../ToggleSwitch';
+import Button from '../Button';
+import { BodyExperiences } from './styles';
 import { inputChange } from "../../utils/inputChange";
 import { selectChange } from "../../utils/selectChange";
 import { textareaChange } from "../../utils/textareaChange";
 import { yearOptions, monthOptions } from "../../utils/dates";
 import axios, { AxiosError } from "axios";
 
-const ProfessionalExperiences: React.FC = () => {
-  const [register, setRegister] = useState<boolean>(false);
-  const vinculos: OptionsTypes[] = [
+
+const AcademicExperiences: React.FC = () => {
+  const [register, setRegister] = useState<boolean>(false)
+  const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Trainee", value: "Trainee" },
     { label: "Terceirizado", value: "Terceirizado" },
     { label: "Intermitente", value: "Intermitente" },
