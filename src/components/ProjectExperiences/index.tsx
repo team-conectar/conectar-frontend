@@ -1,7 +1,7 @@
-import React, { ChangeEvent, FormEvent, useState, useCallback } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useCallback, OptionHTMLAttributes } from 'react';
 import Input from '../Input';
 import Textarea from '../Textarea';
-import Select, { OptionsTypes } from '../Select';
+import Select from '../Select';
 import ToggleSwitch from '../ToggleSwitch';
 import Button from '../Button';
 import { BodyExperiences } from './styles';
@@ -13,7 +13,7 @@ import axios, { AxiosError } from "axios";
 
 const ProjectExperiences: React.FC = () => {
   const [register, setRegister] = useState<boolean>(false)
-  const situacao: OptionsTypes[] = [
+  const situacao: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Desativado", value: "desativado" },
     { label: "Em andamento", value: "em andamento" },
     { label: "Conluído", value: "conluido" },

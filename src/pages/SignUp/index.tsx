@@ -1,4 +1,4 @@
-import React, { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { BodySignUp } from './styles';
 import logo from '../../assets/image/logo_fundoClaro.svg';
 import Input from '../../components/Input';
@@ -14,7 +14,7 @@ import { FaFacebookF } from 'react-icons/fa';
 import { useHistory } from 'react-router';
 import { monthOptions, yearOptions } from '../../utils/dates';
 import axios, { AxiosError } from "axios";
-import { selectChange } from '../../utils/selectChange';
+
 
 interface renderFacebook {
   onClick: () => void;

@@ -1,7 +1,7 @@
-import React, { ChangeEvent, FormEvent, useState, useCallback } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useCallback, OptionHTMLAttributes } from 'react';
 import Input from '../Input';
 import Textarea from '../Textarea';
-import Select, { OptionsTypes } from '../Select';
+import Select from '../Select';
 import ToggleSwitch from '../ToggleSwitch';
 import Button from '../Button';
 import { BodyExperiences } from './styles';
@@ -13,7 +13,7 @@ import axios, { AxiosError } from "axios";
 
 const AcademicExperiences: React.FC = () => {
   const [register, setRegister] = useState<boolean>(false)
-  const vinculos: OptionsTypes[] = [
+  const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Trainee", value: "Trainee" },
     { label: "Terceirizado", value: "Terceirizado" },
     { label: "Intermitente", value: "Intermitente" },
@@ -108,7 +108,7 @@ const AcademicExperiences: React.FC = () => {
      * so it will send the JWT token as cookie
      * */
     const res = await axios
-      .post("/api/v1/experiencias/professional", data, {
+      .post("/api/v1/experiencias/profissional", data, {
         withCredentials: true,
       })
       .catch((err: AxiosError) => {
