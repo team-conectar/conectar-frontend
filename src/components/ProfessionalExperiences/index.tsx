@@ -13,7 +13,7 @@ import { yearOptions, monthOptions } from "../../utils/dates";
 import axios, { AxiosError } from "axios";
 
 
-const AcademicExperiences: React.FC = () => {
+const ProfessionalExperiences: React.FC = () => {
   const [register, setRegister] = useState<boolean>(false)
   const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Trainee", value: "Trainee" },

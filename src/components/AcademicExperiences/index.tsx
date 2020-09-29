@@ -21,9 +21,9 @@ interface AcademicType {
   curso: string;
   situacao: string;
   descricao: string;
-  data_inicio: string;
+  data_inicial: string;
   // Supressing "The operand of a 'delete' operator must be optional" warning
-  data_fim: any;
+  data_final: any;
 }
 
 const AcademicExperiences: React.FC = () => {
@@ -47,8 +47,8 @@ const AcademicExperiences: React.FC = () => {
     instituicao: "",
     escolaridade: "",
     curso: "",
-    data_inicio: "",
-    data_fim: "",
+    data_inicial: "",
+    data_final: "",
     descricao: "",
     situacao: "",
   });
@@ -68,7 +68,7 @@ const AcademicExperiences: React.FC = () => {
     academicRecords.splice(
       academicRecords.indexOf(
         academicRecords.filter((experiencia) => {
-          return experiencia.id == id
+          return experiencia.id === id
         })[0]
       ), 1
     )
@@ -97,20 +97,22 @@ const AcademicExperiences: React.FC = () => {
       escolaridade,
       curso,
       descricao,
-      data_fim,
-      data_inicio,
+      data_final,
+      data_inicial,
       situacao,
     }: AcademicType = academicFormData;
 
-    let data_final;
-    if (data_fim) {
-      data_final = `${data_fim}-01-01`;
+
+    let data_fim;
+    if (situacao !== "Incompleto") {
+      if (data_final) {
+        data_fim = `${data_final}-01-01`;
+      }
     }
 
-    const data_inicial = `${data_inicio}-01-01`;
+    const data_inicio = `${data_inicial}-01-01`;
 
     const data = {
-
       instituicao,
       descricao,
       data_inicio,
@@ -120,14 +122,7 @@ const AcademicExperiences: React.FC = () => {
       situacao,
     };
 
-    /**
-     * In case data_fim has been set, it should not be sent to backend
-     * So it will be null and not listed when not needed
-     */
-
-    if (!data_fim) {
-      delete data["data_fim"];
-    }
+    console.table([data]);
 
     /**
      * Sends data to backend
@@ -180,16 +175,6 @@ const AcademicExperiences: React.FC = () => {
     },
     []
   );
-
-  const [academicFormData, setAcademicFormData] = useState({
-    institution: "",
-    schooling: "",
-    course: "",
-    data_inicio: "",
-    data_fim: "",
-    details: "",
-    situacao: "",
-  });
 
   function handleAcademicInputChange(event: ChangeEvent<HTMLInputElement>) {
     handleInputChange(
@@ -246,7 +231,7 @@ const AcademicExperiences: React.FC = () => {
                 <p>
                   {experience.instituicao} <br />
                   {experience.situacao} <br />
-                  {`${experience.data_inicio} até ${experience.data_fim}`}
+                  {`${experience.data_inicial} até ${experience.data_final}`}
                 </p>
 
               </fieldset>
@@ -295,21 +280,22 @@ const AcademicExperiences: React.FC = () => {
                 <aside>
                   <Select
                     label="Ano inicial"
-                    name="data_inicio"
+                    name="data_inicial"
                     required
                     options={yearOptions}
-                    defaultOption={tempEditExperience ? tempEditExperience?.data_inicio : "Selecione"}
+                    defaultOption={tempEditExperience ? tempEditExperience?.data_inicial : "Selecione"}
                     onChange={handleAcademicSelectChange}
-                    value={academicFormData.data_inicio}
+                    value={academicFormData.data_inicial}
                   />
                   
                   <Select
                     label="Ano final"
-                    name="data_fim"
+                    name="data_final"
                     options={yearOptions}
-                    defaultOption={tempEditExperience ? tempEditExperience?.data_fim : "Selecione"}
+                    required={academicFormData.situacao !== "Incompleto"}
+                    defaultOption={tempEditExperience ? tempEditExperience?.data_final : "Selecione"}
                     onChange={handleAcademicSelectChange}
-                    value={academicFormData.data_fim}
+                    value={academicFormData.data_final}
 
                   />
                 </aside>

@@ -1,9 +1,6 @@
 import {OptionHTMLAttributes} from 'react';
 
-
-
 export const monthOptions: OptionHTMLAttributes<HTMLOptionElement>[] = [
-  { value: 0, label: "Janeiro" },
   { value: 1, label: "Janeiro" },
   { value: 2, label: "Fevereiro" },
   { value: 3, label: "Março" },
@@ -23,7 +20,7 @@ function createYearOptions() {
   const yearPlusFive = `${new Date().getFullYear() + 5}`;
 
 
-  const years: OptionsTypes[] = [{
+  const years: OptionHTMLAttributes<HTMLOptionElement>[] = [{
     label: yearPlusFive,
     value: yearPlusFive,
   },];
