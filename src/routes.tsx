@@ -6,6 +6,7 @@ import ProfileFeatures from './pages/ProfileFeatures'
 import ExperienceAreas from './pages/ExperienceAreas';
 import MasteryTools from './pages/MasteryTools';
 import CreateProject from './pages/CreateProject';
+import ApproveProject from './pages/ApproveProject';
 
 
 function Routes() {
@@ -17,6 +18,7 @@ function Routes() {
       <Route path="/experienceareas" component={ ExperienceAreas} />
       <Route path="/masterytools" component={ MasteryTools} />
       <Route path="/createproject" component={ CreateProject} />
+      <Route path="/approveproject" component={ ApproveProject} />
     </BrowserRouter>
   )
 
