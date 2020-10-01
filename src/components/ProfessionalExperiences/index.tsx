@@ -97,10 +97,10 @@ const ProfessionalExperiences: React.FC = () => {
     } = professionalFormData;
 
     let data_fim;
-    const data_inicio = `${initialYear}-${initialMonth}-01`;
+    const data_inicio = `${initialYear}-${initialMonth}-02`;
 
     if (!currentlyWorking) {
-      data_fim = `${finalYear}-${finalMonth}-01`;
+      data_fim = `${finalYear}-${finalMonth}-02`;
     }
 
     const data = {
