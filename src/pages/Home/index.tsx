@@ -14,7 +14,8 @@ function Home() {
         <div className="container topo">
           <section className="area-login">
             <h1>Find your <br /> dreamteam!</h1>
-            <Login />
+            <Login 
+            onAfterLogin={()=>{}}/>
           </section>
           <section className="hero">
             <img src={hero} alt="imagem de redes neurais" />

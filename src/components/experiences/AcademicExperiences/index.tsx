@@ -6,16 +6,16 @@ import React, {
   useEffect,
   OptionHTMLAttributes,
 } from "react";
-import Input from "../Input";
-import Textarea from "../Textarea";
-import Select from "../Select";
-import ToggleSwitch from "../ToggleSwitch";
-import Button from "../Button";
-import { BodyExperiences } from "./styles";
-import { inputChange } from "../../utils/inputChange";
-import { selectChange } from "../../utils/selectChange";
-import { textareaChange } from "../../utils/textareaChange";
-import { yearOptions } from "../../utils/dates";
+import Input from "../../Input";
+import Textarea from "../../Textarea";
+import Select from "../../Select";
+import ToggleSwitch from "../../ToggleSwitch";
+import Button from "../../Button";
+import { BodyExperiences } from "../styles";
+import { inputChange } from "../../../utils/inputChange";
+import { selectChange } from "../../../utils/selectChange";
+import { textareaChange } from "../../../utils/textareaChange";
+import { yearOptions } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
 import edit from "../../assets/icon/editar.svg";
 import trash from "../../assets/icon/lixeira.svg";
@@ -45,6 +45,7 @@ const AcademicExperiences: React.FC = () => {
     data_inicial: "",
     data_final: "",
   });
+  const [academicRecords, setAcademicRecords] = useState<AcademicType[]>([]);
   const [control, setControl] = useState<number>(0);
   const niveisFormacao: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Ensino Fundamental", value: "Ensino Fundamental" },
@@ -67,7 +68,6 @@ const AcademicExperiences: React.FC = () => {
     descricao: "",
     situacao: "",
   });
-  const [academicRecords, setAcademicRecords] = useState<AcademicType[]>([]);
   useEffect(() => {
     axios
       .get("/api/v1/experiencias/academica/me")
@@ -80,14 +80,16 @@ const AcademicExperiences: React.FC = () => {
       });
   }, [control]);
   async function handleDeleteExperienceRecord(id: any) {
-    academicRecords.splice(
-      academicRecords.indexOf(
-        academicRecords.filter((experiencia) => {
-          return experiencia.id === id;
-        })[0]
-      ),
-      1
-    );
+    if (academicRecords.length === 1) {
+      academicRecords.splice(0, 1);
+    }
+    // academicRecords.splice(
+    //   academicRecords.indexOf(
+    //     academicRecords.filter((experiencia) => {
+    //       return experiencia.id === id
+    //     })[0]
+    //   ), 1
+    // )
     await axios.delete(`/api/v1/experiencias/academica/${id}`, {
       withCredentials: true,
     });
@@ -215,15 +217,15 @@ const AcademicExperiences: React.FC = () => {
   function handleAcademicInputChange(event: ChangeEvent<HTMLInputElement>) {
     handleInputChange(
       event,
-      tempEditExperience ? setTempEditExperience : setAcademicFormData,
-      tempEditExperience ? tempEditExperience : academicFormData
+      tempEditExperience.curso ? setTempEditExperience : setAcademicFormData,
+      tempEditExperience.curso ? tempEditExperience : academicFormData
     );
   }
   function handleAcademicSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     handleSelectChange(
       event,
-      tempEditExperience ? setTempEditExperience : setAcademicFormData,
-      tempEditExperience ? tempEditExperience : academicFormData
+      tempEditExperience.curso ? setTempEditExperience : setAcademicFormData,
+      tempEditExperience.curso ? tempEditExperience : academicFormData
     );
   }
   function handleAcademicTextAreaChange(
@@ -231,14 +233,14 @@ const AcademicExperiences: React.FC = () => {
   ) {
     handleTextAreaChange(
       event,
-      tempEditExperience ? setTempEditExperience : setAcademicFormData,
-      tempEditExperience ? tempEditExperience : academicFormData
+      tempEditExperience.curso ? setTempEditExperience : setAcademicFormData,
+      tempEditExperience.curso ? tempEditExperience : academicFormData
     );
   }
   return (
     <BodyExperiences>
       <h2>Educação</h2>
-
+      {console.log(tempEditExperience.data_inicial)}
       {!showRegister ? (
         <div className="experiencias">
           {academicRecords?.map((experience: AcademicType) => (

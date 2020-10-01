@@ -35,9 +35,7 @@ export const BodyCard = styled.div`
         text-decoration:none;
         color:var(--white);
       }
-      .title{
-
-      }
+      
       .areas{
         display:flex;
         flex-flow:row wrap;
@@ -49,10 +47,8 @@ export const BodyCard = styled.div`
         background-color:var(--yellow);
         transition: background-color 0.2s;
         font:700 0.8rem Roboto;
-
         }
       }
-
     }
     .icons{
       grid-area:icones;
@@ -80,4 +76,5 @@ export const BodyCard = styled.div`
       }
     }
   }
+  
 `;
