@@ -28,7 +28,7 @@ function createYearOptions() {
     const year = String(Number(yearPlusFive) - index);
     years.push({
       value: year,
-      label:String(year),
+      label: year,
     })
   }
   return years;

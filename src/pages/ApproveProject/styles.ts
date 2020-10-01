@@ -16,13 +16,13 @@ export const BodyApproveProject = styled.div<StepProps>`
     height:100vh;
     width:100vw;
     background:var(--green-bg);
-    main{
+    >main{
         display:flex;
         justify-content:center;
         align-items:flex-start;
         padding:1.4rem;
         .area-esq,.area-dir{
-            @media screen and (max-width:700px){
+            @media screen and (max-width:1300px){
                 display:none;
             }
             >aside{
@@ -40,18 +40,16 @@ export const BodyApproveProject = styled.div<StepProps>`
             border-radius:0.8rem;
             border:2px solid var(--green);
             
-            h1{
+           >h1{
                 margin:1.4rem 0;
                 color: var(--green-bg);
             }
-            section{
+            >section{
                 display:flex;
                 justify-content:space-between;
                 align-items: center;
                 margin:0.6rem 0;
-                div + div {
-                    margin-left:0.8rem;
-                }
+                
             }
             
         }

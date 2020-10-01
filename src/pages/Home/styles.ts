@@ -9,12 +9,12 @@ export const BodyHome = styled.div`
     
     main.topo-background{
         background:var(--green-bg);
-        width:100%;
+        width:100vw;
         display:flex;
         justify-content:center;
         flex-direction:column;
         align-items:center;
-        
+        border:0;
         clip-path: polygon(0 0, 100% 0, 100% 90%, 80% 90%, 74% 79%, 52% 79%, 48% 72%, 0 72%);
         .topo{
             display: grid;
