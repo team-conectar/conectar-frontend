@@ -17,9 +17,14 @@ import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
 import { yearOptions } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
-import edit from "../../assets/icon/editar.svg";
-import trash from "../../assets/icon/lixeira.svg";
+import edit from "../../../assets/icon/editar.svg";
+import trash from "../../../assets/icon/lixeira.svg";
 
+/**
+ * As this type is used from data that comes from the backend, it comes with
+ * data_fim and data_inicio, but we need data_inicial and data_final as placeholders
+ * so we can create a full date from it and modify the state properly
+ */
 interface AcademicType {
   id?: number;
   instituicao: string;
@@ -28,7 +33,6 @@ interface AcademicType {
   situacao: string;
   descricao: string;
   data_inicial: any;
-  // Supressing "The operand of a 'delete' operator must be optional" warning
   data_final?: any;
   data_inicio?: string;
   data_fim?: string;
@@ -36,6 +40,7 @@ interface AcademicType {
 
 const AcademicExperiences: React.FC = () => {
   const [showRegister, setShowRegister] = useState<boolean>(false);
+  // Add initial state so we can modify it with ease
   const [tempEditExperience, setTempEditExperience] = useState<AcademicType>({
     instituicao: "",
     curso: "",
@@ -43,7 +48,6 @@ const AcademicExperiences: React.FC = () => {
     situacao: "",
     descricao: "",
     data_inicial: "",
-    data_final: "",
   });
   const [academicRecords, setAcademicRecords] = useState<AcademicType[]>([]);
   const [control, setControl] = useState<number>(0);
@@ -105,6 +109,7 @@ const AcademicExperiences: React.FC = () => {
     let data_fim;
     let data: AcademicType;
 
+    // Swap data_inicio and data_fim that were gathered from DB with new ones
     if(tempEditExperience?.data_final){
       data_fim = `${tempEditExperience?.data_final}-02-01`;
       data = { ...tempEditExperience, data_inicio, data_fim };
@@ -115,7 +120,6 @@ const AcademicExperiences: React.FC = () => {
     // Deleting placeholders for actual dates
     delete data?.data_inicial;
     delete data?.data_final;
-    // Swap data_inicio and data_fim that were gathered from DB with new ones
     await axios.put(
       `/api/v1/experiencias/academica/${tempEditExperience?.id}`,
       data,
@@ -329,10 +333,9 @@ const AcademicExperiences: React.FC = () => {
                   required
                   options={yearOptions}
                   defaultOption={
+                    // Getting only the year as string so we can modify it properly
                     tempEditExperience?.data_inicio
-                      ? new Date(tempEditExperience?.data_inicio)
-                          .getFullYear()
-                          .toString()
+                      ? tempEditExperience?.data_inicio.split("-")[0]
                       : "Selecione"
                   }
                   onChange={handleAcademicSelectChange}
@@ -346,9 +349,7 @@ const AcademicExperiences: React.FC = () => {
                   required={academicFormData.situacao !== "Incompleto"}
                   defaultOption={
                     tempEditExperience?.data_fim
-                      ? new Date(tempEditExperience?.data_fim)
-                          .getFullYear()
-                          .toString()
+                      ? tempEditExperience?.data_fim.split("-")[0]
                       : "Selecione"
                   }
                   onChange={handleAcademicSelectChange}
