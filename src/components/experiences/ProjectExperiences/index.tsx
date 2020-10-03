@@ -56,7 +56,7 @@ const ProjectExperiences: React.FC = () => {
       });
   }, [control]);
   async function handleDeleteExperienceRecord(id: any) {
-    if (projectRecords.length == 1) {
+    if (projectRecords.length === 1) {
       projectRecords.splice(0, 1);
     }
     // projectRecords.splice(

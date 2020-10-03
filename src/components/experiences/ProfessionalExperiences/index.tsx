@@ -63,7 +63,7 @@ const ProfessionalExperiences: React.FC = () => {
       });
   }, [control]);
   async function handleDeleteExperienceRecord(id: any) {
-    if (professionalRecords.length == 1) {
+    if (professionalRecords.length === 1) {
       professionalRecords.splice(0, 1);
     }
     // professionalRecords.splice(

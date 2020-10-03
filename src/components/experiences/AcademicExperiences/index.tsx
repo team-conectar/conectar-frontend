@@ -1,19 +1,30 @@
-
-import React, { ChangeEvent, FormEvent, useState, useCallback, useEffect, OptionHTMLAttributes } from 'react';
-import Input from '../../Input';
-import Textarea from '../../Textarea';
-import Select from '../../Select';
-import ToggleSwitch from '../../ToggleSwitch';
-import Button from '../../Button';
-import { BodyExperiences } from '../styles';
-import { inputChange } from '../../../utils/inputChange';
-import { selectChange } from '../../../utils/selectChange';
-import { textareaChange } from '../../../utils/textareaChange';
-import { yearOptions } from '../../../utils/dates';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useState,
+  useCallback,
+  useEffect,
+  OptionHTMLAttributes,
+} from "react";
+import Input from "../../Input";
+import Textarea from "../../Textarea";
+import Select from "../../Select";
+import ToggleSwitch from "../../ToggleSwitch";
+import Button from "../../Button";
+import { BodyExperiences } from "../styles";
+import { inputChange } from "../../../utils/inputChange";
+import { selectChange } from "../../../utils/selectChange";
+import { textareaChange } from "../../../utils/textareaChange";
+import { yearOptions } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
-import edit from '../../../assets/icon/editar.svg';
-import trash from '../../../assets/icon/lixeira.svg';
+import edit from "../../../assets/icon/editar.svg";
+import trash from "../../../assets/icon/lixeira.svg";
 
+/**
+ * As this type is used from data that comes from the backend, it comes with
+ * data_fim and data_inicio, but we need data_inicial and data_final as placeholders
+ * so we can create a full date from it and modify the state properly
+ */
 interface AcademicType {
   id?: number;
   instituicao: string;
@@ -21,15 +32,23 @@ interface AcademicType {
   curso: string;
   situacao: string;
   descricao: string;
-  data_inicial: string;
-  // Supressing "The operand of a 'delete' operator must be optional" warning
-  data_final: any;
+  data_inicial: any;
+  data_final?: any;
+  data_inicio?: string;
+  data_fim?: string;
 }
 
 const AcademicExperiences: React.FC = () => {
-
   const [showRegister, setShowRegister] = useState<boolean>(false);
-  const [tempEditExperience, setTempEditExperience] = useState<AcademicType>({} as AcademicType);
+  // Add initial state so we can modify it with ease
+  const [tempEditExperience, setTempEditExperience] = useState<AcademicType>({
+    instituicao: "",
+    curso: "",
+    escolaridade: "",
+    situacao: "",
+    descricao: "",
+    data_inicial: "",
+  });
   const [academicRecords, setAcademicRecords] = useState<AcademicType[]>([]);
   const [control, setControl] = useState<number>(0);
   const niveisFormacao: OptionHTMLAttributes<HTMLOptionElement>[] = [
@@ -56,16 +75,16 @@ const AcademicExperiences: React.FC = () => {
   useEffect(() => {
     axios
       .get("/api/v1/experiencias/academica/me")
-      .then(response => {
+      .then((response) => {
         setAcademicRecords(response.data);
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [control])
+  }, [control]);
   async function handleDeleteExperienceRecord(id: any) {
-    if (academicRecords.length == 1) {
+    if (academicRecords.length === 1) {
       academicRecords.splice(0, 1);
     }
     // academicRecords.splice(
@@ -80,13 +99,34 @@ const AcademicExperiences: React.FC = () => {
     });
     setControl(control + 1);
     setShowRegister(false);
-
   }
   async function handlePutExperience(event: FormEvent) {
     event.preventDefault();
-    await axios.put(`/api/v1/experiencias/academica/${tempEditExperience?.id}`, tempEditExperience, {
-      withCredentials: true,
-    });
+
+    // Getting changed dates from editing
+    const data_inicio = `${tempEditExperience?.data_inicial}-02-01`;
+    
+    let data_fim;
+    let data: AcademicType;
+
+    // Swap data_inicio and data_fim that were gathered from DB with new ones
+    if(tempEditExperience?.data_final){
+      data_fim = `${tempEditExperience?.data_final}-02-01`;
+      data = { ...tempEditExperience, data_inicio, data_fim };
+    } else {
+      data = { ...tempEditExperience, data_inicio};
+    }
+
+    // Deleting placeholders for actual dates
+    delete data?.data_inicial;
+    delete data?.data_final;
+    await axios.put(
+      `/api/v1/experiencias/academica/${tempEditExperience?.id}`,
+      data,
+      {
+        withCredentials: true,
+      }
+    );
 
     setTempEditExperience({} as AcademicType);
     setControl(control + 1);
@@ -105,15 +145,14 @@ const AcademicExperiences: React.FC = () => {
       situacao,
     }: AcademicType = academicFormData;
 
-
     let data_fim;
     if (situacao !== "Incompleto") {
       if (data_final) {
-        data_fim = `${data_final}-01-01`;
+        data_fim = `${data_final}-02-01`;
       }
     }
 
-    const data_inicio = `${data_inicial}-01-01`;
+    const data_inicio = `${data_inicial}-02-01`;
 
     const data = {
       instituicao,
@@ -193,7 +232,9 @@ const AcademicExperiences: React.FC = () => {
       tempEditExperience.curso ? tempEditExperience : academicFormData
     );
   }
-  function handleAcademicTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
+  function handleAcademicTextAreaChange(
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) {
     handleTextAreaChange(
       event,
       tempEditExperience.curso ? setTempEditExperience : setAcademicFormData,
@@ -206,12 +247,8 @@ const AcademicExperiences: React.FC = () => {
       {console.log(tempEditExperience.data_inicial)}
       {!showRegister ? (
         <div className="experiencias">
-
           {academicRecords?.map((experience: AcademicType) => (
-            <div
-              key={experience.id}
-              className="experiencia-cadastrada"
-            >
+            <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
                 <img
                   src={edit}
@@ -234,13 +271,17 @@ const AcademicExperiences: React.FC = () => {
                 <p>
                   {experience.instituicao} <br />
                   {experience.situacao} <br />
-                  {`${experience.data_inicial} até ${experience.data_final}`}
+                  {/* 
+                      Get only the year from data by spliting the date and getting the first
+                      index of the array.
+                  */}
+                  {`${experience?.data_inicio?.split("-")[0]} até ${
+                    experience?.data_fim?.split("-")[0]
+                  }`}
                 </p>
-
               </fieldset>
             </div>
-          ))
-          }
+          ))}
 
           <button onClick={() => setShowRegister(true)}>
             <span>+ </span>
@@ -248,128 +289,154 @@ const AcademicExperiences: React.FC = () => {
           </button>
         </div>
       ) : (
-
-
-          <form
-            className="form--experiencia"
-            onSubmit={tempEditExperience.curso ? handlePutExperience : handleAcademicSubmit}>
-            <aside className="area-registro">
-              <section className="bloco-um">
-                <Input
-                  label="Instituição de ensino"
-                  name="instituicao"
-                  required
-                  onChange={handleAcademicInputChange}
-                  defaultValue={tempEditExperience?.instituicao}
-                />
-                <Input
-                  label="Curso"
-                  name="curso"
-                  required
-                  onChange={handleAcademicInputChange}
-                  defaultValue={tempEditExperience?.curso}
-                />
-              </section>
-              <section className="bloco-dois">
+        <form
+          className="form--experiencia"
+          onSubmit={
+            !!tempEditExperience ? handlePutExperience : handleAcademicSubmit
+          }
+        >
+          <aside className="area-registro">
+            <section className="bloco-um">
+              <Input
+                label="Instituição de ensino"
+                name="instituicao"
+                required
+                onChange={handleAcademicInputChange}
+                defaultValue={tempEditExperience?.instituicao}
+              />
+              <Input
+                label="Curso"
+                name="curso"
+                required
+                onChange={handleAcademicInputChange}
+                defaultValue={tempEditExperience?.curso}
+              />
+            </section>
+            <section className="bloco-dois">
+              <Select
+                label="Nível de formação"
+                name="escolaridade"
+                required
+                options={niveisFormacao}
+                defaultOption={
+                  tempEditExperience
+                    ? tempEditExperience.escolaridade
+                    : "Selecione"
+                }
+                onChange={handleAcademicSelectChange}
+                value={academicFormData.escolaridade}
+              />
+              <aside>
                 <Select
-                  label="Nível de formação"
-                  name="escolaridade"
+                  label="Ano inicial"
+                  name="data_inicial"
                   required
-                  options={niveisFormacao}
-                  defaultOption={tempEditExperience?.escolaridade || "Selecione"}
-                  onChange={handleAcademicSelectChange}
-                  value={academicFormData.escolaridade}
-                />
-                <aside>
-                  <Select
-                    label="Ano inicial"
-                    name="data_inicial"
-                    required
-                    options={yearOptions}
-                    defaultOption={tempEditExperience?.data_inicial || "Selecione"}
-                    onChange={handleAcademicSelectChange}
-                    value={academicFormData.data_inicial}
-                  />
-                  {!(academicFormData.situacao === "Incompleto")
-                    &&
-                    <Select
-                      label="Ano final"
-                      name="data_final"
-                      options={yearOptions}
-                      required={academicFormData.situacao !== "Incompleto"}
-                      defaultOption={tempEditExperience?.data_inicial || "Selecione"}
-                      onChange={handleAcademicSelectChange}
-                      value={academicFormData.data_final}
-                    />
+                  options={yearOptions}
+                  defaultOption={
+                    // Getting only the year as string so we can modify it properly
+                    tempEditExperience?.data_inicio
+                      ? tempEditExperience?.data_inicio.split("-")[0]
+                      : "Selecione"
                   }
-                  {console.log(tempEditExperience.curso)}
-                </aside>
-              </section>
-              <section className="bloco-tres area-toggle">
-                <ToggleSwitch
-                  label="Incompleto"
-                  name="situacao"
-                  type="radio"
-                  value="Incompleto"
-                  id="incomplete"
-                  onChange={handleAcademicInputChange}
-                  defaultChecked={tempEditExperience?.situacao === "Incompleto"}
-                  required
+                  onChange={handleAcademicSelectChange}
+                  value={academicFormData.data_inicial}
                 />
-                <ToggleSwitch
-                  label="Em andamento"
-                  name="situacao"
-                  type="radio"
-                  onChange={handleAcademicInputChange}
-                  value="Em andamento"
-                  id="current"
-                  defaultChecked={tempEditExperience?.situacao === "Em andamento"}
-                  required
+
+                <Select
+                  label="Ano final"
+                  name="data_final"
+                  options={yearOptions}
+                  required={academicFormData.situacao !== "Incompleto"}
+                  defaultOption={
+                    tempEditExperience?.data_fim
+                      ? tempEditExperience?.data_fim.split("-")[0]
+                      : "Selecione"
+                  }
+                  onChange={handleAcademicSelectChange}
+                  value={academicFormData.data_final}
                 />
-                <ToggleSwitch
-                  label="Concluído"
-                  name="situacao"
-                  type="radio"
-                  value="Concluído"
-                  id="finished"
-                  onChange={handleAcademicInputChange}
-                  defaultChecked={tempEditExperience?.situacao === "Concluído"}
-                  required
-                />
-              </section>
-              <section className="bloco-quatro">
-                <Textarea
-                  name="descricao"
-                  label="Detalhes"
-                  required
-                  onChange={handleAcademicTextAreaChange}
-                  defaultValue={tempEditExperience?.descricao}
-                />
-              </section>
-              <section className="area-botoes">
-                <Button
-                  type="submit"
-                  theme="primary-green"
+              </aside>
+            </section>
+            <section className="bloco-tres area-toggle">
+              <ToggleSwitch
+                label="Incompleto"
+                name="situacao"
+                type="radio"
+                value="Incompleto"
+                id="incomplete"
+                onChange={handleAcademicInputChange}
+                checked={
+                  tempEditExperience &&
+                  tempEditExperience?.situacao === "Incompleto"
+                }
+                required
+              />
+              <ToggleSwitch
+                label="Em andamento"
+                name="situacao"
+                type="radio"
+                onChange={handleAcademicInputChange}
+                value="Em andamento"
+                id="current"
+                checked={
+                  tempEditExperience &&
+                  tempEditExperience?.situacao === "Em andamento"
+                }
+                required
+              />
+              <ToggleSwitch
+                label="Concluído"
+                name="situacao"
+                type="radio"
+                value="Concluído"
+                id="finished"
+                onChange={handleAcademicInputChange}
+                checked={
+                  tempEditExperience &&
+                  tempEditExperience?.situacao === "Concluído"
+                }
+                required
+              />
+            </section>
+            <section className="bloco-quatro">
+              <Textarea
+                name="descricao"
+                label="Detalhes"
+                required
+                onChange={handleAcademicTextAreaChange}
+                defaultValue={tempEditExperience?.descricao}
+              />
+            </section>
+            <section className="area-botoes">
+              <Button
+                type="submit"
+                theme="primary-green"
                 //disabled={academicFormData === {} as AcademicType? false:true}
-                >Salvar</Button>
-                <Button
-                  theme="secondary-green"
-                  onClick={() => {
-                    tempEditExperience ? handleDeleteExperienceRecord(tempEditExperience.id) : setShowRegister(false)
-                  }}
-                >Excluir</Button>
-                <Button
-                  onClick={() => {
-                    setShowRegister(false)
-                    setTempEditExperience({} as AcademicType)
-                  }}
-                >
-                  Cancelar
-                  </Button>
-              </section>
-            </aside>
-          </form>
-        )}
+              >
+                Salvar
+              </Button>
+              <Button
+                theme="secondary-green"
+                onClick={() =>
+                  tempEditExperience
+                    ? handleDeleteExperienceRecord(tempEditExperience.id)
+                    : setShowRegister(false)
+                }
+              >
+                Excluir
+              </Button>
+              <Button
+                onClick={() => {
+                  setShowRegister(false);
+                  setTempEditExperience({} as AcademicType);
+                }}
+              >
+                Cancelar
+              </Button>
+            </section>
+          </aside>
+        </form>
+      )}
     </BodyExperiences>
   );
 };
