@@ -30,6 +30,7 @@ export const BodyModal = styled.div<styleProps>`
     >h1{
       font:500 2rem Roboto;
       margin-bottom:4rem;
+      color:white;
     }
     
     >svg{

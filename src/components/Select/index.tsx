@@ -6,11 +6,13 @@ import { BodySelect } from './styles';
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   name: string;
   label?: string;
-  value?:any;
+  value?: any;
   defaultOption: string;
   options: Array<OptionHTMLAttributes<HTMLOptionElement>>;
 }
-const Select: React.FC<SelectProps> = ({ name,value, label, options, defaultOption,...rest }) => {
+const Select: React.FC<SelectProps> = ({ name, value, label, options, defaultOption, ...rest }) => {
+
+  
   return (
     <BodySelect>
       <label htmlFor={name}>{label}</label>

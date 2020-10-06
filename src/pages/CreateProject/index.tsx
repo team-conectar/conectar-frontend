@@ -9,6 +9,9 @@ import { useDropzone } from 'react-dropzone'
 import SelectArea from '../../components/SelectArea';
 import SelectTool from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
+import { isAuthenticated } from '../../utils/auth';
+import Modal from '../../components/Modal';
+import Login from '../../components/Login';
 
 
 
@@ -57,7 +60,7 @@ function CreateProject() {
   }
 
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
-
+  const [showModal, setShowModal] = useState<boolean>(isAuthenticated());
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'image/*',
     onDrop: onDropAcceptedFiles => {
@@ -68,6 +71,14 @@ function CreateProject() {
 
   return (
     <BodyCreateProject showSecondStep={showNextStep}>
+      {console.log(localStorage.getItem('permissions'))}
+      <Modal
+        open={showModal}
+        setOpen={setShowModal}
+      >
+        <h1>Para prosseguir, você precisa estar logado</h1>
+        <Login onSuccessLogin={() => setShowModal(isAuthenticated())} />
+      </Modal>
       <div className="area-central container">
         <h1>Criar Projeto</h1>
 

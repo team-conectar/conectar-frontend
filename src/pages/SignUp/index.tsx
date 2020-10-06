@@ -230,6 +230,7 @@ function SignUp() {
               theme="primary-yellow"
               type="submit"
               disabled={formData.telefone === "" || formData.day === "" || formData.month === "" || formData.year === "" || !(formData.aliado || formData.colaborador || formData.idealizador)}
+              onClick={() => history.push("/experienceareas")}
             >Continuar</Button>
           </section>
         </div>

@@ -24,7 +24,7 @@ export const BodyHome = styled.div`
             margin:0.8rem 0;
             .area-login{
                 grid-area:login ;
-                h1{
+                >h1{
                     padding-bottom:1.4rem ;
                     font:500 3.4rem Roboto;
                     color:var(--white);
@@ -35,7 +35,7 @@ export const BodyHome = styled.div`
                 display:flex;
                 justify-content:flex-end;
                 align-items:flex-start;
-                img{
+                >img{
                     width:70%;
                 }
             }

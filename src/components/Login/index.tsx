@@ -14,10 +14,10 @@ import { TiSocialFacebookCircular } from 'react-icons/ti';
 
 import { inputChange } from '../../utils/inputChange';
 interface loginProps {
-  onAfterLogin(): void;
+  onSuccessLogin(): void;
 }
 
-const Login: React.FC<loginProps> = ({onAfterLogin}) => {
+const Login: React.FC<loginProps> = ({onSuccessLogin}) => {
 
   const [formData, setFormData] = useState({
     email: '',
@@ -51,11 +51,9 @@ const Login: React.FC<loginProps> = ({onAfterLogin}) => {
 
     const res = await axios
     .post('/api/token', data)
+    .then(onSuccessLogin)
     .catch((err: AxiosError) => {
       // Returns error message from backend
-      if(!err && onAfterLogin){
-      }
-      onAfterLogin();
       return err?.response?.data.detail;
     });
 

@@ -8,14 +8,14 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   subLabel?: string;
   pathSubLabel?: string;
-  type?:string;
+  type?: string;
 }
-const Input: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...rest}) => {
+const Input: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...rest }) => {
   return (
     <BodyInput>
       <label htmlFor={name}>{label}
-        {pathSubLabel && 
-          <Link to={`/${pathSubLabel}`}>{subLabel}</Link>
+        {pathSubLabel &&
+          <Link to={`/${pathSubLabel}`} tabIndex={1}>{subLabel}</Link>
         }
       </label>
       <input type="text" id={name} name={name} {...rest} />

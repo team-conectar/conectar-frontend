@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { BodyProfileFeatures } from "./styles";
 import Button from "../../components/Button";
 import { useHistory } from "react-router-dom";
@@ -14,17 +14,10 @@ function ProfileFeatures() {
     console.log("ḧello world")
   }
   const history = useHistory();
-  const [showModal,setShowModal] =useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
   return (
     <BodyProfileFeatures>
-      {console.log(showModal)}
-      <Modal 
-        open={showModal}
-        setOpen={setShowModal}
-      >
-        <h1>Para prosseguir, você precisa estar logado</h1>
-        <Login onAfterLogin={sla}/>
-      </Modal>
+      
       <div className="area-central container">
         <h1>Nos conte sua experiência</h1>
         <AcademicExperiences />
