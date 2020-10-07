@@ -47,6 +47,13 @@ function CreateProject() {
   }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
+    await axios
+      .post("/api/v1/habilidades", selectedTools, {
+        withCredentials: true,
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail;
+      });
 
     const res = await axios
       .post("/api/v1/projeto", formData, {
@@ -58,7 +65,7 @@ function CreateProject() {
     console.log(res);
     alert(res);
   }
-
+  const [selectedTools, setSelectedTools] = useState<string[]>([]);
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(isAuthenticated());
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -159,7 +166,11 @@ function CreateProject() {
             />
           </div>
           <div className="coluna-dois">
-            <SelectTool label="Ferramentas, matérias e habilidades que o time precisa dominar" />
+            <SelectTool
+              callbackSelectedTools={selectedTools}
+              setCallbackSelectedTools={setSelectedTools}
+              label="Ferramentas, matérias e habilidades que o time precisa dominar"
+            />
           </div>
           <section>
             <Button
@@ -172,6 +183,7 @@ function CreateProject() {
               theme="primary-yellow"
               onClick={handleSubmit}
               disabled={formData.objetivo === "" || formData.descricao === ""}
+              type="submit"
             >Concluir</Button>
           </section>
         </main>

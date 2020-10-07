@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-export const BodyMasteryTools = styled.div`
+export const BodyMasteryTools = styled.form`
     display:flex;
     flex-direction:column;
     justify-content:center;
