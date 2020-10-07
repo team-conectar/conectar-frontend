@@ -38,7 +38,7 @@ export const BodySelectTool = styled.div`
         border-bottom:2px solid var(--yellow);
         
       }  
-      fieldset{
+      >fieldset{
         height:80%;
         overflow-y:auto;
         >button{
@@ -58,10 +58,10 @@ export const BodySelectTool = styled.div`
             color:var(--green);
             font-size:1.3rem;
           }
-          span{
+          >span{
             position:absolute;
           }
-          legend{
+          >legend{
             color:var(--orange);
             display:flex;
             align-items:center;
@@ -74,21 +74,21 @@ export const BodySelectTool = styled.div`
       .area-insercao{
         border-top:2px solid var(--yellow);
         height:10%;
-        span{
+        >span{
           cursor:pointer;
           color:var(--green);
           font-size:1.3rem;
           font:700 1.3rem Roboto;
           text-align:center;
         }
-        input{
+        >input{
           width:90%;
           border:0;
           margin-left:0.2rem;
           padding-left:0.8rem;
           height:2rem;
         }
-        legend{
+        >legend{
           color:var(--orange);
           padding:0.2rem;
         }
@@ -109,6 +109,40 @@ export const BodySelectTool = styled.div`
         font:500 1.2rem Roboto;
         border-top-right-radius:0.4rem;
         padding:.8rem;
+      }
+      > fieldset{
+        >label{
+
+          display: flex;
+          justify-content:space-between;
+          align-items:center;
+          width:100%;
+          margin-top:1px;
+          background:none;
+          height:10%;
+          border:0;
+          border-bottom:2px solid var(--yellow);
+          padding:0 1.4rem;
+          font:500 1.2rem Roboto;
+          >svg{
+            color:var(--green);
+            font-size:1.3rem;
+          }
+          >img{
+            cursor:pointer;
+            height:2.5rem;
+            cursor:pointer;
+          }
+          
+          legend{
+            color:var(--green-bg);
+            display:flex;
+            align-items:center;
+            justify-content:flex-start;
+            margin-left:0.4rem; 
+            width:100%;
+          }
+        }
       }
     }
   }

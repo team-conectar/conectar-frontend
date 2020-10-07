@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { BodySelectTool } from './styles';
 import { GoCheck } from 'react-icons/go';
-
-interface ToolsType {
-  name: string;
-  id: number;
-
-}
-
+import axios, { AxiosError } from "axios";
+import trash from "../../assets/icon/lixeira.svg";
 interface SelectToolProps {
   label?: string;
 }
@@ -15,46 +10,84 @@ interface SelectToolProps {
 
 
 const SelectTool: React.FC<SelectToolProps> = ({ label }) => {
-  const [selectedIdsTools, setSelectedIdsTools] = useState<number[]>([]);
-  const tools: ToolsType[] = [{ name: "a", id: 0 }, { name: "b", id: 1 }, { name: "c", id: 2 }];
+  const [newTool, setNewTool] = useState<string>();
+  const [tools, setTools] = useState<string[]>([]);
+  useEffect(() => {
+    axios
+      .get("/api/v1/habilidades")
+      .then((response) => {
+        setTools(response.data);
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+  }, [newTool]);
+  const [selectedTools, setSelectedTools] = useState<string[]>([]);
 
-  function handleSelectedTools(id: number) {
-    if (selectedIdsTools.includes(id)) {
-      setSelectedIdsTools(selectedIdsTools.filter(sub => sub !== id))
+  function handleSelectedTools(tool: string) {
+    if (selectedTools?.includes(tool)) {
+      setSelectedTools(selectedTools.filter(sub => sub !== tool))
     }
     else {
-      setSelectedIdsTools([...selectedIdsTools, id]);
+      setSelectedTools([...selectedTools, tool]);
+    }
+  }
+  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+    const { name, value } = event.target;
+    if (name === "newTool") {
+      setNewTool(value)
+    }
+  }
+  function handleAddNewTool(tool:string) {
+    if ( !selectedTools.includes(tool)) {
+      setSelectedTools([...selectedTools, tool]);
     }
   }
   return (
     <BodySelectTool>
+      {console.log(newTool)}
       <label>{label}</label>
       <div>
         <div className="area-selecionadas">
           <legend>Habilidades e Ferramentas selecionadas</legend>
           <fieldset>
-
+            {selectedTools?.map(tool => (
+              <label key={tool}>
+                <legend>{tool}</legend>
+                <img
+                  src={trash}
+                  alt="apagar experiencia"
+                  onClick={() => setSelectedTools(selectedTools.filter(sub => sub !== tool))}
+                />
+              </label>
+            ))}
           </fieldset>
         </div>
         <div className="area-selecao">
           <legend>Habilidades e Ferramentas</legend>
-
-
           <fieldset>
-            {tools.map(tool => (
-              <button key={tool.id} onClick={() => { handleSelectedTools(tool.id) }}>
+            {tools?.map(tool => (
+              <button
+                key={tool}
+                onClick={() => { handleSelectedTools(tool) }}
+              >
                 <span>
-                  {selectedIdsTools?.includes(tool.id) && <GoCheck />}
+                  {selectedTools?.includes(tool) && <GoCheck />}
                 </span>
-                <legend>{tool.name}</legend>
+                <legend>{tool}</legend>
                 <strong>+</strong>
               </button>
             ))}
           </fieldset>
           <fieldset className="area-insercao">
             <legend>Se não encontrou insira abaixo</legend>
-            <input placeholder="Habilidade, ferramenta ou matéria..."/>
-            <span> + </span>
+            <input
+              placeholder="Habilidade, ferramenta ou matéria..."
+              name="newTool"
+              onChange={handleInputChange}
+            />
+            <span onClick={()=>newTool && handleAddNewTool(newTool)}> + </span>
           </fieldset>
 
         </div>
