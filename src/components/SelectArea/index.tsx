@@ -2,14 +2,13 @@ import React, { useState } from 'react';
 import { BodySelectArea } from './styles';
 import { GoCheck } from 'react-icons/go';
 
-interface SubareasType {
-  name: string;
+interface Area {
+  descricao: string;
   id: number;
-
 }
 interface AreaTypes {
-  name: string;
-  subareas: SubareasType[];
+  area: Area;
+  subareas: Area[];
 }
 interface ShowSubareaTypes {
   show: boolean;
@@ -17,29 +16,31 @@ interface ShowSubareaTypes {
 }
 interface SelectAreaProps {
   label?: string;
+  areas: AreaTypes[];
 }
 
 
 
-const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
+const SelectArea: React.FC<SelectAreaProps> = ({ label, areas }) => {
   const [selectedIdsSubareas, setSelectedIdsSubareas] = useState<number[]>([]);
   const [showSubareas, setShowSubareas] = useState<ShowSubareaTypes>({
     show: false,
     area: {
-      name: "",
-      subareas: [{ name: "", id: -1 }]
+      area: {id: -1, descricao: ""},
+      subareas: [{ descricao: "", id: -1 }]
     }
   });
-  const areas: AreaTypes[] = [{
-    name: "area a",
-    subareas: [{ name: "sub a", id: 0 }, { name: "sub b", id: 1 }, { name: "sub c", id: 2 }]
-  }]
+  // const areas: AreaTypes[] = [{
+  //   name: "area a",
+  //   subareas: [{ name: "sub a", id: 0 }, { name: "sub b", id: 1 }, { name: "sub c", id: 2 }]
+  // }]
   function handleSelectedSubareas(id: number) {
     if (selectedIdsSubareas.includes(id)) {
       setSelectedIdsSubareas(selectedIdsSubareas.filter(sub => sub !== id))
     }
     else {
       setSelectedIdsSubareas([...selectedIdsSubareas, id]);
+      console.log(areas);
     }
   }
   return (
@@ -52,9 +53,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
             {areas.map(area => (
               area.subareas.map(subarea => (
                 selectedIdsSubareas.includes(subarea.id) &&
-                <legend>{area.name}</legend>
-
-
+                <legend key={subarea.id}>{subarea.descricao}</legend>
               ))
             ))}
           </fieldset>
@@ -64,9 +63,9 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
             <div className="area-rolagem">
               {areas.map(area => (
                 <button
-                  key={area.name}
+                  key={area.area.id}
                   onClick={() => { setShowSubareas({ ...showSubareas, show: true, area: area }) }}
-                >{area.name}
+                >{area.area.descricao}
                 </button>
               ))}
             </div> :
@@ -76,15 +75,15 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label }) => {
                 <button
                   onClick={() => { setShowSubareas({ ...showSubareas, show: false }) }}
                 >Voltar</button>
-                <legend>{showSubareas.area.name}</legend>
+                <legend>{showSubareas.area.area.descricao}</legend>
               </header>
               <fieldset>
                 {showSubareas.area.subareas.map(subarea => (
-                  <button key={subarea.name} onClick={() => { handleSelectedSubareas(subarea.id) }}>
+                  <button key={subarea.descricao} onClick={() => { handleSelectedSubareas(subarea.id) }}>
                     <span>
                       {selectedIdsSubareas?.includes(subarea.id) && <GoCheck />}
                     </span>
-                    <legend>{subarea.name}</legend>
+                    <legend>{subarea.descricao}</legend>
                     <strong>+</strong>
                   </button>
                 ))}
