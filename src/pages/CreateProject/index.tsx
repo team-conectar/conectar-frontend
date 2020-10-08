@@ -7,7 +7,7 @@ import ToggleSwitch from '../../components/ToggleSwitch';
 import { useHistory } from 'react-router';
 import { useDropzone } from 'react-dropzone'
 import SelectArea from '../../components/SelectArea';
-import SelectTool from '../../components/SelectTools';
+import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
 import { isAuthenticated } from '../../utils/auth';
 import Modal from '../../components/Modal';
@@ -34,12 +34,7 @@ function CreateProject() {
     objetivo: "",
   });
 
-  // function handleCheckBoxChange(event: ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-
-  //   setFormData({...formData, [name]: value });
-  //   console.log(formData.visibilidade);
-  // }
+ 
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -74,14 +69,13 @@ function CreateProject() {
     console.log(res);
     alert(res);
   }
-  const [selectedTools, setSelectedTools] = useState<string[]>([]);
+  const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(isAuthenticated());
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'image/*',
     onDrop: onDropAcceptedFiles => {
       console.log(onDropAcceptedFiles);
-
     },
   });
 
