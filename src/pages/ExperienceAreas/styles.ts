@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 
-export const BodyExperienceAreas = styled.div`
+export const BodyExperienceAreas = styled.form`
     display:flex;
     flex-direction:column;
     justify-content:center;

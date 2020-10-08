@@ -1,42 +1,62 @@
-import React, { useState, useEffect } from 'react';
-import { BodyExperienceAreas } from './styles';
-import Button from '../../components/Button';
-import { useHistory } from 'react-router-dom';
-import SelectArea from '../../components/SelecArea';
+import React, { useState, useEffect,FormEvent } from "react";
+import { BodyExperienceAreas } from "./styles";
+import Button from "../../components/Button";
+import { useHistory } from "react-router-dom";
+import SelectArea, { Area } from "../../components/SelectArea";
 
+import axios, { AxiosError } from "axios";
 
-interface AreaTypes {
-  name: string;
-  subareas: string[];
-}
 
 
 function ExperienceAreas() {
   const history = useHistory();
-  
 
-  const [selectedAreas, setSelectedAreas] = useState<AreaTypes[]>([{
-    name: "",
-    subareas: [""]
-  }]);
+  const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
 
 
-  useEffect(() => {
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
 
-  }, [selectedAreas]);
+
+
+    const res = await axios
+      .put("/api/v1/pessoas", { "areas": selectedAreas }, {
+        withCredentials: true,
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail;
+      });
+    console.log(res);
+    alert(res);
+
+  }
+
   return (
-    <BodyExperienceAreas  >
+    <BodyExperienceAreas onSubmit={handleSubmit}>
       <div className="area-central container">
-
         <h1>Selecione suas áreas de atuação (máx. 5)</h1>
-        <SelectArea />
-
-
+        <SelectArea
+          callbackSelectedAreas={selectedAreas}
+          setCallbackSelectedAreas={setSelectedAreas}
+        />
       </div>
-      <footer >
-        <Button>Pular</Button> <Button onClick={() => { history.push("/masterytools") }}>Continuar</Button>
+      <footer>
+        <Button
+          theme="secondary-yellow"
+          onClick={() => {
+            history.push("/masterytools");
+          }}
+        >
+          Pular
+        </Button>
+        <Button
+          type="submit"
+          theme="primary-yellow"
+        >
+          Continuar
+        </Button>
       </footer>
-    </BodyExperienceAreas >
-  )
+    </BodyExperienceAreas>
+  );
 }
 export default ExperienceAreas;

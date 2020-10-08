@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 
 export const BodyNavBar = styled.header`
-  width:100vw;
+  width:100%;
   margin:0 auto;
-  background:var(--green-bg);
+  background:transparent;
   display: flex;
   justify-content:space-between;
   align-items: center;

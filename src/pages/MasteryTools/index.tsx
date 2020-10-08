@@ -1,54 +1,60 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect, FormEvent } from 'react';
 import { BodyMasteryTools } from './styles';
 import Button from '../../components/Button';
 import { useHistory } from 'react-router-dom';
-
-
+import SelectTool, { ToolType } from '../../components/SelectTools';
+import axios, { AxiosError } from "axios";
 
 
 function MasteryTools() {
   const history = useHistory();
 
 
-  const [selectedAreas, setSelectedAreas] = useState<string[]>();
-  const tools: string[] = ["a","b","c"]; 
-
-
+  const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
+  
+  
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    // existingTools?.map(tool => {
+    //   if(tool.id){
+    //     delete tool.id;
+    //   }
+    // })
+    
+    
+    
+    const resp = await axios
+      .put("/api/v1/pessoas", {"habilidades": selectedTools}, {
+        withCredentials: true,
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail;
+      });
+    console.log(resp);
+    alert(resp);
+  }
   return (
-    <BodyMasteryTools >
+    <BodyMasteryTools onSubmit={handleSubmit}>
       <div className="area-central container">
 
         <h1>Selecione suas habilidades e ferramentas de domínio</h1>
-        <section>
-          <div className="area-selecionadas">
-            <legend>Habilidades e Ferramentas selecionadas</legend>
-
-          </div>
-          <div className="area-selecao">
-            <legend>Habilidades e Ferramentas</legend>
-
-            <form>
-              {tools.map(tool => (
-                <label key={tool}>
-                  <div className="check-box">
-                    <input type="checkbox" id={tool} />
-                    <label htmlFor={tool} />
-                  </div>
-
-                  <legend>{tool}</legend>
-                  <strong>+</strong>
-                </label>
-              ))}
-            </form>
-            <input />
-
-          </div>
-        </section>
+        <SelectTool
+          callbackSelectedTools={selectedTools}
+          setCallbackSelectedTools={setSelectedTools}
+        />
 
 
       </div>
       <footer >
-        <Button>Pular</Button> <Button onClick={() => { history.push("/ExperienceAreas") }}>Continuar</Button>
+        <Button
+          theme="secondary-yellow"
+          onClick={() => { history.push("/profilefeatures") }}
+        >Pular</Button>
+        <Button
+          onClick={() => { /*history.push("/profilefeatures")*/ }}
+          theme="primary-yellow"
+          type="submit"
+        >Continuar</Button>
       </footer>
     </BodyMasteryTools>
   )

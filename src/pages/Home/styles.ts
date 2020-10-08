@@ -9,18 +9,22 @@ export const BodyHome = styled.div`
     
     main.topo-background{
         background:var(--green-bg);
-        width:100%;
+        width:100vw;
         display:flex;
         justify-content:center;
+        flex-direction:column;
+        align-items:center;
+        border:0;
         clip-path: polygon(0 0, 100% 0, 100% 90%, 80% 90%, 74% 79%, 52% 79%, 48% 72%, 0 72%);
         .topo{
             display: grid;
             grid-template-rows: 50rem;
             grid-template-columns: 1fr 3fr ;
             grid-template-areas: "login hero";
+            margin:0.8rem 0;
             .area-login{
                 grid-area:login ;
-                h1{
+                >h1{
                     padding-bottom:1.4rem ;
                     font:500 3.4rem Roboto;
                     color:var(--white);
@@ -31,7 +35,7 @@ export const BodyHome = styled.div`
                 display:flex;
                 justify-content:flex-end;
                 align-items:flex-start;
-                img{
+                >img{
                     width:70%;
                 }
             }
@@ -108,7 +112,7 @@ export const BodyHome = styled.div`
     footer{
         background:var(--green-bg);
         clip-path: polygon(20% 0%, 0 0, 0 100%, 100% 100%, 100% 40%, 43% 40%, 40% 25%, 25% 25%);
-        width:100vw;
+        width:99.1vw;
         height:20vh;
     }
 `;

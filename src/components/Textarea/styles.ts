@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 export const BodyTextarea = styled.div`
   width:100%;
-  height:100%;
   min-width:10rem;
   margin: 0.4rem 0 ;
   label{
@@ -22,7 +21,7 @@ export const BodyTextarea = styled.div`
   textarea{
     border: 2px solid var(--yellow);
     width:100%;
-    min-height: 80%;
+    min-height: 10rem ;
     margin-top: 0.2rem;
     border-radius: 0.3rem;
     outline: 0;

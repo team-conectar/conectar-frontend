@@ -1,20 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavBar from '../../components/NavBar';
 import { BodyHome } from './styles';
 import Login from '../../components/Login';
 import ProjectCards from '../../components/ProjectCards';
 import hero from '../../assets/image/hero.svg';
+import Modal from '../../components/Modal';
 
 function Home() {
-
+  const [showModal, setShowModal] = useState<boolean>(false);
   return (
     <BodyHome>
-      < NavBar logged={false} />
+      <Modal
+        open={showModal}
+        setOpen={setShowModal}
+      >
+        <h1>Será redimensionado para a pagina de explorar projetos(faltante)</h1>
+      </Modal>
       <main className="topo-background">
+        < NavBar logged={false} />
         <div className="container topo">
           <section className="area-login">
             <h1>Find your <br /> dreamteam!</h1>
-            <Login />
+            <Login
+              onSuccessLogin={() => setShowModal(true)}
+            />
           </section>
           <section className="hero">
             <img src={hero} alt="imagem de redes neurais" />
