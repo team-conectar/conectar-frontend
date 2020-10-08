@@ -1,49 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { BodyExperienceAreas } from './styles';
-import Button from '../../components/Button';
-import { useHistory } from 'react-router-dom';
-import SelectArea from '../../components/SelectArea';
+import React, { useState, useEffect } from "react";
+import { BodyExperienceAreas } from "./styles";
+import Button from "../../components/Button";
+import { useHistory } from "react-router-dom";
+import SelectArea from "../../components/SelectArea";
 
+import axios, { AxiosError } from "axios";
 
 interface AreaTypes {
-  name: string;
-  subareas: string[];
+  area: Area;
+  subareas: Area[];
 }
 
+interface Area {
+  descricao: string;
+  id: number;
+  area_pai_id?: number;
+}
 
 function ExperienceAreas() {
   const history = useHistory();
 
-
-  const [selectedAreas, setSelectedAreas] = useState<AreaTypes[]>([{
-    name: "",
-    subareas: [""]
-  }]);
-
+  const [selectedAreas, setSelectedAreas] = useState<AreaTypes[]>([]);
 
   useEffect(() => {
+    axios
+      .get("/api/v1/areas", {
+        withCredentials: true,
+      })
+      .then((result) => {
+        setSelectedAreas(result.data);
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+  }, []);
 
-  }, [selectedAreas]);
+  useEffect(() => {}, [selectedAreas]);
   return (
-    <BodyExperienceAreas  >
+    <BodyExperienceAreas>
       <div className="area-central container">
-
         <h1>Selecione suas áreas de atuação (máx. 5)</h1>
-        <SelectArea />
-
-
+        <SelectArea areas={selectedAreas}/>
       </div>
-      <footer >
+      <footer>
         <Button
           theme="secondary-yellow"
-          onClick={() => { history.push("/masterytools") }}
-        >Pular</Button>
+          onClick={() => {
+            history.push("/masterytools");
+          }}
+        >
+          Pular
+        </Button>
         <Button
-          onClick={() => { history.push("/masterytools") }}
+          onClick={() => {
+            history.push("/masterytools");
+          }}
           theme="primary-yellow"
-        >Continuar</Button>
+        >
+          Continuar
+        </Button>
       </footer>
-    </BodyExperienceAreas >
-  )
+    </BodyExperienceAreas>
+  );
 }
 export default ExperienceAreas;

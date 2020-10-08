@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import { BodyCreateProject } from './styles';
 import Input from '../../components/Input';
 import Textarea from '../../components/Textarea';
@@ -13,7 +13,16 @@ import { isAuthenticated } from '../../utils/auth';
 import Modal from '../../components/Modal';
 import Login from '../../components/Login';
 
+interface AreaTypes {
+  area: Area;
+  subareas: Area[];
+}
 
+interface Area {
+  descricao: string;
+  id: number;
+  area_pai_id?: number;
+}
 
 function CreateProject() {
 
@@ -69,6 +78,22 @@ function CreateProject() {
       console.log(onDropAcceptedFiles);
     },
   });
+
+  const [selectedAreas, setSelectedAreas] = useState<AreaTypes[]>([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/v1/areas", {
+        withCredentials: true,
+      })
+      .then((result) => {
+        setSelectedAreas(result.data);
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+  }, []);
 
   return (
     <BodyCreateProject showSecondStep={showNextStep}>
@@ -126,7 +151,7 @@ function CreateProject() {
 
           </div>
           <div className="coluna-dois">
-            <SelectArea label="Área de desenvolvimento" />
+            <SelectArea label="Área de desenvolvimento" areas={selectedAreas}/>
           </div>
           <section>
             <Button
