@@ -4,16 +4,19 @@ import { GoCheck } from 'react-icons/go';
 import axios, { AxiosError } from "axios";
 import trash from "../../assets/icon/lixeira.svg";
 interface SelectToolProps {
-  callbackSelectedTools: string[];
-  setCallbackSelectedTools(tools: string[]): void;
+  callbackSelectedTools: ToolType[];
+  setCallbackSelectedTools(tools: ToolType[]): void;
   label?: string;
 }
 
-
+export interface ToolType{
+  nome:string;
+  id?:number;
+}
 
 const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,setCallbackSelectedTools }) => {
-  const [newTool, setNewTool] = useState<string>();
-  const [tools, setTools] = useState<string[]>([]);
+  const [newTool, setNewTool] = useState<ToolType>();
+  const [tools, setTools] = useState<ToolType[]>([]);
   useEffect(() => {
     axios
       .get("/api/v1/habilidades")
@@ -24,10 +27,10 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [newTool]);
+  },[]);
   
 
-  function handlecallbackTools(tool: string) {
+  function handleSelectedTools(tool: ToolType) {
     if (callbackSelectedTools?.includes(tool)) {
       setCallbackSelectedTools(callbackSelectedTools.filter(sub => sub !== tool))
     }
@@ -38,25 +41,24 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     if (name === "newTool") {
-      setNewTool(value)
+      setNewTool({nome: value})
     }
   }
-  function handleAddNewTool(tool: string) {
+  function handleAddNewTool(tool: ToolType) {
     if (!callbackSelectedTools.includes(tool)) {
       setCallbackSelectedTools([...callbackSelectedTools, tool]);
     }
   }
   return (
     <BodySelectTool>
-      {console.log(newTool)}
       <label>{label}</label>
       <div>
         <div className="area-selecionadas">
           <legend>Habilidades e Ferramentas selecionadas</legend>
           <fieldset>
             {callbackSelectedTools?.map(tool => (
-              <label key={tool}>
-                <legend>{tool}</legend>
+              <label key={tool.nome}>
+                <legend>{tool.nome}</legend>
                 <img
                   src={trash}
                   alt="apagar experiencia"
@@ -71,13 +73,14 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
           <fieldset>
             {tools?.map(tool => (
               <button
-                key={tool}
-                onClick={() => { handlecallbackTools(tool) }}
+                key={tool.nome}
+                type="button"
+                onClick={() => { handleSelectedTools(tool) }}
               >
                 <span>
                   {callbackSelectedTools?.includes(tool) && <GoCheck />}
                 </span>
-                <legend>{tool}</legend>
+                <legend>{tool.nome}</legend>
                 <strong>+</strong>
               </button>
             ))}

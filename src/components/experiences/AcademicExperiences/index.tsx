@@ -292,7 +292,7 @@ const AcademicExperiences: React.FC = () => {
         <form
           className="form--experiencia"
           onSubmit={
-            !!tempEditExperience ? handlePutExperience : handleAcademicSubmit
+            tempEditExperience.curso ? handlePutExperience : handleAcademicSubmit
           }
         >
           <aside className="area-registro">
@@ -365,7 +365,7 @@ const AcademicExperiences: React.FC = () => {
                 value="Incompleto"
                 id="incomplete"
                 onChange={handleAcademicInputChange}
-                checked={
+                defaultChecked={
                   tempEditExperience &&
                   tempEditExperience?.situacao === "Incompleto"
                 }
@@ -378,7 +378,7 @@ const AcademicExperiences: React.FC = () => {
                 onChange={handleAcademicInputChange}
                 value="Em andamento"
                 id="current"
-                checked={
+                defaultChecked={
                   tempEditExperience &&
                   tempEditExperience?.situacao === "Em andamento"
                 }
@@ -391,7 +391,7 @@ const AcademicExperiences: React.FC = () => {
                 value="Concluído"
                 id="finished"
                 onChange={handleAcademicInputChange}
-                checked={
+                defaultChecked={
                   tempEditExperience &&
                   tempEditExperience?.situacao === "Concluído"
                 }

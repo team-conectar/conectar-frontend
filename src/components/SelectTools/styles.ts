@@ -111,15 +111,17 @@ export const BodySelectTool = styled.div`
         padding:.8rem;
       }
       > fieldset{
+        height:90%;
+        overflow-y:auto;
         >label{
 
           display: flex;
           justify-content:space-between;
           align-items:center;
           width:100%;
+          height:9%;
           margin-top:1px;
           background:none;
-          height:10%;
           border:0;
           border-bottom:2px solid var(--yellow);
           padding:0 1.4rem;
@@ -134,7 +136,7 @@ export const BodySelectTool = styled.div`
             cursor:pointer;
           }
           
-          legend{
+          >legend{
             color:var(--green-bg);
             display:flex;
             align-items:center;
