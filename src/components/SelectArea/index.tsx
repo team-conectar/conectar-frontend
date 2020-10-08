@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BodySelectArea } from './styles';
 import { GoCheck } from 'react-icons/go';
-
-interface Area {
+import axios, { AxiosError } from "axios";
+import trash from "../../assets/icon/lixeira.svg";
+export interface Area {
   descricao: string;
   id: number;
+  area_pai_id?: number;
 }
 interface AreaTypes {
   area: Area;
@@ -16,31 +18,45 @@ interface ShowSubareaTypes {
 }
 interface SelectAreaProps {
   label?: string;
-  areas: AreaTypes[];
+  callbackSelectedAreas: Area[];
+  setCallbackSelectedAreas(areas: Area[]): void;
 }
 
 
 
-const SelectArea: React.FC<SelectAreaProps> = ({ label, areas }) => {
-  const [selectedIdsSubareas, setSelectedIdsSubareas] = useState<number[]>([]);
+const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, setCallbackSelectedAreas }) => {
   const [showSubareas, setShowSubareas] = useState<ShowSubareaTypes>({
     show: false,
     area: {
-      area: {id: -1, descricao: ""},
+      area: { id: -1, descricao: "" },
       subareas: [{ descricao: "", id: -1 }]
     }
   });
+  const [areas, setAreas] = useState<AreaTypes[]>([]);
+  useEffect(() => {
+    axios
+      .get("/api/v1/areas", {
+        withCredentials: true,
+      })
+      .then((result) => {
+        setAreas(result.data);
+        console.log(result.data);
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+  }, []);
   // const areas: AreaTypes[] = [{
   //   name: "area a",
   //   subareas: [{ name: "sub a", id: 0 }, { name: "sub b", id: 1 }, { name: "sub c", id: 2 }]
   // }]
-  function handleSelectedSubareas(id: number) {
-    if (selectedIdsSubareas.includes(id)) {
-      setSelectedIdsSubareas(selectedIdsSubareas.filter(sub => sub !== id))
+  function handleSelectedSubareas(area: Area) {
+    if (callbackSelectedAreas?.includes(area)) {
+      setCallbackSelectedAreas(callbackSelectedAreas.filter(atual => atual !== area))
     }
     else {
-      setSelectedIdsSubareas([...selectedIdsSubareas, id]);
-      console.log(areas);
+      setCallbackSelectedAreas([...callbackSelectedAreas, area]);
     }
   }
   return (
@@ -50,11 +66,16 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, areas }) => {
         <div className="area-selecionadas">
           <legend>Áreas selecionadas</legend>
           <fieldset>
-            {areas.map(area => (
-              area.subareas.map(subarea => (
-                selectedIdsSubareas.includes(subarea.id) &&
-                <legend key={subarea.id}>{subarea.descricao}</legend>
-              ))
+
+            {callbackSelectedAreas.map(area => (
+              <label>
+                <legend>{area.descricao}</legend>
+                <img
+                  src={trash}
+                  alt="apagar experiencia"
+                  onClick={() => setCallbackSelectedAreas(callbackSelectedAreas.filter(atual => atual !== area))}
+                />
+              </label>
             ))}
           </fieldset>
         </div>
@@ -79,9 +100,13 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, areas }) => {
               </header>
               <fieldset>
                 {showSubareas.area.subareas.map(subarea => (
-                  <button key={subarea.descricao} onClick={() => { handleSelectedSubareas(subarea.id) }}>
+                  <button
+                    key={subarea.descricao}
+                    onClick={() => handleSelectedSubareas(subarea)}
+                    type="button"
+                  >
                     <span>
-                      {selectedIdsSubareas?.includes(subarea.id) && <GoCheck />}
+                      {callbackSelectedAreas?.includes(subarea) && <GoCheck />}
                     </span>
                     <legend>{subarea.descricao}</legend>
                     <strong>+</strong>
@@ -93,7 +118,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, areas }) => {
         </div>
       </div>
 
-    </BodySelectArea>
+    </BodySelectArea >
   )
 }
 export default SelectArea;

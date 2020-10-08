@@ -9,17 +9,17 @@ interface SelectToolProps {
   label?: string;
 }
 
-export interface ToolType{
-  nome:string;
-  id?:number;
+export interface ToolType {
+  nome: string;
+  id?: number;
 }
 
-const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,setCallbackSelectedTools }) => {
+const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, setCallbackSelectedTools }) => {
   const [newTool, setNewTool] = useState<ToolType>();
   const [tools, setTools] = useState<ToolType[]>([]);
   useEffect(() => {
     axios
-      .get("/api/v1/habilidades")
+      .get("/api/v1/habilidades/")
       .then((response) => {
         setTools(response.data);
       })
@@ -27,12 +27,12 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  },[]);
-  
+  }, [newTool]);
+
 
   function handleSelectedTools(tool: ToolType) {
     if (callbackSelectedTools?.includes(tool)) {
-      setCallbackSelectedTools(callbackSelectedTools.filter(sub => sub !== tool))
+      setCallbackSelectedTools(callbackSelectedTools.filter(atual => atual !== tool))
     }
     else {
       setCallbackSelectedTools([...callbackSelectedTools, tool]);
@@ -41,13 +41,27 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
     if (name === "newTool") {
-      setNewTool({nome: value})
+      setNewTool({ nome: value })
     }
   }
-  function handleAddNewTool(tool: ToolType) {
-    if (!callbackSelectedTools.includes(tool)) {
-      setCallbackSelectedTools([...callbackSelectedTools, tool]);
+  async function handleAddNewTool(tool: ToolType) {
+    if (!tools.includes(tool)) {
+      const res = await axios
+        .post("/api/v1/habilidade/pessoa", tool, {
+          withCredentials: true,
+        })
+        .then((response) => {
+          const habilidade: ToolType = response.data;
+          setNewTool({} as ToolType)
+          setCallbackSelectedTools([ ...callbackSelectedTools, habilidade ])
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail;
+        });
+      console.log(res);
     }
+
+
   }
   return (
     <BodySelectTool>
@@ -62,7 +76,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
                 <img
                   src={trash}
                   alt="apagar experiencia"
-                  onClick={() => setCallbackSelectedTools(callbackSelectedTools.filter(sub => sub !== tool))}
+                  onClick={() => setCallbackSelectedTools(callbackSelectedTools.filter(atual => atual !== tool))}
                 />
               </label>
             ))}
@@ -75,7 +89,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
               <button
                 key={tool.nome}
                 type="button"
-                onClick={() => { handleSelectedTools(tool) }}
+                onClick={() => handleSelectedTools(tool)}
               >
                 <span>
                   {callbackSelectedTools?.includes(tool) && <GoCheck />}
@@ -91,6 +105,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools,se
               placeholder="Habilidade, ferramenta ou matéria..."
               name="newTool"
               onChange={handleInputChange}
+
             />
             <span onClick={() => newTool && handleAddNewTool(newTool)}> + </span>
           </fieldset>

@@ -1,47 +1,44 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,FormEvent } from "react";
 import { BodyExperienceAreas } from "./styles";
 import Button from "../../components/Button";
 import { useHistory } from "react-router-dom";
-import SelectArea from "../../components/SelectArea";
+import SelectArea, { Area } from "../../components/SelectArea";
 
 import axios, { AxiosError } from "axios";
 
-interface AreaTypes {
-  area: Area;
-  subareas: Area[];
-}
 
-interface Area {
-  descricao: string;
-  id: number;
-  area_pai_id?: number;
-}
 
 function ExperienceAreas() {
   const history = useHistory();
 
-  const [selectedAreas, setSelectedAreas] = useState<AreaTypes[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
 
-  useEffect(() => {
-    axios
-      .get("/api/v1/areas", {
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+
+
+
+    const res = await axios
+      .put("/api/v1/pessoas", { "areas": selectedAreas }, {
         withCredentials: true,
       })
-      .then((result) => {
-        setSelectedAreas(result.data);
-      })
       .catch((err: AxiosError) => {
-        // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, []);
+    console.log(res);
+    alert(res);
 
-  useEffect(() => {}, [selectedAreas]);
+  }
+
   return (
-    <BodyExperienceAreas>
+    <BodyExperienceAreas onSubmit={handleSubmit}>
       <div className="area-central container">
         <h1>Selecione suas áreas de atuação (máx. 5)</h1>
-        <SelectArea areas={selectedAreas}/>
+        <SelectArea
+          callbackSelectedAreas={selectedAreas}
+          setCallbackSelectedAreas={setSelectedAreas}
+        />
       </div>
       <footer>
         <Button
@@ -53,9 +50,7 @@ function ExperienceAreas() {
           Pular
         </Button>
         <Button
-          onClick={() => {
-            history.push("/masterytools");
-          }}
+          type="submit"
           theme="primary-yellow"
         >
           Continuar

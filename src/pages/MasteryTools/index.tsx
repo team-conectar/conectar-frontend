@@ -11,18 +11,8 @@ function MasteryTools() {
 
 
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
-  const [existingTools, setExistingTools] = useState<ToolType[]>([]);
-  useEffect(() => {
-    axios
-      .get("/api/v1/habilidades")
-      .then((response) => {
-        setExistingTools(response.data);
-      })
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail;
-      });
-  },[]);
+  
+  
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     // existingTools?.map(tool => {
@@ -30,23 +20,11 @@ function MasteryTools() {
     //     delete tool.id;
     //   }
     // })
-    selectedTools?.map(tool => {
-      if(!existingTools.includes(tool)){
-        setExistingTools([...existingTools,tool])
-      }
-    })
-    {console.log(existingTools)}
-    const res = await axios
-      .post("/api/v1/habilidades", existingTools, {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail;
-      });
-    console.log(res);
-    alert(res);
+    
+    
+    
     const resp = await axios
-      .put("/api/v1/pessoas/1", selectedTools, {
+      .put("/api/v1/pessoas", {"habilidades": selectedTools}, {
         withCredentials: true,
       })
       .catch((err: AxiosError) => {
@@ -57,7 +35,6 @@ function MasteryTools() {
   }
   return (
     <BodyMasteryTools onSubmit={handleSubmit}>
-      {console.log(existingTools)}
       <div className="area-central container">
 
         <h1>Selecione suas habilidades e ferramentas de domínio</h1>

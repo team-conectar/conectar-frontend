@@ -6,23 +6,13 @@ import Button from '../../components/Button';
 import ToggleSwitch from '../../components/ToggleSwitch';
 import { useHistory } from 'react-router';
 import { useDropzone } from 'react-dropzone'
-import SelectArea from '../../components/SelectArea';
+import SelectArea, { Area } from '../../components/SelectArea';
 import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
 import { isAuthenticated } from '../../utils/auth';
 import Modal from '../../components/Modal';
 import Login from '../../components/Login';
 
-interface AreaTypes {
-  area: Area;
-  subareas: Area[];
-}
-
-interface Area {
-  descricao: string;
-  id: number;
-  area_pai_id?: number;
-}
 
 function CreateProject() {
 
@@ -34,7 +24,7 @@ function CreateProject() {
     objetivo: "",
   });
 
- 
+
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -79,7 +69,7 @@ function CreateProject() {
     },
   });
 
-  const [selectedAreas, setSelectedAreas] = useState<AreaTypes[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
 
   useEffect(() => {
     axios
@@ -151,7 +141,11 @@ function CreateProject() {
 
           </div>
           <div className="coluna-dois">
-            <SelectArea label="Área de desenvolvimento" areas={selectedAreas}/>
+            <SelectArea
+              label="Área de desenvolvimento"
+              callbackSelectedAreas={selectedAreas}
+              setCallbackSelectedAreas={setSelectedAreas}
+            />
           </div>
           <section>
             <Button
