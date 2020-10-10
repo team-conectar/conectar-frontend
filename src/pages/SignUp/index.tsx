@@ -19,7 +19,7 @@ import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { useHistory } from "react-router";
 import { monthOptions, yearOptions } from "../../utils/dates";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 
 interface renderFacebook {
   onClick: () => void;
@@ -66,27 +66,20 @@ function SignUp() {
 
     const {
       email,
-      telefone,
       nome,
       username,
-      year,
       password,
-      month,
-      day,
     } = formData;
-
-    const data_nascimento = `${year}-${month}-${day}`;
 
     const data = new FormData();
 
-    data.append("data_nascimento", data_nascimento);
     data.append("email", email);
-    data.append("telefone", telefone);
     data.append("nome", nome);
     data.append("username", username);
     data.append("password", password);
     try {
-      const res = await axios.post("/api/signup", data);
+      await axios.post("/api/signup", data);
+      setShowNextStep(true);
     } catch (error) {
       return error.response.data.detail;
     }
@@ -101,7 +94,7 @@ function SignUp() {
 
     const data = { ...formData, data_nascimento };
     try {
-      const res = await axios.put("/api/v1/pessoas", data, {
+      await axios.put("/api/v1/pessoas", data, {
         withCredentials: true,
       });
       history.push("/experienceareas");
@@ -125,92 +118,93 @@ function SignUp() {
 
   return (
     <BodySignUp showSecondStep={showNextStep}>
-      <form onSubmit={handleSubmit} className="area-central container">
-        <Link to="/">
-          <img src={logo} alt="logo" />
-        </Link>
-        <div className="primeira-etapa">
-          <img src="" alt="#" className="area-img" />
+      {!showNextStep && (
+        <form onSubmit={handleSubmit} className="area-central container">
+          <Link to="/">
+            <img src={logo} alt="logo" />
+          </Link>
+          <div className="primeira-etapa">
+            <img src="" alt="#" className="area-img" />
 
-          <div className="area-form">
-            <h1>Criar sua conta</h1>
-            <Input
-              name="nome"
-              label="Nome Completo"
-              onChange={handleInputChange}
-            />
-            <Input
-              type="email"
-              name="email"
-              label="E-mail"
-              onChange={handleInputChange}
-            />
-            <section>
+            <div className="area-form">
+              <h1>Criar sua conta</h1>
               <Input
-                name="username"
-                label="Nome de usuário"
+                name="nome"
+                label="Nome Completo"
                 onChange={handleInputChange}
               />
               <Input
-                type="password"
-                name="password"
-                label="Senha"
+                type="email"
+                name="email"
+                label="E-mail"
                 onChange={handleInputChange}
               />
-            </section>
-            <p>
-              Ao prosseguir, você concorda com os{" "}
-              <Link to="#">Termos de Uso</Link> e{" "}
-              <Link to="#">Política de Privacidade.</Link>
-            </p>
+              <section>
+                <Input
+                  name="username"
+                  label="Nome de usuário"
+                  onChange={handleInputChange}
+                />
+                <Input
+                  type="password"
+                  name="password"
+                  label="Senha"
+                  onChange={handleInputChange}
+                />
+              </section>
+              <p>
+                Ao prosseguir, você concorda com os{" "}
+                <Link to="#">Termos de Uso</Link> e{" "}
+                <Link to="#">Política de Privacidade.</Link>
+              </p>
 
-            <section>
-              <Link to="login">Já tem uma conta?</Link>
-              <Button
-                onClick={() => setShowNextStep(true)}
-                theme="primary-yellow"
-                type="button"
-                disabled={
-                  formData.nome === "" ||
-                  formData.email === "" ||
-                  formData.username === "" ||
-                  formData.password === ""
-                }
-              >
-                Continuar
-              </Button>
-            </section>
-            <section>
-              <FacebookLogin
-                appId="1088597931155576"
-                autoLoad={true}
-                fields="name,email,picture"
-                callback={responseFacebook}
-                cssClass="facebook-button"
-                textButton="Cadastre-se com Facebook"
-                icon={<FaFacebookF />}
-              />
-              <GoogleLogin
-                clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-                render={(renderProps) => (
-                  <button
-                    className="google-button"
-                    onClick={renderProps.onClick}
-                    disabled={renderProps.disabled}
-                  >
-                    <FcGoogle />
-                    Inscreva-se com Google
-                  </button>
-                )}
-                buttonText="Login"
-                onSuccess={responseGoogle}
-                onFailure={responseGoogle}
-                cookiePolicy={"single_host_origin"}
-              />
-            </section>
+              <section>
+                <Link to="login">Já tem uma conta?</Link>
+                <Button
+                  theme="primary-yellow"
+                  type="submit"
+                  disabled={
+                    formData.nome === "" ||
+                    formData.email === "" ||
+                    formData.username === "" ||
+                    formData.password === ""
+                  }
+                >
+                  Continuar
+                </Button>
+              </section>
+              <section>
+                <FacebookLogin
+                  appId="1088597931155576"
+                  autoLoad={true}
+                  fields="name,email,picture"
+                  callback={responseFacebook}
+                  cssClass="facebook-button"
+                  textButton="Cadastre-se com Facebook"
+                  icon={<FaFacebookF />}
+                />
+                <GoogleLogin
+                  clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+                  render={(renderProps) => (
+                    <button
+                      className="google-button"
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    >
+                      <FcGoogle />
+                      Inscreva-se com Google
+                    </button>
+                  )}
+                  buttonText="Login"
+                  onSuccess={responseGoogle}
+                  onFailure={responseGoogle}
+                  cookiePolicy={"single_host_origin"}
+                />
+              </section>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      )}
       {showNextStep && (
         <form onSubmit={handleSecondSubmit} className="area-central container">
           <div className="segunda-etapa">

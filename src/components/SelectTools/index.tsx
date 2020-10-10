@@ -52,7 +52,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
         })
         .then((response) => {
           const habilidade: ToolType = response.data;
-          setNewTool({} as ToolType)
+          setNewTool({} as ToolType);
           setCallbackSelectedTools([ ...callbackSelectedTools, habilidade ])
         })
         .catch((err: AxiosError) => {
