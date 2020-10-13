@@ -13,10 +13,18 @@ export interface ToolType {
   nome: string;
   id?: number;
 }
-
+/**
+ * callback named functions are not callbacks
+ * see: https://pt.stackoverflow.com/questions/27177/o-que-%C3%A9-callback
+ */
 const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, setCallbackSelectedTools }) => {
   const [newTool, setNewTool] = useState<ToolType>();
   const [tools, setTools] = useState<ToolType[]>([]);
+
+  /**
+   * If you are gonna set objects with parent state, you should do
+   * the useEffect on parent
+   */
   useEffect(() => {
     axios
       .get("/api/v1/habilidades/")
@@ -52,7 +60,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
         })
         .then((response) => {
           const habilidade: ToolType = response.data;
-          setNewTool({} as ToolType);
+          setNewTool({ nome: "" });
           setCallbackSelectedTools([ ...callbackSelectedTools, habilidade ])
         })
         .catch((err: AxiosError) => {
@@ -63,6 +71,9 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
 
 
   }
+  /**
+   * Use forms when you have to make api calls
+   */
   return (
     <BodySelectTool>
       <label>{label}</label>
@@ -85,7 +96,14 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
         <div className="area-selecao">
           <legend>Habilidades e Ferramentas</legend>
           <fieldset>
-            {tools?.map(tool => (
+            {tools?.filter((tool) => {
+              if (tool.nome && newTool?.nome) {
+                const name = newTool.nome.toLowerCase();
+                const tool_name = tool.nome.toLowerCase();
+                return tool_name.includes(name) ? tool : null
+              }
+              return tool;
+            }).map(tool => (
               <button
                 key={tool.nome}
                 type="button"
@@ -105,7 +123,6 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
               placeholder="Habilidade, ferramenta ou matéria..."
               name="newTool"
               onChange={handleInputChange}
-
             />
             <span onClick={() => newTool && handleAddNewTool(newTool)}> + </span>
           </fieldset>
