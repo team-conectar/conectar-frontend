@@ -41,23 +41,23 @@ function CreateProject() {
   }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    await axios
-      .post("/api/v1/habilidades", selectedTools, {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail;
-      });
-
+    // await axios
+    //   .post("/api/v1/habilidades", selectedTools, {
+    //     withCredentials: true,
+    //   })
+    //   .catch((err: AxiosError) => {
+    //     return err?.response?.data.detail;
+    //   });
+    const data = {...formData, "habilidades": selectedTools, "areas": selectedAreas};
     const res = await axios
-      .post("/api/v1/projeto", formData, {
+      .post("/api/v1/projeto", data, {
         withCredentials: true,
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail;
       });
     console.log(res);
-    alert(res);
+    alert({...res});
   }
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
@@ -85,6 +85,11 @@ function CreateProject() {
       });
   }, []);
 
+  /**
+   * Use forms when making api calls
+   * also take a look at https://formik.org/ it will improve performance on forms
+   * and make the job easier
+   */
   return (
     <BodyCreateProject showSecondStep={showNextStep}>
       {console.log(localStorage.getItem('permissions'))}
