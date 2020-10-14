@@ -41,7 +41,9 @@ export const BodySelectTool = styled.div`
       >fieldset{
         height:80%;
         overflow-y:auto;
+        overflow-x:hidden;
         >button{
+          position: relative;
           display: flex;
           justify-content:space-between;
           align-items:center;
