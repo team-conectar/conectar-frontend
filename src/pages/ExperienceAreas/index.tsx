@@ -1,4 +1,4 @@
-import React, { useState, useEffect,FormEvent } from "react";
+import React, { useState, useEffect, FormEvent } from "react";
 import { BodyExperienceAreas } from "./styles";
 import Button from "../../components/Button";
 import { useHistory } from "react-router-dom";
@@ -17,17 +17,17 @@ function ExperienceAreas() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-
-
     const res = await axios
       .put("/api/v1/pessoas", { "areas": selectedAreas }, {
         withCredentials: true,
+      })
+      .then(() => {
+        history.push("/masterytools")
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail;
       });
     console.log(res);
-    alert(res);
 
   }
 
@@ -52,6 +52,7 @@ function ExperienceAreas() {
         <Button
           type="submit"
           theme="primary-yellow"
+          disabled={selectedAreas.length == 0}
         >
           Continuar
         </Button>

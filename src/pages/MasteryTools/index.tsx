@@ -11,27 +11,23 @@ function MasteryTools() {
 
 
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
-  
-  
+
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    // existingTools?.map(tool => {
-    //   if(tool.id){
-    //     delete tool.id;
-    //   }
-    // })
-    
-    
-    
-    const resp = await axios
-      .put("/api/v1/pessoas", {"habilidades": selectedTools}, {
+
+    const res = await axios
+      .put("/api/v1/pessoas", { "habilidades": selectedTools }, {
         withCredentials: true,
+      })
+      .then(() => {
+        history.push("/profilefeatures");
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail;
       });
-    console.log(resp);
-    alert(resp);
+    console.log(res);
+
   }
   return (
     <BodyMasteryTools onSubmit={handleSubmit}>
@@ -51,9 +47,9 @@ function MasteryTools() {
           onClick={() => { history.push("/profilefeatures") }}
         >Pular</Button>
         <Button
-          onClick={() => { /*history.push("/profilefeatures")*/ }}
           theme="primary-yellow"
           type="submit"
+          disabled={selectedTools.length == 0}
         >Continuar</Button>
       </footer>
     </BodyMasteryTools>
