@@ -104,7 +104,12 @@ const AcademicExperiences: React.FC = () => {
     event.preventDefault();
 
     // Getting changed dates from editing
-    const data_inicio = `${tempEditExperience?.data_inicial}-02-01`;
+    let data_inicio;
+    if(tempEditExperience.data_inicial) {
+      data_inicio = `${tempEditExperience?.data_inicial}-02-01`;
+    } else {
+      data_inicio = tempEditExperience.data_inicio;
+    }
     
     let data_fim;
     let data: AcademicType;
@@ -244,7 +249,6 @@ const AcademicExperiences: React.FC = () => {
   return (
     <BodyExperiences>
       <h2>Educação</h2>
-      {console.log(tempEditExperience.data_inicial)}
       {!showRegister ? (
         <div className="experiencias">
           {academicRecords?.map((experience: AcademicType) => (
