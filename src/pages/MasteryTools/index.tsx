@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { BodyMasteryTools } from './styles';
 import Button from '../../components/Button';
 import { useHistory } from 'react-router-dom';
@@ -16,6 +16,7 @@ function MasteryTools() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
+
     const res = await axios
       .put("/api/v1/pessoas", { "habilidades": selectedTools }, {
         withCredentials: true,
@@ -26,6 +27,7 @@ function MasteryTools() {
       .catch((err: AxiosError) => {
         return err?.response?.data.detail;
       });
+
     console.log(res);
 
   }
