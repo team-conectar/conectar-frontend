@@ -15,7 +15,28 @@ export const monthOptions: OptionHTMLAttributes<HTMLOptionElement>[] = [
   { value: 12, label: "Dezembro" },
 ];
 // preciso revisar
-
+export function toMonth(month:string) {
+  /**
+   * Helper function to handle inputChanges when using hooks
+   * @param {number} month
+   * 
+   */
+  let stringMonth = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
+  ];
+  return stringMonth[parseInt(month)-1];
+}
 function createYearOptions() {
   const yearPlusFive = `${new Date().getFullYear() + 5}`;
 

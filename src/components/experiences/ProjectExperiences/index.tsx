@@ -9,12 +9,12 @@ import { BodyExperiences } from '../styles';
 import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
-import { yearOptions, monthOptions } from "../../../utils/dates";
+import { yearOptions, monthOptions, toMonth } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
 import edit from '../../../assets/icon/editar.svg';
 import trash from '../../../assets/icon/lixeira.svg';
 interface ProjectType {
-  id?: number;
+  id: number;
   nome: string,
   descricao: string,
   data_inicio: string,
@@ -22,23 +22,34 @@ interface ProjectType {
   cargo: string,
   situacao: string,
 }
+interface ProjectDataType {
+  nome: string;
+  descricao: string;
+  currentProject: boolean;
+  cargo: string;
+  situacao: string;
+  initialYear: string;
+  initialMonth: string;
+  // Supressing "The operand of a 'delete' operator must be optional" warning
+  finalYear: any;
+  finalMonth: any;
+}
 const ProjectExperiences: React.FC = () => {
 
   const [showRegister, setShowRegister] = useState<boolean>(false);
-  const [tempEditExperience, setTempEditExperience] = useState<ProjectType>();
   const [projectRecords, setProjectRecords] = useState<ProjectType[]>([]);
-  const [control, setControl] = useState<number>(0);
-  const [projectFormData, setProjectFormData] = useState({
-    cargo: "",
+  // gets the editing experience id
+  const [editingId, setEditingId] = useState<number>(0);
+  const initialProjectData = {
     nome: "",
-    initialYear: "",
-    finalYear: "",
-    initialMonth: "",
-    finalMonth: "",
     descricao: "",
+    cargo: "",
     situacao: "",
+    initialYear: "",
+    initialMonth: "",
     currentProject: false,
-  });
+  } as ProjectDataType;
+  const [projectFormData, setProjectFormData] = useState(initialProjectData);
   const situacao: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Desativado", value: "Desativado" },
     { label: "Em andamento", value: "Em andamento" },
@@ -54,23 +65,17 @@ const ProjectExperiences: React.FC = () => {
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [control]);
-  async function handleDeleteExperienceRecord(id: any) {
+  }, [editingId, showRegister]);
+  async function handleDeleteExperienceRecord(id: number) {
     if (projectRecords.length === 1) {
       projectRecords.splice(0, 1);
     }
-    // projectRecords.splice(
-    //   projectRecords.indexOf(
-    //     projectRecords.filter((experiencia) => {
-    //       return experiencia.id === id
-    //     })[0]
-    //   ), 1
-    // )
     await axios.delete(`/api/v1/experiencias/projeto/${id}`, {
       withCredentials: true,
     });
-    setControl(control + 1);
     setShowRegister(false);
+    setEditingId(id);
+    setEditingId(0);
 
   }
   /**
@@ -79,6 +84,98 @@ const ProjectExperiences: React.FC = () => {
    * doesn't actually improve performance here
    * reference: https://reactjs.org/docs/hooks-reference.html#usecallback
    */
+
+  async function handleProjectSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    const {
+      currentProject,
+      nome,
+      cargo,
+      descricao,
+      finalYear,
+      initialYear,
+      finalMonth,
+      initialMonth,
+      situacao,
+    }: ProjectDataType = projectFormData;
+    //setting to null because if there a update an experience with an existing data_fim it will not send
+    let data_fim = null;
+    const data_inicio = `${initialYear}-${initialMonth}-01`;
+
+    if (!currentProject) {
+      data_fim = `${finalYear}-${finalMonth}-01`;
+    }
+
+
+    const data = {
+      nome,
+      descricao,
+      data_inicio,
+      data_fim,
+      cargo,
+      situacao,
+    };
+    console.log(data);
+    /**
+     * Sends data to backend
+     * It's important to notice the withCredentials being true here
+     * so it will send the JWT token as cookie
+     * */
+    const res = editingId
+      ? await axios
+        .put(`/api/v1/experiencias/projeto/${editingId}`, data, {
+          withCredentials: true,
+        })
+        .catch((err: AxiosError) => {
+          // Returns error message from backend
+          return err?.response?.data.detail;
+        })
+      : await axios
+        .post("/api/v1/experiencias/projeto", data, {
+          withCredentials: true,
+        })
+        .catch((err: AxiosError) => {
+          // Returns error message from backend
+          return err?.response?.data.detail;
+        });
+    console.log(res);
+    setShowRegister(false);
+    setEditingId(0);
+    setProjectFormData(initialProjectData);
+    // Do something
+  }
+  function handleEditExperience(experience: ProjectType) {
+    const {
+      id,
+      nome,
+      descricao,
+      data_inicio,
+      data_fim,
+      cargo,
+      situacao,
+    }: ProjectType = experience;
+
+    const [initialYear, initialMonth] = data_inicio.split("-");
+
+    const data = {
+      nome,
+      cargo,
+      descricao,
+      initialYear,
+      initialMonth,
+      situacao,
+      currentProject: data_fim ? false : true,
+      finalYear: data_fim ? data_fim.split("-")[0] : data_fim,
+      finalMonth: data_fim ? data_fim.split("-")[1] : data_fim,
+    };
+
+
+    setShowRegister(true);
+    setEditingId(id);
+    setProjectFormData(data);
+
+  }
   const handleInputChange = useCallback(
     (
       event: ChangeEvent<HTMLInputElement>,
@@ -112,95 +209,25 @@ const ProjectExperiences: React.FC = () => {
     []
   );
 
-  async function handleProjectSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    const {
-      currentProject,
-      nome,
-      cargo,
-      descricao,
-      finalYear,
-      initialYear,
-      finalMonth,
-      initialMonth,
-      situacao,
-    }: {
-      nome: string;
-      descricao: string;
-      currentProject: boolean;
-      cargo: string;
-      situacao: string;
-      initialYear: string;
-      initialMonth: string;
-      // Supressing "The operand of a 'delete' operator must be optional" warning
-      finalYear: any;
-      finalMonth: any;
-    } = projectFormData;
-
-    let data_fim;
-    const data_inicio = `${initialYear}-${initialMonth}-01`;
-
-    if (!currentProject) {
-      data_fim = `${finalYear}-${finalMonth}-01`;
-    }
-
-    const data = {
-      nome,
-      descricao,
-      data_inicio,
-      data_fim,
-      cargo,
-      situacao,
-    };
-
-    /**
-     * Sends data to backend
-     * It's important to notice the withCredentials being true here
-     * so it will send the JWT token as cookie
-     * */
-    const res = await axios
-      .post("/api/v1/experiencias/projeto", data, {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail;
-      });
-    console.log(res);
-    setControl(control + 1);
-    setShowRegister(false);
-    // Do something
-  }
-  async function handlePutExperience(event: FormEvent) {
-    event.preventDefault();
-    await axios.put(`/api/v1/experiencias/projeto/${tempEditExperience?.id}`, tempEditExperience, {
-      withCredentials: true,
-    });
-
-    setTempEditExperience({} as ProjectType);
-    setControl(control + 1);
-    setShowRegister(false);
-  }
   function handleProjectInputChange(event: ChangeEvent<HTMLInputElement>) {
     handleInputChange(
       event,
-      tempEditExperience?.nome ? setTempEditExperience : setProjectFormData,
-      tempEditExperience?.nome ? tempEditExperience : projectFormData
+      setProjectFormData,
+      projectFormData
     );
   }
   function handleProjectSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     handleSelectChange(
       event,
-      tempEditExperience?.nome ? setTempEditExperience : setProjectFormData,
-      tempEditExperience?.nome ? tempEditExperience : projectFormData
+      setProjectFormData,
+      projectFormData
     );
   }
   function handleProjectTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
     handleTextAreaChange(
       event,
-      tempEditExperience?.nome ? setTempEditExperience : setProjectFormData,
-      tempEditExperience?.nome ? tempEditExperience : projectFormData
+      setProjectFormData,
+      projectFormData
     );
   }
 
@@ -219,10 +246,7 @@ const ProjectExperiences: React.FC = () => {
                 <img
                   src={edit}
                   alt="editar experiencia"
-                  onClick={() => {
-                    setTempEditExperience(experience);
-                    setShowRegister(true);
-                  }}
+                  onClick={() => handleEditExperience(experience)}
                 />
                 <img
                   src={trash}
@@ -234,11 +258,24 @@ const ProjectExperiences: React.FC = () => {
                 <legend>
                   {`${experience.cargo} | ${experience.nome}`}
                 </legend>
+
                 <p>
                   {experience.situacao} <br />
-                  {experience.descricao} <br />
-                  {`${experience.data_inicio} até ${experience.situacao === "Em andamento"? "o presente momento":experience.data_fim}`}
+                  {`
+                  ${toMonth(experience.data_inicio.split("-")[1])} 
+                  de 
+                  ${experience.data_inicio.split("-")[0]} 
+                  até 
+                  ${experience.data_fim ? `
+                      ${toMonth(experience.data_fim.split("-")[1])} 
+                      de 
+                      ${experience.data_fim.split("-")[0]}
+                    ` :
+                      "o momento atual"}
+                  `} <br />
+                  {experience.data_fim}
                 </p>
+
 
               </fieldset>
             </div>
@@ -249,14 +286,18 @@ const ProjectExperiences: React.FC = () => {
           </button>
         </div>
       ) : (
-          <form className="form--experiencia" onSubmit={handleProjectSubmit}>
+          <form
+            className="form--experiencia"
+            onSubmit={handleProjectSubmit}
+          >
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
                   label="Nome do projeto"
                   name="nome"
                   onChange={handleProjectInputChange}
-                  defaultValue={tempEditExperience?.nome}
+                  defaultValue={projectFormData?.nome}
+                  required
                 />
               </section>
               <section className="bloco-dois">
@@ -264,15 +305,17 @@ const ProjectExperiences: React.FC = () => {
                   label="Situação"
                   name="situacao"
                   options={situacao}
-                  defaultOption={tempEditExperience?.situacao || "Selecione"}
                   onChange={handleProjectSelectChange}
+                  defaultOption={projectFormData?.situacao || "Selecione"}
+                  required
                 />
 
                 <Input
                   label="Cargo"
                   name="cargo"
                   onChange={handleProjectInputChange}
-                  defaultValue={tempEditExperience?.cargo}
+                  defaultValue={projectFormData?.cargo}
+                  required
                 />
               </section>
               <section className="bloco-tres">
@@ -281,16 +324,17 @@ const ProjectExperiences: React.FC = () => {
                     label="Mês inicial"
                     name="initialMonth"
                     options={monthOptions}
-                    defaultOption={tempEditExperience?.data_inicio || "Selecione"}
                     onChange={handleProjectSelectChange}
+                    defaultOption={toMonth(projectFormData?.initialMonth) || "Selecione"}
+                    required
                   />
                   <Select
                     label="Ano inicial"
                     name="initialYear"
                     options={yearOptions}
-                    defaultOption={tempEditExperience?.data_inicio || "Selecione"}
                     onChange={handleProjectSelectChange}
-                    value={projectFormData.initialYear}
+                    defaultOption={projectFormData?.initialYear || "Selecione"}
+                    required
                   />
                 </aside>
                 <aside>
@@ -299,7 +343,7 @@ const ProjectExperiences: React.FC = () => {
                     name="currentProject"
                     id="currentProject"
                     onChange={handleProjectInputChange}
-                    defaultChecked={tempEditExperience?.data_fim ? true : false}
+                    defaultChecked={projectFormData?.currentProject}
                   />
                 </aside>
                 {!projectFormData.currentProject && (
@@ -308,15 +352,17 @@ const ProjectExperiences: React.FC = () => {
                       label="Mês final"
                       name="finalMonth"
                       options={monthOptions}
-                      defaultOption={tempEditExperience?.data_inicio || "Selecione"}
+                      onChange={handleProjectSelectChange}
+                      defaultOption={toMonth(projectFormData?.finalMonth) || "Selecione"}
+                      required
                     />
                     <Select
                       label="Ano final"
                       name="finalYear"
                       options={yearOptions}
-                      defaultOption={tempEditExperience?.data_inicio || "Selecione"}
                       onChange={handleProjectSelectChange}
-                      value={projectFormData.finalYear}
+                      defaultOption={projectFormData?.finalYear || "Selecione"}
+                      required
                     />
                   </aside>
                 )}
@@ -326,7 +372,8 @@ const ProjectExperiences: React.FC = () => {
                   name="descricao"
                   label="Detalhes"
                   onChange={handleProjectTextAreaChange}
-                  defaultValue={tempEditExperience?.descricao}
+                  defaultValue={projectFormData?.descricao}
+                  required
                 />
               </section>
               <section className="area-botoes">
@@ -338,13 +385,16 @@ const ProjectExperiences: React.FC = () => {
                 <Button
                   theme="secondary-green"
                   onClick={() => {
-                    tempEditExperience ? handleDeleteExperienceRecord(tempEditExperience.id) : setShowRegister(false)
+                    editingId > 0
+                      ? handleDeleteExperienceRecord(editingId)
+                      : setShowRegister(false)
                   }}
                 >Excluir</Button>
                 <Button
                   onClick={() => {
-                    setShowRegister(false)
-                    setTempEditExperience({} as ProjectType)
+                    setShowRegister(false);
+                    setEditingId(0);
+                    setProjectFormData(initialProjectData)
                   }}
                 >
                   Cancelar

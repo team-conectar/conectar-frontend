@@ -40,7 +40,6 @@ interface AcademicType {
 
 const AcademicExperiences: React.FC = () => {
   const [showRegister, setShowRegister] = useState<boolean>(false);
-  // Add initial state so we can modify it with ease
   const [tempEditExperience, setTempEditExperience] = useState<AcademicType>({
     instituicao: "",
     curso: "",
@@ -87,13 +86,6 @@ const AcademicExperiences: React.FC = () => {
     if (academicRecords.length === 1) {
       academicRecords.splice(0, 1);
     }
-    // academicRecords.splice(
-    //   academicRecords.indexOf(
-    //     academicRecords.filter((experiencia) => {
-    //       return experiencia.id === id
-    //     })[0]
-    //   ), 1
-    // )
     await axios.delete(`/api/v1/experiencias/academica/${id}`, {
       withCredentials: true,
     });
