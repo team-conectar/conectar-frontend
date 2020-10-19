@@ -6,7 +6,9 @@ export const BodyExperiences = styled.section`
     .form--experiencia {
         width: 100%;
     }   
-
+    textarea {
+        resize: none;
+    }
     background:white;
     padding:0.8rem;
     margin: 0.8rem 0;
