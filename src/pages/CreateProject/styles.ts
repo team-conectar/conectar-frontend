@@ -44,7 +44,7 @@ export const BodyCreateProject = styled.div<StepProps>`
                 props.showSecondStep ? css`display:grid;` : css`display:none;`
             }  
         }
-        main{
+        form{
             grid-template-columns:2fr 3fr;
             grid-template-rows:1fr;
             grid-gap:2rem;

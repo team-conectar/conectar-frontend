@@ -10,15 +10,13 @@ import Button from '../Button';
 
 import axios, { AxiosError } from 'axios';
 
-import { TiSocialFacebookCircular } from 'react-icons/ti';
 
 import { inputChange } from '../../utils/inputChange';
 interface loginProps {
   onSuccessLogin(): void;
 }
-
-const Login: React.FC<loginProps> = ({onSuccessLogin}) => {
-
+const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
+  const [logged, setLogged] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     senha: ''
@@ -41,6 +39,7 @@ const Login: React.FC<loginProps> = ({onSuccessLogin}) => {
      * data from formData state and send it to backend by using axios
      * @param {FormEvent} event
      */
+
     event.preventDefault();
 
     const { email, senha } = formData;
@@ -50,12 +49,15 @@ const Login: React.FC<loginProps> = ({onSuccessLogin}) => {
     data.append('password', senha);
 
     const res = await axios
-    .post('/api/token', data)
-    .then(onSuccessLogin)
-    .catch((err: AxiosError) => {
-      // Returns error message from backend
-      return err?.response?.data.detail;
-    });
+      .post('/api/token', data)
+      .then(() => {
+        onSuccessLogin()
+
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
 
     console.log(res);
 
@@ -64,7 +66,6 @@ const Login: React.FC<loginProps> = ({onSuccessLogin}) => {
 
   return (
     <BodyLogin onSubmit={handleSubmit}>
-
       <Input
         id="email"
         name="email"

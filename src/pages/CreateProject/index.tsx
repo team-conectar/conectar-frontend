@@ -48,7 +48,7 @@ function CreateProject() {
     //   .catch((err: AxiosError) => {
     //     return err?.response?.data.detail;
     //   });
-    const data = {...formData, "habilidades": selectedTools, "areas": selectedAreas};
+    const data = { ...formData, "habilidades": selectedTools, "areas": selectedAreas };
     const res = await axios
       .post("/api/v1/projeto", data, {
         withCredentials: true,
@@ -57,11 +57,11 @@ function CreateProject() {
         return err?.response?.data.detail;
       });
     console.log(res);
-    alert({...res});
+    alert({ ...res });
   }
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(isAuthenticated());
+  const [showModal, setShowModal] = useState<boolean>(false);
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'image/*',
     onDrop: onDropAcceptedFiles => {
@@ -71,19 +71,7 @@ function CreateProject() {
 
   const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
 
-  useEffect(() => {
-    axios
-      .get("/api/v1/areas", {
-        withCredentials: true,
-      })
-      .then((result) => {
-        setSelectedAreas(result.data);
-      })
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail;
-      });
-  }, []);
+
 
   /**
    * Use forms when making api calls
@@ -92,7 +80,6 @@ function CreateProject() {
    */
   return (
     <BodyCreateProject showSecondStep={showNextStep}>
-      {console.log(localStorage.getItem('permissions'))}
       <Modal
         open={showModal}
         setOpen={setShowModal}
@@ -103,7 +90,7 @@ function CreateProject() {
       <div className="area-central container">
         <h1>Criar Projeto</h1>
 
-        <main className="primeira-etapa">
+        <form className="primeira-etapa">
           <div className="coluna-um">
 
             <Input
@@ -167,8 +154,8 @@ function CreateProject() {
           </section>
 
 
-        </main>
-        <main className="segunda-etapa">
+        </form>
+        <form className="segunda-etapa">
           <div className="coluna-um">
             <Textarea
               label="Objetivo do projeto"
@@ -204,7 +191,7 @@ function CreateProject() {
               type="submit"
             >Concluir</Button>
           </section>
-        </main>
+        </form>
       </div>
     </BodyCreateProject>
   )
