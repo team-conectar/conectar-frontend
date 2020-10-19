@@ -5,14 +5,13 @@ import Textarea from '../../components/Textarea';
 import Button from '../../components/Button';
 import ToggleSwitch from '../../components/ToggleSwitch';
 import { useHistory } from 'react-router';
-import { useDropzone } from 'react-dropzone'
 import SelectArea, { Area } from '../../components/SelectArea';
 import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
 import { isAuthenticated } from '../../utils/auth';
 import Modal from '../../components/Modal';
 import Login from '../../components/Login';
-
+import Dropzone from '../../components/Dropzone';
 
 function CreateProject() {
 
@@ -24,7 +23,7 @@ function CreateProject() {
     objetivo: "",
   });
 
-
+  const [selectedFile, setselectedFile] = useState<File>();
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -62,12 +61,7 @@ function CreateProject() {
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(isAuthenticated());
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: 'image/*',
-    onDrop: onDropAcceptedFiles => {
-      console.log(onDropAcceptedFiles);
-    },
-  });
+  
 
   const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
 
@@ -113,26 +107,8 @@ function CreateProject() {
               required
             />
             <div className="upload-img">
-              <label htmlFor="upload">Capa do projeto</label>
-              <div className="view-img" {...getRootProps()}>
-                <label>Fazer Upload de Imagem</label>
-                <input
-                  name="upload"
-                  id="upload"
-                  accept="image/png, image/jpeg"
-                  {...getInputProps()}
-                />
-                <p>ou</p>
-                {isDragActive ? (
-                  <p>Solte a imagem</p>
-                ) : (
-                    <p>Arraste o arquivo para cá</p>
-                  )}
-
-                <p>Tamanho mínimo de 805x632px</p>
-              </div>
+              <Dropzone onFileUploaded={setselectedFile}/>
             </div>
-
 
             <ToggleSwitch
               name="visibilidade"

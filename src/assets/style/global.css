@@ -1,50 +1,50 @@
-                     :root {
-                        /* font-size: 60%; */
-                        --yellow: #Ebae3c;
-                        --yellow-dark: #FEA81B;
-                        --orange: #Ebae3c;
-                        --green: #99b876;
-                        --green-bg: #072F3F;
-                        --red: ##d8252c;
-                        --white: #ffff;
-                        --gray: #a6a6a6;
-                    }
-                    
-                    * {
-                        margin: 0;
-                        padding: 0;
-                        box-sizing: border-box;
-                    }
-                    
-                    .container {
-                        width: min(1100px, 90vw);
-                    }
-                    
-                    #root {
-                        font-family: Roboto;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        -webkit-font-smoothing: subpixel-antialiased;
-                    }
-                    
-                    @media (min-width: 700px) {
-                        /* :root {
+:root {
+  /* font-size: 60%; */
+  --yellow: #ebae3c;
+  --yellow-dark: #fea81b;
+  --orange: #ebae3c;
+  --green: #99b876;
+  --green-bg: #072f3f;
+  --red: ##d8252c;
+  --white: #ffff;
+  --gray: #a6a6a6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  width: min(1100px, 90vw);
+}
+
+#root {
+  font-family: Roboto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+
+@media (min-width: 700px) {
+  /* :root {
         font-size: 62.5%;
     } */
-                    }
-                    
-                    fieldset {
-                        border: 0;
-                    }
-                    
-                    button {
-                        cursor: pointer;
-                    }
-                    
-                    input,
-                    button,
-                    select,
-                    textarea {
-                        outline: none;
-                    }
+}
+
+fieldset {
+  border: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+input,
+button,
+select,
+textarea {
+  outline: none;
+}
