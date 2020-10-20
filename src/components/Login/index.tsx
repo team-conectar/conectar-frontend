@@ -67,6 +67,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   return (
     <BodyLogin onSubmit={handleSubmit}>
       <Input
+        mask=""
         id="email"
         name="email"
         label="E-mail ou nome de usuário"
@@ -74,6 +75,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         onChange={handleInputChange}
       />
       <Input
+        mask=""
         id="senha"
         name="senha"
         type="password"
