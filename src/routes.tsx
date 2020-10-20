@@ -8,18 +8,21 @@ import MasteryTools from './pages/MasteryTools';
 import CreateProject from './pages/CreateProject';
 import ApproveProject from './pages/ApproveProject';
 
+import { AuthProvider } from './context/AuthContext';
 
 function Routes() {
   return (
-    <BrowserRouter>
-      <Route exact path="/" component={Home} />
-      <Route path="/signup" component={SignUp} />
-      <Route path="/profilefeatures" component={ProfileFeatures} />
-      <Route path="/experienceareas" component={ ExperienceAreas} />
-      <Route path="/masterytools" component={ MasteryTools} />
-      <Route path="/createproject" component={ CreateProject} />
-      <Route path="/approveproject" component={ ApproveProject} />
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Route exact path="/" component={Home} />
+        <Route path="/signup" component={SignUp} />
+        <Route path="/profilefeatures" component={ProfileFeatures} />
+        <Route path="/experienceareas" component={ ExperienceAreas} />
+        <Route path="/masterytools" component={ MasteryTools} />
+        <Route path="/createproject" component={ CreateProject} />
+        <Route path="/approveproject" component={ ApproveProject} />
+      </BrowserRouter>
+    </AuthProvider>
   )
 
 }

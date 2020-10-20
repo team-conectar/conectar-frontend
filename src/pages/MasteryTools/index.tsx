@@ -1,15 +1,16 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent,  } from 'react';
 import { BodyMasteryTools } from './styles';
 import Button from '../../components/Button';
 import { useHistory } from 'react-router-dom';
 import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
 
+import Logged from "../../components/Logged";
 
 function MasteryTools() {
   const history = useHistory();
 
-
+  
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
 
 
@@ -31,8 +32,13 @@ function MasteryTools() {
     console.log(res);
 
   }
+
+  
+
+
   return (
     <BodyMasteryTools onSubmit={handleSubmit}>
+      <Logged />
       <div className="area-central container">
 
         <h1>Selecione suas habilidades e ferramentas de domínio</h1>

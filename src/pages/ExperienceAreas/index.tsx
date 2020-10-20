@@ -3,10 +3,9 @@ import { BodyExperienceAreas } from "./styles";
 import Button from "../../components/Button";
 import { useHistory } from "react-router-dom";
 import SelectArea, { Area } from "../../components/SelectArea";
+import Logged from "../../components/Logged";
 
 import axios, { AxiosError } from "axios";
-
-
 
 function ExperienceAreas() {
   const history = useHistory();
@@ -33,6 +32,7 @@ function ExperienceAreas() {
 
   return (
     <BodyExperienceAreas onSubmit={handleSubmit}>
+      <Logged />
       <div className="area-central container">
         <h1>Selecione suas áreas de atuação (máx. 5)</h1>
         <SelectArea
