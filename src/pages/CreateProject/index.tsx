@@ -17,8 +17,9 @@ import { Context } from "../../context/AuthContext";
 import Logged from "../../components/Logged";
 
 function CreateProject() {
-  
+
   const { isAuthenticated } = useContext(Context);
+
 
   const history = useHistory();
   const [formData, setFormData] = useState({
@@ -27,7 +28,7 @@ function CreateProject() {
     visibilidade: true,
     objetivo: "",
   });
-  
+
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -60,7 +61,7 @@ function CreateProject() {
 
     data.append("nome", nome);
     data.append("visibilidade", JSON.stringify(visibilidade));
-    selectedFile && data.append("userpic",selectedFile, `${nome}pic.jpg`);
+    selectedFile && data.append("userpic", selectedFile, `${nome}pic.jpg`);
     data.append("areas", JSON.stringify(selectedAreas));
     try {
       await axios.post("/api/v1/projeto", data);
@@ -73,7 +74,7 @@ function CreateProject() {
   async function handleSecondSubmit(event: FormEvent) {
     event.preventDefault();
 
-    const data = { ...formData, "habilidades":selectedTools };
+    const data = { ...formData, "habilidades": selectedTools };
     try {
       await axios.put("/api/v1/projeto", data, {
         withCredentials: true,
@@ -137,6 +138,7 @@ function CreateProject() {
           <div className="coluna-um">
 
             <Input
+              mask=""
               name="nome"
               label="Título do projeto"
               onChange={handleInputChange}

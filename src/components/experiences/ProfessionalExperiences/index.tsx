@@ -331,6 +331,7 @@ const ProfessionalExperiences: React.FC = () => {
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
+                  mask=""
                   label="Organização"
                   name="organizacao"
                   onChange={handleProfessionalInputChange}
@@ -338,6 +339,7 @@ const ProfessionalExperiences: React.FC = () => {
                   required
                 />
                 <Input
+                  mask=""
                   label="Cargo"
                   name="cargo"
                   onChange={handleProfessionalInputChange}

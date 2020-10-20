@@ -315,7 +315,7 @@ const ProjectExperiences: React.FC = () => {
                       ${experience.data_fim.split("-")[0]}
                     ` :
                       "o momento atual"}
-                  `} 
+                  `}
                 </p>
 
 
@@ -335,6 +335,7 @@ const ProjectExperiences: React.FC = () => {
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
+                  mask=""
                   label="Nome do projeto"
                   name="nome"
                   onChange={handleProjectInputChange}
@@ -353,6 +354,7 @@ const ProjectExperiences: React.FC = () => {
                 />
 
                 <Input
+                  mask=""
                   label="Cargo"
                   name="cargo"
                   onChange={handleProjectInputChange}

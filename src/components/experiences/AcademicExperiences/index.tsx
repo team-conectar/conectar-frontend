@@ -318,6 +318,7 @@ const AcademicExperiences: React.FC = () => {
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
+                  mask=""
                   label="Instituição de ensino"
                   name="instituicao"
                   required
@@ -325,6 +326,7 @@ const AcademicExperiences: React.FC = () => {
                   defaultValue={academicFormData?.instituicao}
                 />
                 <Input
+                  mask=""
                   label="Curso"
                   name="curso"
                   required

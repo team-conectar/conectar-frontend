@@ -1,9 +1,9 @@
 import React, { InputHTMLAttributes, ChangeEvent } from 'react';
 import { BodyInput } from './styles';
 import { Link } from 'react-router-dom';
+import InputMask, {Props} from 'react-input-mask';
 
-
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends Props {
   name: string;
   label?: string;
   subLabel?: string;
@@ -18,7 +18,7 @@ const Input: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...r
           <Link to={`/${pathSubLabel}`} tabIndex={1}>{subLabel}</Link>
         }
       </label>
-      <input type="text" id={name} name={name} {...rest} />
+      <InputMask type="text" id={name} name={name} maskChar="" {...rest}/>
     </BodyInput>
 
   )
