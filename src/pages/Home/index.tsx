@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import NavBar from '../../components/NavBar';
 import { BodyHome } from './styles';
 import Login from '../../components/Login';
@@ -6,10 +6,18 @@ import ProjectCards from '../../components/ProjectCards';
 import hero from '../../assets/image/hero.svg';
 import Modal from '../../components/Modal';
 
+
+import { Context } from "../../context/AuthContext";
+
+import Logged from "../../components/Logged";
+
 function Home() {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const { handleLogin } = useContext(Context);
+  
   return (
     <BodyHome>
+      <Logged />
       <Modal
         open={showModal}
         setOpen={setShowModal}
@@ -22,7 +30,7 @@ function Home() {
           <section className="area-login">
             <h1>Find your <br /> dreamteam!</h1>
             <Login
-              onSuccessLogin={() => setShowModal(true)}
+              onSuccessLogin={() => {setShowModal(true); handleLogin(true)}}
             />
           </section>
           <section className="hero">

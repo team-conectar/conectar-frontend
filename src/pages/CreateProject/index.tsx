@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent, FormEvent, useEffect, useContext } from 'react';
 import { BodyCreateProject } from './styles';
 import Input from '../../components/Input';
 import Textarea from '../../components/Textarea';
@@ -8,13 +8,18 @@ import { useHistory } from 'react-router';
 import SelectArea, { Area } from '../../components/SelectArea';
 import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
-import { isAuthenticated } from '../../utils/auth';
+
 import Modal from '../../components/Modal';
 import Login from '../../components/Login';
 import Dropzone from '../../components/Dropzone';
 
+import { Context } from "../../context/AuthContext";
+import Logged from "../../components/Logged";
+
 function CreateProject() {
   
+  const { isAuthenticated } = useContext(Context);
+
   const history = useHistory();
   const [formData, setFormData] = useState({
     nome: "",
@@ -110,20 +115,17 @@ function CreateProject() {
   //   alert({ ...res });
   // }
 
+  
 
-  /**
-   * Use forms when making api calls
-   * also take a look at https://formik.org/ it will improve performance on forms
-   * and make the job easier
-   */
   return (
     <BodyCreateProject showSecondStep={showNextStep}>
+      <Logged />
       <Modal
         open={showModal}
         setOpen={setShowModal}
       >
         <h1>Para prosseguir, você precisa estar logado</h1>
-        <Login onSuccessLogin={() => setShowModal(isAuthenticated())} />
+        <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
       </Modal>
       <div className="area-central container">
         <h1>Criar Projeto</h1>

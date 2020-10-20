@@ -5,15 +5,15 @@ export default function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   
-  // useEffect(() => {
-  //   axios.post('/refresh_token').then(async req => {
-  //     const accessToken = await req.data.accessToken;
-  //     api.defaults.headers.Authorization = `Bearer ${accessToken}`;
-  //     setIsAuthenticated(true);
-  //   }).finally(() => {
-  //     setLoading(false);
-  //   });
-  // }, []);
+  useEffect(() => {
+    axios.post('/api/refresh_token').then(async req => {
+      const accessToken = await req.data.access_token;
+      axios.defaults.headers.Authorization = `Bearer ${accessToken}`;
+      setIsAuthenticated(true);
+    }).finally(() => {
+      setLoading(false);
+    });
+  }, [isAuthenticated]);
   
   function handleLogin(didAuthenticate: boolean) {
     setIsAuthenticated(didAuthenticate);
