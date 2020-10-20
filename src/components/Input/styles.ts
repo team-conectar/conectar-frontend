@@ -29,4 +29,14 @@ export const BodyInput = styled.div`
     font: 1.6rem;
     
   }
+  input[type=number]::-webkit-inner-spin-button { 
+    -webkit-appearance: none;
+    
+  }
+  input[type=number] { 
+    -moz-appearance: textfield;
+    appearance: textfield;
+
+  }
+
 `;

@@ -44,10 +44,15 @@ function SignUp() {
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
+    const reg = new RegExp(/^\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$/)
     const { name } = target;
     const value = target.type === "checkbox" ? target.checked : target.value;
+    if (target.type === "tel" && target.value.match(reg)) {
 
-    setFormData({ ...formData, [name]: value });
+    } else {
+
+      setFormData({ ...formData, [name]: value });
+    }
   }
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -60,7 +65,29 @@ function SignUp() {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   }
+  function hancdleCheckPasswrod() {
 
+    var forca = 0;
+
+
+    if ((formData.password.length >= 8)) {
+
+      if (formData.password.match(/[a-z]+/)) {
+        forca++;
+      }
+      else if (formData.password.match(/[A-Z]+/)) {
+        forca++;
+      }
+      else if (formData.password.match(/[@#$%&;*]/)) {
+        forca++;
+      }
+
+      else if (formData.password.match(/([1-9]+)\1{1,}/)) {
+        forca++;
+      }
+    }
+
+  }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
@@ -104,7 +131,6 @@ function SignUp() {
   }
 
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
-
   const responseFacebook = (
     resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse
   ) => {
@@ -213,10 +239,11 @@ function SignUp() {
             </legend>
             <section>
               <Input
-                type="tel"
+                type="number"
                 name="telefone"
                 label="Celular"
                 onChange={handleInputChange}
+                value={formData.telefone}
               ></Input>
               <Select
                 label="Data de Nascimento"

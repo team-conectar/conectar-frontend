@@ -9,10 +9,11 @@ import { BodyExperiences } from '../styles';
 import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
-import { yearOptions, monthOptions, toMonth } from "../../../utils/dates";
+import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
 import edit from '../../../assets/icon/editar.svg';
 import trash from '../../../assets/icon/lixeira.svg';
+import Modal from "../../Modal";
 interface ProjectType {
   id: number;
   nome: string,
@@ -49,6 +50,11 @@ const ProjectExperiences: React.FC = () => {
     initialMonth: "",
     currentProject: false,
   } as ProjectDataType;
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [experienceExcluded, setExperienceExcluded] = useState({
+    id: 0,
+    nome: "",
+  })
   const [projectFormData, setProjectFormData] = useState(initialProjectData);
   const situacao: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Desativado", value: "Desativado" },
@@ -65,17 +71,26 @@ const ProjectExperiences: React.FC = () => {
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [editingId, showRegister]);
-  async function handleDeleteExperienceRecord(id: number) {
+  }, [editingId, showRegister, openModal]);
+  async function handleDeleteExperience(id: number) {
     if (projectRecords.length === 1) {
       projectRecords.splice(0, 1);
     }
-    await axios.delete(`/api/v1/experiencias/projeto/${id}`, {
-      withCredentials: true,
-    });
-    setShowRegister(false);
-    setEditingId(id);
-    setEditingId(0);
+    await axios
+      .delete(`/api/v1/experiencias/projeto/${id}`, {
+        withCredentials: true,
+      })
+      .then(() => {
+        setShowRegister(false);
+        setOpenModal(false);
+        setEditingId(0);
+        setProjectFormData(initialProjectData);
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+
 
   }
   /**
@@ -127,6 +142,11 @@ const ProjectExperiences: React.FC = () => {
         .put(`/api/v1/experiencias/projeto/${editingId}`, data, {
           withCredentials: true,
         })
+        .then(() => {
+          setShowRegister(false);
+          setEditingId(0);
+          setProjectFormData(initialProjectData);
+        })
         .catch((err: AxiosError) => {
           // Returns error message from backend
           return err?.response?.data.detail;
@@ -135,14 +155,17 @@ const ProjectExperiences: React.FC = () => {
         .post("/api/v1/experiencias/projeto", data, {
           withCredentials: true,
         })
+        .then(() => {
+          setShowRegister(false);
+          setEditingId(0);
+          setProjectFormData(initialProjectData);
+        })
         .catch((err: AxiosError) => {
           // Returns error message from backend
           return err?.response?.data.detail;
         });
     console.log(res);
-    setShowRegister(false);
-    setEditingId(0);
-    setProjectFormData(initialProjectData);
+
     // Do something
   }
   function handleEditExperience(experience: ProjectType) {
@@ -233,6 +256,23 @@ const ProjectExperiences: React.FC = () => {
 
   return (
     <BodyExperiences>
+      <Modal setOpen={setOpenModal} open={openModal}>
+        <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
+        <footer>
+          <Button
+            theme="primary-yellow"
+            onClick={() => experienceExcluded && handleDeleteExperience(experienceExcluded?.id)}
+          >
+            Excluir
+          </Button>
+          <Button
+            theme="secondary-yellow"
+            onClick={() => setOpenModal(false)}
+          >
+            Manter
+          </Button>
+        </footer>
+      </Modal>
       <h2>Projetos</h2>
 
       {!showRegister ? (
@@ -251,7 +291,10 @@ const ProjectExperiences: React.FC = () => {
                 <img
                   src={trash}
                   alt="apagar experiencia"
-                  onClick={() => handleDeleteExperienceRecord(experience.id)}
+                  onClick={() => {
+                    setOpenModal(true);
+                    setExperienceExcluded(experience);
+                  }}
                 />
               </section>
               <fieldset className="info-experiencias">
@@ -272,8 +315,7 @@ const ProjectExperiences: React.FC = () => {
                       ${experience.data_fim.split("-")[0]}
                     ` :
                       "o momento atual"}
-                  `} <br />
-                  {experience.data_fim}
+                  `} 
                 </p>
 
 
@@ -359,9 +401,13 @@ const ProjectExperiences: React.FC = () => {
                     <Select
                       label="Ano final"
                       name="finalYear"
-                      options={yearOptions}
+                      options={finalYearOptions(Number(projectFormData.initialYear))}
                       onChange={handleProjectSelectChange}
-                      defaultOption={projectFormData?.finalYear || "Selecione"}
+                      defaultOption={
+                        Number(projectFormData?.finalYear) > Number(projectFormData?.initialYear)
+                          ? projectFormData.finalYear
+                          : "Selecione"
+                      }
                       required
                     />
                   </aside>
@@ -384,11 +430,14 @@ const ProjectExperiences: React.FC = () => {
                 >Salvar</Button>
                 <Button
                   theme="secondary-green"
-                  onClick={() => {
+                  onClick={
                     editingId > 0
-                      ? handleDeleteExperienceRecord(editingId)
-                      : setShowRegister(false)
-                  }}
+                      ? () => {
+                        setOpenModal(true);
+                        setExperienceExcluded({ ...projectFormData, "id": editingId })
+                      }
+                      : () => setShowRegister(false)
+                  }
                 >Excluir</Button>
                 <Button
                   onClick={() => {

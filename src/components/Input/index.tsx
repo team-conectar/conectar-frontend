@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from 'react';
+import React, { InputHTMLAttributes, ChangeEvent } from 'react';
 import { BodyInput } from './styles';
 import { Link } from 'react-router-dom';
 

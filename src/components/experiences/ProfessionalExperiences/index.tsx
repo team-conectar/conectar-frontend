@@ -15,10 +15,11 @@ import { BodyExperiences } from "../styles";
 import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
-import { yearOptions, monthOptions, toMonth } from "../../../utils/dates";
+import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
 import edit from "../../../assets/icon/editar.svg";
 import trash from "../../../assets/icon/lixeira.svg";
+import Modal from "../../Modal";
 interface ProfessionalType {
   id: number;
   organizacao: string;
@@ -48,6 +49,11 @@ const ProfessionalExperiences: React.FC = () => {
   const initialProfessionalData = {
     currentWorking: false,
   } as ProfessionalDataType;
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [experienceExcluded, setExperienceExcluded] = useState({
+    id: 0,
+    nome: "",
+  })
   const [professionalFormData, setProfessionalFormData] = useState(initialProfessionalData);
   const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Trainee", value: "Trainee" },
@@ -71,17 +77,25 @@ const ProfessionalExperiences: React.FC = () => {
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [showRegister, editingId]);
-  async function handleDeleteExperienceRecord(id: number) {
+  }, [showRegister, editingId, openModal]);
+  async function handleDeleteExperience(id: number) {
     if (professionalRecords.length === 1) {
       professionalRecords.splice(0, 1);
     }
     await axios.delete(`/api/v1/experiencias/profissional/${id}`, {
       withCredentials: true,
-    });
-    setShowRegister(false);
-    setEditingId(id);
-    setEditingId(0);
+    })
+      .then(() => {
+        setShowRegister(false);
+        setOpenModal(false);
+        setEditingId(0);
+        setProfessionalFormData(initialProfessionalData);
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+
   }
 
 
@@ -127,6 +141,11 @@ const ProfessionalExperiences: React.FC = () => {
           `/api/v1/experiencias/profissional/${editingId}`, data, {
           withCredentials: true,
         })
+        .then(() => {
+          setShowRegister(false);
+          setEditingId(0);
+          setProfessionalFormData(initialProfessionalData);
+        })
         .catch((err: AxiosError) => {
           // Returns error message from backend
           return err?.response?.data.detail;
@@ -135,15 +154,18 @@ const ProfessionalExperiences: React.FC = () => {
         .post("/api/v1/experiencias/profissional", data, {
           withCredentials: true,
         })
+        .then(() => {
+          setShowRegister(false);
+          setEditingId(0);
+          setProfessionalFormData(initialProfessionalData);
+        })
         .catch((err: AxiosError) => {
           // Returns error message from backend
           return err?.response?.data.detail;
         });
 
     console.log(res);
-    setShowRegister(false);
-    setEditingId(0);
-    setProfessionalFormData(initialProfessionalData);
+
     // Do something
   }
   function handleEditExperience(experience: ProfessionalType) {
@@ -237,6 +259,23 @@ const ProfessionalExperiences: React.FC = () => {
   }
   return (
     <BodyExperiences>
+      <Modal setOpen={setOpenModal} open={openModal}>
+        <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
+        <footer>
+          <Button
+            theme="primary-yellow"
+            onClick={() => experienceExcluded && handleDeleteExperience(experienceExcluded?.id)}
+          >
+            Excluir
+          </Button>
+          <Button
+            theme="secondary-yellow"
+            onClick={() => setOpenModal(false)}
+          >
+            Manter
+          </Button>
+        </footer>
+      </Modal>
       <h2>Atuação Profissional</h2>
       {!showRegister ? (
         <div className="experiencias">
@@ -251,7 +290,10 @@ const ProfessionalExperiences: React.FC = () => {
                 <img
                   src={trash}
                   alt="apagar experiencia"
-                  onClick={() => handleDeleteExperienceRecord(experience.id)}
+                  onClick={() => {
+                    setOpenModal(true);
+                    setExperienceExcluded({ ...experience, "nome": experience.cargo });
+                  }}
                 />
               </section>
               <fieldset className="info-experiencias">
@@ -355,8 +397,8 @@ const ProfessionalExperiences: React.FC = () => {
                     <Select
                       label="Ano final"
                       name="finalYear"
-                      options={yearOptions}
-                      defaultOption={professionalFormData?.finalYear || "Selecione"}
+                      options={finalYearOptions(Number(professionalFormData.initialYear))}
+                      defaultOption={Number(professionalFormData?.finalYear) > Number(professionalFormData?.initialYear) ? professionalFormData.finalYear : "Selecione"}
                       onChange={handleProfessionalSelectChange}
                       required
                     />
@@ -382,11 +424,14 @@ const ProfessionalExperiences: React.FC = () => {
               </Button>
                 <Button
                   theme="secondary-green"
-                  onClick={() => {
+                  onClick={
                     editingId > 0
-                      ? handleDeleteExperienceRecord(editingId)
-                      : setShowRegister(false);
-                  }}
+                      ? () => {
+                        setOpenModal(true);
+                        setExperienceExcluded({ "nome": professionalFormData.cargo, "id": editingId })
+                      }
+                      : () => setShowRegister(false)
+                  }
                 >
                   Excluir
               </Button>

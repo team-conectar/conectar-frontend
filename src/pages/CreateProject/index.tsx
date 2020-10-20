@@ -5,17 +5,16 @@ import Textarea from '../../components/Textarea';
 import Button from '../../components/Button';
 import ToggleSwitch from '../../components/ToggleSwitch';
 import { useHistory } from 'react-router';
-import { useDropzone } from 'react-dropzone'
 import SelectArea, { Area } from '../../components/SelectArea';
 import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
 import { isAuthenticated } from '../../utils/auth';
 import Modal from '../../components/Modal';
 import Login from '../../components/Login';
-
+import Dropzone from '../../components/Dropzone';
 
 function CreateProject() {
-
+  
   const history = useHistory();
   const [formData, setFormData] = useState({
     nome: "",
@@ -23,8 +22,13 @@ function CreateProject() {
     visibilidade: true,
     objetivo: "",
   });
-
-
+  
+  const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
+  const [showNextStep, setShowNextStep] = useState<boolean>(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
+  const [idProject, setIdProject] = useState(0);
+  const [selectedFile, setSelectedFile] = useState<File>();
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
@@ -41,36 +45,70 @@ function CreateProject() {
   }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    // await axios
-    //   .post("/api/v1/habilidades", selectedTools, {
-    //     withCredentials: true,
-    //   })
-    //   .catch((err: AxiosError) => {
-    //     return err?.response?.data.detail;
-    //   });
-    const data = { ...formData, "habilidades": selectedTools, "areas": selectedAreas };
-    const res = await axios
-      .post("/api/v1/projeto", data, {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail;
-      });
-    console.log(res);
-    alert({ ...res });
+
+    const {
+      nome,
+      visibilidade,
+    } = formData;
+
+    const data = new FormData();
+
+    data.append("nome", nome);
+    data.append("visibilidade", JSON.stringify(visibilidade));
+    selectedFile && data.append("userpic",selectedFile, `${nome}pic.jpg`);
+    data.append("areas", JSON.stringify(selectedAreas));
+    try {
+      await axios.post("/api/v1/projeto", data);
+      setShowNextStep(true);
+    } catch (error) {
+      return error.response.data.detail;
+    }
   }
-  const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
-  const [showNextStep, setShowNextStep] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: 'image/*',
-    onDrop: onDropAcceptedFiles => {
-      console.log(onDropAcceptedFiles);
-    },
-  });
 
-  const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
+  async function handleSecondSubmit(event: FormEvent) {
+    event.preventDefault();
 
+    const data = { ...formData, "habilidades":selectedTools };
+    try {
+      await axios.put("/api/v1/projeto", data, {
+        withCredentials: true,
+      });
+      history.push("/");
+    } catch (error) {
+      return error.response.data.detail;
+    }
+  }
+  // async function handleSubmit(event: FormEvent) {
+  //   event.preventDefault();
+  //   // await axios
+  //   //   .post("/api/v1/habilidades", selectedTools, {
+  //   //     withCredentials: true,
+  //   //   })
+  //   //   .catch((err: AxiosError) => {
+  //   //     return err?.response?.data.detail;
+  //   //   });
+  //   const data = { ...formData, "habilidades": selectedTools, "areas": selectedAreas };
+  //   const res = idProject > 0
+  //     ? await axios
+  //       .post("/api/v1/projeto", data, {
+  //         withCredentials: true,
+  //       }).then((response) => {
+  //         const { id }: { id: number } = response.data;
+  //         setIdProject(id);
+  //       })
+  //       .catch((err: AxiosError) => {
+  //         return err?.response?.data.detail;
+  //       })
+  //     : await axios
+  //       .put(`/api/v1/projeto/${idProject}`, data, {
+  //         withCredentials: true,
+  //       })
+  //       .catch((err: AxiosError) => {
+  //         return err?.response?.data.detail;
+  //       });
+  //   console.log(res);
+  //   alert({ ...res });
+  // }
 
 
   /**
@@ -90,7 +128,10 @@ function CreateProject() {
       <div className="area-central container">
         <h1>Criar Projeto</h1>
 
-        <form className="primeira-etapa">
+        <form
+          className="primeira-etapa"
+          onSubmit={handleSubmit}
+        >
           <div className="coluna-um">
 
             <Input
@@ -100,26 +141,8 @@ function CreateProject() {
               required
             />
             <div className="upload-img">
-              <label htmlFor="upload">Capa do projeto</label>
-              <div className="view-img" {...getRootProps()}>
-                <label>Fazer Upload de Imagem</label>
-                <input
-                  name="upload"
-                  id="upload"
-                  accept="image/png, image/jpeg"
-                  {...getInputProps()}
-                />
-                <p>ou</p>
-                {isDragActive ? (
-                  <p>Solte a imagem</p>
-                ) : (
-                    <p>Arraste o arquivo para cá</p>
-                  )}
-
-                <p>Tamanho mínimo de 805x632px</p>
-              </div>
+              <Dropzone onFileUploaded={setSelectedFile} />
             </div>
-
 
             <ToggleSwitch
               name="visibilidade"
@@ -146,7 +169,6 @@ function CreateProject() {
               theme="secondary-yellow"
             >Cancelar</Button>
             <Button
-              onClick={() => setShowNextStep(true)}
               theme="primary-yellow"
               type="submit"
               disabled={formData.nome === ""}
@@ -155,7 +177,10 @@ function CreateProject() {
 
 
         </form>
-        <form className="segunda-etapa">
+        <form
+          className="segunda-etapa"
+          onSubmit={handleSecondSubmit}
+        >
           <div className="coluna-um">
             <Textarea
               label="Objetivo do projeto"

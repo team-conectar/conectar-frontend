@@ -54,5 +54,22 @@ function createYearOptions() {
   }
   return years;
 }
+export const finalYearOptions = (initialYear:number) => {
+  const yearPlusFive = `${new Date().getFullYear() + 5}`;
+
+
+  const years: OptionHTMLAttributes<HTMLOptionElement>[] = [{
+    label: yearPlusFive,
+    value: yearPlusFive,
+  },];
+  for (let index = Number(yearPlusFive) - 1 ; index > initialYear; index--) {
+    const year = String(index);
+    years.push({
+      value: year,
+      label: year,
+    })
+  }
+  return years;
+}
 export const yearOptions: OptionHTMLAttributes<HTMLOptionElement>[] = createYearOptions();
  

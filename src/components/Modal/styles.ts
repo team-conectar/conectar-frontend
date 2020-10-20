@@ -6,7 +6,7 @@ interface styleProps {
 
 export const BodyModal = styled.div<styleProps>`
   ${props => props.open ? css`display:flex;` : css`display:none;`}
-  width:100%;
+  width:100vw;
   height:100%;
   margin:0 auto;
   justify-content:center;
@@ -15,6 +15,7 @@ export const BodyModal = styled.div<styleProps>`
   position:fixed;
   z-index:1;
   top:0;
+  left:0;
   .janela{
     width:700px;
     background:var(--green-bg);
@@ -37,6 +38,11 @@ export const BodyModal = styled.div<styleProps>`
       align-self:flex-end;
       color:white;
       cursor: pointer;
+    }
+    footer{
+      display:flex;
+      justify-content:space-between;
+      width:80%;
     }
   }
 `;
