@@ -17,8 +17,8 @@ import { Context } from "../../context/AuthContext";
 import Logged from "../../components/Logged";
 
 function CreateProject() {
-
-  const { isAuthenticated } = useContext(Context);
+  const { loading, isAuthenticated } = useContext(Context);
+  
 
 
   const history = useHistory();
@@ -30,12 +30,11 @@ function CreateProject() {
   });
 
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
-  const [showNextStep, setShowNextStep] = useState<boolean>(false);
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showNextStep, setShowNextStep] = useState<boolean>(true);
+  const [showModal, setShowModal] = useState<boolean>(!isAuthenticated);
   const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
   const [idProject, setIdProject] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File>();
-
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const { name } = target;
@@ -124,6 +123,7 @@ function CreateProject() {
       <Modal
         open={showModal}
         setOpen={setShowModal}
+        onAfterClose={()=>{setShowModal(!isAuthenticated)}}
       >
         <h1>Para prosseguir, você precisa estar logado</h1>
         <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
