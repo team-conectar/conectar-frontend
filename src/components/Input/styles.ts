@@ -2,6 +2,12 @@ import styled from 'styled-components';
 
 
 export const BodyInput = styled.div`
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus, 
+  input:-webkit-autofill:active  {
+      -webkit-box-shadow: 0 0 0 30px white inset !important;
+  }
   width:100%;
   min-width:10rem;
   margin: 0.3rem 0 ;

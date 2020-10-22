@@ -39,6 +39,7 @@ interface AcademicType {
 
 
 const AcademicExperiences: React.FC = () => {
+  
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [academicRecords, setAcademicRecords] = useState<AcademicType[]>([]);
   const [editingId, setEditingId] = useState<number>(0);
@@ -189,7 +190,7 @@ const AcademicExperiences: React.FC = () => {
       escolaridade,
       curso,
       descricao,
-      data_fim: (situacao !== "Incompleto" && data_fim) ? `${data_fim}-02-01` : "",
+      data_fim: (situacao !== "Incompleto" && data_fim) ? data_fim.split("-")[0] : "",
       data_inicio: data_inicio.split("-")[0],
       situacao,
     };
@@ -247,6 +248,7 @@ const AcademicExperiences: React.FC = () => {
   }
   return (
     <BodyExperiences>
+      {console.log(academicFormData)}
       <Modal setOpen={setOpenModal} open={openModal}>
         <h1>Deseja realmente excluir {experienceExcluded.nome}?</h1>
         <footer>

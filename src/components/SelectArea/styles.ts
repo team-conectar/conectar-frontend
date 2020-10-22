@@ -41,7 +41,7 @@ export const BodySelectArea = styled.div`
           border-bottom:2px solid var(--yellow);
           padding:0 1.4rem;
           color:var(--orange);
-          font:500 1.2rem Roboto;
+          font:500 1rem Roboto;
         }
       }
       .area-subarea{    
@@ -56,7 +56,7 @@ export const BodySelectArea = styled.div`
           padding:0 0.4rem;
           legend{
             color:var(--green-bg);
-            font:500 1.2rem Roboto;
+            font:500 1rem Roboto;
           }
           button{
             position:absolute; 
@@ -69,10 +69,12 @@ export const BodySelectArea = styled.div`
             
           }
         }
-        fieldset{
+        >fieldset{
           height:90%;
           overflow-y:auto;
+          overflow-x:hidden;
           >button{
+            position:relative;
             margin-top:1px;
             width:100%;
             cursor:pointer;
@@ -84,7 +86,7 @@ export const BodySelectArea = styled.div`
             border:0;
             border-bottom:2px solid var(--yellow);
             padding:0 1.4rem;
-            font:500 1.2rem Roboto;
+            font:500 1rem Roboto;
             strong,span{
               color:var(--green);
               font-size:1.3rem;
@@ -122,6 +124,8 @@ export const BodySelectArea = styled.div`
         border-top-right-radius:0.4rem;
       }
       fieldset{
+        height:90%;
+        overflow-y:auto;
         >label{
           display: flex;
           justify-content:space-between;
@@ -133,7 +137,7 @@ export const BodySelectArea = styled.div`
           border:0;
           border-bottom:2px solid var(--yellow);
           padding:0 1.4rem;
-          font:500 1.2rem Roboto;
+          font:500 1rem Roboto;
           >svg{
             color:var(--green);
             font-size:1.3rem;
@@ -151,7 +155,7 @@ export const BodySelectArea = styled.div`
           justify-content:flex-start;
           margin-left:0.4rem; 
           width:100%;
-          font:500 1.4rem Roboto;
+          font:500 1rem Roboto;
 
         }
       }

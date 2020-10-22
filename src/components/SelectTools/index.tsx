@@ -118,7 +118,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
             ))}
           </fieldset>
           <fieldset className="area-insercao">
-            <legend>Se não encontrou insira abaixo</legend>
+            <legend>ou insira abaixo</legend>
             <input
               placeholder="Habilidade, ferramenta ou matéria..."
               name="newTool"
