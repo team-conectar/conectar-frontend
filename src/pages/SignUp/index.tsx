@@ -244,13 +244,13 @@ function SignUp() {
             </legend>
             <section>
 
-
+            {console.log(formData.telefone)}
               <Input
                 type="tel"
                 name="telefone"
                 label="Celular"
                 onChange={handleInputChange}
-                mask="(99) 99999-9999"
+                mask="(99) 99999-9999 "
               />
 
               <Select
