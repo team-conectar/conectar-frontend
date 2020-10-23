@@ -61,10 +61,13 @@ function CreateProject() {
 
     data.append("nome", nome);
     data.append("visibilidade", JSON.stringify(visibilidade));
-    selectedFile && data.append("userpic", selectedFile, `${nome}pic.jpg`);
-    data.append("areas", JSON.stringify(selectedAreas));
+    selectedFile && data.append("foto_capa", selectedFile, `${nome}pic.jpg`);
+    data.append("descricao", "default");
+    data.append("objetivo", "default");
+    // data.append("areas", JSON.stringify(selectedAreas));
     try {
-      await axios.post("/api/v1/projeto", data);
+      const { id } = await (await axios.post("/api/v1/projeto", data)).data;
+      setIdProject(id);
       setShowNextStep(true);
     } catch (error) {
       return error.response.data.detail;
@@ -74,9 +77,9 @@ function CreateProject() {
   async function handleSecondSubmit(event: FormEvent) {
     event.preventDefault();
 
-    const data = { ...formData, "habilidades": selectedTools };
+    const data = { ...formData, "habilidades": selectedTools, "areas": selectedAreas };
     try {
-      await axios.put("/api/v1/projeto", data, {
+      await axios.put(`/api/v1/projeto/${idProject}`, data, {
         withCredentials: true,
       });
       history.push("/");
@@ -215,7 +218,6 @@ function CreateProject() {
             >Voltar</Button>
             <Button
               theme="primary-yellow"
-              onClick={handleSubmit}
               disabled={formData.objetivo === "" || formData.descricao === ""}
               type="submit"
             >Concluir</Button>
