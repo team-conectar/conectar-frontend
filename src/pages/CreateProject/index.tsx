@@ -18,7 +18,7 @@ import axios, { AxiosError } from "axios";
 import Modal from "../../components/Modal";
 import Login from "../../components/Login";
 import Dropzone from "../../components/Dropzone";
-
+import { Beforeunload } from 'react-beforeunload';
 import { Context } from "../../context/AuthContext";
 import Logged from "../../components/Logged";
 
@@ -97,6 +97,7 @@ function CreateProject() {
 
   return (
     <BodyCreateProject showSecondStep={showNextStep}>
+      <Beforeunload onBeforeunload={(event) => event.preventDefault()}/>
       <Logged />
       <Modal
         open={showModal}
@@ -118,6 +119,8 @@ function CreateProject() {
               name="nome"
               label="Título do projeto"
               onChange={handleInputChange}
+              minLength={3}
+              maxLength={50}
               required
             />
             <div className="upload-img">
@@ -163,12 +166,16 @@ function CreateProject() {
               label="Objetivo do projeto"
               name="objetivo"
               onChange={handleTextAreaChange}
+              minLength={3}
+                maxLength={500}
               required
             />
             <Textarea
               label="Descrição simples"
               name="descricao"
               onChange={handleTextAreaChange}
+              minLength={3}
+                maxLength={500}
               required
             />
           </div>

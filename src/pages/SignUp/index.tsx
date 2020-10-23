@@ -141,9 +141,14 @@ function SignUp() {
   ) => {
     console.log(response);
   };
-
+  window.addEventListener('beforeunload', (e:any) => {
+    e.preventDefault();
+    alert('Fechando...');
+})
   return (
+    
     <BodySignUp showSecondStep={showNextStep}>
+      
       {!showNextStep && (
         <form onSubmit={handleSubmit} className="area-central container">
           <Link to="/">
@@ -166,6 +171,8 @@ function SignUp() {
                 name="email"
                 label="E-mail"
                 onChange={handleInputChange}
+                minLength={5}
+                maxLength={70}
               />
               <section>
                 <Input
@@ -173,6 +180,8 @@ function SignUp() {
                   name="username"
                   label="Nome de usuário"
                   onChange={handleInputChange}
+                  minLength={3}
+                  maxLength={50}
                 />
                 <Input
                   mask=""
@@ -282,7 +291,7 @@ function SignUp() {
               <fieldset>
                 <legend>Idealizador</legend>
                 <aside>
-                  <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
+                  <p>Interessado em criar projetos</p>
                   <ToggleSwitch
                     name="idealizador"
                     id="idealizador"
@@ -293,7 +302,7 @@ function SignUp() {
               <fieldset>
                 <legend>Colaborador</legend>
                 <aside>
-                  <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
+                  <p>Interessado em participar de projetos</p>
                   <ToggleSwitch
                     name="colaborador"
                     id="colaborador"
@@ -304,7 +313,7 @@ function SignUp() {
               <fieldset>
                 <legend>Aliado</legend>
                 <aside>
-                  <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
+                  <p>Interessado em ajudar projetos</p>
                   <ToggleSwitch
                     name="aliado"
                     id="aliado"
