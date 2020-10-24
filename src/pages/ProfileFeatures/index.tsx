@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,  } from "react";
 import { BodyProfileFeatures } from "./styles";
 import Button from "../../components/Button";
 import { useHistory } from "react-router-dom";
@@ -8,16 +8,19 @@ import ProjectExperiences from "../../components/experiences/ProjectExperiences"
 import Modal from "../../components/Modal";
 import Login from "../../components/Login";
 
+import Logged from "../../components/Logged";
 
 function ProfileFeatures() {
+  
   function sla() {
     console.log("ḧello world")
   }
   const history = useHistory();
   const [showModal, setShowModal] = useState<boolean>(false);
+
   return (
     <BodyProfileFeatures>
-      
+      <Logged />
       <div className="area-central container">
         <h1>Nos conte sua experiência</h1>
         <AcademicExperiences />

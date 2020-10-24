@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+import React, { useState, ChangeEvent, FormEvent, useCallback } from "react";
 import { BodySignUp } from "./styles";
 import logo from "../../assets/image/logo_fundoClaro.svg";
 import Input from "../../components/Input";
@@ -18,8 +18,9 @@ import GoogleLogin, {
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
 import { useHistory } from "react-router";
-import { monthOptions, yearOptions } from "../../utils/dates";
+import { daysOptions, monthOptions, yearOptions } from "../../utils/dates";
 import axios from "axios";
+
 
 interface renderFacebook {
   onClick: () => void;
@@ -42,12 +43,18 @@ function SignUp() {
     aliado: false,
   });
 
+  const [showNextStep, setShowNextStep] = useState<boolean>(false);
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
+    const reg = new RegExp(/^\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$/)
     const { name } = target;
     const value = target.type === "checkbox" ? target.checked : target.value;
+    if (target.type === "tel" && target.value.match(reg)) {
 
-    setFormData({ ...formData, [name]: value });
+    } else {
+
+      setFormData({ ...formData, [name]: value });
+    }
   }
 
   function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -60,7 +67,28 @@ function SignUp() {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   }
+  const checkPasswrod = useCallback(
+    () => {
+      let forca = 0;
 
+      if ((formData.password.length >= 8)) {
+
+        if (formData.password.match(/[a-z]+/)) {
+          forca++;
+        }
+        else if (formData.password.match(/[A-Z]+/)) {
+          forca++;
+        }
+        else if (formData.password.match(/[@#$%&;*]/)) {
+          forca++;
+        }
+
+        else if (formData.password.match(/([1-9]+)\1{1,}/)) {
+          forca++;
+        }
+      }
+    }, [formData.password]
+  );
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
@@ -103,8 +131,6 @@ function SignUp() {
     }
   }
 
-  const [showNextStep, setShowNextStep] = useState<boolean>(false);
-
   const responseFacebook = (
     resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse
   ) => {
@@ -115,9 +141,14 @@ function SignUp() {
   ) => {
     console.log(response);
   };
-
+  window.addEventListener('beforeunload', (e:any) => {
+    e.preventDefault();
+    alert('Fechando...');
+})
   return (
+    
     <BodySignUp showSecondStep={showNextStep}>
+      
       {!showNextStep && (
         <form onSubmit={handleSubmit} className="area-central container">
           <Link to="/">
@@ -129,27 +160,36 @@ function SignUp() {
             <div className="area-form">
               <h1>Criar sua conta</h1>
               <Input
+                mask=""
                 name="nome"
                 label="Nome Completo"
                 onChange={handleInputChange}
               />
               <Input
+                mask=""
                 type="email"
                 name="email"
                 label="E-mail"
                 onChange={handleInputChange}
+                minLength={5}
+                maxLength={70}
               />
               <section>
                 <Input
+                  mask=""
                   name="username"
                   label="Nome de usuário"
                   onChange={handleInputChange}
+                  minLength={3}
+                  maxLength={50}
                 />
                 <Input
+                  mask=""
                   type="password"
                   name="password"
                   label="Senha"
                   onChange={handleInputChange}
+                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 />
               </section>
               <p>
@@ -212,12 +252,16 @@ function SignUp() {
               <h1>Bem vindo(a) ao Conectar</h1>
             </legend>
             <section>
+
+            {console.log(formData.telefone)}
               <Input
                 type="tel"
                 name="telefone"
                 label="Celular"
                 onChange={handleInputChange}
-              ></Input>
+                mask="(99) 99999-9999 "
+              />
+
               <Select
                 label="Data de Nascimento"
                 name="year"
@@ -231,11 +275,12 @@ function SignUp() {
                 options={monthOptions}
                 onChange={handleSelectChange}
               />
-              <Input
-                type="number"
+
+              <Select
                 name="day"
-                placeholder="Dia"
-                onChange={handleInputChange}
+                defaultOption="Dia"
+                options={daysOptions(Number(formData.month), Number(formData.year))}
+                onChange={handleSelectChange}
               />
             </section>
             <section>
@@ -246,7 +291,7 @@ function SignUp() {
               <fieldset>
                 <legend>Idealizador</legend>
                 <aside>
-                  <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
+                  <p>Interessado em criar projetos</p>
                   <ToggleSwitch
                     name="idealizador"
                     id="idealizador"
@@ -257,7 +302,7 @@ function SignUp() {
               <fieldset>
                 <legend>Colaborador</legend>
                 <aside>
-                  <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
+                  <p>Interessado em participar de projetos</p>
                   <ToggleSwitch
                     name="colaborador"
                     id="colaborador"
@@ -268,7 +313,7 @@ function SignUp() {
               <fieldset>
                 <legend>Aliado</legend>
                 <aside>
-                  <p>xxxxxxxxxxxxxxxx xxx xxxx</p>
+                  <p>Interessado em ajudar projetos</p>
                   <ToggleSwitch
                     name="aliado"
                     id="aliado"

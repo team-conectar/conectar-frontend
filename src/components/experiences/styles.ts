@@ -6,7 +6,9 @@ export const BodyExperiences = styled.section`
     .form--experiencia {
         width: 100%;
     }   
-
+    textarea {
+        resize: none;
+    }
     background:white;
     padding:0.8rem;
     margin: 0.8rem 0;
@@ -25,6 +27,7 @@ export const BodyExperiences = styled.section`
             justify-content:flex-start;
             align-items:center;
             margin:0.8rem 0;
+            padding:0.5rem;
             fieldset{
                 margin-left:1.2rem;
                 legend{
@@ -32,6 +35,18 @@ export const BodyExperiences = styled.section`
                 }
                 font:400 1.2rem Roboto;
                 color:var(--green-bg); 
+                .textos{
+                    display:flex;
+                    align-items:flex-start;
+                    justify-content:space-between;
+                    p + p{
+                        border-left:solid 2px var(--green);
+                        margin-left:3rem;
+                        padding:0.8rem 0.3rem 0.8rem 2rem;
+                        word-break:break-all;
+                    }
+                    
+                }
             }
             .icones{
                 border-right:2px solid var(--green);
@@ -46,7 +61,7 @@ export const BodyExperiences = styled.section`
                 }
             }
         }
-        button{
+        >button{
             border:0;
             background:none;
             font:500 1rem Roboto;
@@ -56,7 +71,7 @@ export const BodyExperiences = styled.section`
             }
         }
     }
-    h2{
+    >h2{
         margin:1.4rem 0;
         color: var(--green-bg);
     }

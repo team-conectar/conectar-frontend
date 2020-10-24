@@ -1,44 +1,60 @@
-
-import React, { ChangeEvent, FormEvent, useState, useEffect, useCallback, OptionHTMLAttributes } from 'react';
-import Input from '../../Input';
-import Textarea from '../../Textarea';
-import Select from '../../Select';
-import ToggleSwitch from '../../ToggleSwitch';
-import Button from '../../Button';
-import { BodyExperiences } from '../styles';
+import React, {
+  ChangeEvent,
+  FormEvent,
+  useState,
+  useEffect,
+  useCallback,
+  OptionHTMLAttributes,
+} from "react";
+import Input from "../../Input";
+import Textarea from "../../Textarea";
+import Select from "../../Select";
+import ToggleSwitch from "../../ToggleSwitch";
+import Button from "../../Button";
+import { BodyExperiences } from "../styles";
 import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
-import { yearOptions, monthOptions } from "../../../utils/dates";
+import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
-import edit from '../../../assets/icon/editar.svg';
-import trash from '../../../assets/icon/lixeira.svg';
+import edit from "../../../assets/icon/editar.svg";
+import trash from "../../../assets/icon/lixeira.svg";
+import Modal from "../../Modal";
 interface ProfessionalType {
-  id?: number;
-  organizacao: string,
-  descricao: string,
-  data_inicio: string,
-  data_fim: string,
-  cargo: string,
-  vinculo: string,
+  id: number;
+  organizacao: string;
+  descricao: string;
+  data_inicio: string;
+  data_fim: string;
+  cargo: string;
+  vinculo: string;
 }
-
+interface ProfessionalDataType {
+  vinculo: string;
+  currentWorking: boolean;
+  cargo: string;
+  organizacao: string;
+  descricao: string;
+  initialYear: string;
+  initialMonth: string;
+  // Supressing "The operand of a 'delete' operator must be optional" warning
+  finalYear: any;
+  finalMonth: any;
+}
 const ProfessionalExperiences: React.FC = () => {
   const [showRegister, setShowRegister] = useState<boolean>(false);
-  const [tempEditExperience, setTempEditExperience] = useState<ProfessionalType>();
   const [professionalRecords, setProfessionalRecords] = useState<ProfessionalType[]>([]);
-  const [control, setControl] = useState<number>(0);
-  const [professionalFormData, setProfessionalFormData] = useState({
-    organizacao: "",
-    vinculo: "",
-    cargo: "",
-    initialYear: "",
-    finalYear: "",
-    initialMonth: "",
-    finalMonth: "",
-    descricao: "",
-    currentlyWorking: false,
-  });
+  // gets the editing experience id
+  const [editingId, setEditingId] = useState<number>(0);
+  const initialProfessionalData = {
+    currentWorking: false,
+  } as ProfessionalDataType;
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [experienceExcluded, setExperienceExcluded] = useState({
+    id: 0,
+    nome: "",
+  })
+  const [professionalFormData, setProfessionalFormData] = useState(initialProfessionalData);
   const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Trainee", value: "Trainee" },
     { label: "Terceirizado", value: "Terceirizado" },
@@ -54,41 +70,135 @@ const ProfessionalExperiences: React.FC = () => {
   useEffect(() => {
     axios
       .get("/api/v1/experiencias/profissional/me")
-      .then(response => {
+      .then((response) => {
         setProfessionalRecords(response.data);
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [control]);
-  async function handleDeleteExperienceRecord(id: any) {
+  }, [showRegister, editingId, openModal]);
+  async function handleDeleteExperience(id: number) {
     if (professionalRecords.length === 1) {
       professionalRecords.splice(0, 1);
     }
-    // professionalRecords.splice(
-    //   professionalRecords.indexOf(
-    //     professionalRecords.filter((experiencia) => {
-    //       return experiencia.id === id
-    //     })[0]
-    //   ), 1
-    // )
     await axios.delete(`/api/v1/experiencias/profissional/${id}`, {
       withCredentials: true,
-    });
-    setControl(control + 1);
-    setShowRegister(false);
+    })
+      .then(() => {
+        setShowRegister(false);
+        setOpenModal(false);
+        setEditingId(0);
+        setProfessionalFormData(initialProfessionalData);
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
 
   }
-  async function handlePutExperience(event: FormEvent) {
-    event.preventDefault();
-    await axios.put(`/api/v1/experiencias/profissional/${tempEditExperience?.id}`, tempEditExperience, {
-      withCredentials: true,
-    });
 
-    setTempEditExperience({} as ProfessionalType);
-    setControl(control + 1);
-    setShowRegister(false);
+
+  async function handleProfessionalSubmit(event: FormEvent) {
+    event.preventDefault();
+
+    const {
+      vinculo,
+      currentWorking,
+      organizacao,
+      cargo,
+      descricao,
+      finalYear,
+      initialYear,
+      initialMonth,
+      finalMonth,
+    }: ProfessionalDataType = professionalFormData;
+    //setting to null because if there a update an experience with an existing data_fim it will not send
+    let data_fim = null;
+    const data_inicio = `${initialYear}-${initialMonth}-01`;
+
+    if (!currentWorking) {
+      data_fim = `${finalYear}-${finalMonth}-01`;
+    }
+
+    const data = {
+      organizacao,
+      descricao,
+      data_inicio,
+      data_fim,
+      cargo,
+      vinculo,
+    };
+
+    /**
+     * Sends data to backend
+     * It's important to notice the withCredentials being true here
+     * so it will send the JWT token as cookie
+     * */
+    const res = editingId
+      ? await axios
+        .put(
+          `/api/v1/experiencias/profissional/${editingId}`, data, {
+          withCredentials: true,
+        })
+        .then(() => {
+          setShowRegister(false);
+          setEditingId(0);
+          setProfessionalFormData(initialProfessionalData);
+        })
+        .catch((err: AxiosError) => {
+          // Returns error message from backend
+          return err?.response?.data.detail;
+        })
+      : await axios
+        .post("/api/v1/experiencias/profissional", data, {
+          withCredentials: true,
+        })
+        .then(() => {
+          setShowRegister(false);
+          setEditingId(0);
+          setProfessionalFormData(initialProfessionalData);
+        })
+        .catch((err: AxiosError) => {
+          // Returns error message from backend
+          return err?.response?.data.detail;
+        });
+
+    console.log(res);
+
+    // Do something
+  }
+  function handleEditExperience(experience: ProfessionalType) {
+
+    const {
+      id,
+      organizacao,
+      descricao,
+      data_inicio,
+      data_fim,
+      cargo,
+      vinculo,
+    }: ProfessionalType = experience;
+
+    const [initialYear, initialMonth] = data_inicio.split("-");
+
+    const data = {
+      vinculo,
+      organizacao,
+      cargo,
+      descricao,
+      initialYear,
+      initialMonth,
+      currentWorking: data_fim ? false : true,
+      finalYear: data_fim ? data_fim.split("-")[0] : data_fim,
+      finalMonth: data_fim ? data_fim.split("-")[1] : data_fim,
+    };
+
+
+    setShowRegister(true);
+    setEditingId(id);
+    setProfessionalFormData(data);
+
   }
   const handleInputChange = useCallback(
     (
@@ -122,110 +232,68 @@ const ProfessionalExperiences: React.FC = () => {
     },
     []
   );
-  async function handleProfessionalSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    const {
-      vinculo,
-      currentlyWorking,
-      organizacao,
-      cargo,
-      descricao,
-      finalYear,
-      initialYear,
-      initialMonth,
-      finalMonth,
-    }: {
-      vinculo: string;
-      currentlyWorking: boolean;
-      cargo: string;
-      organizacao: string;
-      descricao: string;
-      initialYear: string;
-      initialMonth: string;
-      // Supressing "The operand of a 'delete' operator must be optional" warning
-      finalYear: any;
-      finalMonth: any;
-    } = professionalFormData;
-
-    let data_fim;
-    const data_inicio = `${initialYear}-${initialMonth}-01`;
-
-    if (!currentlyWorking) {
-      data_fim = `${finalYear}-${finalMonth}-01`;
-    }
-
-    const data = {
-      organizacao,
-      descricao,
-      data_inicio,
-      data_fim,
-      cargo,
-      vinculo,
-    };
-
-    /**
-     * Sends data to backend
-     * It's important to notice the withCredentials being true here
-     * so it will send the JWT token as cookie
-     * */
-    const res = await axios
-      .post("/api/v1/experiencias/profissional", data, {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail;
-      });
-    console.log(res);
-    setControl(control + 1);
-    setShowRegister(false);
-    // Do something
-  }
   function handleProfessionalInputChange(event: ChangeEvent<HTMLInputElement>) {
     handleInputChange(
       event,
-      tempEditExperience?.organizacao ? setTempEditExperience : setProfessionalFormData,
-      tempEditExperience?.organizacao ? tempEditExperience : professionalFormData
+      setProfessionalFormData,
+      professionalFormData
     );
   }
-  function handleProfessionalSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+  function handleProfessionalSelectChange(
+    event: ChangeEvent<HTMLSelectElement>
+  ) {
     handleSelectChange(
       event,
-      tempEditExperience?.organizacao ? setTempEditExperience : setProfessionalFormData,
-      tempEditExperience?.organizacao ? tempEditExperience : professionalFormData
+      setProfessionalFormData,
+      professionalFormData
     );
   }
-  function handleProfessionalTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
+  function handleProfessionalTextAreaChange(
+    event: ChangeEvent<HTMLTextAreaElement>
+  ) {
     handleTextAreaChange(
       event,
-      tempEditExperience?.organizacao ? setTempEditExperience : setProfessionalFormData,
-      tempEditExperience?.organizacao ? tempEditExperience : professionalFormData
+      setProfessionalFormData,
+      professionalFormData
     );
   }
   return (
     <BodyExperiences>
+      <Modal setOpen={setOpenModal} open={openModal}>
+        <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
+        <footer>
+          <Button
+            theme="primary-yellow"
+            onClick={() => experienceExcluded && handleDeleteExperience(experienceExcluded?.id)}
+          >
+            Excluir
+          </Button>
+          <Button
+            theme="secondary-yellow"
+            onClick={() => setOpenModal(false)}
+          >
+            Manter
+          </Button>
+        </footer>
+      </Modal>
       <h2>Atuação Profissional</h2>
       {!showRegister ? (
         <div className="experiencias">
           {professionalRecords?.map((experience: ProfessionalType) => (
-            <div
-              key={experience.id}
-              className="experiencia-cadastrada"
-            >
+            <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
                 <img
                   src={edit}
                   alt="editar experiencia"
-                  onClick={() => {
-                    setTempEditExperience(experience);
-                    setShowRegister(true);
-                  }}
+                  onClick={() => handleEditExperience(experience)}
                 />
                 <img
                   src={trash}
                   alt="apagar experiencia"
-                  onClick={() => handleDeleteExperienceRecord(experience.id)}
+                  onClick={() => {
+                    setOpenModal(true);
+                    setExperienceExcluded({ ...experience, "nome": experience.cargo });
+                  }}
                 />
               </section>
               <fieldset className="info-experiencias">
@@ -234,10 +302,19 @@ const ProfessionalExperiences: React.FC = () => {
                 </legend>
                 <p>
                   {experience.vinculo} <br />
-                  {experience.data_inicio} <br />
-                  {`${experience.data_inicio} até ${experience.data_fim}`}
+                  {`
+                  ${toMonth(experience.data_inicio.split("-")[1])} 
+                  de 
+                  ${experience.data_inicio.split("-")[0]} 
+                  até 
+                  ${experience.data_fim ? `
+                      ${toMonth(experience.data_fim.split("-")[1])} 
+                      de 
+                      ${experience.data_fim.split("-")[0]}
+                    ` :
+                      "o momento atual"}
+                  `} <br />
                 </p>
-
               </fieldset>
             </div>
           ))}
@@ -247,20 +324,27 @@ const ProfessionalExperiences: React.FC = () => {
           </button>
         </div>
       ) : (
-          <form className="form--experiencia" onSubmit={tempEditExperience?.organizacao ? handlePutExperience : handleProfessionalSubmit}>
+          <form
+            className="form--experiencia"
+            onSubmit={handleProfessionalSubmit}
+          >
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
+                  mask=""
                   label="Organização"
                   name="organizacao"
                   onChange={handleProfessionalInputChange}
-                  defaultValue={tempEditExperience?.organizacao}
+                  defaultValue={professionalFormData?.organizacao}
+                  required
                 />
                 <Input
+                  mask=""
                   label="Cargo"
                   name="cargo"
                   onChange={handleProfessionalInputChange}
-                  defaultValue={tempEditExperience?.cargo}
+                  defaultValue={professionalFormData?.cargo}
+                  required
                 />
               </section>
               <section className="bloco-dois">
@@ -268,8 +352,9 @@ const ProfessionalExperiences: React.FC = () => {
                   label="Vínculo"
                   name="vinculo"
                   options={vinculos}
-                  defaultOption={tempEditExperience?.vinculo || "Selecione"}
+                  defaultOption={professionalFormData?.vinculo || "Selecione"}
                   onChange={handleProfessionalSelectChange}
+                  required
                 />
               </section>
               <section className="bloco-tres">
@@ -278,41 +363,46 @@ const ProfessionalExperiences: React.FC = () => {
                     label="Mês inicial"
                     name="initialMonth"
                     options={monthOptions}
-                    defaultOption={tempEditExperience?.data_inicio || "Selecione"}
+                    defaultOption={toMonth(professionalFormData.initialMonth) || "Selecione"}
                     onChange={handleProfessionalSelectChange}
+                    required
                   />
                   <Select
                     label="Ano inicial"
                     name="initialYear"
                     options={yearOptions}
-                    defaultOption={tempEditExperience?.data_inicio || "Selecione"}
+                    defaultOption={professionalFormData?.initialYear || "Selecione"}
                     onChange={handleProfessionalSelectChange}
+                    required
                   />
                 </aside>
                 <aside>
                   <ToggleSwitch
                     label="Trabalho atual"
-                    name="currentlyWorking"
-                    id="currentlyWorking"
+                    name="currentWorking"
+                    id="currentWorking"
                     onChange={handleProfessionalInputChange}
-                    defaultChecked={tempEditExperience?.data_fim ? true : false}
+                    defaultChecked={professionalFormData?.currentWorking}
                   />
                 </aside>
-                {!professionalFormData.currentlyWorking && (
+                {console.log(professionalFormData?.finalYear)}
+                {!professionalFormData.currentWorking && (
                   <aside>
                     <Select
                       label="Mês final"
                       name="finalMonth"
                       options={monthOptions}
-                      defaultOption={tempEditExperience?.data_fim || "Selecione"}
+                      defaultOption={toMonth(professionalFormData?.finalMonth) || "Selecione"}
                       onChange={handleProfessionalSelectChange}
+                      required
                     />
                     <Select
                       label="Ano final"
                       name="finalYear"
-                      options={yearOptions}
-                      defaultOption={tempEditExperience?.data_fim || "Selecione"}
+                      options={finalYearOptions(Number(professionalFormData.initialYear))}
+                      defaultOption={Number(professionalFormData?.finalYear) > Number(professionalFormData?.initialYear) ? professionalFormData.finalYear : "Selecione"}
                       onChange={handleProfessionalSelectChange}
+                      required
                     />
                   </aside>
                 )}
@@ -322,7 +412,8 @@ const ProfessionalExperiences: React.FC = () => {
                   name="descricao"
                   label="Detalhes"
                   onChange={handleProfessionalTextAreaChange}
-                  defaultValue={tempEditExperience?.descricao}
+                  defaultValue={professionalFormData?.descricao}
+                  required
                 />
               </section>
               <section className="area-botoes">
@@ -330,21 +421,31 @@ const ProfessionalExperiences: React.FC = () => {
                   type="submit"
                   theme="primary-green"
                 //disabled={academicFormData === {} as AcademicType? false:true}
-                >Salvar</Button>
+                >
+                  Salvar
+              </Button>
                 <Button
                   theme="secondary-green"
-                  onClick={() => {
-                    tempEditExperience ? handleDeleteExperienceRecord(tempEditExperience.id) : setShowRegister(false)
-                  }}
-                >Excluir</Button>
+                  onClick={
+                    editingId > 0
+                      ? () => {
+                        setOpenModal(true);
+                        setExperienceExcluded({ "nome": professionalFormData.cargo, "id": editingId })
+                      }
+                      : () => setShowRegister(false)
+                  }
+                >
+                  Excluir
+              </Button>
                 <Button
                   onClick={() => {
-                    setShowRegister(false)
-                    setTempEditExperience({} as ProfessionalType)
+                    setShowRegister(false);
+                    setProfessionalFormData(initialProfessionalData);
+                    setEditingId(0);
                   }}
                 >
                   Cancelar
-                </Button>
+              </Button>
               </section>
             </aside>
           </form>
