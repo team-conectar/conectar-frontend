@@ -7,7 +7,7 @@ import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import Button from '../Button';
-
+import api from "../../services/api";
 import axios, { AxiosError } from 'axios';
 
 
@@ -48,7 +48,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
     data.append('username', email);
     data.append('password', senha);
 
-    const res = await axios
+    const res = await api
       .post('/api/token', data)
       .then(() => {
         onSuccessLogin()

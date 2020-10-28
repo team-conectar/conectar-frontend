@@ -14,7 +14,7 @@ import { useHistory } from "react-router";
 import SelectArea, { Area } from "../../components/SelectArea";
 import SelectTool, { ToolType } from "../../components/SelectTools";
 import axios, { AxiosError } from "axios";
-
+import api from "../../services/api";
 import Modal from "../../components/Modal";
 import Login from "../../components/Login";
 import Dropzone from "../../components/Dropzone";
@@ -65,7 +65,7 @@ function CreateProject() {
     data.append("objetivo", "Não informado");
     // data.append("areas", JSON.stringify(selectedAreas));
     try {
-      const { id } = await (await axios.post("/api/v1/projeto", data)).data;
+      const { id } = await (await api.post("/api/v1/projeto", data)).data;
       setIdProject(id);
       setShowNextStep(true);
     } catch (error) {
@@ -82,7 +82,7 @@ function CreateProject() {
       areas: selectedAreas,
     };
 
-    await axios
+    await api
       .put(`/api/v1/projeto/${idProject}`, data, {
         withCredentials: true,
       })

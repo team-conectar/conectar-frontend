@@ -20,7 +20,7 @@ import { FaFacebookF } from "react-icons/fa";
 import { useHistory } from "react-router";
 import { daysOptions, monthOptions, yearOptions } from "../../utils/dates";
 import axios from "axios";
-
+import api from "../../services/api";
 
 interface renderFacebook {
   onClick: () => void;
@@ -106,7 +106,7 @@ function SignUp() {
     data.append("username", username);
     data.append("password", password);
     try {
-      await axios.post("/api/signup", data);
+      await api.post("/api/signup", data);
       setShowNextStep(true);
     } catch (error) {
       return error.response.data.detail;
@@ -122,7 +122,7 @@ function SignUp() {
 
     const data = { ...formData, data_nascimento };
     try {
-      await axios.put("/api/v1/pessoas", data, {
+      await api.put("/api/v1/pessoas", data, {
         withCredentials: true,
       });
       history.push("/experienceareas");

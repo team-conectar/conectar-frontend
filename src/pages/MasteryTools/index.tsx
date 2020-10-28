@@ -4,7 +4,7 @@ import Button from '../../components/Button';
 import { useHistory } from 'react-router-dom';
 import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
-
+import api from "../../services/api";
 import Logged from "../../components/Logged";
 
 function MasteryTools() {
@@ -18,7 +18,7 @@ function MasteryTools() {
     event.preventDefault();
 
 
-    const res = await axios
+    const res = await api
       .put("/api/v1/pessoas", { "habilidades": selectedTools }, {
         withCredentials: true,
       })

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BodySelectArea } from './styles';
 import { GoCheck } from 'react-icons/go';
 import axios, { AxiosError } from "axios";
+import api from "../../services/api";
 import trash from "../../assets/icon/lixeira.svg";
 export interface Area {
   descricao: string;
@@ -34,7 +35,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, s
   });
   const [areas, setAreas] = useState<AreaTypes[]>([]);
   useEffect(() => {
-    axios
+    api
       .get("/api/v1/areas", {
         withCredentials: true,
       })

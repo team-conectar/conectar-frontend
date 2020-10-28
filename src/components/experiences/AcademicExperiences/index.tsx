@@ -17,6 +17,7 @@ import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
 import { finalYearOptions, yearOptions } from "../../../utils/dates";
 import axios, { AxiosError } from "axios";
+import api from "../../../services/api";
 import edit from "../../../assets/icon/editar.svg";
 import trash from "../../../assets/icon/lixeira.svg";
 import Modal from "../../Modal";
@@ -72,7 +73,7 @@ const AcademicExperiences: React.FC = () => {
     { label: "Aperfeiçoamento", value: "Aperfeiçoamento" },
   ];
   useEffect(() => {
-    axios
+    api
       .get("/api/v1/experiencias/academica/me")
       .then((response) => {
         setAcademicRecords(response.data);
@@ -86,7 +87,7 @@ const AcademicExperiences: React.FC = () => {
     if (academicRecords.length === 1) {
       academicRecords.splice(0, 1);
     }
-    await axios
+    await api
       .delete(`/api/v1/experiencias/academica/${id}`, {
         withCredentials: true,
       })
@@ -133,7 +134,7 @@ const AcademicExperiences: React.FC = () => {
      * so it will send the JWT token as cookie
      * */
     const res = editingId
-      ? await axios
+      ? await api
         .put(`/api/v1/experiencias/academica/${editingId}`, data, {
           withCredentials: true,
         })
@@ -146,7 +147,7 @@ const AcademicExperiences: React.FC = () => {
           // Returns error message from backend
           return err?.response?.data.detail;
         })
-      : await axios
+      : await api
         .post("/api/v1/experiencias/academica", data, {
           withCredentials: true,
         }).then(() => {

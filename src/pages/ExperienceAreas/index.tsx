@@ -6,7 +6,7 @@ import SelectArea, { Area } from "../../components/SelectArea";
 import Logged from "../../components/Logged";
 
 import axios, { AxiosError } from "axios";
-
+import api from "../../services/api";
 function ExperienceAreas() {
   const history = useHistory();
 
@@ -16,7 +16,7 @@ function ExperienceAreas() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    const res = await axios
+    const res = await api
       .put("/api/v1/pessoas", { "areas": selectedAreas }, {
         withCredentials: true,
       })
