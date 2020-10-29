@@ -36,7 +36,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [newTool]);
+  }, []);
 
 
   function handleSelectedTools(tool: ToolType) {

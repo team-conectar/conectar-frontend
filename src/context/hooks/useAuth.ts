@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios, { AxiosError } from 'axios';
 import api from "../../services/api";
 export default function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
