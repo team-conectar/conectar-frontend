@@ -22,7 +22,8 @@ const NavBar: React.FC<navProps> = ({ logged }) => {
       </div>
       <aside>
 
-        <Link to="/explore" >EXPLORE</Link>
+        a
+        <Link to="/explore">EXPLORE</Link>
         <Link to="/createproject" className="create">CRIAR PROJETO</Link>
         {logged && (
 

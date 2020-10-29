@@ -95,7 +95,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       <aside>
         <FacebookLogin
           textButton=""
-          appId="1088597931155576"
+          appId="364709984736964"
           autoLoad={true}
           fields="name,email,picture"
           callback={responseFacebook}
@@ -103,7 +103,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           icon={<FaFacebook />}
         />
         <GoogleLogin
-          clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+          clientId="1027346829762-a6tjn6i5a8r50nn0cskrg4sholipvt5j.apps.googleusercontent.com"
           render={renderProps => (
             <button className="google-button" onClick={renderProps.onClick} disabled={renderProps.disabled}><FcGoogle /></button>
           )}
