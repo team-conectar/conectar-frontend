@@ -10,7 +10,7 @@ import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
 import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import api from "../../../services/api";
 import edit from '../../../assets/icon/editar.svg';
 import trash from '../../../assets/icon/lixeira.svg';
@@ -64,7 +64,9 @@ const ProjectExperiences: React.FC = () => {
   ];
   useEffect(() => {
     api
-      .get("/api/v1/experiencias/projeto/me")
+      .get("/api/v1/experiencias/projeto/me", {
+        withCredentials: true,
+      })
       .then(response => {
         setProjectRecords(response.data);
       })

@@ -16,7 +16,7 @@ import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
 import { finalYearOptions, yearOptions } from "../../../utils/dates";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 import api from "../../../services/api";
 import edit from "../../../assets/icon/editar.svg";
 import trash from "../../../assets/icon/lixeira.svg";
@@ -74,7 +74,9 @@ const AcademicExperiences: React.FC = () => {
   ];
   useEffect(() => {
     api
-      .get("/api/v1/experiencias/academica/me")
+      .get("/api/v1/experiencias/academica/me", {
+        withCredentials: true,
+      })
       .then((response) => {
         setAcademicRecords(response.data);
       })

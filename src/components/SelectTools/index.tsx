@@ -1,7 +1,7 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { BodySelectTool } from './styles';
 import { GoCheck } from 'react-icons/go';
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 import trash from "../../assets/icon/lixeira.svg";
 import api from "../../services/api";
 interface SelectToolProps {
@@ -28,7 +28,9 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
    */
   useEffect(() => {
     api
-      .get("/api/v1/habilidades/")
+      .get("/api/v1/habilidades/", {
+        withCredentials: true,
+      })
       .then((response) => {
         setTools(response.data);
       })

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BodySelectArea } from './styles';
 import { GoCheck } from 'react-icons/go';
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import api from "../../services/api";
 import trash from "../../assets/icon/lixeira.svg";
 export interface Area {

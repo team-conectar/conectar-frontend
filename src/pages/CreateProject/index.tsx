@@ -2,7 +2,6 @@ import React, {
   useState,
   ChangeEvent,
   FormEvent,
-  useEffect,
   useContext,
 } from "react";
 import { BodyCreateProject } from "./styles";
@@ -13,7 +12,7 @@ import ToggleSwitch from "../../components/ToggleSwitch";
 import { useHistory } from "react-router";
 import SelectArea, { Area } from "../../components/SelectArea";
 import SelectTool, { ToolType } from "../../components/SelectTools";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 import api from "../../services/api";
 import Modal from "../../components/Modal";
 import Login from "../../components/Login";
@@ -63,9 +62,11 @@ function CreateProject() {
     selectedFile && data.append("foto_capa", selectedFile, `${nome}pic.jpg`);
     data.append("descricao", "Não informado");
     data.append("objetivo", "Não informado");
-    // data.append("areas", JSON.stringify(selectedAreas));
+
     try {
-      const { id } = await (await api.post("/api/v1/projeto", data)).data;
+      const { id } = await (await api.post("/api/v1/projeto", data, {
+        withCredentials: true,
+      })).data;
       setIdProject(id);
       setShowNextStep(true);
     } catch (error) {
