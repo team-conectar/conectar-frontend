@@ -8,25 +8,67 @@ import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import Button from '../Button';
 import api from "../../services/api";
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { useHistory } from "react-router";
 
 
 import { inputChange } from '../../utils/inputChange';
 interface loginProps {
   onSuccessLogin(): void;
 }
+interface PessoaType {
+
+  colaborador: boolean;
+  idealizador: boolean;
+  aliado: boolean;
+
+}
 const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
+  const history = useHistory();
   const [logged, setLogged] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     senha: ''
   });
-
-  const responseFacebook = (resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse) => {
-    console.log(resposta);
+  /**This function checks the profile is idealizer, collaborator or ally, then redirects to registration these */
+  async function checkProfileType() {
+    const { aliado, colaborador, idealizador } = (await api.get("/api/v1/pessoas/me")).data;
+    if (!aliado || !colaborador || !idealizador) {
+      history.push("/signup/2");
+    }
   }
-  const responseGoogle = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    console.log(response);
+
+  const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
+    let { accessToken } = resposta;
+    const res = await api
+      .post(`/api/login?provider=facebook?token=${accessToken}`)
+      .then(() => {
+        checkProfileType();
+        onSuccessLogin();
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+
+    console.log(res);
+
+
+
+  }
+  const responseGoogle = async (response: GoogleLoginResponse | any) => {
+    let { tokenId } = response;
+    const res = await api
+      .post(`/api/login?provider=google?token=${tokenId}`)
+      .then(() => {
+        checkProfileType();
+        onSuccessLogin();
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+    console.log(res);
   }
 
   const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -50,10 +92,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
 
     const res = await api
       .post('/api/token', data)
-      .then(() => {
-        onSuccessLogin()
-
-      })
+      .then(onSuccessLogin)
       .catch((err: AxiosError) => {
         // Returns error message from backend
         return err?.response?.data.detail;
@@ -113,7 +152,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           cookiePolicy={'single_host_origin'}
         />
       </aside>
-      <p>Novo no Conectar? <Link to="/signup">Crie uma conta</Link></p>
+      <p>Novo no Conectar? <Link to="/signup/1">Crie uma conta</Link></p>
     </BodyLogin>
   )
 
