@@ -37,11 +37,16 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       history.push("/signup/2");
     }
   }
-
+  /**Send email name and profile_pic to backend through the login route with provider=facebook then check profile type*/
   const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
-    let { accessToken } = resposta;
+    const { email, name } = resposta;
+    const foto_perfil = resposta.picture?.data.url;
     const res = await api
-      .post(`/api/login?provider=facebook&token=${accessToken}`)
+      .post(`/api/login?provider=facebook`, {
+        email,
+        name,
+        foto_perfil
+      })
       .then(() => {
         checkProfileType();
         onSuccessLogin();

@@ -139,17 +139,22 @@ function SignUp() {
   }
   /**This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {
-    const { aliado, colaborador, idealizador,nome,email } = (await api.get("/api/v1/pessoas/me")).data;
+    const { aliado, colaborador, idealizador, nome, email } = (await api.get("/api/v1/pessoas/me")).data;
     if (!aliado || !colaborador || !idealizador) {
       setShowNextStep(true);
     }
-    setFormData({...formData, nome, email});
+    //setFormData({ ...formData, nome, email });
   }
   const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
 
-    let { accessToken } = resposta;
+    const { email, name } = resposta;
+    const foto_perfil = resposta.picture?.data.url;
     const res = await api
-      .post(`/api/login?provider=facebook&token=${accessToken}`)
+      .post(`/api/login?provider=facebook`, {
+        email,
+        name,
+        foto_perfil
+      })
       .then(checkProfileType)
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -169,7 +174,7 @@ function SignUp() {
       });
     console.log(res);
   }
-  
+
   return (
 
     <BodySignUp showSecondStep={showNextStep}>
