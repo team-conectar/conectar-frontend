@@ -140,7 +140,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         <FacebookLogin
           textButton=""
           appId="364709984736964"
-          autoLoad={true}
+          autoLoad={false}
           fields="name,email,picture"
           callback={responseFacebook}
           cssClass="facebook-button"

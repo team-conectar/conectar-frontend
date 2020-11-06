@@ -246,7 +246,7 @@ function SignUp() {
               <section>
                 <FacebookLogin
                   appId="1088597931155576"
-                  autoLoad={true}
+                  autoLoad={false}
                   fields="name,email,picture"
                   callback={responseFacebook}
                   cssClass="facebook-button"
