@@ -148,7 +148,7 @@ function SignUp() {
 
     let { accessToken } = resposta;
     const res = await api
-      .post(`/api/login?provider=facebook?token=${accessToken}`)
+      .post(`/api/login?provider=facebook&token=${accessToken}`)
       .then(checkProfileType)
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -160,7 +160,7 @@ function SignUp() {
   const responseGoogle = async (response: GoogleLoginResponse | any) => {
     let { tokenId } = response;
     const res = await api
-      .post(`/api/login?provider=google?token=${tokenId}`)
+      .post(`/api/login?provider=google&token=${tokenId}`)
       .then(checkProfileType)
       .catch((err: AxiosError) => {
         // Returns error message from backend

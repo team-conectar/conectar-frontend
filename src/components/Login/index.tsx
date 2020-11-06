@@ -41,7 +41,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
     let { accessToken } = resposta;
     const res = await api
-      .post(`/api/login?provider=facebook?token=${accessToken}`)
+      .post(`/api/login?provider=facebook&token=${accessToken}`)
       .then(() => {
         checkProfileType();
         onSuccessLogin();
@@ -59,7 +59,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   const responseGoogle = async (response: GoogleLoginResponse | any) => {
     let { tokenId } = response;
     const res = await api
-      .post(`/api/login?provider=google?token=${tokenId}`)
+      .post(`/api/login?provider=google&token=${tokenId}`)
       .then(() => {
         checkProfileType();
         onSuccessLogin();
