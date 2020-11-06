@@ -137,12 +137,13 @@ function SignUp() {
       return error.response.data.detail;
     }
   }
-  /**This function checks if the profile is idealizer, collaborator or ally then advances to the next form  */
+  /**This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {
-    const { aliado, colaborador, idealizador } = (await api.get("/api/v1/pessoas/me")).data;
+    const { aliado, colaborador, idealizador,nome,email } = (await api.get("/api/v1/pessoas/me")).data;
     if (!aliado || !colaborador || !idealizador) {
       setShowNextStep(true);
     }
+    setFormData({...formData, nome, email});
   }
   const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
 
