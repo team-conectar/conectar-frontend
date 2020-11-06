@@ -44,7 +44,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
     const res = await api
       .post(`/api/login?provider=facebook`, {
         email,
-        name,
+        "nome":name,
         foto_perfil
       })
       .then(() => {
