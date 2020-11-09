@@ -15,7 +15,7 @@ function Routes() {
     <AuthProvider>
       <BrowserRouter>
         <Route exact path="/" component={Home} />
-        <Route path="/signup" component={SignUp} />
+        <Route path="/signup/:step" component={SignUp} />
         <Route path="/profilefeatures" component={ProfileFeatures} />
         <Route path="/experienceareas" component={ ExperienceAreas} />
         <Route path="/masterytools" component={ MasteryTools} />

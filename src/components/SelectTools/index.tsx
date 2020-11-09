@@ -1,8 +1,9 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { BodySelectTool } from './styles';
 import { GoCheck } from 'react-icons/go';
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
 import trash from "../../assets/icon/lixeira.svg";
+import api from "../../services/api";
 interface SelectToolProps {
   callbackSelectedTools: ToolType[];
   setCallbackSelectedTools(tools: ToolType[]): void;
@@ -26,8 +27,10 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
    * the useEffect on parent
    */
   useEffect(() => {
-    axios
-      .get("/api/v1/habilidades/")
+    api
+      .get("/api/v1/habilidades/", {
+        withCredentials: true,
+      })
       .then((response) => {
         setTools(response.data);
       })
@@ -35,7 +38,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [newTool]);
+  }, []);
 
 
   function handleSelectedTools(tool: ToolType) {
@@ -54,7 +57,7 @@ const SelectTool: React.FC<SelectToolProps> = ({ label, callbackSelectedTools, s
   }
   async function handleAddNewTool(tool: ToolType) {
     if (!tools.includes(tool)) {
-      const res = await axios
+      const res = await api
         .post("/api/v1/habilidade/pessoa", tool, {
           withCredentials: true,
         })

@@ -16,7 +16,8 @@ import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
 import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
-import axios, { AxiosError } from "axios";
+import  { AxiosError } from "axios";
+import api from "../../../services/api";
 import edit from "../../../assets/icon/editar.svg";
 import trash from "../../../assets/icon/lixeira.svg";
 import Modal from "../../Modal";
@@ -68,8 +69,10 @@ const ProfessionalExperiences: React.FC = () => {
     { label: "Tempo Integral", value: "Tempo Integral" },
   ];
   useEffect(() => {
-    axios
-      .get("/api/v1/experiencias/profissional/me")
+    api
+      .get("/api/v1/experiencias/profissional/me", {
+        withCredentials: true,
+      })
       .then((response) => {
         setProfessionalRecords(response.data);
       })
@@ -82,7 +85,7 @@ const ProfessionalExperiences: React.FC = () => {
     if (professionalRecords.length === 1) {
       professionalRecords.splice(0, 1);
     }
-    await axios.delete(`/api/v1/experiencias/profissional/${id}`, {
+    await api.delete(`/api/v1/experiencias/profissional/${id}`, {
       withCredentials: true,
     })
       .then(() => {
@@ -136,7 +139,7 @@ const ProfessionalExperiences: React.FC = () => {
      * so it will send the JWT token as cookie
      * */
     const res = editingId
-      ? await axios
+      ? await api
         .put(
           `/api/v1/experiencias/profissional/${editingId}`, data, {
           withCredentials: true,
@@ -150,7 +153,7 @@ const ProfessionalExperiences: React.FC = () => {
           // Returns error message from backend
           return err?.response?.data.detail;
         })
-      : await axios
+      : await api
         .post("/api/v1/experiencias/profissional", data, {
           withCredentials: true,
         })

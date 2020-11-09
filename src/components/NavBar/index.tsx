@@ -21,8 +21,7 @@ const NavBar: React.FC<navProps> = ({ logged }) => {
         <input placeholder="Buscar"></input>
       </div>
       <aside>
-
-        <Link to="/explore" >EXPLORE</Link>
+        <Link to="/explore">EXPLORE</Link>
         <Link to="/createproject" className="create">CRIAR PROJETO</Link>
         {logged && (
 

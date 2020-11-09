@@ -35,6 +35,13 @@ export const BodyLogin = styled.form`
       height:3rem;
       background-color:var(--white);
       border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      svg{
+        width:3rem;
+        height:3rem;
+      }
     }
   }
   p{
