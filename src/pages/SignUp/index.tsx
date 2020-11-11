@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent, useCallback } from "react";
+import React, { useState, ChangeEvent, FormEvent, useCallback, useEffect } from "react";
 import { BodySignUp } from "./styles";
 import logo from "../../assets/image/logo_fundoClaro.svg";
 import Input from "../../components/Input";
@@ -17,16 +17,19 @@ import GoogleLogin, {
 } from "react-google-login";
 import { FcGoogle } from "react-icons/fc";
 import { FaFacebookF } from "react-icons/fa";
-import { useHistory } from "react-router";
+import { useHistory, useParams } from "react-router";
 import { daysOptions, monthOptions, yearOptions } from "../../utils/dates";
-import axios from "axios";
-
+import { AxiosError } from 'axios';
+import api from "../../services/api";
+import { createTrue } from "typescript";
 
 interface renderFacebook {
   onClick: () => void;
   disabled?: boolean;
 }
-
+interface routeParms {
+  step: string;
+}
 function SignUp() {
   const history = useHistory();
   const [formData, setFormData] = useState({
@@ -43,7 +46,11 @@ function SignUp() {
     aliado: false,
   });
 
-  const [showNextStep, setShowNextStep] = useState<boolean>(false);
+  const [showNextStep, setShowNextStep] = useState<boolean>(
+    Number(useParams<routeParms>().step) === 2
+      ? true
+      : false
+  );
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
     const target = event.target;
     const reg = new RegExp(/^\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$/)
@@ -67,7 +74,7 @@ function SignUp() {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   }
-  const checkPasswrod = useCallback(
+  const checkPassword = useCallback(
     () => {
       let forca = 0;
 
@@ -106,7 +113,7 @@ function SignUp() {
     data.append("username", username);
     data.append("password", password);
     try {
-      await axios.post("/api/signup", data);
+      await api.post("/api/signup", data);
       setShowNextStep(true);
     } catch (error) {
       return error.response.data.detail;
@@ -122,7 +129,7 @@ function SignUp() {
 
     const data = { ...formData, data_nascimento };
     try {
-      await axios.put("/api/v1/pessoas", data, {
+      await api.put("/api/v1/pessoas", data, {
         withCredentials: true,
       });
       history.push("/experienceareas");
@@ -130,25 +137,48 @@ function SignUp() {
       return error.response.data.detail;
     }
   }
+  /**This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
+  async function checkProfileType() {
+    const { aliado, colaborador, idealizador, nome, email } = (await api.get("/api/v1/pessoas/me")).data;
+    if (!aliado || !colaborador || !idealizador) {
+      setShowNextStep(true);
+    }
+    //setFormData({ ...formData, nome, email });
+  }
+  const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
 
-  const responseFacebook = (
-    resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse
-  ) => {
-    console.log(resposta);
-  };
-  const responseGoogle = (
-    response: GoogleLoginResponse | GoogleLoginResponseOffline
-  ) => {
-    console.log(response);
-  };
-  window.addEventListener('beforeunload', (e:any) => {
-    e.preventDefault();
-    alert('Fechando...');
-})
+    const { email, name } = resposta;
+    const foto_perfil = resposta.picture?.data.url;
+    const res = await api
+      .post(`/api/login?provider=facebook`, {
+        email,
+        "nome":name,
+        foto_perfil
+      })
+      .then(checkProfileType)
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+
+    console.log(res);
+  }
+  const responseGoogle = async (response: GoogleLoginResponse | any) => {
+    let { tokenId } = response;
+    const res = await api
+      .post(`/api/login?provider=google&token=${tokenId}`)
+      .then(checkProfileType)
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+    console.log(res);
+  }
+
   return (
-    
+
     <BodySignUp showSecondStep={showNextStep}>
-      
+
       {!showNextStep && (
         <form onSubmit={handleSubmit} className="area-central container">
           <Link to="/">
@@ -216,7 +246,7 @@ function SignUp() {
               <section>
                 <FacebookLogin
                   appId="1088597931155576"
-                  autoLoad={true}
+                  autoLoad={false}
                   fields="name,email,picture"
                   callback={responseFacebook}
                   cssClass="facebook-button"
@@ -253,7 +283,7 @@ function SignUp() {
             </legend>
             <section>
 
-            {console.log(formData.telefone)}
+              {console.log(formData.telefone)}
               <Input
                 type="tel"
                 name="telefone"

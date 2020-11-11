@@ -11,7 +11,7 @@ import SelectTool from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
 import NavBar from '../../components/NavBar';
 import ProjectCards from '../../components/ProjectCards';
-
+import api from "../../services/api";
 
 
 function ApproveProject() {
@@ -47,7 +47,7 @@ function ApproveProject() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
-    const res = await axios
+    const res = await api
       .post("/api/v1/projeto", formData, {
         withCredentials: true,
       })

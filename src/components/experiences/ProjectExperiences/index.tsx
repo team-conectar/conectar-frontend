@@ -10,7 +10,8 @@ import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
 import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
-import axios, { AxiosError } from "axios";
+import { AxiosError } from "axios";
+import api from "../../../services/api";
 import edit from '../../../assets/icon/editar.svg';
 import trash from '../../../assets/icon/lixeira.svg';
 import Modal from "../../Modal";
@@ -62,8 +63,10 @@ const ProjectExperiences: React.FC = () => {
     { label: "Conluído", value: "Conluído" },
   ];
   useEffect(() => {
-    axios
-      .get("/api/v1/experiencias/projeto/me")
+    api
+      .get("/api/v1/experiencias/projeto/me", {
+        withCredentials: true,
+      })
       .then(response => {
         setProjectRecords(response.data);
       })
@@ -76,7 +79,7 @@ const ProjectExperiences: React.FC = () => {
     if (projectRecords.length === 1) {
       projectRecords.splice(0, 1);
     }
-    await axios
+    await api
       .delete(`/api/v1/experiencias/projeto/${id}`, {
         withCredentials: true,
       })
@@ -138,7 +141,7 @@ const ProjectExperiences: React.FC = () => {
      * so it will send the JWT token as cookie
      * */
     const res = editingId
-      ? await axios
+      ? await api
         .put(`/api/v1/experiencias/projeto/${editingId}`, data, {
           withCredentials: true,
         })
@@ -151,7 +154,7 @@ const ProjectExperiences: React.FC = () => {
           // Returns error message from backend
           return err?.response?.data.detail;
         })
-      : await axios
+      : await api
         .post("/api/v1/experiencias/projeto", data, {
           withCredentials: true,
         })

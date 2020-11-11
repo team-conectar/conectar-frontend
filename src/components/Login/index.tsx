@@ -7,26 +7,73 @@ import GoogleLogin, { GoogleLoginResponse, GoogleLoginResponseOffline } from 're
 import { FcGoogle } from 'react-icons/fc';
 import { FaFacebook } from 'react-icons/fa';
 import Button from '../Button';
-
-import axios, { AxiosError } from 'axios';
+import api from "../../services/api";
+import { AxiosError } from 'axios';
+import { useHistory } from "react-router";
 
 
 import { inputChange } from '../../utils/inputChange';
 interface loginProps {
   onSuccessLogin(): void;
 }
+interface PessoaType {
+
+  colaborador: boolean;
+  idealizador: boolean;
+  aliado: boolean;
+
+}
 const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
+  const history = useHistory();
   const [logged, setLogged] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     senha: ''
   });
-
-  const responseFacebook = (resposta: ReactFacebookLoginInfo | ReactFacebookFailureResponse) => {
-    console.log(resposta);
+  /**This function checks the profile is idealizer, collaborator or ally, then redirects to registration these */
+  async function checkProfileType() {
+    const { aliado, colaborador, idealizador } = (await api.get("/api/v1/pessoas/me")).data;
+    if (!aliado || !colaborador || !idealizador) {
+      history.push("/signup/2");
+    }
   }
-  const responseGoogle = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-    console.log(response);
+  /**Send email name and profile_pic to backend through the login route with provider=facebook then check profile type*/
+  const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
+    const { email, name } = resposta;
+    const foto_perfil = resposta.picture?.data.url;
+    const res = await api
+      .post(`/api/login?provider=facebook`, {
+        email,
+        "nome":name,
+        foto_perfil
+      })
+      .then(() => {
+        checkProfileType();
+        onSuccessLogin();
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+
+    console.log(res);
+
+
+
+  }
+  const responseGoogle = async (response: GoogleLoginResponse | any) => {
+    let { tokenId } = response;
+    const res = await api
+      .post(`/api/login?provider=google&token=${tokenId}`)
+      .then(() => {
+        checkProfileType();
+        onSuccessLogin();
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail;
+      });
+    console.log(res);
   }
 
   const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
@@ -48,12 +95,9 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
     data.append('username', email);
     data.append('password', senha);
 
-    const res = await axios
+    const res = await api
       .post('/api/token', data)
-      .then(() => {
-        onSuccessLogin()
-
-      })
+      .then(onSuccessLogin)
       .catch((err: AxiosError) => {
         // Returns error message from backend
         return err?.response?.data.detail;
@@ -95,15 +139,15 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       <aside>
         <FacebookLogin
           textButton=""
-          appId="1088597931155576"
-          autoLoad={true}
+          appId="364709984736964"
+          autoLoad={false}
           fields="name,email,picture"
           callback={responseFacebook}
           cssClass="facebook-button"
           icon={<FaFacebook />}
         />
         <GoogleLogin
-          clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
+          clientId="1027346829762-a6tjn6i5a8r50nn0cskrg4sholipvt5j.apps.googleusercontent.com"
           render={renderProps => (
             <button className="google-button" onClick={renderProps.onClick} disabled={renderProps.disabled}><FcGoogle /></button>
           )}
@@ -113,7 +157,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           cookiePolicy={'single_host_origin'}
         />
       </aside>
-      <p>Novo no Conectar? <Link to="/signup">Crie uma conta</Link></p>
+      <p>Novo no Conectar? <Link to="/signup/1">Crie uma conta</Link></p>
     </BodyLogin>
   )
 
