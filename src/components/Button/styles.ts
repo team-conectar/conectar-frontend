@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
-interface PropsBodyButton{
-  theme?:string;
+interface PropsBodyButton {
+  theme?: string;
 }
 
 export const BodyButton = styled.button<PropsBodyButton>`
@@ -8,13 +8,12 @@ export const BodyButton = styled.button<PropsBodyButton>`
   align-items: center;
   justify-content: center;
   align-self:center;  
-  margin:0;
-  width:12rem; 
-  padding:0.6rem;
   border-radius:0.4rem; 
-  border:0;
-  cursor: pointer;
   font:500 1rem Roboto;
+  cursor: pointer;
+  border:0;
+  margin:0;
+  padding:.4rem .8rem;
   ${props => props.theme === "primary-yellow" && css`
     background:var(--yellow);
     color:var(--green-bg);
@@ -42,5 +41,9 @@ export const BodyButton = styled.button<PropsBodyButton>`
   :disabled{
     cursor: no-drop;
     opacity:0.5;
+  }
+  @media(min-width:768px){
+    width:12rem; 
+    padding:0.6rem;
   }
 `;
