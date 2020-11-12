@@ -30,7 +30,14 @@ export const BodySignUp = styled.div<StepProps>`
             ${props =>
                 props.showSecondStep ? css`display:none;` : css`display:grid;`
             } 
-            
+            .area-img{
+                grid-area:img;
+                display:flex;
+                img{
+                    width:100%;
+
+                }
+            }
             grid-template-rows: 500px;
             grid-template-columns: 60% 40%;
             grid-template-areas:"form img";
@@ -54,7 +61,7 @@ export const BodySignUp = styled.div<StepProps>`
                     width: 15rem;
                     border-radius:0.4rem;
                     padding:0.4rem;
-                    svg{
+                    >svg{
                         color:#3b5998;
                         padding: 0 0.4rem;
                         border-right: 1px solid var(--green);
@@ -87,9 +94,7 @@ export const BodySignUp = styled.div<StepProps>`
                     }
                 }
             }
-            .area-img{
-                grid-area:img;
-            }
+
             -webkit-transition: .2s;
             transition: opacity .5s linear;
         }

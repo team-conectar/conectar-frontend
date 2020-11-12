@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useCallback, useEffect } from "react";
 import { BodySignUp } from "./styles";
 import logo from "../../assets/image/logo_fundoClaro.svg";
+import cadastro_banner from "../../assets/image/cadastro_banner.svg";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
 import { Link } from "react-router-dom";
@@ -152,7 +153,7 @@ function SignUp() {
     const res = await api
       .post(`/api/login?provider=facebook`, {
         email,
-        "nome":name,
+        "nome": name,
         foto_perfil
       })
       .then(checkProfileType)
@@ -185,7 +186,9 @@ function SignUp() {
             <img src={logo} alt="logo" />
           </Link>
           <div className="primeira-etapa">
-            <img src="" alt="#" className="area-img" />
+            <div className="area-img">
+              <img src={cadastro_banner} alt="cadastro" />
+            </div>
 
             <div className="area-form">
               <h1>Criar sua conta</h1>

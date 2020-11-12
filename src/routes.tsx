@@ -7,6 +7,7 @@ import ExperienceAreas from './pages/ExperienceAreas';
 import MasteryTools from './pages/MasteryTools';
 import CreateProject from './pages/CreateProject';
 import ApproveProject from './pages/ApproveProject';
+import Projects from './pages/Projects';
 
 import { AuthProvider } from './context/AuthContext';
 
@@ -21,6 +22,7 @@ function Routes() {
         <Route path="/masterytools" component={ MasteryTools} />
         <Route path="/createproject" component={ CreateProject} />
         <Route path="/approveproject" component={ ApproveProject} />
+        <Route path="/projects" component={ Projects} />
       </BrowserRouter>
     </AuthProvider>
   )
