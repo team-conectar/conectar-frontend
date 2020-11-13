@@ -2,6 +2,7 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { BodyProjects } from './styles';
 import edit from '../../assets/icon/editar.svg'
+import config from '../../assets/icon/config.svg'
 import no_couver from '../../assets/image/no_couver.svg'
 import { useHistory } from 'react-router';
 import Button from '../../components/Button';
@@ -81,18 +82,17 @@ function Projects() {
                   2 Vagas
                 </p>
               </aside>
-              <img src={edit} alt="editar" />
+              <img src={config} alt="configurações" />
             </section>
             <section>
               <aside>
-
                 <legend>Ux Designer</legend>
                 <p>
                   Trainee | Não remunerado <br />
                   2 Vagas
                 </p>
               </aside>
-              <img src={edit} alt="editar" />
+              <img src={config} alt="configurações" />
             </section>
           </div>
           <div className="descricao">
@@ -100,8 +100,6 @@ function Projects() {
             <section>
               <p>Sobre a Empresa:<br /><br />
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec vitae porttitor lacus. Praesent ac nisl ut magna dapibus semper auctor sed justo. Nulla mattis massa eu ligula consectetur consequat. Donec a ante nisl. Donec quam erat, feugiat eleifend quam vel, tincidunt lacinia nisl. Aliquam tempus elementum mauris
-              
-
               </p>
             </section>
           </div>

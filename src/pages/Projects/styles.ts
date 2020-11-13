@@ -148,37 +148,41 @@ export const BodyProjects = styled.div`
                 }
             }
         }
-        .vagas{
-            >legend{
-                font: 500 2rem Roboto;
-                margin:.2rem 0;
-                color:var(--green-bg);
-                img{
-                    width:1.2rem;
-                    cursor: pointer;
-                }
-            }
-            >section{
-                border-radius:0.6rem;
-                border:solid 1px;
-                padding:.6rem 1rem;;
-                margin:1.2rem 0;
-                display:flex;
-                    justify-content:space-between;
-                    align-items:center;
-                legend{
-                    font: 500 1.2rem Roboto;
-                    margin:.2rem 0;
-                }
-                img{
-                    width:2rem;
+        aside{
 
+            .vagas{
+                >legend{
+                    font: 500 2rem Roboto;
+                    margin:.2rem 0;
+                    color:var(--green-bg);
+                    img{
+                        width:1.2rem;
+                        cursor: pointer;
+                    }
                 }
+                >section{
+                    border-radius:0.6rem;
+                    border:solid 1px;
+                    padding:.6rem 1rem;;
+                    margin:1.2rem 0;
+                    display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                    legend{
+                        font: 500 1.2rem Roboto;
+                        margin:.2rem 0;
+                    }
+                    img{
+                        width:2rem;
+                        cursor: pointer;
+
+                    }
+                }
+                    
             }
-                
-        }
-        .descricao{
-            display:none;
+            .descricao{
+                display:none;
+            }
         }
         @media(min-width:768px){
             display:grid;
