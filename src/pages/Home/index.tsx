@@ -25,7 +25,7 @@ function Home() {
         <h1>Será redimensionado para a pagina de explorar projetos(faltante)</h1>
       </Modal>
       <main className="topo-background">
-        < NavBar logged={false} />
+        <NavBar/>
         <div className="container topo">
           <section className="area-login">
             <h1>Find your <br /> dreamteam!</h1>

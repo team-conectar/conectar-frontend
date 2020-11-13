@@ -70,7 +70,7 @@ function ApproveProject() {
 
   return (
     <BodyApproveProject showSecondStep={showNextStep}>
-      <NavBar logged={false} />
+      <NavBar/>
       <main>
         <div className="area-esq">
           <aside>
