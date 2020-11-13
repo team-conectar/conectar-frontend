@@ -66,7 +66,7 @@ aside {
           border-radius: 50%;
           border: solid 2px var(--green);
           cursor: pointer;
-          margin: 0 .6rem;
+          margin: .2rem .6rem;
           height: 40px;
           display: flex;
           align-items: center;
@@ -79,10 +79,10 @@ aside {
       .dropdown-content {
           display: block;
           position: absolute;
-          background-color: #f9f9f9;
+          background-color: white;
           width: 20rem;
           right: 0;
-          margin-top: .6rem;
+          margin-top: .8rem;
           box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
           z-index: 1;
           border-radius: .4rem;
@@ -130,6 +130,23 @@ aside {
             padding: .8rem 1.2rem;
             width:100%;
             text-align:start;
+          }
+          :before, :after{ //setas
+            content:"";
+            position: absolute;
+            height: 0px;
+            width: 0px;
+            right: 15px;
+            border-width: 12px;
+            border-style: solid;
+          } 
+          :before{ //borda da seta
+            top: -25.5px;
+            border-color: transparent transparent var(--green) transparent;
+          }
+          :after{ //seta
+            top: -22.5px;
+            border-color: transparent transparent white transparent;
           }
       }
     }
