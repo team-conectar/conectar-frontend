@@ -26,7 +26,7 @@ const NavBar: React.FC = () => {
   })
   function handleLogout() {
     const res = api
-      .post('/logout')
+      .post('/api/logout')
       .catch((err: AxiosError) => {
         return err?.response?.data.detail;
       });
@@ -35,7 +35,7 @@ const NavBar: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated) {
       const res = api
-        .get('/pessoas/me')
+        .get('/api/v1/pessoas/me')
         .then((response) => {
           setUser(response.data);
         })
