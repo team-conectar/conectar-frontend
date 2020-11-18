@@ -107,12 +107,15 @@ aside {
                   grid-column: 2;
                   grid-row: 1;
               }
-              p:nth-child(2) {
+              p{
+                  font-size:.8rem;
                   grid-column: 2;
+                  
+              }
+              p:nth-child(2) {
                   grid-row: 2;
               }
               p:nth-child(3) {
-                  grid-column: 2;
                   grid-row: 3;
               }
           }

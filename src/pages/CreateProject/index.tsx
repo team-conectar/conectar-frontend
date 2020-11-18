@@ -10,7 +10,7 @@ import Textarea from "../../components/Textarea";
 import Button from "../../components/Button";
 import ToggleSwitch from "../../components/ToggleSwitch";
 import { useHistory } from "react-router";
-import SelectArea, { Area } from "../../components/SelectArea";
+import SelectArea, { AreaType } from "../../components/SelectArea";
 import SelectTool, { ToolType } from "../../components/SelectTools";
 import  { AxiosError } from "axios";
 import api from "../../services/api";
@@ -35,7 +35,7 @@ function CreateProject() {
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
   const [showNextStep, setShowNextStep] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated);
-  const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<AreaType[]>([]);
   const [idProject, setIdProject] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File>();
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {

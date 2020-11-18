@@ -1,4 +1,4 @@
-import React, { useContext, useState, useCallback, useEffect, useRef, RefAttributes, useMemo } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { BodyNavBar } from './styles';
 import logo from '../../assets/image/logo.svg';
 import { Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ const NavBar: React.FC = () => {
   const [user, setUser] = useState<UserTypes>({} as UserTypes);
   const divRef = useRef(null);
   document.addEventListener("mousedown", (event: any) => {
-    if (event.target.id !== "dropdown" && userButton && event.target.id !== "user" && event.target.id !== "1") {
+    if (event.target.id !== "dropdown" && userButton && event.target.id !== "user" && event.target.id !== "itens") {
       setUserButton(!userButton);
     }
   })
@@ -76,13 +76,13 @@ const NavBar: React.FC = () => {
                 <section>
                   <img src={user.foto_perfil ? user.foto_perfil : userDefault} alt="sua conta" />
                   <legend>{user.nome}</legend>
-                  <p>@may</p>
+                  <p>{user.usuario}</p>
                   <p>{user.email}</p>
                 </section>
-                <Link id="1" to="/explore">Perfil no Conectar</Link>
-                <Link id="1" to="/explore">Configurações</Link>
-                <Link id="1" to="/explore">Ajuda</Link>
-                <button id="1" onClick={handleLogout}>Sair</button>
+                <Link id="itens" to="/explore">Perfil no Conectar</Link>
+                <Link id="itens" to="/explore">Configurações</Link>
+                <Link id="itens" to="/explore">Ajuda</Link>
+                <button id="itens" onClick={handleLogout}>Sair</button>
 
               </div>
             }

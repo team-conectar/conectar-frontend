@@ -22,6 +22,7 @@ const Modal: React.FC<modalProps> = ({ open, setOpen, onAfterClose, children }) 
     >
       <div className="janela">
         <AiOutlineClose
+          className="fechar"
           onClick={close}
         />
         {children}

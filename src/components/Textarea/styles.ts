@@ -27,6 +27,6 @@ export const BodyTextarea = styled.div`
     outline: 0;
     padding: 0.4rem 0.8rem;
     font: 1.6rem;
-    resize: vertical;
+    resize: none;
   }
 `;

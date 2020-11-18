@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 
 
 
+
 export const BodyProjects = styled.div`
     width:100%;
     display:flex;
@@ -13,7 +14,7 @@ export const BodyProjects = styled.div`
     width:100vw;
         display:flex;
         flex-direction:column;
-        justify-content:center;
+        justify-content:flex-start;
         align-items:center;
         >img{
             width:100%;
@@ -35,11 +36,7 @@ export const BodyProjects = styled.div`
             border-bottom:solid 1px;
             padding:.5rem .3rem;
             width: min(1100px, 90vw);
-            >img{
-                
-                width:100%;
-                margin: 0;
-            }
+    
             h1{
                 color:var(--green-bg);
                 display:flex;
@@ -55,10 +52,24 @@ export const BodyProjects = styled.div`
             }
             
             button{
-                margin:.3rem 0;
+                margin:.3rem;
+            }
+            button + button{
+                margin:0 0.8rem;
+            }
+            .icons{
+                margin:1rem .5rem; 
+                font:400 .8rem Roboto;
+                img{
+                    width:1rem;
+                    margin: 0 .4rem;
+                }
+                
             }
             >p{
-                text-align:justify;
+
+                font:400 .8rem Roboto;
+                margin:1rem .5rem; 
             }
             >section{
                 display:flex;
@@ -68,7 +79,7 @@ export const BodyProjects = styled.div`
         }
         @media(min-width:768px){
             display:grid;
-            grid-template-columns: 1fr 2,4fr;
+            grid-template-columns: 1fr 2.2fr;
             grid-template-rows:auto;
             column-gap:1rem;
             border:solid 1px;
@@ -139,7 +150,7 @@ export const BodyProjects = styled.div`
             aside{
                 display:flex;
                 flex-wrap:wrap;
-                span{
+                >span{
                     word-break:normal;
                     padding:.2rem;
                     margin:.2rem;
@@ -158,6 +169,7 @@ export const BodyProjects = styled.div`
                     img{
                         width:1.2rem;
                         cursor: pointer;
+                        margin:0 .5rem;
                     }
                 }
                 >section{
@@ -177,6 +189,7 @@ export const BodyProjects = styled.div`
                         cursor: pointer;
 
                     }
+                    
                 }
                     
             }
@@ -225,27 +238,24 @@ export const BodyProjects = styled.div`
                     >legend{
                         font-size:1.6rem;
                         margin:.8rem;
-                        img{
-                            display:none;
-                        }
                     }
                     >section{
                         border-radius:0;
                         border: 0;
-                        border:solid 1px 0;
+                        border-bottom:solid 1px;
                         border-top:solid 1px;
                         padding:.6rem 1rem;
                         margin:1.2rem 0;
                         display:flex;
                         justify-content:space-between;
                         align-items:center;
+                        
                         legend{
                             font: 500 1.2rem Roboto;
                             margin:.2rem 0;
                         }
-                        img{
-                            width:2rem;
-                        }
+                        
+                        
                     }
                 }
                 .descricao{
