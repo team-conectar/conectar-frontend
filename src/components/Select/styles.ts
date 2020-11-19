@@ -6,6 +6,7 @@ export const BodySelect = styled.div`
   width:100%;
   min-width:10rem;
   margin: 0.3rem 0 ;
+  position: relative;
   label{
     display:flex;
     justify-content:space-between;
@@ -19,15 +20,16 @@ export const BodySelect = styled.div`
       font-size:0.7rem;
     }
   }
-  select{
-    border: 2px solid var(--yellow);
+  .select{
+    *{
+        border-color:var(--yellow) !important;
+        border-width:2px;
+        :focus-within{
+            box-shadow: 0 0 0 0 !important;
+        }
+    }
     width:100%;
-    height: 2rem;
-    margin-top: 0.2rem;
-    border-radius: 0.3rem;
-    outline: 0;
-    padding: 0 0.8rem;
+    margin-top: 0.3rem;
     font: 1.6rem;
-    background:white;
   }
 `;
