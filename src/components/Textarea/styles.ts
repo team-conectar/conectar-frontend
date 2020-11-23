@@ -5,6 +5,7 @@ export const BodyTextarea = styled.div`
   width:100%;
   min-width:10rem;
   margin: 0.4rem 0 ;
+  position: relative;
   label{
     display:flex;
     justify-content:space-between;
@@ -20,13 +21,13 @@ export const BodyTextarea = styled.div`
   }
   textarea{
     border: 2px solid var(--yellow);
+    border-radius: .2rem;
     width:100%;
     min-height: 10rem ;
     margin-top: 0.2rem;
-    border-radius: 0.3rem;
-    outline: 0;
     padding: 0.4rem 0.8rem;
     font: 1.6rem;
+    outline: 0;
     resize: none;
   }
 `;

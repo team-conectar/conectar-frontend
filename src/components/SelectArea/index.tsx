@@ -68,7 +68,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, s
           <legend>Áreas selecionadas</legend>
           <fieldset>
 
-            {callbackSelectedAreas.map(area => (
+            {callbackSelectedAreas?.map(area => (
               <label>
                 <legend>{area.descricao}</legend>
                 <img

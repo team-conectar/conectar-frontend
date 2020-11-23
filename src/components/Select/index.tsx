@@ -1,10 +1,10 @@
 import React, { SelectHTMLAttributes, OptionHTMLAttributes,InputHTMLAttributes } from 'react';
 import { BodySelect } from './styles';
 // import { Link } from 'react-router-dom';
-import SelectReact, { NamedProps, OptionsType } from "react-select";
+import SelectReact, { NamedProps, OptionTypeBase, Props } from "react-select";
 import makeAnimated from 'react-select/animated';
 
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement>{
   name: string;
   label?: string;
   value?: any;

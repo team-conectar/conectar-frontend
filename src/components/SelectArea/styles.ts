@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 export const BodySelectArea = styled.div`
   margin: 0.3rem 0 ;
+  width:100%;
   >label{
     display:flex;
     justify-content:space-between;
@@ -144,7 +145,7 @@ export const BodySelectArea = styled.div`
           }
           >img{
             cursor:pointer;
-            height:2.5rem;
+            height:1.4rem;
             cursor:pointer;
           }
         }

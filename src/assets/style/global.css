@@ -21,11 +21,10 @@
 }
 
 #root {
-    font-family: Roboto;
+    font-family: Raleway !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    -webkit-font-smoothing: subpixel-antialiased;
 }
 
 @media (min-width: 700px) {

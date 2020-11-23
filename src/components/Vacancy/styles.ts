@@ -10,9 +10,12 @@ export const BodyVacancy = styled.section`
     justify-content:flex-start;
     align-items: flex-start;
     width:100%;
-    height:100vh;
+    height:100%;
     .vagas{
             width:100%;
+            height:100%;
+            max-height:80vh;
+            overflow-y:auto;
         .vaga-cadastrada{
             border-radius:0.4rem;
             border:2px solid var(--green);
@@ -70,78 +73,70 @@ export const BodyVacancy = styled.section`
         margin:1.4rem 0;
         color: var(--green-bg);
     }
-    .form--vaga {
-        width: 100%;
-        .area-registro{
-            width:100%;
-            .area-botoes{
-                display:flex;
-                justify-content:space-evenly;
-                margin: .4rem 0;
-            }
-            form{
-                display:flex;
-                flex-direction:column;
-                align-items:flex-start;
-                justify-content:center;
-                height:100%;
-            }
-            span{
-                color:var(--yellow-dark);
-            }
-            
-            aside{
-                display:flex;
-                align-items:center;
-                justify-content:flex-start;
-                margin:0;
-                div + div{
-                    margin-left:.4rem;
-                }
-            }
+    .form-vaga {
+        overflow-y:auto;
+        width:100%;
+        .area-botoes{
+            display:flex;
+            justify-content:space-evenly;
+            margin: .4rem 0;
+        }
+        form{
+            display:flex;
+            flex-direction:column;
+            align-items:flex-start;
+            justify-content:center;
+            height:100%;
+        }
+        span{
+            color:var(--yellow-dark);
+        }
         
+        aside{
+            display:flex;
+            align-items:center;
+            justify-content:flex-start;
+            margin:0;
+            div + div{
+                margin-left:.4rem;
+            }
         }
     }
     @media(min-width:768px){
         border-radius:0.4rem;
         border:2px solid var(--green);
         height:auto;
-        .form--vaga {
+        .form-vaga {
         
-            .area-registro{
-                display:grid;
+            
+            display:grid;
+            width:100%;
+            grid-template-columns:calc(50% - 10px) calc(30% - 10px) calc(20% - 10px);
+            grid-template-rows:repeat(4, auto);
+            grid-gap: 10px;
+            .area-botoes{
+                grid-column:1/-1;
+                grid-row:4;
+            }
+            
+            .bloco-area{
+                grid-column:2 / -1;
+                grid-row:2 ;
+            }
+            
+            .bloco-contrato{
+                grid-column:2 / -1;
+                grid-row:3;
+                display:flex;
+                justify-content:space-around;
+                align-items:center;
+                flex-direction:column;
+                height:100%;
                 width:100%;
-                grid-template-columns:2.6fr 1.6fr .2fr;
-                grid-template-rows:repeat(3, auto);
-                grid-gap: 10px;
-                .area-botoes{
-                    grid-column:1/-1;
-                    grid-row:3;
-                }
-                .bloco-cargo{
-                    grid-column:1;
-                    grid-row:1;
-                }
-                .bloco-perfil{
-                    grid-column:2;
-                    grid-row:1;
-                }
-                .bloco-qtd{
-                    grid-column:3;
-                    grid-row:1;
-                    
-                }
-                .bloco-descricao{
-                    grid-column:1; 
-                    grid-row:2;
-                }
-                .bloco-contrato{
-                    grid-column:2 / -1;
-                    grid-row:2;
-                    
-                }
+                
             }
         }
     }
+    
         
 `;

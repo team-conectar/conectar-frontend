@@ -1,15 +1,23 @@
-import styled from 'styled-components';
-export const BodyNavBar=styled.header` width:100%;
-margin:0 auto;
-background:transparent;
+import styled, { css } from 'styled-components';
+interface NavBarProps {
+    sobre: boolean;
+    explorar: boolean;
+}
+
+
+export const BodyNavBar = styled.header<NavBarProps>` 
+width:100%;
+padding:0 1.8rem;
+margin:0;
+background:white;
 display: flex;
 justify-content:space-between;
 align-items: center;
-padding: 1.2rem;
+height:45px;
 img {
     width: 12rem;
 }
-
+box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 .searchBlock {
     border: 2px solid var(--green);
     height: 2rem;
@@ -23,7 +31,6 @@ img {
         width: 20vw;
         background: transparent;
         height: 2rem;
-        color: var(--white);
         outline: 0;
         padding: 0 0.6rem;
     }
@@ -42,39 +49,62 @@ img {
 aside {
     display: flex;
     align-items: center;
+    height:100%;
     a {
         text-decoration: none;
         font: 500 0.9rem Roboto;
-        color: var(--white);
+        color: var(--green-bg);
+        display:flex;
+        align-items:center;
+    }
+    .sobre{
+        height:100%;
+        ${(props) => props.sobre && css` border-bottom:solid 4px var(--green-bg);`}
+
+    }
+    .explorar{
+        
+        height:100%;
+        ${(props) => props.explorar && css` border-bottom:solid 4px var(--green-bg);`}
+        padding:0 .3rem;
+        img {
+            width: 1.2rem;
+            margin-right:.6rem;
+        }
     }
     .create {
-        padding: 0.4rem 0.6rem;
-        border-radius: 0.2rem;
-        background-color: var(--green);
+        padding: .4rem 2rem;
+        border-radius: 0.4rem;
+        border:solid 2px var(--green);
         transition: background-color 0.2s;
     }
-    a+a {
+    a + a {
         margin-left: 20px;
     }
     #dropdown {
       position: relative;
       display: inline-block;
+      #user,#notification{
+            border:0;
+            background: white;
+            padding: .4rem;
+            font-size: 18px;
+            cursor: pointer;
+            margin: .2rem .6rem;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            img {
+                width: 20px;
+            }
+      }
+      
       #user {
-          background: white;
-          padding: .4rem;
-          font-size: 18px;
-          border-radius: 50%;
-          border: solid 2px var(--green);
-          cursor: pointer;
-          margin: .2rem .6rem;
-          height: 40px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 40px;
-          img {
-              width: 20px;
-          }
+          
+            border-radius: 50%;
+            border: solid 2px var(--green);
       }
       .dropdown-content {
           display: block;

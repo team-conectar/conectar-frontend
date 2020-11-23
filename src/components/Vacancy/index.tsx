@@ -21,7 +21,9 @@ import api from "../../services/api";
 import edit from "../../assets/icon/editar.svg";
 import trash from "../../assets/icon/lixeira.svg";
 import Modal from "../Modal";
-
+import { AreaType } from "../../components/SelectArea";
+import { ToolType } from "../../components/SelectTools";
+import { createOptionAreas, createOptionTools } from "../../utils/projects";
 
 interface VacanciesType {
   nome: string;
@@ -31,11 +33,38 @@ interface VacanciesType {
   foto_capa: string;
   id: number;
 }
+interface ProjectType {
+  nome: string;
+  descricao: string;
+  visibilidade: true;
+  objetivo: string;
+  foto_capa: string;
+  areas: AreaType[];
+  habilidades: ToolType[];
+  id: number;
+}
+interface VacancyProps {
+  project: ProjectType;
+}
 
-const Vacancy: React.FC = () => {
+const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number>(0);
-
+  const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
+    { value: 'trainee', label: 'Trainee' },
+    { value: 'terceirizado', label: 'Terceirizado' },
+    { value: 'intermitente', label: 'Intermitente' },
+    { value: 'aprendiz', label: 'Aprendiz' },
+    { value: 'estágio', label: 'Estágio' },
+    { value: 'temporário', label: 'Temporário' },
+    { value: 'freelance', label: 'Freelance' },
+    { value: 'autônomo', label: 'Autônomo' },
+    { value: 'meioPeríodo', label: 'Meio Período' },
+    { value: 'tempoIntegral', label: ' Tempo Integral' }
+  ]
+  
+  const optionsAreas: Array<OptionHTMLAttributes<HTMLOptionElement>> = createOptionAreas(project.areas);
+  const optionsTools: Array<OptionHTMLAttributes<HTMLOptionElement>> = createOptionTools(project.habilidades);
   useEffect(() => {
     api
       .get("/api/v1/experiencias/academica/me", {
@@ -83,6 +112,162 @@ const Vacancy: React.FC = () => {
 
             </fieldset>
           </div>
+          <div key={1} className="vaga-cadastrada">
+
+            <section className="icones">
+              <img
+                src={edit}
+                alt="editar vaga"
+
+              />
+              <img
+                src={trash}
+                alt="apagar vaga"
+
+              />
+
+            </section>
+            <fieldset className="info-vagas">
+
+
+              <legend>Ux Designer</legend>
+              <p>
+                Trainee | Não remunerado <br />
+                  2 Vagas
+                </p>
+
+            </fieldset>
+          </div>
+          <div key={1} className="vaga-cadastrada">
+
+            <section className="icones">
+              <img
+                src={edit}
+                alt="editar vaga"
+
+              />
+              <img
+                src={trash}
+                alt="apagar vaga"
+
+              />
+
+            </section>
+            <fieldset className="info-vagas">
+
+
+              <legend>Ux Designer</legend>
+              <p>
+                Trainee | Não remunerado <br />
+                  2 Vagas
+                </p>
+
+            </fieldset>
+          </div>
+          <div key={1} className="vaga-cadastrada">
+
+            <section className="icones">
+              <img
+                src={edit}
+                alt="editar vaga"
+
+              />
+              <img
+                src={trash}
+                alt="apagar vaga"
+
+              />
+
+            </section>
+            <fieldset className="info-vagas">
+
+
+              <legend>Ux Designer</legend>
+              <p>
+                Trainee | Não remunerado <br />
+                  2 Vagas
+                </p>
+
+            </fieldset>
+          </div>
+          <div key={1} className="vaga-cadastrada">
+
+            <section className="icones">
+              <img
+                src={edit}
+                alt="editar vaga"
+
+              />
+              <img
+                src={trash}
+                alt="apagar vaga"
+
+              />
+
+            </section>
+            <fieldset className="info-vagas">
+
+
+              <legend>Ux Designer</legend>
+              <p>
+                Trainee | Não remunerado <br />
+                  2 Vagas
+                </p>
+
+            </fieldset>
+          </div>
+          <div key={1} className="vaga-cadastrada">
+
+            <section className="icones">
+              <img
+                src={edit}
+                alt="editar vaga"
+
+              />
+              <img
+                src={trash}
+                alt="apagar vaga"
+
+              />
+
+            </section>
+            <fieldset className="info-vagas">
+
+
+              <legend>Ux Designer</legend>
+              <p>
+                Trainee | Não remunerado <br />
+                  2 Vagas
+                </p>
+
+            </fieldset>
+          </div>
+          <div key={1} className="vaga-cadastrada">
+
+            <section className="icones">
+              <img
+                src={edit}
+                alt="editar vaga"
+
+              />
+              <img
+                src={trash}
+                alt="apagar vaga"
+
+              />
+
+            </section>
+            <fieldset className="info-vagas">
+
+
+              <legend>Ux Designer</legend>
+              <p>
+                Trainee | Não remunerado <br />
+                  2 Vagas
+                </p>
+
+            </fieldset>
+          </div>
           <button onClick={() => setShowRegister(true)}>
             <span>+ </span>
             Adicionar
@@ -90,91 +275,105 @@ const Vacancy: React.FC = () => {
         </div>
       ) : (
           <form
-            className="form--vaga"
+            className="form-vaga"
           >
-            <aside className="area-registro">
 
-              <Input
-                mask=""
-                label="Cargo"
-                name="cargo"
-                required
-                className="bloco-cargo"
-              //onChange={handleAcademicInputChange}
-              //defaultValue={academicFormData?.instituicao}
+
+            <Input
+              mask=""
+              label="Cargo"
+              name="cargo"
+              required
+            //onChange={handleAcademicInputChange}
+            //defaultValue={academicFormData?.instituicao}
+            />
+
+
+            <Input
+              mask=""
+              label="Perfil"
+              name="perfil"
+              required
+            //onChange={handleAcademicInputChange}
+            //defaultValue={academicFormData?.instituicao}
+            />
+            <Input
+              mask=""
+              label="Quantidade"
+              name="quantidade"
+              type="number"
+              required
+            //onChange={handleAcademicInputChange}
+            //defaultValue={academicFormData?.instituicao}
+            />
+            <div className="bloco-area">
+
+              <Select
+                label="Habilidade ou Ferramentas"
+                name="habilidade"
+                options={optionsTools}
+                isMulti
               />
+            </div>
+            <Select
+              label="Áreas"
+              name="areas"
+              options={optionsAreas}
+              isMulti
+            />
 
 
-              <Input
-                mask=""
-                label="Perfil"
-                name="perfil"
-                required
-                className="bloco-perfil"
-              //onChange={handleAcademicInputChange}
-              //defaultValue={academicFormData?.instituicao}
+            <Textarea
+              name="descricao"
+              label="Descrição"
+              required
+            //onChange={handleAcademicTextAreaChange}
+            //defaultValue={academicFormData?.descricao}
+            />
+            <section className="bloco-contrato">
+
+
+              <Select
+                label="Tipo de contrato"
+                options={optionsContrato}
+                name="tipoContrato"
               />
-              <Input
-                mask=""
-                label="Quantidade"
-                name="quantidade"
-                type="number"
-                required
-                className="bloco-qtd"
-              //onChange={handleAcademicInputChange}
-              //defaultValue={academicFormData?.instituicao}
+              <ToggleSwitch
+                label="Remunerado"
+                name="remunerado"
+                id="remunerado"
+              // onChange={handleAcademicInputChange}
+              //defaultChecked={
+              //  academicFormData &&
+              //  academicFormData?.situacao === "Incompleto"
+              //}
               />
-
-
-
-
-              <Textarea
-                name="descricao"
-                label="Descrição"
-                required
-                className="bloco-descricao"
-              //onChange={handleAcademicTextAreaChange}
-              //defaultValue={academicFormData?.descricao}
-              />
-              <section className="bloco-contatro">
-
-
-                <ToggleSwitch
-                  label="Remunerado"
-                  name="remunerado"
-                  id="incomplete"
-                // onChange={handleAcademicInputChange}
-                //defaultChecked={
-                //  academicFormData &&
-                //  academicFormData?.situacao === "Incompleto"
-                //}
-                />
-              </section>
-              <section className="area-botoes">
-                <Button
-                  type="submit"
-                  theme="primary-green"
-                //disabled={academicFormData === {} as AcademicType? false:true}
-                >
-                  Salvar
+            </section>
+            <section className="area-botoes">
+              <Button
+                type="submit"
+                theme="primary-green"
+              //disabled={academicFormData === {} as AcademicType? false:true}
+              >
+                Salvar
               </Button>
-                <Button
-                  theme="secondary-green"
+              <Button
+                theme="secondary-green"
 
-                >
-                  Excluir
+              >
+                Excluir
               </Button>
-                <Button
-                  onClick={() => {
-                    setShowRegister(false);
-                    setEditingId(0);
-                    //setAcademicFormData(initialAcademicData);
-                  }}
-                >
-                  Cancelar
+              <Button
+                onClick={() => {
+                  setShowRegister(false);
+                  setEditingId(0);
+                  //setAcademicFormData(initialAcademicData);
+                }}
+              >
+                Cancelar
               </Button>
-              </section>
-            </aside>
+            </section>
+
           </form>
         )}
     </BodyVacancy>

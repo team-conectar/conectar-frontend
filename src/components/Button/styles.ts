@@ -8,7 +8,7 @@ export const BodyButton = styled.button<PropsBodyButton>`
   align-items: center;
   justify-content: center;
   align-self:center;  
-  border-radius:0.4rem; 
+  border-radius:1.2rem; 
   font:500 1rem Roboto;
   cursor: pointer;
   border:0;

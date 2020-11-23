@@ -7,7 +7,7 @@ interface styleProps {
 export const BodyModal = styled.div<styleProps>`
   ${props => props.open ? css`display:flex;` : css`display:none;`}
   width:100vw;
-  height:100%;
+  height:100vh;
   
   justify-content:center;
   align-items: center;
@@ -17,29 +17,36 @@ export const BodyModal = styled.div<styleProps>`
   top:0;
   left:0;
   .fechar{
-          top:10px;
-          right:10px;
-          position:absolute;
-          z-index:103;
-          
-          cursor: pointer;
-          border-radius:40%;
-          color: currentColor;
-      }
+        display: flex;
+        align-items:center;
+        top:10px;
+        right:15px;
+        position:absolute;
+        z-index:103;
+        cursor: pointer;
+        border-radius:40%;
+        color: currentColor;
+        font:500 1rem Roboto;
+        svg{
+          margin:0 .3rem;
+          font-size:1.2rem;
+        }
+    }
   .janela{
       width:100vw;
       height:100vh;
+      >h1{
+        font:500 2rem Roboto;
+        margin-bottom:4rem;
+        color:white;
+      }
       @media(min-width:768px){
-        width:710px;
-        height:auto;
+        width: max(710px,50vw);
+        height:auto;        
+        overflow-y:none;
         opacity:none;
         position:relative;
         z-index:102;
-        >h1{
-          font:500 2rem Roboto;
-          margin-bottom:4rem;
-          color:white;
-        }
         
         
       
@@ -69,5 +76,13 @@ export const BodyModalDefault = styled.div`
       display:flex;
       justify-content:space-between;
       width:80%;
+    }
+    @media(min-width:768px){
+        width: max(710px,50vw);
+        height:auto;        
+        overflow-y:none;
+        opacity:none;
+        position:relative;
+        z-index:102;
     }
 `; 

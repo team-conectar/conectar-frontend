@@ -9,7 +9,7 @@ export const BodyInput = styled.div`
       -webkit-box-shadow: 0 0 0 30px white inset !important;
   }
   width:100%;
-  min-width:10rem;
+  min-width:6rem;
   margin: 0.3rem 0 ;
   label{
     display:flex;
@@ -26,10 +26,10 @@ export const BodyInput = styled.div`
   }
   input{
     border: 2px solid var(--yellow);
+    border-radius: .2rem;
     width:100%;
-    height: 2rem;
+    height: 2.4rem;
     margin-top: 0.2rem;
-    border-radius: 0.3rem;
     outline: 0;
     padding: 0 0.8rem;
     font: 1.6rem;
