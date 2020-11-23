@@ -111,6 +111,7 @@ aside {
           position: absolute;
           background-color: white;
           width: 20rem;
+          min-height:2rem;
           right: 0;
           margin-top: .8rem;
           box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);

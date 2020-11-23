@@ -21,29 +21,29 @@ interface NavBarProps {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
-  const { loading, isAuthenticated } = useContext(Context);
+  const { loading, isAuthenticated,handleLogout } = useContext(Context);
   const [userButton, setUserButton] = useState(false);
   const [notificationButton, setNotificationButton] = useState(false);
   const [user, setUser] = useState<UserTypes>({} as UserTypes);
   const divRef = useRef(null);
   document.addEventListener("mousedown", (event: any) => {
     if (event.target.id !== "dropdown" &&
-      userButton &&
       event.target.id !== "user" &&
       event.target.id !== "notification" &&
       event.target.id !== "itens") {
       setUserButton(false);
       setNotificationButton(false);
     }
+    else if (event.target.id === "user" &&
+      notificationButton ) {
+      setNotificationButton(false);
+    }
+    else if (event.target.id === "notification" &&
+      userButton ) {
+        setUserButton(false);
+    }
   })
-  function handleLogout() {
-    const res = api
-      .post('/api/logout')
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail;
-      });
-    console.log(res);
-  }
+  
   useEffect(() => {
     if (isAuthenticated) {
       const res = api
@@ -88,59 +88,52 @@ const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
       </div>
       <aside>
         <Link to="/createproject" className="create">Criar um Projeto</Link>
-        {!loading && isAuthenticated &&
-          <>
-            <div id="dropdown" >
+        {!loading && isAuthenticated && <>
+          <div id="dropdown" >
+            <img
+              src={notification}
+              alt="sua conta"
+              id="notification"
+              onClick={() => setNotificationButton(!notificationButton)}
+            />
+            {console.log(divRef)}
+            {
+              notificationButton &&
+              <div className="dropdown-content" >
+              </div>
+            }
+          </div>
+          <div
+            id="dropdown"
+          >
 
+            <img
+              id="user"
+              src={userDefault}
+              alt="sua conta"
+              onClick={() => setUserButton(!userButton)}
+            />
 
-              <img
-                src={notification} 
-                alt="sua conta"
-                id="notification"
-                onClick={() => setNotificationButton(!notificationButton)}
-              />
+            {console.log(divRef)}
+            {
+              userButton &&
+              <div className="dropdown-content" >
+                <section>
+                  <img src={user.foto_perfil ? user.foto_perfil : userDefault} alt="sua conta" />
+                  <legend>{user.nome}</legend>
+                  <p>{user.usuario}</p>
+                  <p>{user.email}</p>
+                </section>
+                <Link id="itens" to="/explore">Perfil no Conectar</Link>
+                <Link id="itens" to="/explore">Configurações</Link>
+                <Link id="itens" to="/explore">Ajuda</Link>
+                <button id="itens" onClick={handleLogout}>Sair</button>
 
-              {console.log(divRef)}
-              {
-                notificationButton &&
-                <div className="dropdown-content" >
+              </div>
+            }
+          </div>
 
-                  
-
-                </div>
-              }
-            </div>
-            <div
-              id="dropdown"
-            >
-
-              <img
-                id="user"
-                src={userDefault}
-                alt="sua conta"
-                onClick={() => setUserButton(!userButton)}
-              />
-
-              {console.log(divRef)}
-              {
-                userButton &&
-                <div className="dropdown-content" >
-                  <section>
-                    <img src={user.foto_perfil ? user.foto_perfil : userDefault} alt="sua conta" />
-                    <legend>{user.nome}</legend>
-                    <p>{user.usuario}</p>
-                    <p>{user.email}</p>
-                  </section>
-                  <Link id="itens" to="/explore">Perfil no Conectar</Link>
-                  <Link id="itens" to="/explore">Configurações</Link>
-                  <Link id="itens" to="/explore">Ajuda</Link>
-                  <button id="itens" onClick={handleLogout}>Sair</button>
-
-                </div>
-              }
-            </div>
-
-          </>}
+        </>}
       </aside>
 
 
