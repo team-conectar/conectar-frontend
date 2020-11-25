@@ -1,28 +1,35 @@
-import React, { SelectHTMLAttributes, OptionHTMLAttributes } from 'react';
+import React, { SelectHTMLAttributes, OptionHTMLAttributes,InputHTMLAttributes } from 'react';
 import { BodySelect } from './styles';
 // import { Link } from 'react-router-dom';
+import SelectReact, { NamedProps, OptionTypeBase, Props } from "react-select";
+import makeAnimated from 'react-select/animated';
 
-
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement>{
   name: string;
   label?: string;
   value?: any;
-  defaultOption: string;
+  defaultOption?: any;
   options: Array<OptionHTMLAttributes<HTMLOptionElement>>;
+  isMulti?: boolean;
 }
-const Select: React.FC<SelectProps> = ({ name, value, label, options, defaultOption, ...rest }) => {
+const Select: React.FC<SelectProps> = ({ name, value, isMulti, label, options, defaultOption, ...rest }) => {
+  const animatedComponents = makeAnimated();
 
-  
   return (
     <BodySelect>
       <label htmlFor={name}>{label}</label>
+      
+      <SelectReact
+        name={name}
+        id={name}
+        closeMenuOnSelect={true}
+        components={animatedComponents}
+        options={options}
+        placeholder={defaultOption || "Selecione"}
+        className="select"
+        isMulti={isMulti}
+      />
 
-      <select id={name} name={name} {...rest} >
-        <option value={defaultOption} hidden >{defaultOption}</option>
-        {options.map(option => {
-          return <option key={option.value?.toString()} value={option.value}>{option.label}</option>
-        })}
-      </select>
     </BodySelect>
 
   )

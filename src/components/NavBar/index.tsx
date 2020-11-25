@@ -1,8 +1,10 @@
-import React, { useContext, useState, useCallback, useEffect, useRef, RefAttributes, useMemo } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import { BodyNavBar } from './styles';
-import logo from '../../assets/image/logo.svg';
+import logo from '../../assets/image/logo_fundoClaro.svg';
 import { Link } from 'react-router-dom';
 import lupa from '../../assets/icon/lupa.svg';
+import notification from '../../assets/icon/notification.svg';
+import explorar from '../../assets/icon/explorar.svg';
 import userDefault from '../../assets/icon/user.svg';
 import { Context } from '../../context/AuthContext';
 import api from '../../services/api';
@@ -13,25 +15,35 @@ interface UserTypes {
   foto_perfil: string;
   usuario: string;
 }
+interface NavBarProps {
+  pageIsSobre?: boolean;
+  pageIsExplorar?: boolean;
+}
 
-const NavBar: React.FC = () => {
-  const { loading, isAuthenticated } = useContext(Context);
+const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
+  const { loading, isAuthenticated,handleLogout } = useContext(Context);
   const [userButton, setUserButton] = useState(false);
+  const [notificationButton, setNotificationButton] = useState(false);
   const [user, setUser] = useState<UserTypes>({} as UserTypes);
   const divRef = useRef(null);
   document.addEventListener("mousedown", (event: any) => {
-    if (event.target.id !== "dropdown" && userButton && event.target.id !== "user" && event.target.id !== "1") {
-      setUserButton(!userButton);
+    if (event.target.id !== "dropdown" &&
+      event.target.id !== "user" &&
+      event.target.id !== "notification" &&
+      event.target.id !== "itens") {
+      setUserButton(false);
+      setNotificationButton(false);
+    }
+    else if (event.target.id === "user" &&
+      notificationButton ) {
+      setNotificationButton(false);
+    }
+    else if (event.target.id === "notification" &&
+      userButton ) {
+        setUserButton(false);
     }
   })
-  function handleLogout() {
-    const res = api
-      .post('/api/logout')
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail;
-      });
-    console.log(res);
-  }
+  
   useEffect(() => {
     if (isAuthenticated) {
       const res = api
@@ -47,9 +59,26 @@ const NavBar: React.FC = () => {
   }, [isAuthenticated]);
 
   return (
-    <BodyNavBar >
+    <BodyNavBar
+      explorar={pageIsExplorar ? true : false}
+      sobre={pageIsSobre ? true : false}
+    >
+      <aside>
+        <img src={logo} alt="logo conectar" />
+        <Link
+          to="/explore"
+          className="explorar"
+        >
+          <img
+            src={explorar}
+            alt="Explore os demais projetos"
+          />
+        Explorar
+        </Link>
+        <Link to="/sobre" className="sobre">Sobre</Link>
 
-      <img src={logo} alt="logo conectar" />
+      </aside>
+
       <div className="searchBlock">
         <button type="submit">
           <img src={lupa} alt="botao de pesquisa" />
@@ -58,17 +87,33 @@ const NavBar: React.FC = () => {
         <input placeholder="Buscar"></input>
       </div>
       <aside>
-        <Link to="/explore">EXPLORE</Link>
-        <Link to="/createproject" className="create">CRIAR PROJETO</Link>
-        {!loading && isAuthenticated &&
-
+        <Link to="/createproject" className="create">Criar um Projeto</Link>
+        {!loading && isAuthenticated && <>
           <div id="dropdown" >
-            <button
+            <img
+              src={notification}
+              alt="sua conta"
+              id="notification"
+              onClick={() => setNotificationButton(!notificationButton)}
+            />
+            {console.log(divRef)}
+            {
+              notificationButton &&
+              <div className="dropdown-content" >
+              </div>
+            }
+          </div>
+          <div
+            id="dropdown"
+          >
+
+            <img
               id="user"
+              src={userDefault}
+              alt="sua conta"
               onClick={() => setUserButton(!userButton)}
-            >
-              <img src={userDefault} alt="sua conta" />
-            </button>
+            />
+
             {console.log(divRef)}
             {
               userButton &&
@@ -76,19 +121,19 @@ const NavBar: React.FC = () => {
                 <section>
                   <img src={user.foto_perfil ? user.foto_perfil : userDefault} alt="sua conta" />
                   <legend>{user.nome}</legend>
-                  <p>@may</p>
+                  <p>{user.usuario}</p>
                   <p>{user.email}</p>
                 </section>
-                <Link id="1" to="/explore">Perfil no Conectar</Link>
-                <Link id="1" to="/explore">Configurações</Link>
-                <Link id="1" to="/explore">Ajuda</Link>
-                <button id="1" onClick={handleLogout}>Sair</button>
+                <Link id="itens" to="/explore">Perfil no Conectar</Link>
+                <Link id="itens" to="/explore">Configurações</Link>
+                <Link id="itens" to="/explore">Ajuda</Link>
+                <button id="itens" onClick={handleLogout}>Sair</button>
 
               </div>
             }
           </div>
 
-        }
+        </>}
       </aside>
 
 

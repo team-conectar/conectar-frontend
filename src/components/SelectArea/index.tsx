@@ -4,14 +4,14 @@ import { GoCheck } from 'react-icons/go';
 import { AxiosError } from "axios";
 import api from "../../services/api";
 import trash from "../../assets/icon/lixeira.svg";
-export interface Area {
+export interface AreaType {
   descricao: string;
   id: number;
   area_pai_id?: number;
 }
 interface AreaTypes {
-  area: Area;
-  subareas: Area[];
+  area: AreaType;
+  subareas: AreaType[];
 }
 interface ShowSubareaTypes {
   show: boolean;
@@ -19,8 +19,8 @@ interface ShowSubareaTypes {
 }
 interface SelectAreaProps {
   label?: string;
-  callbackSelectedAreas: Area[];
-  setCallbackSelectedAreas(areas: Area[]): void;
+  callbackSelectedAreas: AreaType[];
+  setCallbackSelectedAreas(areas: AreaType[]): void;
 }
 
 
@@ -52,7 +52,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, s
   //   name: "area a",
   //   subareas: [{ name: "sub a", id: 0 }, { name: "sub b", id: 1 }, { name: "sub c", id: 2 }]
   // }]
-  function handleSelectedSubareas(area: Area) {
+  function handleSelectedSubareas(area: AreaType) {
     if (callbackSelectedAreas?.includes(area)) {
       setCallbackSelectedAreas(callbackSelectedAreas.filter(atual => atual !== area))
     }
@@ -68,7 +68,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, s
           <legend>Áreas selecionadas</legend>
           <fieldset>
 
-            {callbackSelectedAreas.map(area => (
+            {callbackSelectedAreas?.map(area => (
               <label>
                 <legend>{area.descricao}</legend>
                 <img

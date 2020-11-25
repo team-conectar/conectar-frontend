@@ -22,7 +22,7 @@ function Routes() {
         <Route path="/masterytools" component={ MasteryTools} />
         <Route path="/createproject" component={ CreateProject} />
         <Route path="/approveproject" component={ ApproveProject} />
-        <Route path="/projects" component={ Projects} />
+        <Route path="/projects/:id" component={ Projects} />
       </BrowserRouter>
     </AuthProvider>
   )
