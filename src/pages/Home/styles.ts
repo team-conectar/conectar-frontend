@@ -7,6 +7,7 @@ export const BodyHome = styled.div`
         scroll-snap-type: y mandatory;
         overflow-y: scroll;
         scroll-behavior:smooth;
+
         >div {
             scroll-snap-align: start;
             height: 100%;
@@ -16,13 +17,27 @@ export const BodyHome = styled.div`
             align-items: center;
         }
         .arrow-bottom{
-            cursor: pointer;
+            height:140px;
+            width:100%;
             position:absolute;
-            bottom:15px;
-            right:50%;
-            font-size:2rem;
-            color:var(--green-bg);
+            bottom:18px;
+            right:0;
+            transition:.5s;
+            display:flex;
+            align-items:flex-end;
+            justify-content:center;
+            a{
+                cursor: pointer;     
+                font-size:2rem;
+                color:var(--green-bg);
+            }
+            :hover{
+                bottom:15px;
+
+            }
         }
+        
+        
         .topo-background {
             width: calc(100vw -18px);
             justify-content: flex-start;
@@ -68,7 +83,7 @@ export const BodyHome = styled.div`
             }
         }
         #introducao {
-            
+            position:relative;
             justify-content: flex-start;
             >aside {
                 display: flex;
@@ -76,7 +91,9 @@ export const BodyHome = styled.div`
                 justify-content: center;
                 width: 99.27vw;
                 background: var(--green);
-                margin: 2rem 0 10% 0;
+                margin: 0 0 15% 0;
+                position:sticky;
+                top:5%;
                 h3 {
                     background: #f1f1f1ff;
                     width: fit-content;
@@ -99,7 +116,7 @@ export const BodyHome = styled.div`
                     flex-direction:column;
                     align-items:flex-start;
                     justify-content:center;
-                    padding:3rem 8% 3rem 20%;
+                    padding:3rem 8% 3rem 23%;
                     transform: skewX(10deg);
                     
                     h4{
@@ -126,6 +143,7 @@ export const BodyHome = styled.div`
                     right:0;
                     transform: rotate(-5deg);
                     background: linear-gradient(350.79deg, #FF5757  20.58%, #FB0927 45.57%);
+                    
                 }
                 .intro-box:before{
                     width:75%;
@@ -174,6 +192,7 @@ export const BodyHome = styled.div`
                         right:0;
                         position:block;
                         align-self:flex-end;
+                        transition:.5s;
                     }
                     legend{
                         align-self:flex-start;
@@ -181,11 +200,15 @@ export const BodyHome = styled.div`
                         padding: 0 .8rem;
                         margin-bottom:.8rem;
                         font:500 2rem Roboto;
+                        transition:.1s;
                     }
                     &:hover{
                         legend{
                             border-left:solid 6px var(--green);
                             padding: 0 calc(.8rem - 2px);
+                        }
+                        img{
+                            margin-right:-35px;
                         }
                     }
                     p{
@@ -204,8 +227,9 @@ export const BodyHome = styled.div`
             }
         }
         #idealizador,#aliado{
+            position:relative;
             >h3{
-                margin: 3rem 0;
+                margin-bottom: 4rem;
                 align-self:flex-end;
                 border-left:solid 4px var(--green);
                 border-right:solid calc(50vw + .8rem) var(--green);
@@ -214,6 +238,8 @@ export const BodyHome = styled.div`
                 font: 700 2rem Roboto;
                 padding: 0 .8rem;
                 width:fit-content;
+                position:sticky;
+                top:6%;
             }
             
             >section{
@@ -241,7 +267,7 @@ export const BodyHome = styled.div`
         }
         #colaborador{
             >h3{
-                margin: 3rem 0;
+                margin: 4rem 0;
                 align-self:flex-start;
                 border-right:solid 4px var(--green);
                 border-left:solid calc(50vw + .8rem) var(--green);
@@ -250,6 +276,8 @@ export const BodyHome = styled.div`
                 font: 700 2rem Roboto;
                 padding: 0 .8rem;
                 width:fit-content;
+                position:sticky;
+                top:6%;
             }
             >section{
                 width:90vw;

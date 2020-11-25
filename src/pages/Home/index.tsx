@@ -52,9 +52,11 @@ function Home() {
             <section className="hero">
               <img src={hero} alt="imagem de redes neurais" />
             </section>
-            <a href="#introducao">
-              <IoIosArrowDown className="arrow-bottom" />
-            </a>
+            <label className="arrow-bottom">
+              <a href="#introducao" >
+                <IoIosArrowDown />
+              </a>
+            </label>
 
           </div>
         </div>
@@ -92,9 +94,11 @@ function Home() {
             </p>
             </section>
           </main>
-          <a href="#perfis">
-            <IoIosArrowDown className="arrow-bottom" />
-          </a>
+          <label className="arrow-bottom">
+            <a href="#perfis">
+              <IoIosArrowDown />
+            </a>
+          </label>
         </div>
         <div id="perfis">
           <legend>Para fazer isso de forma <strong>automatizada</strong> nossos usuários podem escolher aquele(s) tipo(s) de perfil que mais se identificam dentre as seguintes opções:</legend>
@@ -122,7 +126,6 @@ function Home() {
                 fresquinha e revolucionária
               </p>
               <a href="#colaborador">
-
                 <Button theme="primary-green">Saiba mais</Button>
               </a>
             </aside>
@@ -140,9 +143,11 @@ function Home() {
               </a>
             </aside>
           </section>
-          <a href="#idealizador">
-            <IoIosArrowDown className="arrow-bottom" />
-          </a>
+          <label className="arrow-bottom">
+            <a href="#idealizador">
+              <IoIosArrowDown />
+            </a>
+          </label>
         </div>
         <div id="idealizador">
 
@@ -163,9 +168,11 @@ function Home() {
               </aside>
             </div>
           </section>
-          <a href="#colaborador">
-            <IoIosArrowDown className="arrow-bottom" />
-          </a>
+          <label className="arrow-bottom">
+            <a href="#colaborador">
+              <IoIosArrowDown />
+            </a>
+          </label>
         </div>
 
         <div id="colaborador">
@@ -187,9 +194,11 @@ function Home() {
             </div>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
+          <label className="arrow-bottom">
           <a href="#aliado">
-            <IoIosArrowDown className="arrow-bottom" />
+            <IoIosArrowDown/>
           </a>
+          </label>
         </div>
         <div id="aliado">
           <h3>Aliado</h3>
@@ -209,9 +218,12 @@ function Home() {
               </aside>
             </div>
           </section>
-          <a href="#rodape">
-            <IoIosArrowDown className="arrow-bottom" />
-          </a>
+          <label className="arrow-bottom">
+
+            <a href="#rodape">
+              <IoIosArrowDown />
+            </a>
+          </label>
         </div>
 
         <div id="rodape">
@@ -238,7 +250,7 @@ function Home() {
               <a href="https://www.instagram.com/boraconectar/">
                 <AiOutlineInstagram />
                 <span>/boraconectar</span>
-                </a>
+              </a>
               <a href='https://www.linkedin.com/company/boraconectar/'>
                 <FaLinkedinIn />
                 <span>/company/boraconectar</span>
