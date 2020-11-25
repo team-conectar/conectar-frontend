@@ -19,7 +19,7 @@ export default function useAuth() {
   }
 
   async function handleLogout() {
-    await api.post('/logout');
+    await api.post('/api/logout');
     setIsAuthenticated(false);
   }
 
