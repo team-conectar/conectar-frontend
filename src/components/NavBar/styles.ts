@@ -9,7 +9,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
 width:100%;
 padding:0 1.8rem;
 margin:0;
-background:white;
+background:#f1f1f1ff;
 display: flex;
 justify-content:space-between;
 align-items: center;
@@ -17,7 +17,7 @@ height:45px;
 img {
     width: 12rem;
 }
-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
 .searchBlock {
     border: 2px solid var(--green);
     height: 2rem;
@@ -35,6 +35,8 @@ box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
         padding: 0 0.6rem;
     }
     button {
+        display: flex;
+        align-items: center;
         border: 0;
         background: transparent;
         padding: 0 0.4rem;
@@ -86,7 +88,7 @@ aside {
       display: inline-block;
       #user,#notification{
             border:0;
-            background: white;
+            background: transparent;
             padding: .4rem;
             font-size: 18px;
             cursor: pointer;
