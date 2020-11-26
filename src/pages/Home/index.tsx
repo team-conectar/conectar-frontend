@@ -12,6 +12,9 @@ import card_aliado from '../../assets/image/card_aliado.svg';
 import colaborador from '../../assets/image/colaborador.svg';
 import idealizador from '../../assets/image/idealizador.svg';
 import aliado from '../../assets/image/aliado.svg';
+import passos_colaborador from '../../assets/image/passos_colaborador.svg';
+import passos_idealizador from '../../assets/image/passos_idealizador.svg';
+import passos_aliado from '../../assets/image/passos_aliado.svg';
 import curtiu from '../../assets/image/curtiu.svg';
 import migos from '../../assets/image/migos.svg';
 import logo from '../../assets/image/logo.svg';
@@ -164,9 +167,31 @@ function Home() {
                 um investimento. Tudo isso de forma automatizada. Basta seguir este tutorial:
               </p>
               <aside>
-
+                <section>
+                  <legend>Passo 01</legend>
+                  <p>Faça uma conta e crie um novo projeto</p>
+                </section>
+                <section>
+                  <legend>Passo 02</legend>
+                  <p>
+                    Adicione as vagas disponíveis no
+                    projeto e as habilidades que os
+                    candidatos devem dominar pra
+                    botar pra quebrar nessa parada
+                  </p>
+                </section>
+                <section>
+                  <legend>Passo 03</legend>
+                  <p>
+                    Convide os candidatos do time
+                    selecionado para o que você
+                    precisa e após o aceite tenha
+                    seu time perfeito
+                  </p>
+                </section>
               </aside>
             </div>
+              <Button theme="primary-green">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
             <a href="#colaborador">
@@ -189,15 +214,37 @@ function Home() {
                 esforço para se aprender algo novo. Basta seguir este tutorial:
               </p>
               <aside>
-
+                <section>
+                  <legend>Passo 01</legend>
+                  <p>Faça uma conta e nos conte sobre suas experiências</p>
+                </section>
+                <section>
+                  <legend>Passo 02</legend>
+                  <p>
+                    Adicione suas áreas de atuação,
+                    suas habilidades e as
+                    ferramentas que você conhece
+                    de cabo a rabo
+                  </p>
+                </section>
+                <section>
+                  <legend>Passo 03</legend>
+                  <p>
+                    Agora sim, além de ser um
+                    candidato dos projetos daqui
+                    você pode demonstrar interesse
+                    nos que achar top
+                  </p>
+                </section>
               </aside>
             </div>
+              <Button theme="primary-green">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
           <label className="arrow-bottom">
-          <a href="#aliado">
-            <IoIosArrowDown/>
-          </a>
+            <a href="#aliado">
+              <IoIosArrowDown />
+            </a>
           </label>
         </div>
         <div id="aliado">
@@ -214,9 +261,31 @@ function Home() {
                 para a comunidade e quem sabe até pro seu bolso. Basta seguir este tutorial:
               </p>
               <aside>
-
+                <section>
+                  <legend>Passo 01</legend>
+                  <p>Faça uma conta e nos conte suas experiências</p>
+                </section>
+                <section>
+                  <legend>Passo 02</legend>
+                  <p>
+                    Adicione suas áreas de atuação,
+                    suas habilidades e as
+                    ferramentas que você conhece
+                    de cabo a rabo
+                  </p>
+                </section>
+                <section>
+                  <legend>Passo 03</legend>
+                  <p>
+                    Agora sim, além de ser um
+                    candidato aos projetos daqui
+                    você pode demonstrar interesse
+                    nos que achar top
+                  </p>
+                </section>
               </aside>
             </div>
+              <Button theme="primary-green">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
 
@@ -232,7 +301,7 @@ function Home() {
             <strong> explorar </strong>
             e
             <strong> interagir </strong>
-            com os projetos publicados por aqui<br />
+            com os projetos publicados por aqui.<br />
             Sinceramente, só falta
             <strong> você </strong>
           </p>

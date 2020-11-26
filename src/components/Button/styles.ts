@@ -6,8 +6,7 @@ interface PropsBodyButton {
 export const BodyButton = styled.button<PropsBodyButton>`
   display: flex;
   align-items: center;
-  justify-content: center;
-  align-self:center;  
+  justify-content: center; 
   border-radius:1.2rem; 
   font:500 1rem Roboto;
   cursor: pointer;
