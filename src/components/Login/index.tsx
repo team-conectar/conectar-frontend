@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useCallback, ChangeEvent } from 'react';
+import React, { FormEvent, useState, useCallback, useRef } from 'react';
 import { BodyLogin } from './styles';
 import { Link } from 'react-router-dom';
 import Input from '../Input';
@@ -10,26 +10,20 @@ import Button from '../Button';
 import api from "../../services/api";
 import { AxiosError } from 'axios';
 import { useHistory } from "react-router";
-
-
-import { inputChange } from '../../utils/inputChange';
+import * as Yup from 'yup';
+import { FormHandles } from '@unform/core';
+import getValidationErrors from '../../utils/getValidationErrors';
 interface loginProps {
   onSuccessLogin(): void;
 }
-interface PessoaType {
-
-  colaborador: boolean;
-  idealizador: boolean;
-  aliado: boolean;
-
+interface SignInFormData {
+  email: string;
+  senha: string;
 }
+
 const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   const history = useHistory();
-  const [logged, setLogged] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    senha: ''
-  });
+  const formRef = useRef<FormHandles>(null);
   /**This function checks the profile is idealizer, collaborator or ally, then redirects to registration these */
   async function checkProfileType() {
     const { aliado, colaborador, idealizador } = (await api.get("/api/v1/pessoas/me")).data;
@@ -44,7 +38,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
     const res = await api
       .post(`/api/login?provider=facebook`, {
         email,
-        "nome":name,
+        "nome": name,
         foto_perfil
       })
       .then(() => {
@@ -57,8 +51,6 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       });
 
     console.log(res);
-
-
 
   }
   const responseGoogle = async (response: GoogleLoginResponse | any) => {
@@ -75,59 +67,67 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       });
     console.log(res);
   }
+  const handleSubmit = useCallback(
+    async (formData: SignInFormData) => {
+      console.log(formData);
+      formRef.current?.setErrors({});
 
-  const handleInputChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    inputChange(event, setFormData, formData);
-  }, [formData]);
 
-  async function handleSubmit(event: FormEvent) {
-    /**
-     * Handle form submition by creating FormData object, appends
-     * data from formData state and send it to backend by using axios
-     * @param {FormEvent} event
-     */
+      try {
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .email('Informe um email válido')
+            .required('E-mail é obrigatório'),
+          password: Yup.string().min(8).required('Senha obrigatória'),
+        });
 
-    event.preventDefault();
+        await schema.validate(formData, {
+          abortEarly: false,
+        });
 
-    const { email, senha } = formData;
-    const data = new FormData();
-    console.log(`email = ${email}, senha = ${senha}`);
-    data.append('username', email);
-    data.append('password', senha);
+        const data = new FormData();
+        data.append('username', formData.email);
+        data.append('password', formData.senha);
 
-    const res = await api
-      .post('/api/token', data)
-      .then(onSuccessLogin)
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail;
-      });
+         await api.post('/api/token', data)
+          .then(onSuccessLogin)
+          .catch((err: AxiosError) => {
+            // Returns error message from backend
+            return err?.response?.data.detail;
+          });
 
-    console.log(res);
+        
 
-    // DO SOMETHING
-  }
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(error);
+
+          formRef.current?.setErrors(errors);
+          alert(error)
+          return;
+        }
+
+
+      }
+    },
+    [onSuccessLogin],
+  );
+
 
   return (
-    <BodyLogin onSubmit={handleSubmit}>
+    <BodyLogin onSubmit={handleSubmit} ref={formRef}>
       <Input
-        mask=""
         id="email"
         name="email"
         label="E-mail ou nome de usuário"
-        required
-        onChange={handleInputChange}
       />
       <Input
-        mask=""
         id="senha"
         name="senha"
         type="password"
         label="Senha"
         subLabel="Esqueceu a senha?"
         pathSubLabel="#"
-        required
-        onChange={handleInputChange}
       />
       <Button
         type="submit"

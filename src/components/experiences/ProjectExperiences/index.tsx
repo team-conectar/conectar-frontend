@@ -1,20 +1,21 @@
 
-import React, { ChangeEvent, FormEvent, useState, useCallback, useEffect, OptionHTMLAttributes } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useCallback, useEffect, OptionHTMLAttributes, useRef } from 'react';
 import Input from '../../Input';
 import Textarea from '../../Textarea';
 import Select from '../../Select';
 import ToggleSwitch from '../../ToggleSwitch';
 import Button from '../../Button';
 import { BodyExperiences } from '../styles';
-import { inputChange } from "../../../utils/inputChange";
-import { selectChange } from "../../../utils/selectChange";
-import { textareaChange } from "../../../utils/textareaChange";
 import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
 import { AxiosError } from "axios";
 import api from "../../../services/api";
 import edit from '../../../assets/icon/editar.svg';
 import trash from '../../../assets/icon/lixeira.svg';
 import Modal from "../../Modal";
+import * as Yup from 'yup';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import getValidationErrors from '../../../utils/getValidationErrors';
 interface ProjectType {
   id: number;
   nome: string,
@@ -37,7 +38,7 @@ interface ProjectDataType {
   finalMonth: any;
 }
 const ProjectExperiences: React.FC = () => {
-
+  const formRef = useRef<FormHandles>(null);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [projectRecords, setProjectRecords] = useState<ProjectType[]>([]);
   // gets the editing experience id
@@ -96,167 +97,106 @@ const ProjectExperiences: React.FC = () => {
 
 
   }
-  /**
-   * The useCallback hook will act as the bind method so we can
-   * use the generalized function in this scope. Note that memoization
-   * doesn't actually improve performance here
-   * reference: https://reactjs.org/docs/hooks-reference.html#usecallback
-   */
 
-  async function handleProjectSubmit(event: FormEvent) {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (formData: ProjectDataType) => {
 
-    const {
-      currentProject,
-      nome,
-      cargo,
-      descricao,
-      finalYear,
-      initialYear,
-      finalMonth,
-      initialMonth,
-      situacao,
-    }: ProjectDataType = projectFormData;
-    //setting to null because if there a update an experience with an existing data_fim it will not send
-    let data_fim = null;
-    const data_inicio = `${initialYear}-${initialMonth}-01`;
+      const {
+        currentProject,
+        nome,
+        cargo,
+        descricao,
+        finalYear,
+        initialYear,
+        finalMonth,
+        initialMonth,
+        situacao,
+      } = formData;
+      //setting to null because if there a update an experience with an existing data_fim it will not send
+      let data_fim = null;
+      const data_inicio = `${initialYear}-${initialMonth}-01`;
 
-    if (!currentProject) {
-      data_fim = `${finalYear}-${finalMonth}-01`;
+      if (!currentProject) {
+        data_fim = `${finalYear}-${finalMonth}-01`;
+      }
+
+
+      const data = {
+        nome,
+        descricao,
+        data_inicio,
+        data_fim,
+        cargo,
+        situacao,
+      };
+      console.log(data);
+      /**
+       * Sends data to backend
+       * It's important to notice the withCredentials being true here
+       * so it will send the JWT token as cookie
+       * */
+      const res = editingId
+        ? await api
+          .put(`/api/v1/experiencias/projeto/${editingId}`, data, {
+            withCredentials: true,
+          })
+          .then(() => {
+            setShowRegister(false);
+            setEditingId(0);
+            setProjectFormData(initialProjectData);
+          })
+          .catch((err: AxiosError) => {
+            // Returns error message from backend
+            return err?.response?.data.detail;
+          })
+        : await api
+          .post("/api/v1/experiencias/projeto", data, {
+            withCredentials: true,
+          })
+          .then(() => {
+            setShowRegister(false);
+            setEditingId(0);
+            setProjectFormData(initialProjectData);
+          })
+          .catch((err: AxiosError) => {
+            // Returns error message from backend
+            return err?.response?.data.detail;
+          });
+      console.log(res);
+
+      // Do something
     }
-
-
-    const data = {
-      nome,
-      descricao,
-      data_inicio,
-      data_fim,
-      cargo,
-      situacao,
-    };
-    console.log(data);
-    /**
-     * Sends data to backend
-     * It's important to notice the withCredentials being true here
-     * so it will send the JWT token as cookie
-     * */
-    const res = editingId
-      ? await api
-        .put(`/api/v1/experiencias/projeto/${editingId}`, data, {
-          withCredentials: true,
-        })
-        .then(() => {
-          setShowRegister(false);
-          setEditingId(0);
-          setProjectFormData(initialProjectData);
-        })
-        .catch((err: AxiosError) => {
-          // Returns error message from backend
-          return err?.response?.data.detail;
-        })
-      : await api
-        .post("/api/v1/experiencias/projeto", data, {
-          withCredentials: true,
-        })
-        .then(() => {
-          setShowRegister(false);
-          setEditingId(0);
-          setProjectFormData(initialProjectData);
-        })
-        .catch((err: AxiosError) => {
-          // Returns error message from backend
-          return err?.response?.data.detail;
-        });
-    console.log(res);
-
-    // Do something
-  }
+  ,[]);
   function handleEditExperience(experience: ProjectType) {
-    const {
-      id,
-      nome,
-      descricao,
-      data_inicio,
-      data_fim,
-      cargo,
-      situacao,
-    }: ProjectType = experience;
+      const {
+        id,
+        nome,
+        descricao,
+        data_inicio,
+        data_fim,
+        cargo,
+        situacao,
+      }: ProjectType = experience;
 
-    const [initialYear, initialMonth] = data_inicio.split("-");
+      const [initialYear, initialMonth] = data_inicio.split("-");
 
-    const data = {
-      nome,
-      cargo,
-      descricao,
-      initialYear,
-      initialMonth,
-      situacao,
-      currentProject: data_fim ? false : true,
-      finalYear: data_fim ? data_fim.split("-")[0] : data_fim,
-      finalMonth: data_fim ? data_fim.split("-")[1] : data_fim,
-    };
+      const data = {
+        nome,
+        cargo,
+        descricao,
+        initialYear,
+        initialMonth,
+        situacao,
+        currentProject: data_fim ? false : true,
+        finalYear: data_fim ? data_fim.split("-")[0] : data_fim,
+        finalMonth: data_fim ? data_fim.split("-")[1] : data_fim,
+      };
 
 
-    setShowRegister(true);
-    setEditingId(id);
-    setProjectFormData(data);
-
-  }
-  const handleInputChange = useCallback(
-    (
-      event: ChangeEvent<HTMLInputElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      inputChange(event, setFormData, formData);
-    },
-    []
-  );
-
-  const handleTextAreaChange = useCallback(
-    (
-      event: ChangeEvent<HTMLTextAreaElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      textareaChange(event, setFormData, formData);
-    },
-    []
-  );
-
-  const handleSelectChange = useCallback(
-    (
-      event: ChangeEvent<HTMLSelectElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      selectChange(event, setFormData, formData);
-    },
-    []
-  );
-
-  function handleProjectInputChange(event: ChangeEvent<HTMLInputElement>) {
-    handleInputChange(
-      event,
-      setProjectFormData,
-      projectFormData
-    );
-  }
-  function handleProjectSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    handleSelectChange(
-      event,
-      setProjectFormData,
-      projectFormData
-    );
-  }
-  function handleProjectTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    handleTextAreaChange(
-      event,
-      setProjectFormData,
-      projectFormData
-    );
-  }
-
+      setShowRegister(true);
+      setEditingId(id);
+      setProjectFormData(data);
+    }
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
@@ -331,19 +271,17 @@ const ProjectExperiences: React.FC = () => {
           </button>
         </div>
       ) : (
-          <form
+          <Form
             className="form--experiencia"
-            onSubmit={handleProjectSubmit}
+            onSubmit={handleSubmit}
+            ref={formRef}
           >
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
-                  mask=""
                   label="Nome do projeto"
                   name="nome"
-                  onChange={handleProjectInputChange}
                   defaultValue={projectFormData?.nome}
-                  required
                 />
               </section>
               <section className="bloco-dois">
@@ -351,18 +289,13 @@ const ProjectExperiences: React.FC = () => {
                   label="Situação"
                   name="situacao"
                   options={situacao}
-                  onChange={handleProjectSelectChange}
                   defaultOption={projectFormData?.situacao || "Selecione"}
-                  required
                 />
 
                 <Input
-                  mask=""
                   label="Cargo"
                   name="cargo"
-                  onChange={handleProjectInputChange}
                   defaultValue={projectFormData?.cargo}
-                  required
                 />
               </section>
               <section className="bloco-tres">
@@ -371,17 +304,15 @@ const ProjectExperiences: React.FC = () => {
                     label="Mês inicial"
                     name="initialMonth"
                     options={monthOptions}
-                    onChange={handleProjectSelectChange}
                     defaultOption={toMonth(projectFormData?.initialMonth) || "Selecione"}
-                    required
+
                   />
                   <Select
                     label="Ano inicial"
                     name="initialYear"
                     options={yearOptions}
-                    onChange={handleProjectSelectChange}
                     defaultOption={projectFormData?.initialYear || "Selecione"}
-                    required
+
                   />
                 </aside>
                 <aside>
@@ -389,7 +320,6 @@ const ProjectExperiences: React.FC = () => {
                     label="Estou nesse projeto atualmente"
                     name="currentProject"
                     id="currentProject"
-                    onChange={handleProjectInputChange}
                     defaultChecked={projectFormData?.currentProject}
                   />
                 </aside>
@@ -399,21 +329,19 @@ const ProjectExperiences: React.FC = () => {
                       label="Mês final"
                       name="finalMonth"
                       options={monthOptions}
-                      onChange={handleProjectSelectChange}
                       defaultOption={toMonth(projectFormData?.finalMonth) || "Selecione"}
-                      required
+
                     />
                     <Select
                       label="Ano final"
                       name="finalYear"
                       options={finalYearOptions(Number(projectFormData.initialYear))}
-                      onChange={handleProjectSelectChange}
                       defaultOption={
                         Number(projectFormData?.finalYear) > Number(projectFormData?.initialYear)
                           ? projectFormData.finalYear
                           : "Selecione"
                       }
-                      required
+
                     />
                   </aside>
                 )}
@@ -422,9 +350,7 @@ const ProjectExperiences: React.FC = () => {
                 <Textarea
                   name="descricao"
                   label="Detalhes"
-                  onChange={handleProjectTextAreaChange}
                   defaultValue={projectFormData?.descricao}
-                  required
                 />
               </section>
               <section className="area-botoes">
@@ -455,7 +381,7 @@ const ProjectExperiences: React.FC = () => {
                 </Button>
               </section>
             </aside>
-          </form>
+          </Form>
         )}
     </BodyExperiences>
   );

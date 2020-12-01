@@ -1,8 +1,8 @@
 import styled from 'styled-components';
+import { Form } from '@unform/web';
 
 
-
-export const BodyLogin = styled.form`
+export const BodyLogin = styled(Form)`
   display:flex;
   flex-direction:column;
   align-items:center;

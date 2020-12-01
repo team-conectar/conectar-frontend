@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent,
+  useRef,
   FormEvent,
   useState,
   useEffect,
@@ -16,11 +16,15 @@ import { inputChange } from "../../../utils/inputChange";
 import { selectChange } from "../../../utils/selectChange";
 import { textareaChange } from "../../../utils/textareaChange";
 import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
-import  { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import api from "../../../services/api";
 import edit from "../../../assets/icon/editar.svg";
 import trash from "../../../assets/icon/lixeira.svg";
 import Modal from "../../Modal";
+import * as Yup from 'yup';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import getValidationErrors from '../../../utils/getValidationErrors';
 interface ProfessionalType {
   id: number;
   organizacao: string;
@@ -43,6 +47,7 @@ interface ProfessionalDataType {
   finalMonth: any;
 }
 const ProfessionalExperiences: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [professionalRecords, setProfessionalRecords] = useState<ProfessionalType[]>([]);
   // gets the editing experience id
@@ -101,9 +106,9 @@ const ProfessionalExperiences: React.FC = () => {
 
   }
 
+  const handleSubmit = useCallback(
+  async (formData: ProfessionalDataType) => {
 
-  async function handleProfessionalSubmit(event: FormEvent) {
-    event.preventDefault();
 
     const {
       vinculo,
@@ -170,7 +175,7 @@ const ProfessionalExperiences: React.FC = () => {
     console.log(res);
 
     // Do something
-  }
+  },[]);
   function handleEditExperience(experience: ProfessionalType) {
 
     const {
@@ -202,63 +207,6 @@ const ProfessionalExperiences: React.FC = () => {
     setEditingId(id);
     setProfessionalFormData(data);
 
-  }
-  const handleInputChange = useCallback(
-    (
-      event: ChangeEvent<HTMLInputElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      inputChange(event, setFormData, formData);
-    },
-    []
-  );
-
-  const handleTextAreaChange = useCallback(
-    (
-      event: ChangeEvent<HTMLTextAreaElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      textareaChange(event, setFormData, formData);
-    },
-    []
-  );
-
-  const handleSelectChange = useCallback(
-    (
-      event: ChangeEvent<HTMLSelectElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      selectChange(event, setFormData, formData);
-    },
-    []
-  );
-  function handleProfessionalInputChange(event: ChangeEvent<HTMLInputElement>) {
-    handleInputChange(
-      event,
-      setProfessionalFormData,
-      professionalFormData
-    );
-  }
-  function handleProfessionalSelectChange(
-    event: ChangeEvent<HTMLSelectElement>
-  ) {
-    handleSelectChange(
-      event,
-      setProfessionalFormData,
-      professionalFormData
-    );
-  }
-  function handleProfessionalTextAreaChange(
-    event: ChangeEvent<HTMLTextAreaElement>
-  ) {
-    handleTextAreaChange(
-      event,
-      setProfessionalFormData,
-      professionalFormData
-    );
   }
   return (
     <BodyExperiences>
@@ -327,27 +275,22 @@ const ProfessionalExperiences: React.FC = () => {
           </button>
         </div>
       ) : (
-          <form
+          <Form
             className="form--experiencia"
-            onSubmit={handleProfessionalSubmit}
+            onSubmit={handleSubmit}
+            ref={formRef}
           >
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
-                  mask=""
                   label="Organização"
                   name="organizacao"
-                  onChange={handleProfessionalInputChange}
                   defaultValue={professionalFormData?.organizacao}
-                  required
                 />
                 <Input
-                  mask=""
                   label="Cargo"
                   name="cargo"
-                  onChange={handleProfessionalInputChange}
                   defaultValue={professionalFormData?.cargo}
-                  required
                 />
               </section>
               <section className="bloco-dois">
@@ -356,8 +299,6 @@ const ProfessionalExperiences: React.FC = () => {
                   name="vinculo"
                   options={vinculos}
                   defaultOption={professionalFormData?.vinculo || "Selecione"}
-                  onChange={handleProfessionalSelectChange}
-                  required
                 />
               </section>
               <section className="bloco-tres">
@@ -367,16 +308,14 @@ const ProfessionalExperiences: React.FC = () => {
                     name="initialMonth"
                     options={monthOptions}
                     defaultOption={toMonth(professionalFormData.initialMonth) || "Selecione"}
-                    onChange={handleProfessionalSelectChange}
-                    required
+
                   />
                   <Select
                     label="Ano inicial"
                     name="initialYear"
                     options={yearOptions}
                     defaultOption={professionalFormData?.initialYear || "Selecione"}
-                    onChange={handleProfessionalSelectChange}
-                    required
+
                   />
                 </aside>
                 <aside>
@@ -384,7 +323,6 @@ const ProfessionalExperiences: React.FC = () => {
                     label="Trabalho atual"
                     name="currentWorking"
                     id="currentWorking"
-                    onChange={handleProfessionalInputChange}
                     defaultChecked={professionalFormData?.currentWorking}
                   />
                 </aside>
@@ -396,16 +334,14 @@ const ProfessionalExperiences: React.FC = () => {
                       name="finalMonth"
                       options={monthOptions}
                       defaultOption={toMonth(professionalFormData?.finalMonth) || "Selecione"}
-                      onChange={handleProfessionalSelectChange}
-                      required
+
                     />
                     <Select
                       label="Ano final"
                       name="finalYear"
                       options={finalYearOptions(Number(professionalFormData.initialYear))}
                       defaultOption={Number(professionalFormData?.finalYear) > Number(professionalFormData?.initialYear) ? professionalFormData.finalYear : "Selecione"}
-                      onChange={handleProfessionalSelectChange}
-                      required
+
                     />
                   </aside>
                 )}
@@ -414,9 +350,7 @@ const ProfessionalExperiences: React.FC = () => {
                 <Textarea
                   name="descricao"
                   label="Detalhes"
-                  onChange={handleProfessionalTextAreaChange}
                   defaultValue={professionalFormData?.descricao}
-                  required
                 />
               </section>
               <section className="area-botoes">
@@ -451,7 +385,7 @@ const ProfessionalExperiences: React.FC = () => {
               </Button>
               </section>
             </aside>
-          </form>
+          </Form>
         )}
     </BodyExperiences>
   );

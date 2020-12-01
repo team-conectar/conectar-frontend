@@ -12,6 +12,9 @@ import card_aliado from '../../assets/image/card_aliado.svg';
 import colaborador from '../../assets/image/colaborador.svg';
 import idealizador from '../../assets/image/idealizador.svg';
 import aliado from '../../assets/image/aliado.svg';
+import passos_colaborador from '../../assets/image/passos_colaborador.svg';
+import passos_idealizador from '../../assets/image/passos_idealizador.svg';
+import passos_aliado from '../../assets/image/passos_aliado.svg';
 import curtiu from '../../assets/image/curtiu.svg';
 import migos from '../../assets/image/migos.svg';
 import logo from '../../assets/image/logo.svg';
@@ -42,15 +45,15 @@ function Home() {
         <div className="topo-background">
           <NavBar />
           <div className="container topo">
+            <section className="hero">
+              <img src={hero} alt="imagem de redes neurais" />
+            </section>
             <section className="area-login">
               <h1>Encontre o </h1>
               <h1>time ideal</h1>
               <Login
                 onSuccessLogin={() => { setShowModal(true); handleLogin(true) }}
               />
-            </section>
-            <section className="hero">
-              <img src={hero} alt="imagem de redes neurais" />
             </section>
             <label className="arrow-bottom">
               <a href="#introducao" >
@@ -102,47 +105,72 @@ function Home() {
         </div>
         <div id="perfis">
           <legend>Para fazer isso de forma <strong>automatizada</strong> nossos usuários podem escolher aquele(s) tipo(s) de perfil que mais se identificam dentre as seguintes opções:</legend>
-          <section className="area-cards">
-            <aside>
-              <img src={card_idealizador} alt="Idealizador" />
-              <legend>Idealizador</legend>
-              <p>
-                Põe pra jogo sua ideia inovadora,
-                adicione os detalhes do seu projeto e encontre
-                o time perfeito para tirar sua ideia do papel e
-                finalmente colocá-la em prática.
-              </p>
-              <a href="#idealizador">
-                <Button theme="primary-green">Saiba mais</Button>
-              </a>
-            </aside>
-            <aside>
-              <img src={card_colaborador} alt="Colaborador" />
-              <legend>Colaborador</legend>
-              <p>
-                Relatando suas experiências e habilidades
-                você pode ser selecionado para fazer parte de
-                um time que botou no mundo uma ideia
-                fresquinha e revolucionária
-              </p>
-              <a href="#colaborador">
-                <Button theme="primary-green">Saiba mais</Button>
-              </a>
-            </aside>
-            <aside>
-              <img src={card_aliado} alt="Aliado" />
-              <legend>Aliado</legend>
-              <p>
-                Conta pra gente suas experiências
-                e habilidades e apoie empreendedores
-                acompanhando a transformação de
-                pequenas ideias em grandes realizações.
+          <main>
+
+            <section className="area-cards">
+              <input type="radio" id="radIdea" name="perfil" value="idealizador" defaultChecked />
+              <aside>
+                <label htmlFor="radIdea">
+                  <div>
+
+                    <img src={card_idealizador} alt="Idealizador" />
+                    <legend>Idealizador</legend>
+                  </div>
+                </label>
+                <div className="descricao">
+                  <p>
+                    Põe pra jogo sua ideia inovadora,
+                    adicione os detalhes do seu projeto e encontre
+                    o time perfeito para tirar sua ideia do papel e
+                    finalmente colocá-la em prática.
+                  </p>
+                  <a href="#idealizador">
+                    <Button theme="primary-green">Saiba mais</Button>
+                  </a>
+                </div>
+              </aside>
+              <input type="radio" id="radColab" name="perfil" value="colaborador" />
+              <aside className="teste">
+                <label htmlFor="radColab">
+                  <div>
+                    <img src={card_colaborador} alt="Colaborador" />
+                    <legend>Colaborador</legend>
+                  </div>
+                </label>
+                <div className="descricao">
+                  <p>
+                    Relatando suas experiências e habilidades
+                    você pode ser selecionado para fazer parte de
+                    um time que botou no mundo uma ideia
+                    fresquinha e revolucionária
+                  </p>
+                  <a href="#colaborador">
+                    <Button theme="primary-green">Saiba mais</Button>
+                  </a>
+                </div>
+              </aside>
+              <input type="radio" id="radAlia" name="perfil" value="aliado" />
+              <aside>
+                <label htmlFor="radAlia">
+                  <div>
+                    <img src={card_aliado} alt="Aliado" />
+                    <legend>Aliado</legend>
+                  </div>
+                </label>
+                <div className="descricao">
+                  <p>
+                    Conta pra gente suas experiências
+                    e habilidades e apoie empreendedores
+                    acompanhando a transformação de
+                    pequenas ideias em grandes realizações.
                 </p>
-              <a href="#aliado">
-                <Button theme="primary-green">Saiba mais</Button>
-              </a>
-            </aside>
-          </section>
+                  <a href="#aliado">
+                    <Button theme="primary-green">Saiba mais</Button>
+                  </a>
+                </div>
+              </aside>
+            </section>
+          </main>
           <label className="arrow-bottom">
             <a href="#idealizador">
               <IoIosArrowDown />
@@ -164,9 +192,31 @@ function Home() {
                 um investimento. Tudo isso de forma automatizada. Basta seguir este tutorial:
               </p>
               <aside>
-
+                <section>
+                  <legend>Passo 01</legend>
+                  <p>Faça uma conta e crie um novo projeto</p>
+                </section>
+                <section>
+                  <legend>Passo 02</legend>
+                  <p>
+                    Adicione as vagas disponíveis no
+                    projeto e as habilidades que os
+                    candidatos devem dominar pra
+                    botar pra quebrar nessa parada
+                  </p>
+                </section>
+                <section>
+                  <legend>Passo 03</legend>
+                  <p>
+                    Convide os candidatos do time
+                    selecionado para o que você
+                    precisa e após o aceite tenha
+                    seu time perfeito
+                  </p>
+                </section>
               </aside>
             </div>
+            <Button theme="primary-green">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
             <a href="#colaborador">
@@ -189,15 +239,37 @@ function Home() {
                 esforço para se aprender algo novo. Basta seguir este tutorial:
               </p>
               <aside>
-
+                <section>
+                  <legend>Passo 01</legend>
+                  <p>Faça uma conta e nos conte sobre suas experiências</p>
+                </section>
+                <section>
+                  <legend>Passo 02</legend>
+                  <p>
+                    Adicione suas áreas de atuação,
+                    suas habilidades e as
+                    ferramentas que você conhece
+                    de cabo a rabo
+                  </p>
+                </section>
+                <section>
+                  <legend>Passo 03</legend>
+                  <p>
+                    Agora sim, além de ser um
+                    candidato dos projetos daqui
+                    você pode demonstrar interesse
+                    nos que achar top
+                  </p>
+                </section>
               </aside>
             </div>
+            <Button theme="primary-green">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
           <label className="arrow-bottom">
-          <a href="#aliado">
-            <IoIosArrowDown/>
-          </a>
+            <a href="#aliado">
+              <IoIosArrowDown />
+            </a>
           </label>
         </div>
         <div id="aliado">
@@ -214,9 +286,31 @@ function Home() {
                 para a comunidade e quem sabe até pro seu bolso. Basta seguir este tutorial:
               </p>
               <aside>
-
+                <section>
+                  <legend>Passo 01</legend>
+                  <p>Faça uma conta e nos conte suas experiências</p>
+                </section>
+                <section>
+                  <legend>Passo 02</legend>
+                  <p>
+                    Adicione suas áreas de atuação,
+                    suas habilidades e as
+                    ferramentas que você conhece
+                    de cabo a rabo
+                  </p>
+                </section>
+                <section>
+                  <legend>Passo 03</legend>
+                  <p>
+                    Agora sim, além de ser um
+                    candidato aos projetos daqui
+                    você pode demonstrar interesse
+                    nos que achar top
+                  </p>
+                </section>
               </aside>
             </div>
+            <Button theme="primary-green">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
 
@@ -232,7 +326,7 @@ function Home() {
             <strong> explorar </strong>
             e
             <strong> interagir </strong>
-            com os projetos publicados por aqui<br />
+            com os projetos publicados por aqui.<br />
             Sinceramente, só falta
             <strong> você </strong>
           </p>
