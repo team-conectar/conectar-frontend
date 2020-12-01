@@ -1,33 +1,49 @@
-import React, { SelectHTMLAttributes, OptionHTMLAttributes,InputHTMLAttributes } from 'react';
-import { BodySelect } from './styles';
+import { BodySelect} from './styles';
 // import { Link } from 'react-router-dom';
-import SelectReact, { NamedProps, OptionTypeBase, Props } from "react-select";
 import makeAnimated from 'react-select/animated';
-
-interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement>{
+import React, { useRef, useEffect } from 'react';
+import ReactSelect, {
+  OptionTypeBase,
+  Props as SelectProps,
+} from 'react-select';
+import { useField } from '@unform/core';
+interface Props extends SelectProps<OptionTypeBase>{
   name: string;
   label?: string;
-  value?: any;
-  defaultOption?: any;
-  options: Array<OptionHTMLAttributes<HTMLOptionElement>>;
-  isMulti?: boolean;
 }
-const Select: React.FC<SelectProps> = ({ name, value, isMulti, label, options, defaultOption, ...rest }) => {
+const Select: React.FC<Props> = ({ name, label, ...rest }) => {
   const animatedComponents = makeAnimated();
-
+  const selectRef = useRef(null);
+  const { fieldName, defaultValue, registerField, error } = useField(name);
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: selectRef.current,
+      getValue: (ref: any) => {
+        if (rest.isMulti) {
+          if (!ref.state.value) {
+            return [];
+          }
+          return ref.state.value.map((option: OptionTypeBase) => option.value);
+        }
+        if (!ref.state.value) {
+          return '';
+        }
+        return ref.state.value.value;
+      },
+    });
+  }, [fieldName, registerField, rest.isMulti]);
   return (
     <BodySelect>
       <label htmlFor={name}>{label}</label>
       
-      <SelectReact
-        name={name}
-        id={name}
+      <ReactSelect
+        ref={selectRef}
         closeMenuOnSelect={true}
         components={animatedComponents}
-        options={options}
-        placeholder={defaultOption || "Selecione"}
+        placeholder={defaultValue || "Selecione"}
         className="select"
-        isMulti={isMulti}
+        {...rest}
       />
 
     </BodySelect>

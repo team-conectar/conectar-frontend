@@ -277,33 +277,23 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           <form
             className="form-vaga"
           >
-
-
             <Input
-              mask=""
               label="Cargo"
               name="cargo"
               required
-            //onChange={handleAcademicInputChange}
             //defaultValue={academicFormData?.instituicao}
             />
-
-
             <Input
-              mask=""
               label="Perfil"
               name="perfil"
               required
-            //onChange={handleAcademicInputChange}
             //defaultValue={academicFormData?.instituicao}
             />
             <Input
-              mask=""
               label="Quantidade"
               name="quantidade"
               type="number"
               required
-            //onChange={handleAcademicInputChange}
             //defaultValue={academicFormData?.instituicao}
             />
             <div className="bloco-area">
@@ -327,12 +317,9 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
               name="descricao"
               label="Descrição"
               required
-            //onChange={handleAcademicTextAreaChange}
             //defaultValue={academicFormData?.descricao}
             />
             <section className="bloco-contrato">
-
-
               <Select
                 label="Tipo de contrato"
                 options={optionsContrato}
@@ -342,7 +329,6 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
                 label="Remunerado"
                 name="remunerado"
                 id="remunerado"
-              // onChange={handleAcademicInputChange}
               //defaultChecked={
               //  academicFormData &&
               //  academicFormData?.situacao === "Incompleto"
@@ -359,7 +345,6 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
               </Button>
               <Button
                 theme="secondary-green"
-
               >
                 Excluir
               </Button>

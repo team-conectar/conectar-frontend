@@ -45,15 +45,15 @@ function Home() {
         <div className="topo-background">
           <NavBar />
           <div className="container topo">
+            <section className="hero">
+              <img src={hero} alt="imagem de redes neurais" />
+            </section>
             <section className="area-login">
               <h1>Encontre o </h1>
               <h1>time ideal</h1>
               <Login
                 onSuccessLogin={() => { setShowModal(true); handleLogin(true) }}
               />
-            </section>
-            <section className="hero">
-              <img src={hero} alt="imagem de redes neurais" />
             </section>
             <label className="arrow-bottom">
               <a href="#introducao" >
@@ -105,47 +105,72 @@ function Home() {
         </div>
         <div id="perfis">
           <legend>Para fazer isso de forma <strong>automatizada</strong> nossos usuários podem escolher aquele(s) tipo(s) de perfil que mais se identificam dentre as seguintes opções:</legend>
-          <section className="area-cards">
-            <aside>
-              <img src={card_idealizador} alt="Idealizador" />
-              <legend>Idealizador</legend>
-              <p>
-                Põe pra jogo sua ideia inovadora,
-                adicione os detalhes do seu projeto e encontre
-                o time perfeito para tirar sua ideia do papel e
-                finalmente colocá-la em prática.
-              </p>
-              <a href="#idealizador">
-                <Button theme="primary-green">Saiba mais</Button>
-              </a>
-            </aside>
-            <aside>
-              <img src={card_colaborador} alt="Colaborador" />
-              <legend>Colaborador</legend>
-              <p>
-                Relatando suas experiências e habilidades
-                você pode ser selecionado para fazer parte de
-                um time que botou no mundo uma ideia
-                fresquinha e revolucionária
-              </p>
-              <a href="#colaborador">
-                <Button theme="primary-green">Saiba mais</Button>
-              </a>
-            </aside>
-            <aside>
-              <img src={card_aliado} alt="Aliado" />
-              <legend>Aliado</legend>
-              <p>
-                Conta pra gente suas experiências
-                e habilidades e apoie empreendedores
-                acompanhando a transformação de
-                pequenas ideias em grandes realizações.
+          <main>
+
+            <section className="area-cards">
+              <input type="radio" id="radIdea" name="perfil" value="idealizador" defaultChecked />
+              <aside>
+                <label htmlFor="radIdea">
+                  <div>
+
+                    <img src={card_idealizador} alt="Idealizador" />
+                    <legend>Idealizador</legend>
+                  </div>
+                </label>
+                <div className="descricao">
+                  <p>
+                    Põe pra jogo sua ideia inovadora,
+                    adicione os detalhes do seu projeto e encontre
+                    o time perfeito para tirar sua ideia do papel e
+                    finalmente colocá-la em prática.
+                  </p>
+                  <a href="#idealizador">
+                    <Button theme="primary-green">Saiba mais</Button>
+                  </a>
+                </div>
+              </aside>
+              <input type="radio" id="radColab" name="perfil" value="colaborador" />
+              <aside className="teste">
+                <label htmlFor="radColab">
+                  <div>
+                    <img src={card_colaborador} alt="Colaborador" />
+                    <legend>Colaborador</legend>
+                  </div>
+                </label>
+                <div className="descricao">
+                  <p>
+                    Relatando suas experiências e habilidades
+                    você pode ser selecionado para fazer parte de
+                    um time que botou no mundo uma ideia
+                    fresquinha e revolucionária
+                  </p>
+                  <a href="#colaborador">
+                    <Button theme="primary-green">Saiba mais</Button>
+                  </a>
+                </div>
+              </aside>
+              <input type="radio" id="radAlia" name="perfil" value="aliado" />
+              <aside>
+                <label htmlFor="radAlia">
+                  <div>
+                    <img src={card_aliado} alt="Aliado" />
+                    <legend>Aliado</legend>
+                  </div>
+                </label>
+                <div className="descricao">
+                  <p>
+                    Conta pra gente suas experiências
+                    e habilidades e apoie empreendedores
+                    acompanhando a transformação de
+                    pequenas ideias em grandes realizações.
                 </p>
-              <a href="#aliado">
-                <Button theme="primary-green">Saiba mais</Button>
-              </a>
-            </aside>
-          </section>
+                  <a href="#aliado">
+                    <Button theme="primary-green">Saiba mais</Button>
+                  </a>
+                </div>
+              </aside>
+            </section>
+          </main>
           <label className="arrow-bottom">
             <a href="#idealizador">
               <IoIosArrowDown />
@@ -191,7 +216,7 @@ function Home() {
                 </section>
               </aside>
             </div>
-              <Button theme="primary-green">Criar sua conta</Button>
+            <Button theme="primary-green">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
             <a href="#colaborador">
@@ -238,7 +263,7 @@ function Home() {
                 </section>
               </aside>
             </div>
-              <Button theme="primary-green">Criar sua conta</Button>
+            <Button theme="primary-green">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
           <label className="arrow-bottom">
@@ -285,7 +310,7 @@ function Home() {
                 </section>
               </aside>
             </div>
-              <Button theme="primary-green">Criar sua conta</Button>
+            <Button theme="primary-green">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
 

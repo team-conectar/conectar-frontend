@@ -40,18 +40,7 @@ function CreateProject() {
   const [selectedAreas, setSelectedAreas] = useState<AreaType[]>([]);
   const [idProject, setIdProject] = useState(0);
   const [selectedFile, setSelectedFile] = useState<File>();
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const target = event.target;
-    const { name } = target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
 
-    setFormData({ ...formData, [name]: value });
-  }
-
-  function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  }
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
 
@@ -121,13 +110,8 @@ function CreateProject() {
         <form className="primeira-etapa" onSubmit={handleSubmit}>
           <div className="coluna-um">
             <Input
-              mask=""
               name="nome"
               label="Título do projeto"
-              onChange={handleInputChange}
-              minLength={3}
-              maxLength={50}
-              required
             />
             <div className="upload-img">
               <Dropzone onFileUploaded={setSelectedFile} />
@@ -137,7 +121,6 @@ function CreateProject() {
               name="visibilidade"
               id="visibilidade"
               label="Tornar este projeto privado"
-              onChange={handleInputChange}
               checked={formData.visibilidade}
             />
           </div>
@@ -171,7 +154,6 @@ function CreateProject() {
             <Textarea
               label="Objetivo do projeto"
               name="objetivo"
-              onChange={handleTextAreaChange}
               minLength={3}
               maxLength={500}
               required
@@ -179,7 +161,6 @@ function CreateProject() {
             <Textarea
               label="Descrição simples"
               name="descricao"
-              onChange={handleTextAreaChange}
               minLength={3}
               maxLength={500}
               required

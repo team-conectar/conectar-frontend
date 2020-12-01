@@ -81,7 +81,7 @@ function Projects() {
   }, [projeto_id]);
   useEffect(() => {
     modalContent != initialModalContent && setOpenModal(true);
-  }, [modalContent])
+  }, [initialModalContent, modalContent])
 
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
@@ -122,21 +122,17 @@ function Projects() {
               {modalContent.nome && <Input
                 name="nome"
                 label="Nome do projeto"
-                mask=""
                 defaultValue={project.nome}
-                onChange={handleInputChange}
               />}
               {modalContent.objetivo && <Textarea
                 name="objetivo"
                 label="Objetivo breve do projeto"
                 defaultValue={project.objetivo}
-                onChange={handleTextAreaChange}
               />}
               {modalContent.descricao && <Textarea
                 name="descricao"
                 label="Descrição sobre o projeto"
                 defaultValue={project.descricao}
-                onChange={handleTextAreaChange}
               />}
               {modalContent.areas && <SelectArea
                 label="Selecione as àreas de atuação"

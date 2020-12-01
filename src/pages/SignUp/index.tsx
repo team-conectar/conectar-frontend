@@ -23,6 +23,7 @@ import { daysOptions, monthOptions, yearOptions } from "../../utils/dates";
 import { AxiosError } from 'axios';
 import api from "../../services/api";
 import { createTrue } from "typescript";
+import InputMask from "../../components/InputMask";
 
 interface renderFacebook {
   onClick: () => void;
@@ -193,36 +194,27 @@ function SignUp() {
             <div className="area-form">
               <h1>Criar sua conta</h1>
               <Input
-                mask=""
                 name="nome"
                 label="Nome Completo"
-                onChange={handleInputChange}
               />
               <Input
-                mask=""
                 type="email"
                 name="email"
                 label="E-mail"
-                onChange={handleInputChange}
                 minLength={5}
                 maxLength={70}
               />
               <section>
                 <Input
-                  mask=""
                   name="username"
                   label="Nome de usuário"
-                  onChange={handleInputChange}
                   minLength={3}
                   maxLength={50}
                 />
                 <Input
-                  mask=""
                   type="password"
                   name="password"
                   label="Senha"
-                  onChange={handleInputChange}
-                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 />
               </section>
               <p>
@@ -287,33 +279,28 @@ function SignUp() {
             <section>
 
               {console.log(formData.telefone)}
-              <Input
+              <InputMask
                 type="tel"
                 name="telefone"
                 label="Celular"
-                onChange={handleInputChange}
                 mask="(99) 99999-9999 "
               />
-
               <Select
                 label="Data de Nascimento"
                 name="year"
                 defaultOption="Ano"
                 options={yearOptions}
-                onChange={handleSelectChange}
               />
               <Select
                 name="month"
                 defaultOption="Mês"
                 options={monthOptions}
-                onChange={handleSelectChange}
               />
 
               <Select
                 name="day"
                 defaultOption="Dia"
                 options={daysOptions(Number(formData.month), Number(formData.year))}
-                onChange={handleSelectChange}
               />
             </section>
             <section>
@@ -328,7 +315,6 @@ function SignUp() {
                   <ToggleSwitch
                     name="idealizador"
                     id="idealizador"
-                    onChange={handleInputChange}
                   />
                 </aside>
               </fieldset>
@@ -339,7 +325,6 @@ function SignUp() {
                   <ToggleSwitch
                     name="colaborador"
                     id="colaborador"
-                    onChange={handleInputChange}
                   />
                 </aside>
               </fieldset>
@@ -350,7 +335,6 @@ function SignUp() {
                   <ToggleSwitch
                     name="aliado"
                     id="aliado"
-                    onChange={handleInputChange}
                   />
                 </aside>
               </fieldset>

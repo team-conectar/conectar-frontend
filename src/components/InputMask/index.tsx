@@ -1,14 +1,16 @@
-import React, { useEffect, useRef,InputHTMLAttributes } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useField } from '@unform/core';
 import { BodyInput } from './styles';
 import { Link } from 'react-router-dom';
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+import ReactInputMask, {Props} from 'react-input-mask';
+interface InputProps extends Props {
   name: string;
   label?: string;
   subLabel?: string;
   pathSubLabel?: string;
+  type?: string;
 }
-const Input: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...rest }) => {
+const InputMask: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...rest }) => {
   const inputRef = useRef(null);
   const { fieldName, defaultValue, registerField, error } = useField(name);
   useEffect(() => {
@@ -16,6 +18,12 @@ const Input: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...r
       name: fieldName,
       ref: inputRef.current,
       path: 'value',
+      setValue(ref: any, value: string) {
+        ref.setInputValue(value);
+      },
+      clearValue(ref: any) {
+        ref.setInputValue('');
+      },
     });
   }, [fieldName, registerField]);
   return (
@@ -25,12 +33,11 @@ const Input: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...r
           <Link to={`/${pathSubLabel}`} tabIndex={1}>{subLabel}</Link>
         }
       </label>
-      <input ref={inputRef} defaultValue={defaultValue} type="text" id={fieldName} {...rest}/>
-      {error && <span>error</span>}
+      <ReactInputMask ref={inputRef} defaultValue={defaultValue} type="text" id={fieldName} maskChar="" {...rest}/>
     </BodyInput>
 
   )
 
 }
 
-export default Input;
+export default InputMask;

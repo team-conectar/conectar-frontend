@@ -1,5 +1,5 @@
 import React, {
-  ChangeEvent,
+  useRef,
   FormEvent,
   useState,
   useCallback,
@@ -12,16 +12,16 @@ import Select from "../../Select";
 import ToggleSwitch from "../../ToggleSwitch";
 import Button from "../../Button";
 import { BodyExperiences } from "../styles";
-import { inputChange } from "../../../utils/inputChange";
-import { selectChange } from "../../../utils/selectChange";
-import { textareaChange } from "../../../utils/textareaChange";
 import { finalYearOptions, yearOptions } from "../../../utils/dates";
-import  { AxiosError } from "axios";
+import { AxiosError } from "axios";
 import api from "../../../services/api";
 import edit from "../../../assets/icon/editar.svg";
 import trash from "../../../assets/icon/lixeira.svg";
 import Modal from "../../Modal";
-
+import * as Yup from 'yup';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import getValidationErrors from '../../../utils/getValidationErrors';
 /**
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
@@ -40,7 +40,7 @@ interface AcademicType {
 
 
 const AcademicExperiences: React.FC = () => {
-  
+  const formRef = useRef<FormHandles>(null);
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [academicRecords, setAcademicRecords] = useState<AcademicType[]>([]);
   const [editingId, setEditingId] = useState<number>(0);
@@ -104,76 +104,66 @@ const AcademicExperiences: React.FC = () => {
         return err?.response?.data.detail;
       });
   }
-  async function handleAcademicSubmit(event: FormEvent) {
-    event.preventDefault();
+  const handleSubmit = useCallback(
+    async (formData: AcademicType) => {
 
-    const {
-      instituicao,
-      escolaridade,
-      curso,
-      descricao,
-      data_fim,
-      data_inicio,
-      situacao,
-    }: AcademicType = academicFormData;
+      const {
+        instituicao,
+        escolaridade,
+        curso,
+        descricao,
+        data_fim,
+        data_inicio,
+        situacao,
+      } = formData;
 
 
-    const data = {
-      instituicao,
-      descricao,
-      data_inicio: `${data_inicio}-02-01`,
-      data_fim: (situacao !== "Incompleto" && data_fim) ? `${data_fim}-02-01` : null,
-      escolaridade,
-      curso,
-      situacao,
-    };
+      const data = {
+        instituicao,
+        descricao,
+        data_inicio: `${data_inicio}-02-01`,
+        data_fim: (situacao !== "Incompleto" && data_fim) ? `${data_fim}-02-01` : null,
+        escolaridade,
+        curso,
+        situacao,
+      };
 
-    console.table([data]);
+      console.table([data]);
 
-    /**
-     * Sends data to backend
-     * It's important to notice the withCredentials being true here
-     * so it will send the JWT token as cookie
-     * */
-    const res = editingId
-      ? await api
-        .put(`/api/v1/experiencias/academica/${editingId}`, data, {
-          withCredentials: true,
-        })
-        .then(() => {
-          setShowRegister(false);
-          setEditingId(0);
-          setAcademicFormData(initialAcademicData);
-        })
-        .catch((err: AxiosError) => {
-          // Returns error message from backend
-          return err?.response?.data.detail;
-        })
-      : await api
-        .post("/api/v1/experiencias/academica", data, {
-          withCredentials: true,
-        }).then(() => {
-          setShowRegister(false);
-          setEditingId(0);
-          setAcademicFormData(initialAcademicData);
-        })
-        .catch((err: AxiosError) => {
-          // Returns error message from backend
-          return err?.response?.data.detail;
-        });
-    console.log(res);
-    // Do something
-  }
-  const handleInputChange = useCallback(
-    (
-      event: ChangeEvent<HTMLInputElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      inputChange(event, setFormData, formData);
-    },
-    []
-  );
+      /**
+       * Sends data to backend
+       * It's important to notice the withCredentials being true here
+       * so it will send the JWT token as cookie
+       * */
+      const res = editingId
+        ? await api
+          .put(`/api/v1/experiencias/academica/${editingId}`, data, {
+            withCredentials: true,
+          })
+          .then(() => {
+            setShowRegister(false);
+            setEditingId(0);
+            setAcademicFormData(initialAcademicData);
+          })
+          .catch((err: AxiosError) => {
+            // Returns error message from backend
+            return err?.response?.data.detail;
+          })
+        : await api
+          .post("/api/v1/experiencias/academica", data, {
+            withCredentials: true,
+          }).then(() => {
+            setShowRegister(false);
+            setEditingId(0);
+            setAcademicFormData(initialAcademicData);
+          })
+          .catch((err: AxiosError) => {
+            // Returns error message from backend
+            return err?.response?.data.detail;
+          });
+      console.log(res);
+      // Do something
+    }, []);
   function handleEditExperience(experience: AcademicType) {
     let {
       id,
@@ -204,51 +194,8 @@ const AcademicExperiences: React.FC = () => {
     setAcademicFormData(data);
 
   }
-  const handleTextAreaChange = useCallback(
-    (
-      event: ChangeEvent<HTMLTextAreaElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      textareaChange(event, setFormData, formData);
-    },
-    []
-  );
 
-  const handleSelectChange = useCallback(
-    (
-      event: ChangeEvent<HTMLSelectElement>,
-      setFormData: Function,
-      formData: {}
-    ) => {
-      selectChange(event, setFormData, formData);
-    },
-    []
-  );
 
-  function handleAcademicInputChange(event: ChangeEvent<HTMLInputElement>) {
-    handleInputChange(
-      event,
-      setAcademicFormData,
-      academicFormData
-    );
-  }
-  function handleAcademicSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    handleSelectChange(
-      event,
-      setAcademicFormData,
-      academicFormData
-    );
-  }
-  function handleAcademicTextAreaChange(
-    event: ChangeEvent<HTMLTextAreaElement>
-  ) {
-    handleTextAreaChange(
-      event,
-      setAcademicFormData,
-      academicFormData
-    );
-  }
   return (
     <BodyExperiences>
       {console.log(academicFormData)}
@@ -316,26 +263,23 @@ const AcademicExperiences: React.FC = () => {
           </button>
         </div>
       ) : (
-          <form
+          <Form
             className="form--experiencia"
-            onSubmit={handleAcademicSubmit}
+            onSubmit={handleSubmit}
+            ref={formRef}
           >
             <aside className="area-registro">
               <section className="bloco-um">
                 <Input
-                  mask=""
                   label="Instituição de ensino"
                   name="instituicao"
                   required
-                  onChange={handleAcademicInputChange}
                   defaultValue={academicFormData?.instituicao}
                 />
                 <Input
-                  mask=""
                   label="Curso"
                   name="curso"
                   required
-                  onChange={handleAcademicInputChange}
                   defaultValue={academicFormData?.curso}
                 />
               </section>
@@ -350,7 +294,6 @@ const AcademicExperiences: React.FC = () => {
                       ? academicFormData.escolaridade
                       : "Selecione"
                   }
-                  onChange={handleAcademicSelectChange}
                 />
                 <aside>
                   <Select
@@ -364,7 +307,6 @@ const AcademicExperiences: React.FC = () => {
                         ? academicFormData?.data_inicio.split("-")[0]
                         : "Selecione"
                     }
-                    onChange={handleAcademicSelectChange}
                   />
                   {academicFormData.situacao !== "Incompleto" &&
                     <Select
@@ -376,7 +318,6 @@ const AcademicExperiences: React.FC = () => {
                           ? academicFormData.data_fim.split("-")[0]
                           : "Selecione"
                       }
-                      onChange={handleAcademicSelectChange}
                       required
                     />
                   }
@@ -389,7 +330,6 @@ const AcademicExperiences: React.FC = () => {
                   type="radio"
                   value="Incompleto"
                   id="incomplete"
-                  onChange={handleAcademicInputChange}
                   defaultChecked={
                     academicFormData &&
                     academicFormData?.situacao === "Incompleto"
@@ -400,7 +340,6 @@ const AcademicExperiences: React.FC = () => {
                   label="Em andamento"
                   name="situacao"
                   type="radio"
-                  onChange={handleAcademicInputChange}
                   value="Em andamento"
                   id="current"
                   defaultChecked={
@@ -415,7 +354,6 @@ const AcademicExperiences: React.FC = () => {
                   type="radio"
                   value="Concluído"
                   id="finished"
-                  onChange={handleAcademicInputChange}
                   defaultChecked={
                     academicFormData &&
                     academicFormData?.situacao === "Concluído"
@@ -428,7 +366,6 @@ const AcademicExperiences: React.FC = () => {
                   name="descricao"
                   label="Detalhes"
                   required
-                  onChange={handleAcademicTextAreaChange}
                   defaultValue={academicFormData?.descricao}
                 />
               </section>
@@ -464,7 +401,7 @@ const AcademicExperiences: React.FC = () => {
               </Button>
               </section>
             </aside>
-          </form>
+          </Form>
         )}
     </BodyExperiences>
   );

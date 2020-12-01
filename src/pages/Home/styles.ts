@@ -17,7 +17,6 @@ export const BodyHome = styled.div`
             align-items: center;
         }
         .arrow-bottom{
-            height:140px;
             width:100%;
             position:absolute;
             bottom:18px;
@@ -30,9 +29,14 @@ export const BodyHome = styled.div`
                 cursor: pointer;     
                 font-size:2rem;
                 color:var(--green-bg);
+                outline:none;
             }
             :hover{
                 bottom:15px;
+                
+            }
+            @media(min-width:768px){
+                height:140px;
 
             }
         }
@@ -42,10 +46,10 @@ export const BodyHome = styled.div`
             width: calc(100vw -18px);
             justify-content: flex-start;
             .topo {
-                display: grid;
-                grid-template-rows: 50rem;
-                grid-template-columns: 1.2fr 3fr;
-                margin: 0.8rem 0;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
                 >section {
                     display: flex;
                     flex-direction: column;
@@ -53,17 +57,13 @@ export const BodyHome = styled.div`
                     align-items: center;
                 }
                 .area-login {
-                    margin-left: .8rem;
-                    grid-column: 1;
                     >h1 {
-                        font: 600 3.4rem Roboto;
+                        font: 600 3rem Roboto;
                         color: var(--green-bg);
                         &:nth-child(1) {
                             color: white;
                             -webkit-text-stroke-width: 1.5px;
-                            /* largura da borda */
                             -webkit-text-stroke-color: var(--green-bg);
-                            /* cor da borda */
                         }
                     }
                     h1+h1 {
@@ -74,10 +74,28 @@ export const BodyHome = styled.div`
                     }
                 }
                 .hero {
-                    grid-column: 2;
                     >img {
-                        width: 90%;
-                        align-self: flex-end;
+                        width: 50%;
+                        margin:1rem 0;
+                    }
+                }
+            }
+            @media(min-width:768px){
+                    .topo {
+                    display: grid;
+                    grid-template-rows: 50rem;
+                    grid-template-columns: 2fr 3fr;
+                    
+                    .area-login {
+                        grid-column: 1;
+                        grid-row: 1;
+                    }
+                    .hero {
+                        grid-column: 2;
+                        >img {
+                            width: 90%;
+                            align-self: flex-end;
+                        }
                     }
                 }
             }
@@ -168,58 +186,144 @@ export const BodyHome = styled.div`
         }
         #perfis{
             justify-content:center;
-            .area-cards{
+            >main{
                 width:min(90vw,1100px);
                 display:flex;
-                justify-content:space-between;
-                flex-wrap:wrap;
-                >aside{
-                    display:flex;
-                    flex-direction:column;
-                    align-items:space-around;
-                    width:300px;
-                    background:linear-gradient( #ffc255ff, #ffdc83ff );
+                justify-content:center;
+                align-items:center;
+                .area-cards{
+                    display:grid;
+                    grid-template-columns:1fr 1.5fr;
+                    grid-template-rows:repeat(3,auto);
+                    background: #ffdc83ff;
                     border-radius:1.8rem;
-                    position:relative;
-                    padding-bottom: 4rem;
-                    margin:3.8rem 0;
-                    img{
+                    position: relative;
+                    width:min(80vw,500px);
+                    >input{
+                        display:none;
+                    }
+                    >aside{
+                        grid-column:1;
+                        >label{
+                            width:100%;
+                            img{
+                                width:100px;
+                            }
+                            legend{
+                                align-self:flex-start;
+                                border-left:solid 4px var(--green);
+                                padding: 0 .8rem;
+                                margin-bottom:.8rem;
+                                font:500 2rem Roboto;
+                                transition:.1s;
+                            }
+                        }
+                        .descricao{
+                            display:none;
+                            grid-column:2;
+                            grid-row:1 / -1;
+                            height:100%;
+                            flex-direction:column;
+                            justify-content:space-between;
+                            align-items:flex-start;
+                            padding:2rem .8rem;
+                            position: absolute;
+                            top:0;
+                            right:0;
+                            a{
+                                align-self:flex-end;
+                                text-decoration:none;
+                            }
+                            p{
+                                text-align:center;
+                                line-height:2rem;
+                            }
+                        }
+
+                    }
+                    >input:checked + aside{
+                        background:linear-gradient(#ffdc83ff, #ffc255ff, #ffdc83ff );
+                        .descricao{
+                            display:flex;
+                            
+                        }
+                        >label{
+                            legend{
+                                    border-left:solid 6px var(--green);
+                                    padding: 0 calc(.8rem - 2px);
+                                }
+                                img{
+                                    
+                                }
+                        }
+                    }
+                    @media(min-width:1100px){
+                        display:flex;
+                        align-items:center;
+                        justify-content:space-between;
+                        background: transparent;
                         width:100%;
-                        margin-right:-45px;
-                        top:0;
-                        right:0;
-                        position:block;
-                        align-self:flex-end;
-                        transition:.5s;
-                    }
-                    legend{
-                        align-self:flex-start;
-                        border-left:solid 4px var(--green);
-                        padding: 0 .8rem;
-                        margin-bottom:.8rem;
-                        font:500 2rem Roboto;
-                        transition:.1s;
-                    }
-                    &:hover{
-                        legend{
-                            border-left:solid 6px var(--green);
-                            padding: 0 calc(.8rem - 2px);
+                        >aside{
+                            display:flex;
+                            flex-direction:column;
+                            align-items:space-around;
+                            width:300px;
+                            background:linear-gradient( #ffc255ff, #ffdc83ff );
+                            border-radius:1.8rem;
+                            position:relative;
+                            padding-bottom: 4rem;
+                            margin:3.8rem 0;
+                            >label{
+                                >div{
+
+                                width:auto;
+                                display:flex;
+                                flex-direction:column;
+                                align-items:space-around;
+                                img{
+                                    width:300px;
+                                    margin-right:-45px;
+                                    align-self:flex-end;
+                                    transition:.5s;
+                                }
+                                legend{
+                                    align-self:flex-start;
+                                    border-left:solid 4px var(--green);
+                                    padding: 0 .8rem;
+                                    margin-bottom:.8rem;
+                                    font:500 2rem Roboto;
+                                    transition:.1s;
+                                }
+                                }
+                            }
+                            &:hover{
+                                >label{
+
+                                    legend{
+                                        border-left:solid 6px var(--green);
+                                        padding: 0 calc(.8rem - 2px);
+                                    }
+                                    img{
+                                        margin-right:-35px;
+                                    }
+                                }
+                            }
+                            .descricao{
+                                display:flex;
+                                position: initial;
+                                padding:0 .8rem;
+                                p{
+                                    align-self:center;
+                                    margin: 0 .4rem;
+                                }
+                                a{
+                                    align-self:center;
+                                    position:absolute;
+                                    bottom:-15px;
+                                }
+                            }
                         }
-                        img{
-                            margin-right:-35px;
-                        }
-                    }
-                    p{
-                        align-self:center;
-                        text-align:center;
-                        margin: 0 .8rem;
-                        line-height:2rem;
-                    }
-                    a{
-                        text-decoration:none;
-                        align-self:center;
-                        position:absolute;
-                        bottom:-15px;
+                        
                     }
                 }
             }

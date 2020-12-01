@@ -13,6 +13,7 @@ export const BodyButton = styled.button<PropsBodyButton>`
   border:0;
   margin:0;
   padding:.4rem .8rem;
+  outline:0;
   ${props => props.theme === "primary-yellow" && css`
     background:var(--yellow);
     color:var(--green-bg);
