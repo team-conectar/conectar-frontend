@@ -21,7 +21,10 @@ import { Beforeunload } from 'react-beforeunload';
 import { Context } from "../../context/AuthContext";
 import Logged from "../../components/Logged";
 import { BodyModalDefault } from '../../components/Modal/styles';
-
+import * as Yup from 'yup';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 function CreateProject() {
   const { loading, isAuthenticated } = useContext(Context);
@@ -107,7 +110,7 @@ function CreateProject() {
       <div className="area-central container">
         <h1>Criar Projeto</h1>
 
-        <form className="primeira-etapa" onSubmit={handleSubmit}>
+        <Form className="primeira-etapa" onSubmit={handleSubmit}>
           <div className="coluna-um">
             <Input
               name="nome"
@@ -147,9 +150,9 @@ function CreateProject() {
               Continuar
             </Button>
           </section>
-        </form>
+        </Form>
 
-        <form className="segunda-etapa" onSubmit={handleSecondSubmit}>
+        <Form className="segunda-etapa" onSubmit={handleSecondSubmit}>
           <div className="coluna-um">
             <Textarea
               label="Objetivo do projeto"
@@ -190,7 +193,7 @@ function CreateProject() {
               Concluir
             </Button>
           </section>
-        </form>
+        </Form>
       </div>
     </BodyCreateProject>
   );

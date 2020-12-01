@@ -89,21 +89,21 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         data.append('username', formData.email);
         data.append('password', formData.senha);
 
-        const res = await api
-          .post('/api/token', data)
+         await api.post('/api/token', data)
           .then(onSuccessLogin)
           .catch((err: AxiosError) => {
             // Returns error message from backend
             return err?.response?.data.detail;
           });
 
-        console.log(res);
+        
 
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
           formRef.current?.setErrors(errors);
+          alert(error)
           return;
         }
 
