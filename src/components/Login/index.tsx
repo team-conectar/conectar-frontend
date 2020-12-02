@@ -69,16 +69,15 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   }
   const handleSubmit = useCallback(
     async (formData: SignInFormData) => {
-      console.log(formData);
       formRef.current?.setErrors({});
-
-
       try {
         const schema = Yup.object().shape({
-          email: Yup.string()
-            .email('Informe um email válido')
-            .required('E-mail é obrigatório'),
-          password: Yup.string().min(8).required('Senha obrigatória'),
+          email: Yup
+            .string()
+            .required('E-mail ou usuário obrigatório'),
+          senha: Yup
+            .string()
+            .required('Senha obrigatória'),
         });
 
         await schema.validate(formData, {
@@ -89,24 +88,18 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         data.append('username', formData.email);
         data.append('password', formData.senha);
 
-         await api.post('/api/token', data)
-          .then(onSuccessLogin)
-          .catch((err: AxiosError) => {
-            // Returns error message from backend
-            return err?.response?.data.detail;
-          });
-
-        
+        await api.post('/api/token', data);
+        onSuccessLogin();
 
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
           formRef.current?.setErrors(errors);
-          alert(error)
           return;
         }
-
+        alert("Lgoin ou senha incorreto")
+        
 
       }
     },
@@ -117,12 +110,10 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   return (
     <BodyLogin onSubmit={handleSubmit} ref={formRef}>
       <Input
-        id="email"
         name="email"
         label="E-mail ou nome de usuário"
       />
       <Input
-        id="senha"
         name="senha"
         type="password"
         label="Senha"

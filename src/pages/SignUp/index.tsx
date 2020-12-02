@@ -55,7 +55,7 @@ function SignUp() {
   const [showNextStep, setShowNextStep] = useState<boolean>(
     Number(useParams<routeParms>().step) === 2
       ? true
-      : true
+      : false
   );
 
   async function handleSubmit(formData: PessoaType) {
@@ -63,10 +63,28 @@ function SignUp() {
       // Remove all previous errors
       formRef.current?.setErrors({});
       const schema = Yup.object().shape({
-        email: Yup.string().email().required(),
-        password: Yup.string().min(6).required(),
-        username: Yup.string().min(4).max(20).required(),
-        nome: Yup.string().max(80).required(),
+        email: Yup
+        .string()
+        .email('Não corresponde ao formato exemple@ex.com')
+        .required('Email é obrigatório'),
+        password: Yup
+          .string()
+          .matches(/(?=.*[!@#$%^&*])/g, "Deve conter caracteres especiais")
+          .matches(/(?=.*[A-Z])/g, "Deve conter caracteres maiúsculas")
+          .matches(/(?=.*[0-9])/g, "Deve conter caracteres numéricos")
+          .matches(/(?=.*[a-z])/g, "Deve conter caracteres minúsculas")
+          .min(8, 'Deve conter no mínimo 8 caracteres')
+          .required('Senha é obritória'),
+        username: Yup
+          .string()
+          .min(4,'Deve conter no mínimo 4 caracteres')
+          .max(20,'Deve conter no máximo 20 caracteres')
+          .required('Usuário é obrigatório'),
+        nome: Yup
+        .string()
+        .max(80)
+        .matches(/(?=.*[ ])/g,'Informe o nome completo')
+        .required('Usuário é obrigatório'),
       });
       await schema.validate(formData, {
         abortEarly: false,
@@ -86,7 +104,7 @@ function SignUp() {
         // Validation failed
         const errors = getValidationErrors(err);
         formRef.current?.setErrors(errors);
-        alert(errors);
+        //alert(errors);
       }
     }
   }
@@ -97,13 +115,13 @@ function SignUp() {
       // Remove all previogeus errors
       formRef.current?.setErrors({});
       const schema = Yup.object().shape({
-        telefone: Yup.string().required(),
-        year: Yup.string().required(),
-        month: Yup.string().required(),
-        day: Yup.string().required(),
-        aliado: Yup.string().required(),
-        colaborador: Yup.string().required(),
-        idealizador: Yup.string().required(),
+        telefone: Yup.string().required('Telefone é obrigatório'),
+        year: Yup.string().required('Ano é obrigatório'),
+        month: Yup.string().required('Mês é obrigatório'),
+        day: Yup.string().required('Dia é obrigatório'),
+        aliado: Yup.string(),
+        colaborador: Yup.string(),
+        idealizador: Yup.string(),
       });
       await schema.validate(formData, {
         abortEarly: false,
@@ -131,9 +149,7 @@ function SignUp() {
         const errors = getValidationErrors(err);
         formRef.current?.setErrors(errors);
       }
-
     }
-
   }
   /**This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {

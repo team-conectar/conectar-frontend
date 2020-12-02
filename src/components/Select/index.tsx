@@ -1,4 +1,4 @@
-import { BodySelect} from './styles';
+import { BodySelect } from './styles';
 // import { Link } from 'react-router-dom';
 import makeAnimated from 'react-select/animated';
 import React, { useRef, useEffect } from 'react';
@@ -7,7 +7,7 @@ import ReactSelect, {
   Props as SelectProps,
 } from 'react-select';
 import { useField } from '@unform/core';
-interface Props extends SelectProps<OptionTypeBase>{
+interface Props extends SelectProps<OptionTypeBase> {
   name: string;
   label?: string;
 }
@@ -36,16 +36,17 @@ const Select: React.FC<Props> = ({ name, label, ...rest }) => {
   return (
     <BodySelect>
       <label htmlFor={name}>{label}</label>
-      
+
       <ReactSelect
         ref={selectRef}
         closeMenuOnSelect={true}
         components={animatedComponents}
         placeholder={defaultValue || "Selecione"}
-        className="select"
+        className="react-select-container"
+        classNamePrefix="react-select"
         {...rest}
       />
-
+      {error && <span>{error}</span>}
     </BodySelect>
 
   )
