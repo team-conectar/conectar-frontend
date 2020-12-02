@@ -69,18 +69,14 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   }
   const handleSubmit = useCallback(
     async (formData: SignInFormData) => {
-      console.log(formData);
       formRef.current?.setErrors({});
-
-
       try {
         const schema = Yup.object().shape({
           email: Yup
             .string()
-            .required('E-mail ou usuário incorreto'),
-          password: Yup
+            .required('E-mail ou usuário obrigatório'),
+          senha: Yup
             .string()
-            .min(8, 'Senha deve ser maior que 8')
             .required('Senha obrigatória'),
         });
 
@@ -95,18 +91,15 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         await api.post('/api/token', data);
         onSuccessLogin();
 
-
-
-
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error);
 
           formRef.current?.setErrors(errors);
-          alert(error)
           return;
         }
-        console.log(error);
+        alert("Lgoin ou senha incorreto")
+        
 
       }
     },

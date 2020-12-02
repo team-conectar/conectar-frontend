@@ -44,12 +44,9 @@ export const BodySelect = styled.div`
     .react-select__menu{
       font:400 .85rem Roboto;
       .react-select__menu-list{
-
         .react-select__option{
           margin-left:0;
-
         }
-        
       }
     }
   }
