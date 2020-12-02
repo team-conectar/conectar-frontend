@@ -5,6 +5,7 @@ export const BodyTextarea = styled.div`
   width:100%;
   min-width:10rem;
   margin: 0.4rem 0 ;
+  padding-bottom:.8rem;
   position: relative;
   label{
     display:flex;
@@ -29,5 +30,12 @@ export const BodyTextarea = styled.div`
     font: 1.6rem;
     outline: 0;
     resize: none;
+  }
+  span{
+    color:red;
+    font:400 .8rem Roboto;
+    position:absolute;
+    left:0;
+    bottom:0;
   }
 `;

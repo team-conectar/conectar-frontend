@@ -75,10 +75,13 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
 
       try {
         const schema = Yup.object().shape({
-          email: Yup.string()
-            .email('Informe um email válido')
-            .required('E-mail é obrigatório'),
-          password: Yup.string().min(8).required('Senha obrigatória'),
+          email: Yup
+            .string()
+            .required('E-mail ou usuário incorreto'),
+          password: Yup
+            .string()
+            .min(8, 'Senha deve ser maior que 8')
+            .required('Senha obrigatória'),
         });
 
         await schema.validate(formData, {
@@ -89,14 +92,11 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         data.append('username', formData.email);
         data.append('password', formData.senha);
 
-         await api.post('/api/token', data)
-          .then(onSuccessLogin)
-          .catch((err: AxiosError) => {
-            // Returns error message from backend
-            return err?.response?.data.detail;
-          });
+        await api.post('/api/token', data);
+        onSuccessLogin();
 
-        
+
+
 
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
@@ -106,7 +106,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           alert(error)
           return;
         }
-
+        console.log(error);
 
       }
     },
@@ -117,12 +117,10 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   return (
     <BodyLogin onSubmit={handleSubmit} ref={formRef}>
       <Input
-        id="email"
         name="email"
         label="E-mail ou nome de usuário"
       />
       <Input
-        id="senha"
         name="senha"
         type="password"
         label="Senha"

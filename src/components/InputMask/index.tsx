@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useField } from '@unform/core';
-import { BodyInput } from './styles';
+import { BodyInput } from '../Input/styles';
 import { Link } from 'react-router-dom';
-import ReactInputMask, {Props} from 'react-input-mask';
+import ReactInputMask, { Props } from 'react-input-mask';
 interface InputProps extends Props {
   name: string;
   label?: string;
@@ -33,7 +33,8 @@ const InputMask: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, 
           <Link to={`/${pathSubLabel}`} tabIndex={1}>{subLabel}</Link>
         }
       </label>
-      <ReactInputMask ref={inputRef} defaultValue={defaultValue} type="text" id={fieldName} maskChar="" {...rest}/>
+      <ReactInputMask ref={inputRef} defaultValue={defaultValue} type="text" id={fieldName} maskChar="" {...rest} />
+      {error && <span>{error}</span>}
     </BodyInput>
 
   )

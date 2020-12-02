@@ -26,7 +26,8 @@ const Input: React.FC<InputProps> = ({ name, label, subLabel, pathSubLabel, ...r
         }
       </label>
       <input ref={inputRef} defaultValue={defaultValue} type="text" id={fieldName} {...rest}/>
-      {error && <span>error</span>}
+      {error && <span>{error}</span>}
+      
     </BodyInput>
 
   )
