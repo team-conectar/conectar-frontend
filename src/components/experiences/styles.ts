@@ -93,7 +93,7 @@ export const BodyExperiences = styled.section`
             justify-content:center;
             height:100%;
         }
-        span{
+        >span{
             color:var(--yellow-dark);
         }
         
