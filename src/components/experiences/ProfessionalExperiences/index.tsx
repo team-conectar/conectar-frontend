@@ -1,6 +1,5 @@
 import React, {
   useRef,
-  FormEvent,
   useState,
   useEffect,
   useCallback,
@@ -12,9 +11,6 @@ import Select from "../../Select";
 import ToggleSwitch from "../../ToggleSwitch";
 import Button from "../../Button";
 import { BodyExperiences } from "../styles";
-import { inputChange } from "../../../utils/inputChange";
-import { selectChange } from "../../../utils/selectChange";
-import { textareaChange } from "../../../utils/textareaChange";
 import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
 import { AxiosError } from "axios";
 import api from "../../../services/api";
@@ -25,6 +21,7 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import getValidationErrors from '../../../utils/getValidationErrors';
+import { OptionTypeBase, ValueType } from "react-select";
 interface ProfessionalType {
   id: number;
   organizacao: string;
@@ -35,6 +32,7 @@ interface ProfessionalType {
   vinculo: string;
 }
 interface ProfessionalDataType {
+  id?: number;
   vinculo: string;
   currentWorking: boolean;
   cargo: string;
@@ -47,20 +45,7 @@ interface ProfessionalDataType {
   finalMonth: any;
 }
 const ProfessionalExperiences: React.FC = () => {
-  const formRef = useRef<FormHandles>(null);
-  const [showRegister, setShowRegister] = useState<boolean>(false);
-  const [professionalRecords, setProfessionalRecords] = useState<ProfessionalType[]>([]);
-  // gets the editing experience id
-  const [editingId, setEditingId] = useState<number>(0);
-  const initialProfessionalData = {
-    currentWorking: false,
-  } as ProfessionalDataType;
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const [experienceExcluded, setExperienceExcluded] = useState({
-    id: 0,
-    nome: "",
-  })
-  const [professionalFormData, setProfessionalFormData] = useState(initialProfessionalData);
+  //Global
   const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
     { label: "Trainee", value: "Trainee" },
     { label: "Terceirizado", value: "Terceirizado" },
@@ -73,22 +58,35 @@ const ProfessionalExperiences: React.FC = () => {
     { label: "Meio Período", value: "Meio Período" },
     { label: "Tempo Integral", value: "Tempo Integral" },
   ];
+  const [showRegister, setShowRegister] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const formRef = useRef<FormHandles>(null);
+  const [stored, setStored] = useState<ProfessionalType[]>([]);
+  const [initialYear, setInitialYear] = useState<number>();
+  const initialProfessionalData = {
+    currentWorking: false,
+  } as ProfessionalDataType;
+  const [editStored, setEditStored] = useState<ProfessionalDataType>({} as ProfessionalDataType);
+  const [experienceExcluded, setExperienceExcluded] = useState({
+    id: 0,
+    nome: "",
+  })
   useEffect(() => {
     api
       .get("/api/v1/experiencias/profissional/me", {
         withCredentials: true,
       })
       .then((response) => {
-        setProfessionalRecords(response.data);
+        setStored(response.data);
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
         return err?.response?.data.detail;
       });
-  }, [showRegister, editingId, openModal]);
+  }, [showRegister, editStored, openModal]);
   async function handleDeleteExperience(id: number) {
-    if (professionalRecords.length === 1) {
-      professionalRecords.splice(0, 1);
+    if (stored.length === 1) {
+      stored.splice(0, 1);
     }
     await api.delete(`/api/v1/experiencias/profissional/${id}`, {
       withCredentials: true,
@@ -96,8 +94,7 @@ const ProfessionalExperiences: React.FC = () => {
       .then(() => {
         setShowRegister(false);
         setOpenModal(false);
-        setEditingId(0);
-        setProfessionalFormData(initialProfessionalData);
+        setEditStored({} as ProfessionalDataType);
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -107,75 +104,116 @@ const ProfessionalExperiences: React.FC = () => {
   }
 
   const handleSubmit = useCallback(
-  async (formData: ProfessionalDataType) => {
-
-
-    const {
-      vinculo,
-      currentWorking,
-      organizacao,
-      cargo,
-      descricao,
-      finalYear,
-      initialYear,
-      initialMonth,
-      finalMonth,
-    }: ProfessionalDataType = professionalFormData;
-    //setting to null because if there a update an experience with an existing data_fim it will not send
-    let data_fim = null;
-    const data_inicio = `${initialYear}-${initialMonth}-01`;
-
-    if (!currentWorking) {
-      data_fim = `${finalYear}-${finalMonth}-01`;
-    }
-
-    const data = {
-      organizacao,
-      descricao,
-      data_inicio,
-      data_fim,
-      cargo,
-      vinculo,
-    };
-
-    /**
-     * Sends data to backend
-     * It's important to notice the withCredentials being true here
-     * so it will send the JWT token as cookie
-     * */
-    const res = editingId
-      ? await api
-        .put(
-          `/api/v1/experiencias/profissional/${editingId}`, data, {
-          withCredentials: true,
-        })
-        .then(() => {
-          setShowRegister(false);
-          setEditingId(0);
-          setProfessionalFormData(initialProfessionalData);
-        })
-        .catch((err: AxiosError) => {
-          // Returns error message from backend
-          return err?.response?.data.detail;
-        })
-      : await api
-        .post("/api/v1/experiencias/profissional", data, {
-          withCredentials: true,
-        })
-        .then(() => {
-          setShowRegister(false);
-          setEditingId(0);
-          setProfessionalFormData(initialProfessionalData);
-        })
-        .catch((err: AxiosError) => {
-          // Returns error message from backend
-          return err?.response?.data.detail;
+    async (formData: ProfessionalDataType) => {
+      formRef.current?.setErrors({});
+      try {
+        const schema = Yup.object().shape({
+          vinculo: Yup
+            .string()
+            .required('Informe o vínculo'),
+          organizacao: Yup
+            .string()
+            .required('Informe a organização'),
+          cargo: Yup
+            .string()
+            .required('Informe o cargo'),
+          descricao: Yup
+            .string()
+            .required('Informe a descrição'),
+          finalYear: Yup
+            .string()
+            .required('Ano final é obrigatório'),
+          initialYear: Yup
+            .string()
+            .required('Ano inicial é obrigatório'),
+          initialMonth: Yup
+            .string()
+            .required('Mês inicial é obrigatório'),
+          finalMonth: Yup
+            .string()
+            .required('Mês final é obrigatório'),
         });
 
-    console.log(res);
+        await schema.validate(formData, {
+          abortEarly: false,
+        });
+        // Validation passed
+        const {
+          vinculo,
+          currentWorking,
+          organizacao,
+          cargo,
+          descricao,
+          finalYear,
+          initialYear,
+          initialMonth,
+          finalMonth,
+        }: ProfessionalDataType = formData;
+        //setting to null because if there a update an experience with an existing data_fim it will not send
+        let data_fim = null;
+        const data_inicio = `${initialYear}-${initialMonth}-01`;
 
-    // Do something
-  },[]);
+        if (!currentWorking) {
+          data_fim = `${finalYear}-${finalMonth}-01`;
+        }
+
+        const data = {
+          organizacao,
+          descricao,
+          data_inicio,
+          data_fim,
+          cargo,
+          vinculo,
+        };
+
+        /**
+         * Sends data to backend
+         * It's important to notice the withCredentials being true here
+         * so it will send the JWT token as cookie
+         * */
+        if (editStored !== {} as ProfessionalDataType) await api
+          .put(
+            `/api/v1/experiencias/profissional/${editStored.id}`, data, {
+            withCredentials: true,
+          })
+          .then(() => {
+            setShowRegister(false);
+            setEditStored({} as ProfessionalDataType);
+          })
+          .catch((err: AxiosError) => {
+            // Returns error message from backend
+            return err?.response?.data.detail;
+          })
+        else await api
+          .post("/api/v1/experiencias/profissional", data, {
+            withCredentials: true,
+          })
+          .then(() => {
+            setShowRegister(false);
+            setEditStored({} as ProfessionalDataType);
+
+          })
+          .catch((err: AxiosError) => {
+            // Returns error message from backend
+            return err?.response?.data.detail;
+          });
+
+
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          // Validation failed
+          const errors = getValidationErrors(error);
+
+          formRef.current?.setErrors(errors);
+          return;
+        }
+        alert("Lgoin ou senha incorreto")
+      }
+
+
+      // Do something
+    }, []);
+  //Edit
   function handleEditExperience(experience: ProfessionalType) {
 
     const {
@@ -191,6 +229,7 @@ const ProfessionalExperiences: React.FC = () => {
     const [initialYear, initialMonth] = data_inicio.split("-");
 
     const data = {
+      id,
       vinculo,
       organizacao,
       cargo,
@@ -204,10 +243,10 @@ const ProfessionalExperiences: React.FC = () => {
 
 
     setShowRegister(true);
-    setEditingId(id);
-    setProfessionalFormData(data);
+    setEditStored(data);
 
   }
+
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
@@ -230,7 +269,7 @@ const ProfessionalExperiences: React.FC = () => {
       <h2>Atuação Profissional</h2>
       {!showRegister ? (
         <div className="experiencias">
-          {professionalRecords?.map((experience: ProfessionalType) => (
+          {stored?.map((experience: ProfessionalType) => (
             <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
                 <img
@@ -254,17 +293,17 @@ const ProfessionalExperiences: React.FC = () => {
                 <p>
                   {experience.vinculo} <br />
                   {`
-                  ${toMonth(experience.data_inicio.split("-")[1])} 
-                  de 
-                  ${experience.data_inicio.split("-")[0]} 
-                  até 
-                  ${experience.data_fim ? `
-                      ${toMonth(experience.data_fim.split("-")[1])} 
+                    ${toMonth(experience.data_inicio.split("-")[1])} 
+                    de 
+                    ${experience.data_inicio.split("-")[0]} 
+                    até 
+                    ${experience.data_fim ?
+                      `${toMonth(experience.data_fim.split("-")[1])} 
                       de 
-                      ${experience.data_fim.split("-")[0]}
-                    ` :
-                      "o momento atual"}
-                  `} <br />
+                      ${experience.data_fim.split("-")[0]}` :
+                      "o momento atual"
+                    }
+                  `}
                 </p>
               </fieldset>
             </div>
@@ -285,12 +324,12 @@ const ProfessionalExperiences: React.FC = () => {
                 <Input
                   label="Organização"
                   name="organizacao"
-                  defaultValue={professionalFormData?.organizacao}
+                  defaultValue={editStored?.organizacao}
                 />
                 <Input
                   label="Cargo"
                   name="cargo"
-                  defaultValue={professionalFormData?.cargo}
+                  defaultValue={editStored?.cargo}
                 />
               </section>
               <section className="bloco-dois">
@@ -298,7 +337,6 @@ const ProfessionalExperiences: React.FC = () => {
                   label="Vínculo"
                   name="vinculo"
                   options={vinculos}
-                  defaultOption={professionalFormData?.vinculo || "Selecione"}
                 />
               </section>
               <section className="bloco-tres">
@@ -307,15 +345,28 @@ const ProfessionalExperiences: React.FC = () => {
                     label="Mês inicial"
                     name="initialMonth"
                     options={monthOptions}
-                    defaultOption={toMonth(professionalFormData.initialMonth) || "Selecione"}
+                    defaultValue={ (editStored == {} as ProfessionalDataType) ?
+                      {
+                        label: 'Selecione',
+                        value: 'Selecione'
+                      } :null
 
+                    }
+                    defaultOption={editStored?.initialMonth}
                   />
                   <Select
                     label="Ano inicial"
                     name="initialYear"
                     options={yearOptions}
-                    defaultOption={professionalFormData?.initialYear || "Selecione"}
-
+                    onChange={(option: any) => {
+                      setInitialYear(Number(option.value))
+                    }}
+                    defaultValue={editStored &&
+                    {
+                      label: editStored?.initialYear,
+                      value: editStored?.initialYear
+                    }
+                    }
                   />
                 </aside>
                 <aside>
@@ -323,24 +374,21 @@ const ProfessionalExperiences: React.FC = () => {
                     label="Trabalho atual"
                     name="currentWorking"
                     id="currentWorking"
-                    defaultChecked={professionalFormData?.currentWorking}
+                    defaultChecked={editStored.currentWorking}
                   />
                 </aside>
-                {console.log(professionalFormData?.finalYear)}
-                {!professionalFormData.currentWorking && (
+                {!0 && (
                   <aside>
                     <Select
                       label="Mês final"
                       name="finalMonth"
                       options={monthOptions}
-                      defaultOption={toMonth(professionalFormData?.finalMonth) || "Selecione"}
 
                     />
                     <Select
                       label="Ano final"
                       name="finalYear"
-                      options={finalYearOptions(Number(professionalFormData.initialYear))}
-                      defaultOption={Number(professionalFormData?.finalYear) > Number(professionalFormData?.initialYear) ? professionalFormData.finalYear : "Selecione"}
+                      options={finalYearOptions(Number(initialYear))}
 
                     />
                   </aside>
@@ -350,7 +398,6 @@ const ProfessionalExperiences: React.FC = () => {
                 <Textarea
                   name="descricao"
                   label="Detalhes"
-                  defaultValue={professionalFormData?.descricao}
                 />
               </section>
               <section className="area-botoes">
@@ -364,10 +411,10 @@ const ProfessionalExperiences: React.FC = () => {
                 <Button
                   theme="secondary-green"
                   onClick={
-                    editingId > 0
+                    editStored !== {} as ProfessionalDataType
                       ? () => {
                         setOpenModal(true);
-                        setExperienceExcluded({ "nome": professionalFormData.cargo, "id": editingId })
+                        //setExperienceExcluded({ "nome": professionalFormData.cargo, "id": editStored })
                       }
                       : () => setShowRegister(false)
                   }
@@ -377,8 +424,7 @@ const ProfessionalExperiences: React.FC = () => {
                 <Button
                   onClick={() => {
                     setShowRegister(false);
-                    setProfessionalFormData(initialProfessionalData);
-                    setEditingId(0);
+                    setEditStored({} as ProfessionalDataType);
                   }}
                 >
                   Cancelar
