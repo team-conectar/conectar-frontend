@@ -64,9 +64,10 @@ const ProfessionalExperiences: React.FC = () => {
   const [stored, setStored] = useState<ProfessionalType[]>([]);
   const [initialYear, setInitialYear] = useState<number>();
   const initialProfessionalData = {
+    id: 0,
     currentWorking: false,
   } as ProfessionalDataType;
-  const [editStored, setEditStored] = useState<ProfessionalDataType>({} as ProfessionalDataType);
+  const [editStored, setEditStored] = useState<ProfessionalDataType>(initialProfessionalData);
   const [experienceExcluded, setExperienceExcluded] = useState({
     id: 0,
     nome: "",
@@ -94,7 +95,7 @@ const ProfessionalExperiences: React.FC = () => {
       .then(() => {
         setShowRegister(false);
         setOpenModal(false);
-        setEditStored({} as ProfessionalDataType);
+        setEditStored(initialProfessionalData);
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -171,14 +172,14 @@ const ProfessionalExperiences: React.FC = () => {
          * It's important to notice the withCredentials being true here
          * so it will send the JWT token as cookie
          * */
-        if (editStored !== {} as ProfessionalDataType) await api
+        if (editStored.id) await api
           .put(
             `/api/v1/experiencias/profissional/${editStored.id}`, data, {
             withCredentials: true,
           })
           .then(() => {
             setShowRegister(false);
-            setEditStored({} as ProfessionalDataType);
+            setEditStored(initialProfessionalData);
           })
           .catch((err: AxiosError) => {
             // Returns error message from backend
@@ -190,7 +191,7 @@ const ProfessionalExperiences: React.FC = () => {
           })
           .then(() => {
             setShowRegister(false);
-            setEditStored({} as ProfessionalDataType);
+            setEditStored(initialProfessionalData);
 
           })
           .catch((err: AxiosError) => {
@@ -345,11 +346,11 @@ const ProfessionalExperiences: React.FC = () => {
                     label="Mês inicial"
                     name="initialMonth"
                     options={monthOptions}
-                    defaultValue={ (editStored == {} as ProfessionalDataType) ?
+                    defaultValue={editStored.id ?
                       {
-                        label: 'Selecione',
-                        value: 'Selecione'
-                      } :null
+                        label: editStored?.initialMonth,
+                        value: editStored?.initialMonth
+                      } : null
 
                     }
                     defaultOption={editStored?.initialMonth}
@@ -361,11 +362,11 @@ const ProfessionalExperiences: React.FC = () => {
                     onChange={(option: any) => {
                       setInitialYear(Number(option.value))
                     }}
-                    defaultValue={editStored &&
-                    {
-                      label: editStored?.initialYear,
-                      value: editStored?.initialYear
-                    }
+                    defaultValue={editStored.id ?
+                      {
+                        label: editStored?.initialYear,
+                        value: editStored?.initialYear
+                      } : null
                     }
                   />
                 </aside>
@@ -411,7 +412,7 @@ const ProfessionalExperiences: React.FC = () => {
                 <Button
                   theme="secondary-green"
                   onClick={
-                    editStored !== {} as ProfessionalDataType
+                    editStored.id
                       ? () => {
                         setOpenModal(true);
                         //setExperienceExcluded({ "nome": professionalFormData.cargo, "id": editStored })
@@ -424,7 +425,7 @@ const ProfessionalExperiences: React.FC = () => {
                 <Button
                   onClick={() => {
                     setShowRegister(false);
-                    setEditStored({} as ProfessionalDataType);
+                    setEditStored(initialProfessionalData);
                   }}
                 >
                   Cancelar
