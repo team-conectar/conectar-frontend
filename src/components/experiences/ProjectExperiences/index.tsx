@@ -26,7 +26,7 @@ interface ProjectType {
   situacao: string,
 }
 interface ProjectDataType {
-  id?:number;
+  id?: number;
   nome: string;
   descricao: string;
   currentProject: boolean;
@@ -45,7 +45,7 @@ const ProjectExperiences: React.FC = () => {
   const [currentilyProject, setCurrentilyProject] = useState<boolean>(false);
   const [stored, setStored] = useState<ProjectType[]>([]);
   const initialProjectData = {
-    id:0,
+    id: 0,
     currentProject: false,
   } as ProjectDataType;
   const [editStored, setEditStored] = useState<ProjectDataType>(initialProjectData);
@@ -95,146 +95,146 @@ const ProjectExperiences: React.FC = () => {
 
   const handleSubmit = useCallback(
     async (formData: ProjectDataType) => {
-        formRef.current?.setErrors({});
-        try {
-          const schema = Yup.object().shape({
-            vinculo: Yup
-              .string()
-              .required('Informe o vínculo'),
-            organizacao: Yup
-              .string()
-              .max(50, 'Excedeu o limite de caractéres (50)')
-              .required('Informe a organização'),
-            cargo: Yup
-              .string()
-              .required('Informe o cargo'),
-            descricao: Yup
-              .string()
-              .min(20, 'Descreva um pouco mais')
-              .max(500, 'Excedeu o limite de caractéres (500)')
-              .required('Informe a descrição'),
-            finalYear: Yup
-              .string()
-              .required('Ano final é obrigatório'),
-            initialYear: Yup
-              .string()
-              .required('Ano inicial é obrigatório'),
-            initialMonth: Yup
-              .string()
-              .required('Mês inicial é obrigatório'),
-            finalMonth: Yup
-              .string()
-              .required('Mês final é obrigatório'),
-          });
-  
-          await schema.validate(formData, {
-            abortEarly: false,
-          });
-          // Validation passed
-          const {
-            currentProject,
-            nome,
-            cargo,
-            descricao,
-            finalYear,
-            initialYear,
-            finalMonth,
-            initialMonth,
-            situacao,
-          } = formData;
-          //setting to null because if there a update an experience with an existing data_fim it will not send
-          let data_fim = null;
-          const data_inicio = `${initialYear}-${initialMonth}-01`;
-    
-          if (!currentProject) {
-            data_fim = `${finalYear}-${finalMonth}-01`;
-          }
-    
-    
-          const data = {
-            nome,
-            descricao,
-            data_inicio,
-            data_fim,
-            cargo,
-            situacao,
-          };
-          console.log(data);
-          /**
-           * Sends data to backend
-           * It's important to notice the withCredentials being true here
-           * so it will send the JWT token as cookie
-           * */
-          const res = editStored.id
-            ? await api
-              .put(`/api/v1/experiencias/projeto/${editStored.id}`, data, {
-                withCredentials: true,
-              })
-              .then(() => {
-                setShowRegister(false);
-                setEditStored(initialProjectData);
-              })
-              .catch((err: AxiosError) => {
-                // Returns error message from backend
-                return err?.response?.data.detail;
-              })
-            : await api
-              .post("/api/v1/experiencias/projeto", data, {
-                withCredentials: true,
-              })
-              .then(() => {
-                setShowRegister(false);
-                setEditStored(initialProjectData);
-              })
-              .catch((err: AxiosError) => {
-                // Returns error message from backend
-                return err?.response?.data.detail;
-              });
-          console.log(res);
-    
-  
-  
-        } catch (error) {
-          if (error instanceof Yup.ValidationError) {
-            // Validation failed
-            const errors = getValidationErrors(error);
-  
-            formRef.current?.setErrors(errors);
-            return;
-          }
+      formRef.current?.setErrors({});
+      try {
+        const schema = Yup.object().shape({
+          nome: Yup
+            .string()
+            .required('Informe o nome'),
+          situacao: Yup
+            .string()
+            .max(50, 'Excedeu o limite de caractéres (50)')
+            .required('Informe a organização'),
+          cargo: Yup
+            .string()
+            .required('Informe o cargo'),
+          descricao: Yup
+            .string()
+            .min(20, 'Descreva um pouco mais')
+            .max(500, 'Excedeu o limite de caractéres (500)')
+            .required('Informe a descrição'),
+          finalYear: Yup
+            .string()
+            .required('Ano final é obrigatório'),
+          initialYear: Yup
+            .string()
+            .required('Ano inicial é obrigatório'),
+          initialMonth: Yup
+            .string()
+            .required('Mês inicial é obrigatório'),
+          finalMonth: Yup
+            .string()
+            .required('Mês final é obrigatório'),
+        });
+
+        await schema.validate(formData, {
+          abortEarly: false,
+        });
+        // Validation passed
+        const {
+          currentProject,
+          nome,
+          cargo,
+          descricao,
+          finalYear,
+          initialYear,
+          finalMonth,
+          initialMonth,
+          situacao,
+        } = formData;
+        //setting to null because if there a update an experience with an existing data_fim it will not send
+        let data_fim = null;
+        const data_inicio = `${initialYear}-${initialMonth}-01`;
+
+        if (!currentProject) {
+          data_fim = `${finalYear}-${finalMonth}-01`;
         }
-      
+
+
+        const data = {
+          nome,
+          descricao,
+          data_inicio,
+          data_fim,
+          cargo,
+          situacao,
+        };
+        console.log(data);
+        /**
+         * Sends data to backend
+         * It's important to notice the withCredentials being true here
+         * so it will send the JWT token as cookie
+         * */
+        const res = editStored.id
+          ? await api
+            .put(`/api/v1/experiencias/projeto/${editStored.id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setShowRegister(false);
+              setEditStored(initialProjectData);
+            })
+            .catch((err: AxiosError) => {
+              // Returns error message from backend
+              return err?.response?.data.detail;
+            })
+          : await api
+            .post("/api/v1/experiencias/projeto", data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setShowRegister(false);
+              setEditStored(initialProjectData);
+            })
+            .catch((err: AxiosError) => {
+              // Returns error message from backend
+              return err?.response?.data.detail;
+            });
+        console.log(res);
+
+
+
+      } catch (error) {
+        if (error instanceof Yup.ValidationError) {
+          // Validation failed
+          const errors = getValidationErrors(error);
+
+          formRef.current?.setErrors(errors);
+          return;
+        }
+      }
+
       // Do something
-    }
-  ,[]);
+    }, [currentilyProject,editStored]
+  );
   function handleEditExperience(experience: ProjectType) {
-      const {
-        id,
-        nome,
-        descricao,
-        data_inicio,
-        data_fim,
-        cargo,
-        situacao,
-      }: ProjectType = experience;
+    const {
+      id,
+      nome,
+      descricao,
+      data_inicio,
+      data_fim,
+      cargo,
+      situacao,
+    }: ProjectType = experience;
 
-      const [initialYear, initialMonth] = data_inicio.split("-");
+    const [initialYear, initialMonth] = data_inicio.split("-");
 
-      const data = {
-        id,
-        nome,
-        cargo,
-        descricao,
-        initialYear,
-        initialMonth,
-        situacao,
-        currentProject: data_fim ? false : true,
-        finalYear: data_fim ? data_fim.split("-")[0] : data_fim,
-        finalMonth: data_fim ? data_fim.split("-")[1] : data_fim,
-      };
-      setShowRegister(true);
-      setEditStored(data);
-    }
+    const data = {
+      id,
+      nome,
+      cargo,
+      descricao,
+      initialYear,
+      initialMonth,
+      situacao,
+      currentProject: data_fim ? false : true,
+      finalYear: data_fim ? data_fim.split("-")[0] : data_fim,
+      finalMonth: data_fim ? data_fim.split("-")[1] : data_fim,
+    };
+    setShowRegister(true);
+    setEditStored(data);
+  }
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
@@ -394,7 +394,7 @@ const ProjectExperiences: React.FC = () => {
                       label="Ano final"
                       name="finalYear"
                       options={finalYearOptions(initialYear)}
-                      
+
                       defaultValue={editStored.id && Number(editStored?.finalYear) > initialYear ?
                         {
                           label: editStored?.finalMonth,
