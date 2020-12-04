@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useCallback,
   OptionHTMLAttributes,
+  ChangeEvent,
 } from "react";
 import Input from "../../Input";
 import Textarea from "../../Textarea";
@@ -21,7 +22,6 @@ import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
 import { Form } from '@unform/web';
 import getValidationErrors from '../../../utils/getValidationErrors';
-import { OptionTypeBase, ValueType } from "react-select";
 interface ProfessionalType {
   id: number;
   organizacao: string;
@@ -62,7 +62,8 @@ const ProfessionalExperiences: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false);
   const formRef = useRef<FormHandles>(null);
   const [stored, setStored] = useState<ProfessionalType[]>([]);
-  const [initialYear, setInitialYear] = useState<number>();
+  const [initialYear, setInitialYear] = useState<number>(1970);
+  const [currentilyWork, setCurrentilyWork] = useState<boolean>(false);
   const initialProfessionalData = {
     id: 0,
     currentWorking: false,
@@ -114,12 +115,15 @@ const ProfessionalExperiences: React.FC = () => {
             .required('Informe o vínculo'),
           organizacao: Yup
             .string()
+            .max(50, 'Excedeu o limite de caractéres (50)')
             .required('Informe a organização'),
           cargo: Yup
             .string()
             .required('Informe o cargo'),
           descricao: Yup
             .string()
+            .min(20, 'Descreva um pouco mais')
+            .max(500, 'Excedeu o limite de caractéres (500)')
             .required('Informe a descrição'),
           finalYear: Yup
             .string()
@@ -208,7 +212,6 @@ const ProfessionalExperiences: React.FC = () => {
           formRef.current?.setErrors(errors);
           return;
         }
-        alert("Lgoin ou senha incorreto")
       }
 
 
@@ -338,6 +341,12 @@ const ProfessionalExperiences: React.FC = () => {
                   label="Vínculo"
                   name="vinculo"
                   options={vinculos}
+                  defaultValue={editStored.id ?
+                    {
+                      label: editStored?.vinculo,
+                      value: editStored?.vinculo
+                    } : null
+                  }
                 />
               </section>
               <section className="bloco-tres">
@@ -348,7 +357,7 @@ const ProfessionalExperiences: React.FC = () => {
                     options={monthOptions}
                     defaultValue={editStored.id ?
                       {
-                        label: editStored?.initialMonth,
+                        label: toMonth(editStored?.initialMonth),
                         value: editStored?.initialMonth
                       } : null
 
@@ -376,21 +385,32 @@ const ProfessionalExperiences: React.FC = () => {
                     name="currentWorking"
                     id="currentWorking"
                     defaultChecked={editStored.currentWorking}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) => setCurrentilyWork(event.target.checked)}
                   />
                 </aside>
-                {!0 && (
+                {!currentilyWork && (
                   <aside>
                     <Select
                       label="Mês final"
                       name="finalMonth"
                       options={monthOptions}
-
+                      defaultValue={editStored.id ?
+                        {
+                          label: toMonth(editStored?.finalMonth),
+                          value: editStored?.finalMonth
+                        } : null
+                      }
                     />
                     <Select
                       label="Ano final"
                       name="finalYear"
                       options={finalYearOptions(Number(initialYear))}
-
+                      defaultValue={editStored.id && Number(editStored?.finalYear > initialYear) ?
+                        {
+                          label: editStored?.finalYear,
+                          value: editStored?.finalYear
+                        } : null
+                      }
                     />
                   </aside>
                 )}
@@ -399,26 +419,27 @@ const ProfessionalExperiences: React.FC = () => {
                 <Textarea
                   name="descricao"
                   label="Detalhes"
+                  defaultValue={editStored?.descricao}
                 />
               </section>
               <section className="area-botoes">
                 <Button
                   type="submit"
                   theme="primary-green"
-                //disabled={academicFormData === {} as AcademicType? false:true}
                 >
                   Salvar
               </Button>
                 <Button
                   theme="secondary-green"
-                  onClick={
-                    editStored.id
-                      ? () => {
-                        setOpenModal(true);
-                        //setExperienceExcluded({ "nome": professionalFormData.cargo, "id": editStored })
-                      }
-                      : () => setShowRegister(false)
-                  }
+                  onClick={() => {
+                    if (editStored.id) {
+                      setOpenModal(true);
+                      setExperienceExcluded({ "nome": editStored.cargo, "id": editStored?.id })
+                    }
+                    else {
+                      setShowRegister(false)
+                    }
+                  }}
                 >
                   Excluir
               </Button>
