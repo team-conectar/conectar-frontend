@@ -109,7 +109,7 @@ const ProfessionalExperiences: React.FC = () => {
     async (formData: ProfessionalDataType) => {
       formRef.current?.setErrors({});
       try {
-        const schema = Yup.object().shape({
+        const validations = {
           vinculo: Yup
             .string()
             .required('Informe o vínculo'),
@@ -125,19 +125,23 @@ const ProfessionalExperiences: React.FC = () => {
             .min(20, 'Descreva um pouco mais')
             .max(500, 'Excedeu o limite de caractéres (500)')
             .required('Informe a descrição'),
-          finalYear: Yup
+          finalYear: !currentilyWork? Yup
             .string()
-            .required('Ano final é obrigatório'),
+            .required('Ano final é obrigatório') : Yup
+            .string(),
           initialYear: Yup
             .string()
             .required('Ano inicial é obrigatório'),
           initialMonth: Yup
             .string()
             .required('Mês inicial é obrigatório'),
-          finalMonth: Yup
-            .string()
-            .required('Mês final é obrigatório'),
-        });
+          finalMonth: !currentilyWork? Yup
+          .string()
+          .required('Mês final é obrigatório') : Yup
+          .string(),
+        }
+        
+        const schema = Yup.object().shape(validations);
 
         await schema.validate(formData, {
           abortEarly: false,
@@ -216,7 +220,7 @@ const ProfessionalExperiences: React.FC = () => {
 
 
       // Do something
-    }, []);
+    }, [currentilyWork,editStored]);
   //Edit
   function handleEditExperience(experience: ProfessionalType) {
 

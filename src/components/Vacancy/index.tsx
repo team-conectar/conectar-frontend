@@ -1,6 +1,7 @@
 import React, {
   ChangeEvent,
   FormEvent,
+  useRef,
   useState,
   useCallback,
   useEffect,
@@ -24,7 +25,10 @@ import Modal from "../Modal";
 import { AreaType } from "../../components/SelectArea";
 import { ToolType } from "../../components/SelectTools";
 import { createOptionAreas, createOptionTools } from "../../utils/projects";
-
+import * as Yup from 'yup';
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
+import getValidationErrors from '../../utils/getValidationErrors';
 interface VacanciesType {
   nome: string;
   descricao: string;
@@ -50,6 +54,7 @@ interface VacancyProps {
 const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false);
   const [editingId, setEditingId] = useState<number>(0);
+  const formRef = useRef<FormHandles>(null);
   const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
     { value: 'trainee', label: 'Trainee' },
     { value: 'terceirizado', label: 'Terceirizado' },
@@ -62,7 +67,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
     { value: 'meioPeríodo', label: 'Meio Período' },
     { value: 'tempoIntegral', label: ' Tempo Integral' }
   ]
-  
+
   const optionsAreas: Array<OptionHTMLAttributes<HTMLOptionElement>> = createOptionAreas(project.areas);
   const optionsTools: Array<OptionHTMLAttributes<HTMLOptionElement>> = createOptionTools(project.habilidades);
   useEffect(() => {
@@ -78,7 +83,31 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         return err?.response?.data.detail;
       });
   }, [editingId, showRegister]);
+  const handleSubmit = useCallback(
+    async (formData: ProjectType) => {
+      console.log(formData);
+      try {
+        // Remove all previogeus errors
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          nome: Yup.string().required('Nome é obrigatório'),
 
+        });
+        await schema.validate(formData, {
+          abortEarly: false,
+        });
+        // Validation passed
+
+        await api.put(`/api/v1/projeto/`, formData);
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          // Validation failed
+          const errors = getValidationErrors(err);
+          formRef.current?.setErrors(errors);
+        }
+      }
+    }, []
+  );
   return (
     <BodyVacancy>
 
@@ -170,18 +199,14 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
               <img
                 src={edit}
                 alt="editar vaga"
-
               />
               <img
                 src={trash}
                 alt="apagar vaga"
-
               />
 
             </section>
             <fieldset className="info-vagas">
-
-
               <legend>Ux Designer</legend>
               <p>
                 Trainee | Não remunerado <br />
@@ -274,26 +299,25 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           </button>
         </div>
       ) : (
-          <form
+          <Form
+            ref={formRef}
+            onSubmit={handleSubmit}
             className="form-vaga"
           >
             <Input
               label="Cargo"
               name="cargo"
-              required
             //defaultValue={academicFormData?.instituicao}
             />
             <Input
               label="Perfil"
               name="perfil"
-              required
             //defaultValue={academicFormData?.instituicao}
             />
             <Input
               label="Quantidade"
               name="quantidade"
               type="number"
-              required
             //defaultValue={academicFormData?.instituicao}
             />
             <div className="bloco-area">
@@ -316,8 +340,6 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             <Textarea
               name="descricao"
               label="Descrição"
-              required
-            //defaultValue={academicFormData?.descricao}
             />
             <section className="bloco-contrato">
               <Select
@@ -329,17 +351,12 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
                 label="Remunerado"
                 name="remunerado"
                 id="remunerado"
-              //defaultChecked={
-              //  academicFormData &&
-              //  academicFormData?.situacao === "Incompleto"
-              //}
               />
             </section>
             <section className="area-botoes">
               <Button
                 type="submit"
                 theme="primary-green"
-              //disabled={academicFormData === {} as AcademicType? false:true}
               >
                 Salvar
               </Button>
@@ -352,14 +369,13 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
                 onClick={() => {
                   setShowRegister(false);
                   setEditingId(0);
-                  //setAcademicFormData(initialAcademicData);
                 }}
               >
                 Cancelar
               </Button>
             </section>
 
-          </form>
+          </Form>
         )}
     </BodyVacancy>
   );

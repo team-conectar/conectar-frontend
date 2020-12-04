@@ -59,12 +59,11 @@ function Projects() {
   };
   const [modalContent, setModalContent] = useState(initialModalContent);
   const history = useHistory();
-  const [openModal, setOpenModal] = useState<boolean>(!isAuthenticated);
+  const [openModal, setOpenModal] = useState<boolean>(isAuthenticated);
   const projeto_id = useParams<routeParms>().id;
   const [project, setProject] = useState({} as ProjectType)
-  const [formData, setFormData] = useState({} as ProjectType)
-  const [recordedAreas, setRecordedAreas] = useState<Array<AreaType>>([]);
-  const [recordedTools, setRecordedTools] = useState<Array<ToolType>>([]);
+  const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([]);
+  const [storedTools, setStoredTools] = useState<Array<ToolType>>([]);
   const [selectedImage, setSelectedImage] = useState<File>();
   const formRef = useRef<FormHandles>(null);
   useEffect(() => {
@@ -72,9 +71,8 @@ function Projects() {
       .get(`/api/v1/projeto/${projeto_id}`)
       .then((response) => {
         setProject(response.data);
-        setRecordedTools(response.data.habilidades);
-        setRecordedAreas(response.data.areas);
-        setFormData(response.data);
+        setStoredTools(response.data.habilidades);
+        setStoredAreas(response.data.areas);
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail;
@@ -82,13 +80,6 @@ function Projects() {
     console.log(res);
 
   }, [projeto_id]);
-
-
-
-
-
-
-
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData);
@@ -96,15 +87,27 @@ function Projects() {
         // Remove all previogeus errors
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
-          nome: Yup.string().required('Nome é obrigatório'),
-
-        });
+          nome: modalContent.nome ? Yup.string().required('Nome é obrigatório') : Yup.string(),
+          descricao: modalContent.descricao? Yup.string().required('Descrição é obrigatória') : Yup.string(),
+          objetivo: modalContent.objetivo? Yup.string().required('Objetivo é obrigatório') : Yup.string(),
+        }); 
         await schema.validate(formData, {
           abortEarly: false,
         });
         // Validation passed
-
-
+        const {
+          nome,
+          descricao,
+          objetivo,
+        } = formData;
+        const data= {
+          nome,
+          descricao,
+          objetivo,
+          area:storedAreas,
+          habilidades:storedTools,
+        }
+        await api.put(`/api/v1/projeto/${projeto_id}`, data);
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -112,7 +115,7 @@ function Projects() {
           formRef.current?.setErrors(errors);
         }
       }
-    }, []
+    }, [modalContent,projeto_id]
   );
 
   return (
@@ -149,13 +152,13 @@ function Projects() {
               />}
               {modalContent.areas && <SelectArea
                 label="Selecione as àreas de atuação"
-                callbackSelectedAreas={recordedAreas}
-                setCallbackSelectedAreas={setRecordedAreas}
+                callbackSelectedAreas={storedAreas}
+                setCallbackSelectedAreas={setStoredAreas}
               />}
               {modalContent.habilidades && <SelectTool
                 label="Selecione as ferramentas ou habilidades"
-                callbackSelectedTools={recordedTools}
-                setCallbackSelectedTools={setRecordedTools}
+                callbackSelectedTools={storedTools}
+                setCallbackSelectedTools={setStoredTools}
               />}
               <Button theme="primary-green" type="submit">Salvar</Button>
             </Form>}
@@ -221,7 +224,7 @@ function Projects() {
                   setModalContent({ ...initialModalContent, "objetivo": true })
                   setOpenModal(true);
 
-}                }
+                }}
               />
             </section>
             <p>{project.objetivo}</p>
@@ -236,7 +239,7 @@ function Projects() {
                   setModalContent({ ...initialModalContent, "descricao": true })
                   setOpenModal(true);
 
-}                }
+                }}
               />
             </section>
             <p>{project.descricao}</p>
@@ -290,7 +293,7 @@ function Projects() {
                   setModalContent({ ...initialModalContent, "vaga": true })
                   setOpenModal(true);
 
-}                }
+                }}
               />
             </legend>
 

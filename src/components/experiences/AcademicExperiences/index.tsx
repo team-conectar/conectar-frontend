@@ -195,7 +195,7 @@ const AcademicExperiences: React.FC = () => {
       }
 
       // Do something
-    }, []);
+    }, [isIncomplete,editStored]);
   function handleEditExperience(experience: AcademicType) {
     let {
       id,
