@@ -55,9 +55,11 @@ export const BodyExperiences = styled.section`
                 justify-content:space-between;
                 align-items:center;
                 padding:0.6rem;
+
                 img{
-                    height:3rem;
+                    width:1.4rem;
                     cursor:pointer;
+                    margin:.4rem 0;
                 }
             }
         }
