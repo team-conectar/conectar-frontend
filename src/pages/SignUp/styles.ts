@@ -3,17 +3,16 @@ import styled, { css } from 'styled-components';
 
 
 
-interface StepProps {
-    showSecondStep: boolean;
-}
 
-export const BodySignUp = styled.div<StepProps>`
+
+export const BodySignUp = styled.div`
     display:flex;
     justify-content:center;
     align-items:center;
     height:100vh;
     width:100vw;
     background:var(--green-bg);
+    
     form.area-central{
         background:var(--white);
         padding:2.4rem;
@@ -27,10 +26,15 @@ export const BodySignUp = styled.div<StepProps>`
             color: var(--green-bg);
         }
         .primeira-etapa{
-            ${props =>
-                props.showSecondStep ? css`display:none;` : css`display:grid;`
-            } 
-            
+            display:grid;
+            .area-img{
+                grid-area:img;
+                display:flex;
+                img{
+                    width:100%;
+
+                }
+            }
             grid-template-rows: 500px;
             grid-template-columns: 60% 40%;
             grid-template-areas:"form img";
@@ -48,13 +52,14 @@ export const BodySignUp = styled.div<StepProps>`
                 .google-button, .facebook-button {
                     display: flex;
                     align-items: center;
+                    position: relative;
                     cursor: pointer;
                     font:400 0.9rem Roboto;
                     height:2.8rem;
                     width: 15rem;
                     border-radius:0.4rem;
                     padding:0.4rem;
-                    svg{
+                    >svg{
                         color:#3b5998;
                         padding: 0 0.4rem;
                         border-right: 1px solid var(--green);
@@ -66,12 +71,12 @@ export const BodySignUp = styled.div<StepProps>`
                 .google-button{
                     border: 1px solid var(--green);
                     background-color: var(--white);
-                    margin: 2rem 0 0.5rem 0.2rem; 
+                    margin: 0.5rem 0 0.5rem 0.2rem; 
                 }
                 .facebook-button{              
                     border: 1px solid var(--green);
                     background-color:var(--blue);
-                    margin: 2rem 0.2rem 0.5rem 0;
+                    margin: 0.5rem 0.2rem 0.5rem 0;
                 }
                 a{
                     font:400 1.2rem Roboto;
@@ -87,31 +92,27 @@ export const BodySignUp = styled.div<StepProps>`
                     }
                 }
             }
-            .area-img{
-                grid-area:img;
-            }
-            -webkit-transition: .2s;
-            transition: opacity .5s linear;
+
         }
         .segunda-etapa {
-            ${props =>
-                props.showSecondStep ? css`display:flex;` : css`display:none;`
-            }       
+           
+            display:flex;
+              
             flex-direction:column;
-            section{
+            >section{
                 display:flex;
                 justify-content:space-between;
                 align-items:flex-end;
                 margin:0.6rem 0;
-                div + div {
+                >div + div {
                     margin-left:0.8rem;
                     width:auto;     
                 }
-                legend{
+                >legend{
                     font:400 1rem Roboto;
                     color:var(--orange);
                 }
-                span{
+                >span{
                     font:400 .8rem Roboto;
                     color:var(--gray);
                 }
@@ -119,7 +120,7 @@ export const BodySignUp = styled.div<StepProps>`
             .tipo-perfil{
                 justify-content:space-around;
                 flex-wrap:wrap;
-                fieldset{
+                >fieldset{
                     margin-top:0.4rem;
                     width: max(30% ,150px);
                     legend{
@@ -144,7 +145,6 @@ export const BodySignUp = styled.div<StepProps>`
                         p{
                             margin-bottom:0.8rem;
                         }
-                        
                     }
                 }
             }

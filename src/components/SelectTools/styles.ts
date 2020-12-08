@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 export const BodySelectTool = styled.div`
   margin: 0.3rem 0 ;
+  width:100%;
   >label{
     display:flex;
     justify-content:space-between;
@@ -134,7 +135,7 @@ export const BodySelectTool = styled.div`
           }
           >img{
             cursor:pointer;
-            height:2.5rem;
+            height:1.4rem;
             cursor:pointer;
           }
           

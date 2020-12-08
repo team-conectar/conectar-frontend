@@ -2,7 +2,7 @@ import React, { useState, useEffect, FormEvent } from "react";
 import { BodyExperienceAreas } from "./styles";
 import Button from "../../components/Button";
 import { useHistory } from "react-router-dom";
-import SelectArea, { Area } from "../../components/SelectArea";
+import SelectArea, { AreaType } from "../../components/SelectArea";
 import Logged from "../../components/Logged";
 
 import axios, { AxiosError } from "axios";
@@ -10,7 +10,7 @@ import api from "../../services/api";
 function ExperienceAreas() {
   const history = useHistory();
 
-  const [selectedAreas, setSelectedAreas] = useState<Area[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<AreaType[]>([]);
 
 
   async function handleSubmit(event: FormEvent) {

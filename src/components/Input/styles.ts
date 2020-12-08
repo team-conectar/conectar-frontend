@@ -10,7 +10,9 @@ export const BodyInput = styled.div`
   }
   width:100%;
   min-width:10rem;
-  margin: 0.3rem 0 ;
+  margin:.3rem 0;
+  padding-bottom:.8rem;
+  position:relative;
   label{
     display:flex;
     justify-content:space-between;
@@ -26,14 +28,21 @@ export const BodyInput = styled.div`
   }
   input{
     border: 2px solid var(--yellow);
+    border-radius: .2rem;
     width:100%;
-    height: 2rem;
-    margin-top: 0.2rem;
-    border-radius: 0.3rem;
+    height: 2.4rem;
+    margin: .2rem 0;
     outline: 0;
     padding: 0 0.8rem;
-    font: 1.6rem;
+    font:400 .8rem Roboto;
     
+  }
+  span{
+    color:red;
+    font:400 .8rem Roboto;
+    position:absolute;
+    left:0;
+    bottom:0;
   }
   input[type=number]::-webkit-inner-spin-button { 
     -webkit-appearance: none;

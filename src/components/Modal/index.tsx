@@ -1,16 +1,16 @@
 import React from 'react';
 import { BodyModal } from './styles';
-import { AiOutlineClose } from "react-icons/ai";
+import { TiBackspace } from "react-icons/ti";
 interface modalProps {
   open: boolean;
   setOpen(open: boolean): void;
-  onAfterClose?():void;
+  onAfterClose?(): void;
 }
 const Modal: React.FC<modalProps> = ({ open, setOpen, onAfterClose, children }) => {
   const handleOutsideClick = (e: any) => {
     if (e.target.id === "modal") close();
   }
-  function close(){
+  function close() {
     setOpen(false);
     onAfterClose && onAfterClose();
   }
@@ -21,12 +21,16 @@ const Modal: React.FC<modalProps> = ({ open, setOpen, onAfterClose, children }) 
       onClick={handleOutsideClick}
     >
       <div className="janela">
-        <AiOutlineClose
+        <span
+          className="fechar"
           onClick={close}
-        />
+        >
+          <TiBackspace />
+          Voltar
+        </span>
         {children}
       </div>
-    </BodyModal>
+    </BodyModal >
   )
 
 }
