@@ -34,21 +34,21 @@ export const BodyCreateProject = styled.div<StepProps>`
     }
     .primeira-etapa {
       ${(props) =>
-        props.showSecondStep
-          ? css`
-              display: none;
+    props.showSecondStep
+      ? css`
+              display:none;
             `
-          : css`
+      : css`
               display: grid;
             `}
     }
     .segunda-etapa {
       ${(props) =>
-        props.showSecondStep
-          ? css`
+    props.showSecondStep
+      ? css`
               display: grid;
             `
-          : css`
+      : css`
               display: none;
             `}
     }

@@ -4,59 +4,42 @@ import { Link } from 'react-router-dom';
 
 interface ProjectCardsProps {
   projeto: {
-    title:string;
-    areas:string[];
-    views:number;
-    likes:number;
-  } 
+    title: string;
+    areas: string[];
+    views: number;
+    likes: number;
+  }
   user: {
     imgProfile: string;
-    
-  } 
+
+  }
 
 
 }
 const ProjectCards: React.FC = () => {
   return (
     <BodyCard>
-      <Link to="#">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU" alt="" />
-      </Link>
+
+
       <main>
+        <aside>
 
-        <section className="description">
-          <Link
-            to="#"
-            className="title"
-          >
-            <h2>Linux</h2>
-          </Link>
-          <aside className="areas">
-            <Link to="#" >
-              Sistemas Operacionais
-          </Link>
-            <Link to="#" >
-              OS
-          </Link>
-          </aside>
-        </section>
-        <section className="icons">
-          <p><span></span>1000</p>
-          <p><span>1000</span></p>
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU" alt="" />
 
-
-        </section>
-        <section className="members">
-          <Link to="#">
-            <img src="https://cb.org.br/wp-content/uploads/2015/12/1280x720-a-verdadeira-face-de-jesus.psd.jpg" alt="" />
-          </Link>
-          <Link to="#">
-            <img src="https://cb.org.br/wp-content/uploads/2015/12/1280x720-a-verdadeira-face-de-jesus.psd.jpg" alt="" />
-          </Link>
-        </section>
+          <section>
+            <h3>Title</h3>
+            <ul>
+              <li></li>
+            </ul>
+            <p>publicado em</p>
+          </section>
+        </aside>
+        <p>orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic</p>
       </main>
-
-
+      <aside>
+        <button>Favoritar</button>
+        <button>Tenho interesse</button>
+      </aside>
     </BodyCard>
   )
 }

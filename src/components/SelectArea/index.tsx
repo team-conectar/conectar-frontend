@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, InputHTMLAttributes, useCallback, ChangeEvent } from 'react';
 import { BodySelectArea } from './styles';
 import { GoCheck } from 'react-icons/go';
 import { AxiosError } from "axios";
 import api from "../../services/api";
 import trash from "../../assets/icon/lixeira.svg";
+import { useField } from '@unform/core';
+/**
+*descricao: string;
+*id: number;
+*area_pai_id?: number;
+*/
 export interface AreaType {
   descricao: string;
   id: number;
@@ -13,27 +19,21 @@ interface AreaTypes {
   area: AreaType;
   subareas: AreaType[];
 }
-interface ShowSubareaTypes {
-  show: boolean;
-  area: AreaTypes;
-}
-interface SelectAreaProps {
+
+interface SelectAreaProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
+  name: string;
+  defaultValue?: string[],
   callbackSelectedAreas: AreaType[];
   setCallbackSelectedAreas(areas: AreaType[]): void;
 }
 
 
 
-const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, setCallbackSelectedAreas }) => {
-  const [showSubareas, setShowSubareas] = useState<ShowSubareaTypes>({
-    show: false,
-    area: {
-      area: { id: -1, descricao: "" },
-      subareas: [{ descricao: "", id: -1 }]
-    }
-  });
+const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, setCallbackSelectedAreas, name, defaultValue }) => {
+  const [listedArea, setListedArea] = useState<string>('');
   const [areas, setAreas] = useState<AreaTypes[]>([]);
+  const [selectedAreas, setSelectedAreas] = useState<string[]>(defaultValue || []);
   useEffect(() => {
     api
       .get("/api/v1/areas", {
@@ -48,77 +48,113 @@ const SelectArea: React.FC<SelectAreaProps> = ({ label, callbackSelectedAreas, s
         return err?.response?.data.detail;
       });
   }, []);
-  // const areas: AreaTypes[] = [{
-  //   name: "area a",
-  //   subareas: [{ name: "sub a", id: 0 }, { name: "sub b", id: 1 }, { name: "sub c", id: 2 }]
-  // }]
-  function handleSelectedSubareas(area: AreaType) {
-    if (callbackSelectedAreas?.includes(area)) {
-      setCallbackSelectedAreas(callbackSelectedAreas.filter(atual => atual !== area))
+  const inputRefs = useRef<HTMLInputElement[]>([]);
+  const { fieldName, registerField, error } = useField(name);
+  useEffect(() => {
+
+    registerField({
+      name: fieldName,
+      ref: inputRefs.current,
+      getValue: (refs: HTMLInputElement[]) => {
+        return refs.filter(ref => ref.checked).map(ref => ref.value);
+      },
+      clearValue: (refs: HTMLInputElement[]) => {
+        refs.forEach(ref => {
+          ref.checked = false;
+        });
+
+      },
+      setValue: (refs: HTMLInputElement[], values: string[]) => {
+        refs.forEach(ref => {
+          if (values.includes(ref.id)) {
+            ref.checked = true;
+          }
+        });
+      },
+    });
+  }, [defaultValue, fieldName, registerField]);
+  const handleInputCheckChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    if (selectedAreas?.includes(value)) {
+      setSelectedAreas(selectedAreas.filter(atual => atual !== value))
     }
     else {
-      setCallbackSelectedAreas([...callbackSelectedAreas, area]);
+      setSelectedAreas([...selectedAreas, value]);
     }
-  }
+  }, [selectedAreas])
+
   return (
-    <BodySelectArea>
+    <BodySelectArea showSubarea={listedArea ? true : false}>
       <label>{label}</label>
       <div>
         <div className="area-selecionadas">
           <legend>Áreas selecionadas</legend>
-          <fieldset>
+          <ul>
 
-            {callbackSelectedAreas?.map(area => (
-              <label>
-                <legend>{area.descricao}</legend>
-                <img
-                  src={trash}
-                  alt="apagar experiencia"
-                  onClick={() => setCallbackSelectedAreas(callbackSelectedAreas.filter(atual => atual !== area))}
-                />
-              </label>
+            {selectedAreas?.map((descricao: string) => (
+              <li key={descricao}>
+                <legend>{descricao}</legend>
+                <label htmlFor={descricao}>
+                  <img
+                    src={trash}
+                    alt="apagar experiencia"
+                  />
+                </label>
+              </li>
             ))}
-          </fieldset>
+          </ul>
         </div>
         <div className="area-selecao">
-          {!showSubareas.show ?
-            <div className="area-rolagem">
-              {areas.map(area => (
-                <button
-                  key={area.area.id}
-                  onClick={() => { setShowSubareas({ ...showSubareas, show: true, area: area }) }}
-                >{area.area.descricao}
-                </button>
-              ))}
-            </div> :
-            <aside className="area-subarea">
-              <header>
 
-                <button
-                  onClick={() => { setShowSubareas({ ...showSubareas, show: false }) }}
-                >Voltar</button>
-                <legend>{showSubareas.area.area.descricao}</legend>
-              </header>
-              <fieldset>
-                {showSubareas.area.subareas.map(subarea => (
+          <ul>
+            {areas.map(area => (<>
+              <li
+                key={area.area.id}
+                onClick={() => setListedArea(area.area.descricao)}
+              >{area.area.descricao}
+              </li>
+              <ul>
+                { <header>
                   <button
-                    key={subarea.descricao}
-                    onClick={() => handleSelectedSubareas(subarea)}
                     type="button"
-                  >
-                    <span>
-                      {callbackSelectedAreas?.includes(subarea) && <GoCheck />}
-                    </span>
-                    <legend>{subarea.descricao}</legend>
-                    <strong>+</strong>
-                  </button>
+                    onClick={() => setListedArea('')}
+                  >Voltar</button>
+                  <legend>{listedArea}</legend>
+                </header>
+                }
+
+                {area?.subareas.map((subarea, index) => (
+                  <li key={subarea.id}>
+                    { 
+                      <label htmlFor={subarea.descricao}>
+                        <span>
+                          {selectedAreas?.includes(subarea?.descricao) && <GoCheck />}
+                        </span>
+                        <legend>{subarea?.descricao}</legend>
+                        <strong>+</strong>
+                      </label>
+                    }
+                    <input
+                      type="checkbox"
+                      id={subarea.descricao}
+                      value={subarea.descricao}
+                      defaultChecked={defaultValue ? selectedAreas.indexOf(subarea.descricao) >= 0 : false}
+                      ref={ref => {
+                        inputRefs.current[index] = ref as HTMLInputElement;
+                      }}
+                      onChange={handleInputCheckChange}
+                    />
+                  </li>
                 ))}
-              </fieldset>
-            </aside>
-          }
+              </ul>
+
+            </>))}
+          </ul>
+
         </div>
       </div>
 
+      <span>{error}</span>
     </BodySelectArea >
   )
 }

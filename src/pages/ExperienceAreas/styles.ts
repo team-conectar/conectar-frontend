@@ -1,7 +1,7 @@
 import styled from 'styled-components';
+import { Form } from '@unform/web';
 
-
-export const BodyExperienceAreas = styled.form`
+export const BodyExperienceAreas = styled(Form)`
     display:flex;
     flex-direction:column;
     justify-content:center;
@@ -15,11 +15,9 @@ export const BodyExperienceAreas = styled.form`
     }
     
     .area-central{
-        
         padding:2.4rem 3.2rem;
         border-radius:0.8rem;
         background:white;     
-        
     }
     footer{
         width: min(1100px, 90vw);

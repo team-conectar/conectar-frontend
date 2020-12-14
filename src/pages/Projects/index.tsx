@@ -88,9 +88,9 @@ function Projects() {
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
           nome: modalContent.nome ? Yup.string().required('Nome é obrigatório') : Yup.string(),
-          descricao: modalContent.descricao? Yup.string().required('Descrição é obrigatória') : Yup.string(),
-          objetivo: modalContent.objetivo? Yup.string().required('Objetivo é obrigatório') : Yup.string(),
-        }); 
+          descricao: modalContent.descricao ? Yup.string().required('Descrição é obrigatória') : Yup.string(),
+          objetivo: modalContent.objetivo ? Yup.string().required('Objetivo é obrigatório') : Yup.string(),
+        });
         await schema.validate(formData, {
           abortEarly: false,
         });
@@ -100,12 +100,12 @@ function Projects() {
           descricao,
           objetivo,
         } = formData;
-        const data= {
+        const data = {
           nome,
           descricao,
           objetivo,
-          area:storedAreas,
-          habilidades:storedTools,
+          area: storedAreas,
+          habilidades: storedTools,
         }
         await api.put(`/api/v1/projeto/${projeto_id}`, data);
       } catch (err) {
@@ -115,7 +115,7 @@ function Projects() {
           formRef.current?.setErrors(errors);
         }
       }
-    }, [modalContent,projeto_id]
+    }, [modalContent.descricao, modalContent.nome, modalContent.objetivo, projeto_id, storedAreas, storedTools]
   );
 
   return (
@@ -134,7 +134,7 @@ function Projects() {
           </BodyModalDefault> :
           <>
             {!modalContent.vaga && <Form ref={formRef} className="modal" onSubmit={handleSubmit}>
-              {modalContent.foto && <Dropzone name="capa"/>}
+              {modalContent.foto && <Dropzone name="capa" />}
               {modalContent.nome && <Input
                 name="nome"
                 label="Nome do projeto"
@@ -151,6 +151,7 @@ function Projects() {
                 defaultValue={project.descricao}
               />}
               {modalContent.areas && <SelectArea
+                name="area"
                 label="Selecione as àreas de atuação"
                 callbackSelectedAreas={storedAreas}
                 setCallbackSelectedAreas={setStoredAreas}

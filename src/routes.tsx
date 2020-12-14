@@ -8,6 +8,7 @@ import MasteryTools from './pages/MasteryTools';
 import CreateProject from './pages/CreateProject';
 import ApproveProject from './pages/ApproveProject';
 import Projects from './pages/Projects';
+import Profiles from './pages/Profiles';
 
 import { AuthProvider } from './context/AuthContext';
 
@@ -23,6 +24,7 @@ function Routes() {
         <Route path="/createproject" component={ CreateProject} />
         <Route path="/approveproject" component={ ApproveProject} />
         <Route path="/projects/:id" component={ Projects} />
+        <Route path="/profiles/:id" component={ Profiles} />
       </BrowserRouter>
     </AuthProvider>
   )

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import passos_idealizador from '../../assets/image/passos_idealizador.svg';
 export const BodyHome = styled.div` 
-    background:#f1f1f1ff;
+    background:var(--background);
     >main {
         height: 100vh;
         scroll-snap-type: y mandatory;

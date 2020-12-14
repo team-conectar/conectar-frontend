@@ -1,10 +1,15 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface Props {
+  showSubarea: boolean;
+}
 
 
-
-export const BodySelectArea = styled.div`
+export const BodySelectArea = styled.div<Props>`
   margin: 0.3rem 0 ;
   width:100%;
+  position: relative;
+  padding-bottom:1rem;
   >label{
     display:flex;
     justify-content:space-between;
@@ -28,10 +33,12 @@ export const BodySelectArea = styled.div`
       grid-column:1;
       grid-row:1;
       height:60vh;
-      .area-rolagem{
+      >ul{
         height:100%;
-        overflow-y: auto;
-        > button{
+        overflow-y:auto;
+        scroll-snap-type: y proximity;
+        > li{
+        //${props => props.showSubarea ? css`display:none;` : css`display:initial;`}
           background:none;
           display: flex;
           justify-content:flex-start;
@@ -43,11 +50,15 @@ export const BodySelectArea = styled.div`
           padding:0 1.4rem;
           color:var(--orange);
           font:500 1rem Roboto;
+          cursor: pointer;
         }
-      }
-      .area-subarea{    
+      >ul{ 
+        ${props => props.showSubarea ? css`display:initial;` : css`display:none;`}   
         height:100%;
-        header{
+        height:90%;
+          overflow-y:auto;
+          scroll-snap-type: y proximity;
+        >header{
           position:relative;
           display: flex;
           justify-content:center;
@@ -55,11 +66,11 @@ export const BodySelectArea = styled.div`
           height:10%;
           border-bottom:2px solid var(--yellow);
           padding:0 0.4rem;
-          legend{
+          >legend{
             color:var(--green-bg);
             font:500 1rem Roboto;
           }
-          button{
+          >button{
             position:absolute; 
             left:1rem;
             border:1px solid var(--green-bg);
@@ -70,43 +81,46 @@ export const BodySelectArea = styled.div`
             
           }
         }
-        >fieldset{
-          height:90%;
-          overflow-y:auto;
-          overflow-x:hidden;
-          >button{
-            position:relative;
-            margin-top:1px;
+
+          >li{
+            list-style:none;
             width:100%;
-            cursor:pointer;
             background:none;
-            display: flex;
-            justify-content:space-between;
-            align-items:center;
-            height:10%;
-            border:0;
-            border-bottom:2px solid var(--yellow);
-            padding:0 1.4rem;
             font:500 1rem Roboto;
-            strong,span{
-              color:var(--green);
-              font-size:1.3rem;
+            input{
+              display:none;
             }
-            span{
-              position:absolute;
-            }
-            legend{
-              color:var(--orange);
-              display:flex;
+            label{
+              height:50px;
+              border-bottom:2px solid var(--yellow);
+              display: flex;
+              justify-content:space-between;
               align-items:center;
-              justify-content:center;
-              margin-left:0.4rem; 
+              position:relative;
               width:100%;
-              
+              padding:0 1.4rem;
+              cursor:pointer;
+              strong,span{
+                color:var(--green);
+                font-size:1.3rem;
+              }
+              span{
+                position:absolute;
+              }
+              legend{
+                color:var(--orange);
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                margin-left:0.4rem; 
+                width:100%;
+                
+              }
             }
           }
 
-        }   
+        }  
+      
       }
     }
     .area-selecionadas{
@@ -123,19 +137,20 @@ export const BodySelectArea = styled.div`
         color:white;
         font:500 1.2rem Roboto;
         border-top-right-radius:0.4rem;
+        border-bottom:2px solid var(--green-bg);
       }
-      fieldset{
-        height:90%;
+      ul{
+        height: 90%;
         overflow-y:auto;
-        >label{
+        scroll-snap-type: y proximity;
+        >li{
+          list-style:none;
           display: flex;
           justify-content:space-between;
           align-items:center;
           width:100%;
-          height:9%;
-          margin-top:1px;
+          height:50px;
           background:none;
-          border:0;
           border-bottom:2px solid var(--yellow);
           padding:0 1.4rem;
           font:500 1rem Roboto;
@@ -143,10 +158,12 @@ export const BodySelectArea = styled.div`
             color:var(--green);
             font-size:1.3rem;
           }
-          >img{
-            cursor:pointer;
-            height:1.4rem;
-            cursor:pointer;
+          >label{
+            >img{
+              cursor:pointer;
+              height:1.4rem;
+              cursor:pointer;
+            }
           }
         }
         legend{
@@ -161,5 +178,12 @@ export const BodySelectArea = styled.div`
         }
       }
     }
+  }
+  >span{
+    color:red;
+    font:400 .8rem Roboto;
+    position:absolute;
+    left:0;
+    bottom:0;
   }
 `;

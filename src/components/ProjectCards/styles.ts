@@ -2,78 +2,68 @@ import styled from 'styled-components';
 
 
 
-export const BodyCard = styled.div`
-  background-color:var(--green-bg);
-  width:320px;
-  height:288px;
-  border-radius:0.5rem;
-  display:flex;
-  margin:calc(1vw - 0.1rem) 0.2rem;
-  flex-direction:column;
-  justify-content:flex-start;
-  align-items:center;
-
-  a{
-    img{
-      width:320px;
-      border-radius: 0.5rem 0.5rem 0 0;
-      height:126px;
-      border-bottom:2px solid var(--yellow);
-    }
-  }
-  main{
-    width:90%;
-    display:grid;
-    grid-template-rows:  104px 56px;
-    grid-template-columns: 240px 48px;
-    grid-template-areas: "textos icones" "membros progresso";
-
-    .description{
-      padding:0.2rem;
-      border-bottom:1px solid var(--yellow);
-      a{
-        text-decoration:none;
-        color:var(--white);
+export const BodyCard = styled.li`
+list-style:none;
+  >main{
+    display:flex;
+    flex-direction:column;
+    padding:.6rem;
+    gap:1rem;
+    border-radius:.8rem .8rem 0 0;
+    box-shadow: 0 0 1px 1px  var(--borderDivision);
+    background:white;
+    >aside{
+      display:flex;
+      width:100%;
+      padding-bottom:.6rem;
+      box-shadow: 0 2px 2px -2px var(--borderDivision);
+      img{
+        width:50%;
+        height: 180px;
+        object-fit:cover;
+        object-position: center;
       }
-      
-      .areas{
-        display:flex;
-        flex-flow:row wrap;
-        a{
-        margin:0.1rem;
-        padding: 0.1rem 0.1rem;
-        border-radius:0.2rem;
+      >section{
         color:var(--green-bg);
-        background-color:var(--yellow);
-        transition: background-color 0.2s;
-        font:700 0.8rem Roboto;
+        width:50%;
+        display:flex;
+        flex-direction:column;
+        gap:.4rem;
+        justify-content:center;
+        align-items: center; 
+        h3{
+
+        }
+        ul{
+          li{
+
+          }
+        }
+        p{
+          color:var(--gray);
+
         }
       }
     }
-    .icons{
-      grid-area:icones;
+  }
+  >aside{
+    width:100%;
+    display:flex;
+    button{
+      width:50%;
       display:flex;
-      flex-direction:column;
       justify-content:center;
       align-items:center;
-      border-bottom:1px solid var(--yellow);
-      p{
-        color:var(--white);
-        font:400 0.8rem Roboto;
+      padding: .4rem 0;
+      border:0;
+      :nth-child(1){
+        border-radius: 0 0 0 .8rem;
       }
-
-    }
-    .members{
-      grid-area:membros;
-      display:flex;
-      justify-content:flex-start;
-      align-items:center;
-      img{
-        margin:0 0.2rem;
-        clip-path:circle(50%);
-        width:40px;
-        height:40px;
+      :nth-child(2){
+        border-radius: 0 0 .8rem 0;
       }
+      background:white;
+      box-shadow: 0 0 1px 1px  var(--borderDivision);
     }
   }
   
