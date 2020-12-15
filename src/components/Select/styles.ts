@@ -4,7 +4,7 @@ export const BodySelect = styled.div`
   width: 100%;
   min-width: 10rem;
   margin: 0.3rem 0;
-  padding-bottom: 0.8rem;
+  padding-bottom: 1rem;
   position: relative;
   label {
     display: flex;

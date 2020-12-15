@@ -4,7 +4,7 @@ import React, {
   FormEvent,
   useContext,
   useRef,
-  useCallback
+  useCallback,
 } from 'react'
 import { BodyCreateProject } from './styles'
 import Input from '../../components/Input'
@@ -54,10 +54,13 @@ function CreateProject() {
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
           nome: Yup.string().required('Nome é obrigatório'),
-          visibilidade: Yup.string()
+          visibilidade: Yup.string(),
+          habilidades: Yup.array()
+            .min(1, 'Seleciono pelo menos 1 item')
+            .max(5, 'Seleciono no máximo 5'),
         })
         await schema.validate(formData, {
-          abortEarly: false
+          abortEarly: false,
         })
         // Validation passed
         const visibilidade = formData.visibilidade === 'visibilidade'
@@ -71,7 +74,7 @@ function CreateProject() {
         data.append('objetivo', 'Não informado')
         const { id } = await (
           await api.post('/api/v1/projeto', data, {
-            withCredentials: true
+            withCredentials: true,
           })
         ).data
         setIdProject(id)
@@ -84,7 +87,7 @@ function CreateProject() {
         }
       }
     },
-    [selectedFile]
+    [selectedFile],
   )
   const handleSecondSubmit = useCallback(
     async (formData: ProjectType) => {
@@ -94,20 +97,23 @@ function CreateProject() {
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
           descricao: Yup.string().required('Descrição é obrigatório'),
-          objetivo: Yup.string().required('Objetivo é obrigatório')
+          objetivo: Yup.string().required('Objetivo é obrigatório'),
+          areas: Yup.array()
+            .min(1, 'Seleciono pelo menos 1 área')
+            .max(5, 'Seleciono no máximo 5'),
         })
         await schema.validate(formData, {
-          abortEarly: false
+          abortEarly: false,
         })
         // Validation passed
         const data = {
           ...formData,
           habilidades: selectedTools,
-          areas: selectedAreas
+          areas: selectedAreas,
         }
 
         await api.put(`/api/v1/projeto/${idProject}`, data, {
-          withCredentials: true
+          withCredentials: true,
         })
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -117,7 +123,7 @@ function CreateProject() {
         }
       }
     },
-    [idProject, selectedAreas, selectedTools]
+    [idProject, selectedAreas, selectedTools],
   )
 
   return (
@@ -136,77 +142,74 @@ function CreateProject() {
           <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
         </BodyModalDefault>
       </Modal>
-      <div className='area-central container'>
+      <div className="area-central container">
         <h1>Criar Projeto</h1>
 
-        {!showNextStep
-          ? <Form
+        {!showNextStep ? (
+          <Form
             ref={formRef}
-            className='primeira-etapa'
+            className="primeira-etapa"
             onSubmit={handleSubmit}
           >
-            <div className='coluna-um'>
-              <Input name='nome' label='Título do projeto' />
-              <div className='upload-img'>
-                <Dropzone name='img' />
+            <div className="coluna-um">
+              <Input name="nome" label="Título do projeto" />
+              <div className="upload-img">
+                <Dropzone name="img" />
               </div>
 
               <ToggleSwitch
-                name='visibilidade'
-                value='visibilidade'
-                label='Tornar este projeto privado'
+                name="visibilidade"
+                value="visibilidade"
+                label="Tornar este projeto privado"
               />
             </div>
-            <div className='coluna-dois'>
-              <SelectArea
-                name='area'
-                label='Área de desenvolvimento'
-              />
+            <div className="coluna-dois">
+              <SelectArea name="area" label="Área de desenvolvimento" />
             </div>
             <section>
               <Button
-                type='button'
+                type="button"
                 onClick={history.goBack}
-                theme='secondary-yellow'
+                theme="secondary-yellow"
               >
                 Cancelar
               </Button>
-              <Button theme='primary-yellow' type='submit'>
+              <Button theme="primary-yellow" type="submit">
                 Continuar
               </Button>
             </section>
           </Form>
-          :
+        ) : (
           <Form
             ref={formRef}
-            className='segunda-etapa'
+            className="segunda-etapa"
             onSubmit={handleSecondSubmit}
           >
-            <div className='coluna-um'>
-              <Textarea label='Objetivo do projeto' name='objetivo' />
-              <Textarea label='Descrição simples' name='descricao' />
+            <div className="coluna-um">
+              <Textarea label="Objetivo do projeto" name="objetivo" />
+              <Textarea label="Descrição simples" name="descricao" />
             </div>
-            <div className='coluna-dois'>
+            <div className="coluna-dois">
               <SelectTool
                 name="habilidades"
-                label='Ferramentas, matérias e habilidades que o time precisa dominar'
+                label="Ferramentas, matérias e habilidades que o time precisa dominar"
               />
             </div>
             <section>
               <Button
-                className='voltar'
-                type='button'
+                className="voltar"
+                type="button"
                 onClick={() => setShowNextStep(false)}
-                theme='secondary-yellow'
+                theme="secondary-yellow"
               >
                 Voltar
               </Button>
-              <Button theme='primary-yellow' type='submit'>
+              <Button theme="primary-yellow" type="submit">
                 Concluir
-                </Button>
+              </Button>
             </section>
           </Form>
-        }
+        )}
       </div>
     </BodyCreateProject>
   )

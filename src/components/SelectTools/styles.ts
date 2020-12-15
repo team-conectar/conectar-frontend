@@ -3,6 +3,8 @@ import styled from 'styled-components'
 export const BodySelectTool = styled.div`
   margin: 0.3rem 0;
   width: 100%;
+  padding-bottom: 1rem;
+  position: relative;
   > label {
     display: flex;
     justify-content: space-between;
@@ -111,7 +113,7 @@ export const BodySelectTool = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 10%;
+        height: 50px;
         width: 100%;
         background: var(--green-bg);
         color: white;
@@ -127,8 +129,7 @@ export const BodySelectTool = styled.div`
           justify-content: space-between;
           align-items: center;
           width: 100%;
-          height: 9%;
-          margin-top: 1px;
+          height: 50px;
           background: none;
           border: 0;
           border-bottom: 2px solid var(--yellow);

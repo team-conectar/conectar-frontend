@@ -1,5 +1,4 @@
 import { BodySelect } from './styles'
-// import { Link } from 'react-router-dom';
 import makeAnimated from 'react-select/animated'
 import React, { useRef, useEffect } from 'react'
 import ReactSelect, { OptionTypeBase, Props as SelectProps } from 'react-select'

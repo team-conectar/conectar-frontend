@@ -54,7 +54,7 @@ interface ProjectType {
  * @content is the iten of the modal
  */
 
-function Projects() {
+const Projects: React.FC = () => {
   const { loading, isAuthenticated } = useContext(Context)
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
   const initialModalContent = {
@@ -104,20 +104,22 @@ function Projects() {
           objetivo: modalContent.objetivo
             ? Yup.string().required('Objetivo é obrigatório')
             : Yup.string(),
+          habilidades: modalContent.habilidades
+            ? Yup.array()
+                .min(1, 'Seleciono pelo menos 1 item')
+                .max(5, 'Seleciono no máximo 5')
+            : Yup.array(),
+          areas: modalContent.areas
+            ? Yup.array()
+                .min(1, 'Seleciono pelo menos 1 item')
+                .max(5, 'Seleciono no máximo 5')
+            : Yup.array(),
         })
         await schema.validate(formData, {
           abortEarly: false,
         })
         // Validation passed
-        const { nome, descricao, objetivo } = formData
-        const data = {
-          nome,
-          descricao,
-          objetivo,
-          area: storedAreas,
-          habilidades: storedTools,
-        }
-        await api.put(`/api/v1/projeto/${projeto_id}`, data)
+        await api.put(`/api/v1/projeto/${projeto_id}`, formData)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -126,16 +128,26 @@ function Projects() {
         }
       }
     },
-    [
-      modalContent.descricao,
-      modalContent.nome,
-      modalContent.objetivo,
-      projeto_id,
-      storedAreas,
-      storedTools,
-    ],
+    [modalContent, projeto_id],
   )
+  function areaTypeToString() {
+    const defo: Array<string> = []
 
+    storedAreas.forEach(area => {
+      defo.push(area.descricao)
+    })
+
+    return defo
+  }
+  function toolTypeToString() {
+    const defo: Array<string> = []
+
+    storedTools.forEach(tool => {
+      defo.push(tool.nome)
+    })
+
+    return defo
+  }
   return (
     <BodyProjects>
       <Modal
@@ -180,12 +192,14 @@ function Projects() {
                   <SelectArea
                     name="area"
                     label="Selecione as àreas de atuação"
+                    defaultValue={areaTypeToString()}
                   />
                 )}
                 {modalContent.habilidades && (
                   <SelectTool
                     name="habilidades"
                     label="Selecione as ferramentas ou habilidades"
+                    defaultValue={toolTypeToString()}
                   />
                 )}
                 <Button theme="primary-green" type="submit">

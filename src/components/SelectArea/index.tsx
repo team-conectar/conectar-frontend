@@ -146,7 +146,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({
                         value={subarea.descricao}
                         defaultChecked={
                           defaultValue
-                            ? selectedAreas.indexOf(subarea.descricao) >= 0
+                            ? selectedAreas.includes(subarea.descricao)
                             : false
                         }
                         ref={ref => {
