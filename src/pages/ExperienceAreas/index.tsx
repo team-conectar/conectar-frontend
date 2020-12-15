@@ -9,8 +9,8 @@ import axios, { AxiosError } from "axios";
 import api from "../../services/api";
 import * as Yup from 'yup';
 import { FormHandles } from '@unform/core';
-import { Form } from '@unform/web';
 import getValidationErrors from '../../utils/getValidationErrors';
+
 function ExperienceAreas() {
   const history = useHistory();
   const formRef = useRef<FormHandles>(null);
@@ -60,8 +60,6 @@ function ExperienceAreas() {
         <SelectArea
           defaultValue={["string", "striasdng", "outro"]}
           name="area"
-          callbackSelectedAreas={selectedAreas}
-          setCallbackSelectedAreas={setSelectedAreas}
         />
       </div>
       <footer>

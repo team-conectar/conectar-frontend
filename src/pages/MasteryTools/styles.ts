@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import { Form } from '@unform/web';
 
 
-export const BodyMasteryTools = styled.form`
+export const BodyMasteryTools = styled(Form)`
     display:flex;
     flex-direction:column;
     justify-content:center;

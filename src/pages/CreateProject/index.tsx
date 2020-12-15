@@ -40,7 +40,7 @@ function CreateProject() {
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([])
-  const [showNextStep, setShowNextStep] = useState<boolean>(false)
+  const [showNextStep, setShowNextStep] = useState<boolean>(true)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [selectedAreas, setSelectedAreas] = useState<AreaType[]>([])
   const [idProject, setIdProject] = useState(0)
@@ -161,8 +161,6 @@ function CreateProject() {
               <SelectArea
                 name='area'
                 label='Área de desenvolvimento'
-                callbackSelectedAreas={selectedAreas}
-                setCallbackSelectedAreas={setSelectedAreas}
               />
             </div>
             <section>
@@ -190,8 +188,7 @@ function CreateProject() {
             </div>
             <div className='coluna-dois'>
               <SelectTool
-                callbackSelectedTools={selectedTools}
-                setCallbackSelectedTools={setSelectedTools}
+                name="habilidades"
                 label='Ferramentas, matérias e habilidades que o time precisa dominar'
               />
             </div>

@@ -5,147 +5,142 @@ import React, {
   useCallback,
   OptionHTMLAttributes,
   ChangeEvent,
-} from "react";
-import Input from "../../Input";
-import Textarea from "../../Textarea";
-import Select from "../../Select";
-import ToggleSwitch from "../../ToggleSwitch";
-import Button from "../../Button";
-import { BodyExperiences } from "../styles";
-import { yearOptions, monthOptions, toMonth, finalYearOptions } from "../../../utils/dates";
-import { AxiosError } from "axios";
-import api from "../../../services/api";
-import edit from "../../../assets/icon/editar.svg";
-import trash from "../../../assets/icon/lixeira.svg";
-import Modal from "../../Modal";
-import * as Yup from 'yup';
-import { FormHandles } from '@unform/core';
-import { Form } from '@unform/web';
-import getValidationErrors from '../../../utils/getValidationErrors';
+} from 'react'
+import Input from '../../Input'
+import Textarea from '../../Textarea'
+import Select from '../../Select'
+import ToggleSwitch from '../../ToggleSwitch'
+import Button from '../../Button'
+import { BodyExperiences } from '../styles'
+import {
+  yearOptions,
+  monthOptions,
+  toMonth,
+  finalYearOptions,
+} from '../../../utils/dates'
+import { AxiosError } from 'axios'
+import api from '../../../services/api'
+import edit from '../../../assets/icon/editar.svg'
+import trash from '../../../assets/icon/lixeira.svg'
+import Modal from '../../Modal'
+import * as Yup from 'yup'
+import { FormHandles } from '@unform/core'
+import { Form } from '@unform/web'
+import getValidationErrors from '../../../utils/getValidationErrors'
 interface ProfessionalType {
-  id: number;
-  organizacao: string;
-  descricao: string;
-  data_inicio: string;
-  data_fim: string;
-  cargo: string;
-  vinculo: string;
+  id: number
+  organizacao: string
+  descricao: string
+  data_inicio: string
+  data_fim: string
+  cargo: string
+  vinculo: string
 }
 interface ProfessionalDataType {
-  id?: number;
-  vinculo: string;
-  currentWorking: boolean;
-  cargo: string;
-  organizacao: string;
-  descricao: string;
-  initialYear: string;
-  initialMonth: string;
+  id?: number
+  vinculo: string
+  currentWorking: boolean
+  cargo: string
+  organizacao: string
+  descricao: string
+  initialYear: string
+  initialMonth: string
   // Supressing "The operand of a 'delete' operator must be optional" warning
-  finalYear: any;
-  finalMonth: any;
+  finalYear: any
+  finalMonth: any
 }
 const ProfessionalExperiences: React.FC = () => {
-  //Global
+  // Global
   const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
-    { label: "Trainee", value: "Trainee" },
-    { label: "Terceirizado", value: "Terceirizado" },
-    { label: "Intermitente", value: "Intermitente" },
-    { label: "Aprendiz", value: "Aprendiz" },
-    { label: "Estágio", value: "Estágio" },
-    { label: "Temporário", value: "Temporário" },
-    { label: "Freelance", value: "Freelance" },
-    { label: "Autônomo", value: "Autônomo" },
-    { label: "Meio Período", value: "Meio Período" },
-    { label: "Tempo Integral", value: "Tempo Integral" },
-  ];
-  const [showRegister, setShowRegister] = useState<boolean>(false);
-  const [openModal, setOpenModal] = useState<boolean>(false);
-  const formRef = useRef<FormHandles>(null);
-  const [stored, setStored] = useState<ProfessionalType[]>([]);
-  const [initialYear, setInitialYear] = useState<number>(1970);
-  const [currentilyWork, setCurrentilyWork] = useState<boolean>(false);
+    { label: 'Trainee', value: 'Trainee' },
+    { label: 'Terceirizado', value: 'Terceirizado' },
+    { label: 'Intermitente', value: 'Intermitente' },
+    { label: 'Aprendiz', value: 'Aprendiz' },
+    { label: 'Estágio', value: 'Estágio' },
+    { label: 'Temporário', value: 'Temporário' },
+    { label: 'Freelance', value: 'Freelance' },
+    { label: 'Autônomo', value: 'Autônomo' },
+    { label: 'Meio Período', value: 'Meio Período' },
+    { label: 'Tempo Integral', value: 'Tempo Integral' },
+  ]
+  const [showRegister, setShowRegister] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
+  const formRef = useRef<FormHandles>(null)
+  const [stored, setStored] = useState<ProfessionalType[]>([])
+  const [initialYear, setInitialYear] = useState<number>(1970)
+  const [currentilyWork, setCurrentilyWork] = useState<boolean>(false)
   const initialProfessionalData = {
     id: 0,
     currentWorking: false,
-  } as ProfessionalDataType;
-  const [editStored, setEditStored] = useState<ProfessionalDataType>(initialProfessionalData);
+  } as ProfessionalDataType
+  const [editStored, setEditStored] = useState<ProfessionalDataType>(
+    initialProfessionalData,
+  )
   const [experienceExcluded, setExperienceExcluded] = useState({
     id: 0,
-    nome: "",
+    nome: '',
   })
   useEffect(() => {
     api
-      .get("/api/v1/experiencias/profissional/me", {
+      .get('/api/v1/experiencias/profissional/me', {
         withCredentials: true,
       })
-      .then((response) => {
-        setStored(response.data);
+      .then(response => {
+        setStored(response.data)
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
-        return err?.response?.data.detail;
-      });
-  }, [showRegister, editStored, openModal]);
+        return err?.response?.data.detail
+      })
+  }, [showRegister, editStored, openModal])
   async function handleDeleteExperience(id: number) {
     if (stored.length === 1) {
-      stored.splice(0, 1);
+      stored.splice(0, 1)
     }
-    await api.delete(`/api/v1/experiencias/profissional/${id}`, {
-      withCredentials: true,
-    })
+    await api
+      .delete(`/api/v1/experiencias/profissional/${id}`, {
+        withCredentials: true,
+      })
       .then(() => {
-        setShowRegister(false);
-        setOpenModal(false);
-        setEditStored(initialProfessionalData);
+        setShowRegister(false)
+        setOpenModal(false)
+        setEditStored(initialProfessionalData)
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
-        return err?.response?.data.detail;
-      });
-
+        return err?.response?.data.detail
+      })
   }
 
   const handleSubmit = useCallback(
     async (formData: ProfessionalDataType) => {
-      formRef.current?.setErrors({});
+      formRef.current?.setErrors({})
       try {
         const validations = {
-          vinculo: Yup
-            .string()
-            .required('Informe o vínculo'),
-          organizacao: Yup
-            .string()
+          vinculo: Yup.string().required('Informe o vínculo'),
+          organizacao: Yup.string()
             .max(50, 'Excedeu o limite de caractéres (50)')
             .required('Informe a organização'),
-          cargo: Yup
-            .string()
-            .required('Informe o cargo'),
-          descricao: Yup
-            .string()
+          cargo: Yup.string().required('Informe o cargo'),
+          descricao: Yup.string()
             .min(20, 'Descreva um pouco mais')
             .max(500, 'Excedeu o limite de caractéres (500)')
             .required('Informe a descrição'),
-          finalYear: !currentilyWork? Yup
-            .string()
-            .required('Ano final é obrigatório') : Yup
-            .string(),
-          initialYear: Yup
-            .string()
-            .required('Ano inicial é obrigatório'),
-          initialMonth: Yup
-            .string()
-            .required('Mês inicial é obrigatório'),
-          finalMonth: !currentilyWork? Yup
-          .string()
-          .required('Mês final é obrigatório') : Yup
-          .string(),
+          finalYear: !currentilyWork
+            ? Yup.string().required('Ano final é obrigatório')
+            : Yup.string(),
+          initialYear: Yup.string().required('Ano inicial é obrigatório'),
+          initialMonth: Yup.string().required('Mês inicial é obrigatório'),
+          finalMonth: !currentilyWork
+            ? Yup.string().required('Mês final é obrigatório')
+            : Yup.string(),
         }
-        
-        const schema = Yup.object().shape(validations);
+
+        const schema = Yup.object().shape(validations)
 
         await schema.validate(formData, {
           abortEarly: false,
-        });
+        })
         // Validation passed
         const {
           vinculo,
@@ -157,13 +152,13 @@ const ProfessionalExperiences: React.FC = () => {
           initialYear,
           initialMonth,
           finalMonth,
-        }: ProfessionalDataType = formData;
-        //setting to null because if there a update an experience with an existing data_fim it will not send
-        let data_fim = null;
-        const data_inicio = `${initialYear}-${initialMonth}-01`;
+        }: ProfessionalDataType = formData
+        // setting to null because if there a update an experience with an existing data_fim it will not send
+        let data_fim = null
+        const data_inicio = `${initialYear}-${initialMonth}-01`
 
         if (!currentWorking) {
-          data_fim = `${finalYear}-${finalMonth}-01`;
+          data_fim = `${finalYear}-${finalMonth}-01`
         }
 
         const data = {
@@ -173,57 +168,54 @@ const ProfessionalExperiences: React.FC = () => {
           data_fim,
           cargo,
           vinculo,
-        };
+        }
 
         /**
          * Sends data to backend
          * It's important to notice the withCredentials being true here
          * so it will send the JWT token as cookie
          * */
-        if (editStored.id) await api
-          .put(
-            `/api/v1/experiencias/profissional/${editStored.id}`, data, {
-            withCredentials: true,
-          })
-          .then(() => {
-            setShowRegister(false);
-            setEditStored(initialProfessionalData);
-          })
-          .catch((err: AxiosError) => {
-            // Returns error message from backend
-            return err?.response?.data.detail;
-          })
-        else await api
-          .post("/api/v1/experiencias/profissional", data, {
-            withCredentials: true,
-          })
-          .then(() => {
-            setShowRegister(false);
-            setEditStored(initialProfessionalData);
-
-          })
-          .catch((err: AxiosError) => {
-            // Returns error message from backend
-            return err?.response?.data.detail;
-          });
-
-
+        if (editStored.id)
+          await api
+            .put(`/api/v1/experiencias/profissional/${editStored.id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setShowRegister(false)
+              setEditStored(initialProfessionalData)
+            })
+            .catch((err: AxiosError) => {
+              // Returns error message from backend
+              return err?.response?.data.detail
+            })
+        else
+          await api
+            .post('/api/v1/experiencias/profissional', data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setShowRegister(false)
+              setEditStored(initialProfessionalData)
+            })
+            .catch((err: AxiosError) => {
+              // Returns error message from backend
+              return err?.response?.data.detail
+            })
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           // Validation failed
-          const errors = getValidationErrors(error);
+          const errors = getValidationErrors(error)
 
-          formRef.current?.setErrors(errors);
-          return;
+          formRef.current?.setErrors(errors)
         }
       }
 
-
       // Do something
-    }, [currentilyWork,editStored]);
-  //Edit
+    },
+    [currentilyWork, editStored],
+  )
+  // Edit
   function handleEditExperience(experience: ProfessionalType) {
-
     const {
       id,
       organizacao,
@@ -232,9 +224,9 @@ const ProfessionalExperiences: React.FC = () => {
       data_fim,
       cargo,
       vinculo,
-    }: ProfessionalType = experience;
+    }: ProfessionalType = experience
 
-    const [initialYear, initialMonth] = data_inicio.split("-");
+    const [initialYear, initialMonth] = data_inicio.split('-')
 
     const data = {
       id,
@@ -244,15 +236,13 @@ const ProfessionalExperiences: React.FC = () => {
       descricao,
       initialYear,
       initialMonth,
-      currentWorking: data_fim ? false : true,
-      finalYear: data_fim ? data_fim.split("-")[0] : data_fim,
-      finalMonth: data_fim ? data_fim.split("-")[1] : data_fim,
-    };
+      currentWorking: !data_fim,
+      finalYear: data_fim ? data_fim.split('-')[0] : data_fim,
+      finalMonth: data_fim ? data_fim.split('-')[1] : data_fim,
+    }
 
-
-    setShowRegister(true);
-    setEditStored(data);
-
+    setShowRegister(true)
+    setEditStored(data)
   }
 
   return (
@@ -262,14 +252,14 @@ const ProfessionalExperiences: React.FC = () => {
         <footer>
           <Button
             theme="primary-yellow"
-            onClick={() => experienceExcluded && handleDeleteExperience(experienceExcluded?.id)}
+            onClick={() =>
+              experienceExcluded &&
+              handleDeleteExperience(experienceExcluded?.id)
+            }
           >
             Excluir
           </Button>
-          <Button
-            theme="secondary-yellow"
-            onClick={() => setOpenModal(false)}
-          >
+          <Button theme="secondary-yellow" onClick={() => setOpenModal(false)}>
             Manter
           </Button>
         </footer>
@@ -289,8 +279,11 @@ const ProfessionalExperiences: React.FC = () => {
                   src={trash}
                   alt="apagar experiencia"
                   onClick={() => {
-                    setOpenModal(true);
-                    setExperienceExcluded({ ...experience, "nome": experience.cargo });
+                    setOpenModal(true)
+                    setExperienceExcluded({
+                      ...experience,
+                      nome: experience.cargo,
+                    })
                   }}
                 />
               </section>
@@ -301,15 +294,16 @@ const ProfessionalExperiences: React.FC = () => {
                 <p>
                   {experience.vinculo} <br />
                   {`
-                    ${toMonth(experience.data_inicio.split("-")[1])} 
+                    ${toMonth(experience.data_inicio.split('-')[1])} 
                     de 
-                    ${experience.data_inicio.split("-")[0]} 
+                    ${experience.data_inicio.split('-')[0]} 
                     até 
-                    ${experience.data_fim ?
-                      `${toMonth(experience.data_fim.split("-")[1])} 
+                    ${
+                      experience.data_fim
+                        ? `${toMonth(experience.data_fim.split('-')[1])} 
                       de 
-                      ${experience.data_fim.split("-")[0]}` :
-                      "o momento atual"
+                      ${experience.data_fim.split('-')[0]}`
+                        : 'o momento atual'
                     }
                   `}
                 </p>
@@ -322,145 +316,156 @@ const ProfessionalExperiences: React.FC = () => {
           </button>
         </div>
       ) : (
-          <Form
-            className="form--experiencia"
-            onSubmit={handleSubmit}
-            ref={formRef}
-          >
-            <aside className="area-registro">
-              <section className="bloco-um">
-                <Input
-                  label="Organização"
-                  name="organizacao"
-                  defaultValue={editStored?.organizacao}
-                />
-                <Input
-                  label="Cargo"
-                  name="cargo"
-                  defaultValue={editStored?.cargo}
-                />
-              </section>
-              <section className="bloco-dois">
+        <Form
+          className="form--experiencia"
+          onSubmit={handleSubmit}
+          ref={formRef}
+        >
+          <aside className="area-registro">
+            <section className="bloco-um">
+              <Input
+                label="Organização"
+                name="organizacao"
+                defaultValue={editStored?.organizacao}
+              />
+              <Input
+                label="Cargo"
+                name="cargo"
+                defaultValue={editStored?.cargo}
+              />
+            </section>
+            <section className="bloco-dois">
+              <Select
+                label="Vínculo"
+                name="vinculo"
+                options={vinculos}
+                defaultValue={
+                  editStored.id
+                    ? {
+                        label: editStored?.vinculo,
+                        value: editStored?.vinculo,
+                      }
+                    : null
+                }
+              />
+            </section>
+            <section className="bloco-tres">
+              <aside>
                 <Select
-                  label="Vínculo"
-                  name="vinculo"
-                  options={vinculos}
-                  defaultValue={editStored.id ?
-                    {
-                      label: editStored?.vinculo,
-                      value: editStored?.vinculo
-                    } : null
+                  label="Mês inicial"
+                  name="initialMonth"
+                  options={monthOptions}
+                  defaultValue={
+                    editStored.id
+                      ? {
+                          label: toMonth(editStored?.initialMonth),
+                          value: editStored?.initialMonth,
+                        }
+                      : null
+                  }
+                  defaultOption={editStored?.initialMonth}
+                />
+                <Select
+                  label="Ano inicial"
+                  name="initialYear"
+                  options={yearOptions}
+                  onChange={(option: any) => {
+                    setInitialYear(Number(option.value))
+                  }}
+                  defaultValue={
+                    editStored.id
+                      ? {
+                          label: editStored?.initialYear,
+                          value: editStored?.initialYear,
+                        }
+                      : null
                   }
                 />
-              </section>
-              <section className="bloco-tres">
-                <aside>
-                  <Select
-                    label="Mês inicial"
-                    name="initialMonth"
-                    options={monthOptions}
-                    defaultValue={editStored.id ?
-                      {
-                        label: toMonth(editStored?.initialMonth),
-                        value: editStored?.initialMonth
-                      } : null
-
-                    }
-                    defaultOption={editStored?.initialMonth}
-                  />
-                  <Select
-                    label="Ano inicial"
-                    name="initialYear"
-                    options={yearOptions}
-                    onChange={(option: any) => {
-                      setInitialYear(Number(option.value))
-                    }}
-                    defaultValue={editStored.id ?
-                      {
-                        label: editStored?.initialYear,
-                        value: editStored?.initialYear
-                      } : null
-                    }
-                  />
-                </aside>
-                <aside>
-                  <ToggleSwitch
-                    label="Trabalho atual"
-                    name="currentWorking"
-                    id="currentWorking"
-                    defaultChecked={editStored.currentWorking}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) => setCurrentilyWork(event.target.checked)}
-                  />
-                </aside>
-                {!currentilyWork && (
-                  <aside>
-                    <Select
-                      label="Mês final"
-                      name="finalMonth"
-                      options={monthOptions}
-                      defaultValue={editStored.id ?
-                        {
-                          label: toMonth(editStored?.finalMonth),
-                          value: editStored?.finalMonth
-                        } : null
-                      }
-                    />
-                    <Select
-                      label="Ano final"
-                      name="finalYear"
-                      options={finalYearOptions(Number(initialYear))}
-                      defaultValue={editStored.id && Number(editStored?.finalYear > initialYear) ?
-                        {
-                          label: editStored?.finalYear,
-                          value: editStored?.finalYear
-                        } : null
-                      }
-                    />
-                  </aside>
-                )}
-              </section>
-              <section className="bloco-quatro">
-                <Textarea
-                  name="descricao"
-                  label="Detalhes"
-                  defaultValue={editStored?.descricao}
+              </aside>
+              <aside>
+                <ToggleSwitch
+                  label="Trabalho atual"
+                  name="currentWorking"
+                  id="currentWorking"
+                  defaultChecked={editStored.currentWorking}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    setCurrentilyWork(event.target.checked)
+                  }
                 />
-              </section>
-              <section className="area-botoes">
-                <Button
-                  type="submit"
-                  theme="primary-green"
-                >
-                  Salvar
-              </Button>
-                <Button
-                  theme="secondary-green"
-                  onClick={() => {
-                    if (editStored.id) {
-                      setOpenModal(true);
-                      setExperienceExcluded({ "nome": editStored.cargo, "id": editStored?.id })
+              </aside>
+              {!currentilyWork && (
+                <aside>
+                  <Select
+                    label="Mês final"
+                    name="finalMonth"
+                    options={monthOptions}
+                    defaultValue={
+                      editStored.id
+                        ? {
+                            label: toMonth(editStored?.finalMonth),
+                            value: editStored?.finalMonth,
+                          }
+                        : null
                     }
-                    else {
-                      setShowRegister(false)
+                  />
+                  <Select
+                    label="Ano final"
+                    name="finalYear"
+                    options={finalYearOptions(Number(initialYear))}
+                    defaultValue={
+                      editStored.id &&
+                      Number(editStored?.finalYear > initialYear)
+                        ? {
+                            label: editStored?.finalYear,
+                            value: editStored?.finalYear,
+                          }
+                        : null
                     }
-                  }}
-                >
-                  Excluir
+                  />
+                </aside>
+              )}
+            </section>
+            <section className="bloco-quatro">
+              <Textarea
+                name="descricao"
+                label="Detalhes"
+                defaultValue={editStored?.descricao}
+              />
+            </section>
+            <section className="area-botoes">
+              <Button type="submit" theme="primary-green">
+                Salvar
               </Button>
-                <Button
-                  onClick={() => {
-                    setShowRegister(false);
-                    setEditStored(initialProfessionalData);
-                  }}
-                >
-                  Cancelar
+              <Button
+                theme="secondary-green"
+                onClick={() => {
+                  if (editStored.id) {
+                    setOpenModal(true)
+                    setExperienceExcluded({
+                      nome: editStored.cargo,
+                      id: editStored?.id,
+                    })
+                  } else {
+                    setShowRegister(false)
+                  }
+                }}
+              >
+                Excluir
               </Button>
-              </section>
-            </aside>
-          </Form>
-        )}
+              <Button
+                onClick={() => {
+                  setShowRegister(false)
+                  setEditStored(initialProfessionalData)
+                }}
+              >
+                Cancelar
+              </Button>
+            </section>
+          </aside>
+        </Form>
+      )}
     </BodyExperiences>
-  );
-};
+  )
+}
 
-export default ProfessionalExperiences;
+export default ProfessionalExperiences

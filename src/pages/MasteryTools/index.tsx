@@ -1,4 +1,4 @@
-import React, { useState, FormEvent,  } from 'react';
+import React, { useState, FormEvent, } from 'react';
 import { BodyMasteryTools } from './styles';
 import Button from '../../components/Button';
 import { useHistory } from 'react-router-dom';
@@ -6,17 +6,17 @@ import SelectTool, { ToolType } from '../../components/SelectTools';
 import axios, { AxiosError } from "axios";
 import api from "../../services/api";
 import Logged from "../../components/Logged";
+import * as Yup from 'yup';
+import { FormHandles } from '@unform/core';
+import getValidationErrors from '../../utils/getValidationErrors';
 
 function MasteryTools() {
   const history = useHistory();
 
-  
   const [selectedTools, setSelectedTools] = useState<ToolType[]>([]);
-
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-
 
     const res = await api
       .put("/api/v1/pessoas", { "habilidades": selectedTools }, {
@@ -33,8 +33,6 @@ function MasteryTools() {
 
   }
 
-  
-
 
   return (
     <BodyMasteryTools onSubmit={handleSubmit}>
@@ -43,8 +41,7 @@ function MasteryTools() {
 
         <h1>Selecione suas habilidades e ferramentas de domínio</h1>
         <SelectTool
-          callbackSelectedTools={selectedTools}
-          setCallbackSelectedTools={setSelectedTools}
+          name="habilidades"
         />
 
 

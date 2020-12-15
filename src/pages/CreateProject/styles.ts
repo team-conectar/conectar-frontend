@@ -1,7 +1,7 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components'
 
 interface StepProps {
-  showSecondStep: boolean;
+  showSecondStep: boolean
 }
 
 export const BodyCreateProject = styled.div<StepProps>`
@@ -33,22 +33,22 @@ export const BodyCreateProject = styled.div<StepProps>`
       }
     }
     .primeira-etapa {
-      ${(props) =>
-    props.showSecondStep
-      ? css`
-              display:none;
+      ${props =>
+        props.showSecondStep
+          ? css`
+              display: none;
             `
-      : css`
+          : css`
               display: grid;
             `}
     }
     .segunda-etapa {
-      ${(props) =>
-    props.showSecondStep
-      ? css`
+      ${props =>
+        props.showSecondStep
+          ? css`
               display: grid;
             `
-      : css`
+          : css`
               display: none;
             `}
     }
@@ -75,4 +75,4 @@ export const BodyCreateProject = styled.div<StepProps>`
       }
     }
   }
-`;
+`
