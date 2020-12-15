@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useContext,
-  useRef,
-  useCallback,
-} from 'react'
+import React, { useState, useContext, useRef, useCallback } from 'react'
 import { BodyCreateProject } from './styles'
 import Input from '../../components/Input'
 import Textarea from '../../components/Textarea'
@@ -14,7 +7,6 @@ import ToggleSwitch from '../../components/ToggleSwitch'
 import { useHistory } from 'react-router'
 import SelectArea, { AreaType } from '../../components/SelectArea'
 import SelectTool, { ToolType } from '../../components/SelectTools'
-import { AxiosError } from 'axios'
 import api from '../../services/api'
 import Modal from '../../components/Modal'
 import Login from '../../components/Login'
@@ -39,10 +31,8 @@ function CreateProject() {
   const { loading, isAuthenticated } = useContext(Context)
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [selectedTools, setSelectedTools] = useState<ToolType[]>([])
   const [showNextStep, setShowNextStep] = useState<boolean>(true)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
-  const [selectedAreas, setSelectedAreas] = useState<AreaType[]>([])
   const [idProject, setIdProject] = useState(0)
   const [selectedFile, setSelectedFile] = useState<File>()
 
@@ -106,13 +96,8 @@ function CreateProject() {
           abortEarly: false,
         })
         // Validation passed
-        const data = {
-          ...formData,
-          habilidades: selectedTools,
-          areas: selectedAreas,
-        }
 
-        await api.put(`/api/v1/projeto/${idProject}`, data, {
+        await api.put(`/api/v1/projeto/${idProject}`, formData, {
           withCredentials: true,
         })
       } catch (err) {
@@ -123,7 +108,7 @@ function CreateProject() {
         }
       }
     },
-    [idProject, selectedAreas, selectedTools],
+    [idProject],
   )
 
   return (
