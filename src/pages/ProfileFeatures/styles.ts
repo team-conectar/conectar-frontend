@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components'
 
 export const BodyProfileFeatures = styled.div`
   display: flex;
@@ -22,4 +22,4 @@ export const BodyProfileFeatures = styled.div`
     justify-content: space-between;
     margin: 1.6rem 0;
   }
-`;
+`
