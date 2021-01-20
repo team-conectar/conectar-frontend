@@ -1,13 +1,17 @@
 import React, { ButtonHTMLAttributes } from 'react'
 import { BodyButton } from './styles'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  theme?: string
+  theme?: 'yellow' | 'yellowG' | 'green' | 'greenG'
   color?: string
 }
 /**
+ * Button.
  *
- * @param theme Accept primary-green, secundary-green , primary-yellow or secundary-yellow
- *
+ * @component
+ * @example
+ * return (
+ *   <Button theme="green">Enviar convite</Button>
+ * )
  */
 const Button: React.FC<ButtonProps> = ({ theme, color, children, ...rest }) => {
   return (
