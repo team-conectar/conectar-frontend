@@ -6,12 +6,11 @@ import React, {
   useCallback,
 } from 'react'
 import { BodySelectTool } from './styles'
-import { GoCheck } from 'react-icons/go'
+import { GoCheck, GoPlus } from 'react-icons/go'
 import { AxiosError } from 'axios'
 import trash from '../../assets/icon/lixeira.svg'
 import api from '../../services/api'
 import { useField } from '@unform/core'
-import { Form } from '@unform/web'
 interface SelectToolProps {
   name: string
   defaultValue?: string[]
@@ -34,20 +33,6 @@ const SelectTool: React.FC<SelectToolProps> = ({
     defaultValue || [],
   )
   const inputRefs = useRef<HTMLInputElement[]>([])
-  useEffect(() => {
-    api
-      .get('/api/v1/habilidades', {
-        withCredentials: true,
-      })
-      .then(response => {
-        setTools(response.data)
-      })
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail
-      })
-  }, [])
-
   const { fieldName, registerField, error } = useField(name)
   useEffect(() => {
     registerField({
@@ -89,7 +74,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
           .post('/api/v1/habilidade/pessoa', tool, {
             withCredentials: true,
           })
-          .then(response => {
+          .then(() => {
             setNewTool({ nome: '' })
           })
           .catch((err: AxiosError) => {
@@ -100,6 +85,19 @@ const SelectTool: React.FC<SelectToolProps> = ({
     },
     [newTool],
   )
+  useEffect(() => {
+    api
+      .get('/api/v1/habilidades', {
+        withCredentials: true,
+      })
+      .then(response => {
+        setTools(response.data)
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail
+      })
+  }, [handleAddNewTool])
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target
@@ -142,10 +140,12 @@ const SelectTool: React.FC<SelectToolProps> = ({
                 <li key={tool.nome}>
                   <label htmlFor={tool.nome}>
                     <span>
-                      {selectedTools?.includes(tool.nome) && <GoCheck />}
+                      {selectedTools?.includes(tool.nome) && (
+                        <GoCheck size={20} />
+                      )}
                     </span>
                     <legend>{tool.nome}</legend>
-                    <strong>+</strong>
+                    <GoPlus size={15} />
                   </label>
                   <input
                     type="checkbox"
@@ -173,8 +173,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
               type="button"
               onClick={() => newTool && handleAddNewTool(newTool)}
             >
-              {' '}
-              +{' '}
+              <GoPlus size={15} />
             </button>
           </fieldset>
         </div>

@@ -7,7 +7,7 @@ export const BodyCard = styled.li`
     flex-direction: column;
     padding: 0.6rem;
     gap: 1rem;
-    border-radius: 0.8rem 0.8rem 0 0;
+    border-radius: var(--borderRadius) var(--borderRadius) 0 0;
     box-shadow: 0 0 1px 1px var(--borderDivision);
     background: white;
     > aside {
@@ -52,10 +52,10 @@ export const BodyCard = styled.li`
       padding: 0.4rem 0;
       border: 0;
       :nth-child(1) {
-        border-radius: 0 0 0 0.8rem;
+        border-radius: 0 0 0 var(--borderRadius);
       }
       :nth-child(2) {
-        border-radius: 0 0 0.8rem 0;
+        border-radius: 0 0 var(--borderRadius) 0;
       }
       background: white;
       box-shadow: 0 0 1px 1px var(--borderDivision);

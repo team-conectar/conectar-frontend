@@ -51,12 +51,19 @@ export const BodyNavBar = styled.header<NavBarProps>`
     display: flex;
     align-items: center;
     height: 100%;
+    gap: 1.2rem;
+
     a {
       text-decoration: none;
-      font: 500 0.9rem Roboto;
+      font: 500 0.9rem Raleway;
       color: var(--green-bg);
       display: flex;
       align-items: center;
+    }
+    .sobre,
+    .explorar {
+      border-bottom: solid 4px transparent;
+      border-top: solid 4px transparent;
     }
     .sobre {
       height: 100%;
@@ -72,6 +79,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
         props.explorar &&
         css`
           border-bottom: solid 4px var(--green-bg);
+          transition: 0.5s ease-out;
         `}
       padding:0 .3rem;
       img {
@@ -85,9 +93,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
       border: solid 2px var(--green);
       transition: background-color 0.2s;
     }
-    a + a {
-      margin-left: 20px;
-    }
+
     #dropdown {
       position: relative;
       display: inline-block;
@@ -98,7 +104,6 @@ export const BodyNavBar = styled.header<NavBarProps>`
         padding: 0.4rem;
         font-size: 18px;
         cursor: pointer;
-        margin: 0.2rem 0.6rem;
         height: 40px;
         display: flex;
         align-items: center;

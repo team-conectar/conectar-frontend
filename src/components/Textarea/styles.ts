@@ -10,8 +10,7 @@ export const BodyTextarea = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font: 400 1rem Roboto;
-    color: var(--orange);
+    font: 400 1rem Raleway;
     a {
       justify-content: flex-end;
       text-decoration: none;
@@ -20,7 +19,8 @@ export const BodyTextarea = styled.div`
     }
   }
   textarea {
-    border: 2px solid var(--yellow);
+    border: 0;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
     border-radius: 0.2rem;
     width: 100%;
     min-height: 10rem;
@@ -32,9 +32,19 @@ export const BodyTextarea = styled.div`
   }
   span {
     color: red;
-    font: 400 0.8rem Roboto;
+    font: 400 0.8rem Raleway;
     position: absolute;
     left: 0;
     bottom: 0;
+  }
+  :focus-within::after {
+    width: calc(100% -3.2rem);
+    height: 2px;
+    content: '';
+    background: var(--green-bg);
+    position: absolute;
+    left: 1.6rem;
+    right: 1.6rem;
+    bottom: 1rem;
   }
 `

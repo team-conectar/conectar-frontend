@@ -2,7 +2,7 @@ import React, { InputHTMLAttributes } from 'react'
 import { BodyCard } from './styles'
 import { Link } from 'react-router-dom'
 
-interface ProjectCardsProps {
+interface ProjectCardProps {
   projeto: {
     title: string
     areas: string[]
@@ -13,7 +13,7 @@ interface ProjectCardsProps {
     imgProfile: string
   }
 }
-const ProjectCards: React.FC = () => {
+const ProjectCard: React.FC = () => {
   return (
     <BodyCard>
       <main>
@@ -46,4 +46,4 @@ const ProjectCards: React.FC = () => {
     </BodyCard>
   )
 }
-export default ProjectCards
+export default ProjectCard

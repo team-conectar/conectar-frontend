@@ -6,8 +6,9 @@ import { useField } from '@unform/core'
 interface Props extends SelectProps<OptionTypeBase> {
   name: string
   label?: string
+  multi?: boolean
 }
-const Select: React.FC<Props> = ({ name, label, ...rest }) => {
+const Select: React.FC<Props> = ({ name, label, multi, ...rest }) => {
   const animatedComponents = makeAnimated()
   const selectRef = useRef(null)
   const { fieldName, defaultValue, registerField, error } = useField(name)
@@ -16,7 +17,7 @@ const Select: React.FC<Props> = ({ name, label, ...rest }) => {
       name: fieldName,
       ref: selectRef.current,
       getValue: (ref: any) => {
-        if (rest.isMulti) {
+        if (multi) {
           if (!ref.state.value) {
             return []
           }
@@ -40,7 +41,7 @@ const Select: React.FC<Props> = ({ name, label, ...rest }) => {
         placeholder={defaultValue || 'Selecione'}
         className="react-select-container"
         classNamePrefix="react-select"
-        {...rest}
+        isMulti={multi}
       />
       {error && <span>{error}</span>}
     </BodySelect>

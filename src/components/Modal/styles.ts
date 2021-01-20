@@ -32,7 +32,7 @@ export const BodyModal = styled.div<styleProps>`
     cursor: pointer;
     border-radius: 40%;
     color: currentColor;
-    font: 500 1rem Roboto;
+    font: 500 1rem Raleway;
     svg {
       margin: 0 0.3rem;
       font-size: 1.2rem;
@@ -42,7 +42,7 @@ export const BodyModal = styled.div<styleProps>`
     width: 100vw;
     height: 100vh;
     > h1 {
-      font: 500 2rem Roboto;
+      font: 500 2rem Raleway;
       margin-bottom: 4rem;
       color: white;
     }
@@ -69,7 +69,7 @@ export const BodyModalDefault = styled.div`
   position: relative;
   z-index: 2;
   > h1 {
-    font: 500 2rem Roboto;
+    font: 500 2rem Raleway;
     margin-bottom: 4rem;
     color: white;
   }

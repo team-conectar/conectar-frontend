@@ -229,10 +229,10 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
               label="Habilidade ou Ferramentas"
               name="habilidade"
               options={optionsTools}
-              isMulti
+              multi
             />
           </div>
-          <Select label="Áreas" name="areas" options={optionsAreas} isMulti />
+          <Select label="Áreas" name="areas" options={optionsAreas} multi />
 
           <Textarea name="descricao" label="Descrição" />
           <section className="bloco-contrato">
@@ -248,10 +248,10 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             />
           </section>
           <section className="area-botoes">
-            <Button type="submit" theme="primary-green">
+            <Button type="submit" theme="green">
               Salvar
             </Button>
-            <Button theme="secondary-green">Excluir</Button>
+            <Button theme="greenG">Excluir</Button>
             <Button
               onClick={() => {
                 setShowRegister(false)

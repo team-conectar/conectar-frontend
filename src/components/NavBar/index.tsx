@@ -59,8 +59,10 @@ const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
   return (
     <BodyNavBar explorar={!!pageIsExplorar} sobre={!!pageIsSobre}>
       <aside>
-        <img src={logo} alt="logo conectar" />
-        <Link to="/explore" className="explorar">
+        <Link to="/">
+          <img src={logo} alt="logo conectar" />
+        </Link>
+        <Link to="/explorer" className="explorar">
           <img src={explorar} alt="Explore os demais projetos" />
           Explorar
         </Link>

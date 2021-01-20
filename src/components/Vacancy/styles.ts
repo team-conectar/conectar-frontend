@@ -25,9 +25,9 @@ export const BodyVacancy = styled.section`
       fieldset {
         margin-left: 1.2rem;
         legend {
-          font: 500 1.4rem Roboto;
+          font: 500 1.4rem Raleway;
         }
-        font: 400 1.2rem Roboto;
+        font: 400 1.2rem Raleway;
         color: var(--green-bg);
         .textos {
           display: flex;
@@ -58,10 +58,10 @@ export const BodyVacancy = styled.section`
     > button {
       border: 0;
       background: none;
-      font: 500 1rem Roboto;
+      font: 500 1rem Raleway;
       color: var(--yellow);
       > span {
-        font: 500 1.2rem Roboto;
+        font: 500 1.2rem Raleway;
       }
     }
   }
