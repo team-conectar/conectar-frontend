@@ -10,6 +10,20 @@ interface InputProps extends Props {
   pathSubLabel?: string
   type?: string
 }
+/**
+ * This component receives text in your field whit a possibility of masking
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {string} subLabel is a link for redirecting to the pathSubLabel
+ * @param {string} pathSubLabel is the url of link subLabel
+ * @param {string | RegExp} mask is the expression for the masking
+ * @example
+ * return (
+ *   <InputMask  type="tel"  name="telefone"  label="Celular"  mask="(99) 99999-9999 "/>
+ * )
+ */
 const InputMask: React.FC<InputProps> = ({
   name,
   label,

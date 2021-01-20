@@ -8,6 +8,18 @@ interface Props extends SelectProps<OptionTypeBase> {
   label?: string
   multi?: boolean
 }
+/**
+ * This component receives text in your field by selection
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {boolean} multi optional, is the multiple selection control provided by react-select
+ * @example
+ * return (
+ *   <Select label="Habilidade ou Ferramentas" name="habilidade" options={optionsTools} multi />
+ * )
+ */
 const Select: React.FC<Props> = ({ name, label, multi, ...rest }) => {
   const animatedComponents = makeAnimated()
   const selectRef = useRef(null)

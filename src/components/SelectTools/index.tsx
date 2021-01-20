@@ -21,7 +21,18 @@ export interface ToolType {
   nome: string
   id?: number
 }
-
+/**
+ * This component shows all tools and habilities making possible the user to select their experiences
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {Array<string>} defaultValue are the values ​​that arrive with the standard
+ * @example
+ * return (
+ *   <SelectTool name="habilidades" label="Ferramentas, matérias e habilidades que o time precisa dominar" />
+ * )
+ */
 const SelectTool: React.FC<SelectToolProps> = ({
   label,
   name,

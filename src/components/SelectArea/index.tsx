@@ -32,7 +32,18 @@ interface SelectAreaProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   defaultValue?: string[]
 }
-
+/**
+ * This component shows all areas of knowledge and allows the user to select their experiences
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {Array<string>} defaultValue are the values ​​that arrive with the standard
+ * @example
+ * return (
+ *   <SelectArea defaultValue={['uma area', 'outro']} name="areas" />
+ * )
+ */
 const SelectArea: React.FC<SelectAreaProps> = ({
   label,
   name,

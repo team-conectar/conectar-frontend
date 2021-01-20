@@ -8,6 +8,19 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   subLabel?: string
   pathSubLabel?: string
 }
+/**
+ * This component receives text in your field
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {string} subLabel is a link for redirecting to the pathSubLabel
+ * @param {string} pathSubLabel is the url of link subLabel
+ * @example
+ * return (
+ *   <Input name="senha" type="password" label="Senha" subLabel="Esqueceu a senha?" pathSubLabel="/alterar-senha" />
+ * )
+ */
 const Input: React.FC<InputProps> = ({
   name,
   label,

@@ -14,6 +14,16 @@ interface Props {
 }
 // eslint-disable-next-line no-undef
 type InputProps = JSX.IntrinsicElements['input'] & Props
+/**
+ * This component receives images with the drop zone functionality
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @example
+ * return (
+ *   <Dropzone name="img" />
+ * )
+ */
 const Dropzone: React.FC<InputProps> = ({ name, ...rest }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const { fieldName, registerField, defaultValue, error } = useField(name)
