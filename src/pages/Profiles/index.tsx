@@ -11,10 +11,10 @@ import React, {
 import { Link } from 'react-router-dom'
 import { Page, ButtonList } from './styles'
 import { BodyModalDefault } from '../../components/Modal/styles'
-import edit from '../../assets/icon/editar.svg'
-import trash from '../../assets/icon/lixeira.svg'
+import trabalho from '../../assets/icon/trabalho.svg'
+import educação from '../../assets/icon/educação.svg'
 // import clone from '../../assets/icon/clone.svg'
-import config from '../../assets/icon/config.svg'
+import projeto from '../../assets/icon/projeto.svg'
 import no_couver from '../../assets/image/no_couver.svg'
 import view from '../../assets/icon/view.svg'
 import like from '../../assets/icon/like.svg'
@@ -33,7 +33,7 @@ import SelectTool, { ToolType } from '../../components/SelectTools'
 import Modal from '../../components/Modal'
 import { Context } from '../../context/AuthContext'
 import NavBar from '../../components/NavBar'
-import ProjectCards from '../../components/ProjectCards'
+import ProjectCard from '../../components/ProjectCard'
 
 interface routeParms {
   id: string
@@ -105,9 +105,9 @@ function Projects() {
       <main>
         <header>
           <aside>
-            <img src={capa_id} alt="" />
-            <img src={capa_al} alt="" />
-            <img src={capa_co} alt="" />
+            {profile.idealizador && <img src={capa_id} alt="" />}
+            {profile.aliado && <img src={capa_al} alt="" />}
+            {profile.colaborador && <img src={capa_co} alt="" />}
           </aside>
           <section>
             <ButtonList
@@ -136,12 +136,47 @@ function Projects() {
             />
             <h2>{profile.nome}</h2>
             <p>@{profile.usuario}</p>
-            <Button theme="primary-green">SEGUIR</Button>
+            <Button theme="green">SEGUIR</Button>
             <aside>
-              <img src={id} alt="" />
-              <img src={al} alt="" />
-              <img src={co} alt="" />
+              {profile.idealizador && <img src={id} alt="" />}
+              {profile.aliado && <img src={al} alt="" />}
+              {profile.colaborador && <img src={co} alt="" />}
             </aside>
+            <ol>
+              <li>
+                <img src={educação} alt="" />
+                <aside>
+                  <legend>UTFPR</legend>
+                  <p>
+                    Engenharia de Software <br />
+                    Em andamento
+                  </p>
+                </aside>
+              </li>
+              <li>
+                <img src={trabalho} alt="" />
+                <aside>
+                  <legend>Maynart</legend>
+                  <p>
+                    Digital Artist | Freelancer <br />
+                    Fevereiro de 2018 - Até o momento
+                  </p>
+                </aside>
+              </li>
+              <li>
+                <img src={projeto} alt="" />
+                <aside>
+                  <legend>Conectar</legend>
+                  <p>
+                    UTFPR | UI/UX Designer
+                    <br />
+                    Projeto em andamento
+                    <br />
+                    Agosto de 2020 - Até o momento
+                  </p>
+                </aside>
+              </li>
+            </ol>
 
             <h3>Áreas de atuação</h3>
             <ul>
@@ -160,8 +195,8 @@ function Projects() {
           <section className="projetos">
             {!showFavoritesList ? (
               <ul>
-                <ProjectCards />
-                <ProjectCards />
+                <ProjectCard />
+                <ProjectCard />
               </ul>
             ) : (
               <ul></ul>
