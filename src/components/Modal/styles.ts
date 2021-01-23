@@ -14,7 +14,6 @@ export const BodyModal = styled.div<styleProps>`
         `}
   width:100vw;
   height: 100vh;
-
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.5);
@@ -38,52 +37,18 @@ export const BodyModal = styled.div<styleProps>`
       font-size: 1.2rem;
     }
   }
-  .janela {
-    width: 100vw;
-    height: 100vh;
-    > h1 {
-      font: 500 2rem Raleway;
-      margin-bottom: 4rem;
-      color: white;
-    }
-    @media (min-width: 768px) {
-      width: max(710px, 50vw);
-      height: auto;
-      overflow-y: none;
-      opacity: none;
-      position: relative;
-      z-index: 102;
-    }
-  }
 `
-export const BodyModalDefault = styled.div`
-  width: 100%;
-  background: var(--green-bg);
+
+export const DivModalWindow = styled.div`
+  width: min(900px, 90vw);
+  background: white;
   border-radius: 0.8rem;
   padding: 1.8rem;
   opacity: none;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   position: relative;
   z-index: 2;
-  > h1 {
-    font: 500 2rem Raleway;
-    margin-bottom: 4rem;
-    color: white;
-  }
-  footer {
-    display: flex;
-    justify-content: space-between;
-    width: 80%;
-  }
-  @media (min-width: 768px) {
-    width: max(710px, 50vw);
-    height: auto;
-    overflow-y: none;
-    opacity: none;
-    position: relative;
-    z-index: 102;
-  }
 `

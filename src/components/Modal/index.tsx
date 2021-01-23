@@ -1,5 +1,5 @@
 import React from 'react'
-import { BodyModal } from './styles'
+import { BodyModal, DivModalWindow } from './styles'
 import { TiBackspace } from 'react-icons/ti'
 interface modalProps {
   open: boolean
@@ -23,13 +23,13 @@ const Modal: React.FC<modalProps> = ({
   }
   return (
     <BodyModal open={open} id="modal" onClick={handleOutsideClick}>
-      <div className="janela">
+      <DivModalWindow>
         <span className="fechar" onClick={close}>
           <TiBackspace />
           Voltar
         </span>
         {children}
-      </div>
+      </DivModalWindow>
     </BodyModal>
   )
 }
