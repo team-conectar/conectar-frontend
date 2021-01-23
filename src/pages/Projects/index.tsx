@@ -9,14 +9,19 @@ import React, {
   useCallback,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { BodyProjects } from './styles'
-import { BodyModalDefault } from '../../components/Modal/styles'
+import { BodyProjects, DivSobre, DivTags, DivVagas } from './styles'
 import edit from '../../assets/icon/editar.svg'
-import trash from '../../assets/icon/lixeira.svg'
+import TrashIcon from '../../assets/icon/lixeira.svg'
+import { Scrollbars } from 'react-custom-scrollbars'
+
 // import clone from '../../assets/icon/clone.svg'
 import config from '../../assets/icon/config.svg'
 import no_couver from '../../assets/image/no_couver.svg'
-import view from '../../assets/icon/view.svg'
+import objetivo from '../../assets/icon/objetivo.svg'
+import id from '../../assets/icon/id.svg'
+import al from '../../assets/icon/al.svg'
+import co from '../../assets/icon/co.svg'
+import vagas from '../../assets/icon/vagas.svg'
 import like from '../../assets/icon/like.svg'
 import { useHistory, useParams } from 'react-router'
 import Button from '../../components/Button'
@@ -36,6 +41,8 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
+import { ButtonList } from '../Profiles/styles'
+import ContainerScroll from '../../components/ContainerScroll'
 interface routeParms {
   id: string
 }
@@ -61,7 +68,6 @@ const Projects: React.FC = () => {
     nome: false,
     descricao: false,
     objetivo: false,
-    foto: false,
     vaga: false,
     areas: false,
     habilidades: false,
@@ -74,6 +80,7 @@ const Projects: React.FC = () => {
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
   const [selectedImage, setSelectedImage] = useState<File>()
+  const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const formRef = useRef<FormHandles>(null)
   useEffect(() => {
     const res = api
@@ -158,21 +165,23 @@ const Projects: React.FC = () => {
         }}
       >
         {!loading && !isAuthenticated ? (
-          <BodyModalDefault>
+          <>
             <h1>Para prosseguir, você precisa estar logado</h1>
             <Login onSuccessLogin={() => setOpenModal(isAuthenticated)} />
-          </BodyModalDefault>
+          </>
         ) : (
           <>
             {!modalContent.vaga && (
-              <Form ref={formRef} className="modal" onSubmit={handleSubmit}>
-                {modalContent.foto && <Dropzone name="capa" />}
+              <Form ref={formRef} onSubmit={handleSubmit}>
                 {modalContent.nome && (
-                  <Input
-                    name="nome"
-                    label="Nome do projeto"
-                    defaultValue={project.nome}
-                  />
+                  <>
+                    <Input
+                      name="nome"
+                      label="Nome do projeto"
+                      defaultValue={project.nome}
+                    />
+                    <Dropzone name="capa" />
+                  </>
                 )}
                 {modalContent.objetivo && (
                   <Textarea
@@ -202,7 +211,7 @@ const Projects: React.FC = () => {
                     defaultValue={toolTypeToString()}
                   />
                 )}
-                <Button theme="primary-green" type="submit">
+                <Button theme="green" type="submit">
                   Salvar
                 </Button>
               </Form>
@@ -213,114 +222,130 @@ const Projects: React.FC = () => {
       </Modal>
 
       <header>
-        <div className="area-img">
-          <img src={no_couver} alt="imagem de capa do projeto" />
+        <img src={no_couver} alt="imagem de capa do projeto" />
+        <span>
+          <img
+            src={edit}
+            alt="editar o nome"
+            onClick={() => {
+              setModalContent({ ...initialModalContent, nome: true })
+              setOpenModal(true)
+            }}
+          />
+        </span>
+        <div>
           <section>
-            <Link to="">+</Link>
-            <img
-              src={edit}
-              alt="editar a imagem de capa"
-              onClick={() => {
-                setModalContent({ ...initialModalContent, foto: true })
-                setOpenModal(true)
-              }}
-            />
+            <h1>{project.nome}</h1>
           </section>
-        </div>
-        <aside>
-          <h1>
-            {project.nome}
-            <img
-              src={edit}
-              alt="editar o nome"
-              onClick={() => {
-                setModalContent({ ...initialModalContent, nome: true })
-                setOpenModal(true)
-              }}
-            />
-          </h1>
-          <div className="icons">
-            <img src={like} alt="curtidas" />
-            194
-            <img src={view} alt="vizualizações" />
-            2945
-          </div>
-          <p>Publicado em:</p>
-          <section>
-            <Button theme="primary-green">Curtir</Button>
-            <Button type="submit">Salvar</Button>
-          </section>
-        </aside>
-      </header>
-      <main className="container">
-        <div className="objdes">
-          <aside>
-            <section>
-              <legend>Objetivo</legend>
-              <img
-                src={edit}
-                alt="editar"
-                onClick={() => {
-                  setModalContent({ ...initialModalContent, objetivo: true })
-                  setOpenModal(true)
-                }}
-              />
-            </section>
-            <p>{project.objetivo}</p>
-          </aside>
-          <aside>
-            <section>
-              <legend>Descrição</legend>
-              <img
-                src={edit}
-                alt="editar"
-                onClick={() => {
-                  setModalContent({ ...initialModalContent, descricao: true })
-                  setOpenModal(true)
-                }}
-              />
-            </section>
-            <p>{project.descricao}</p>
-          </aside>
-        </div>
-        <div className="caracteristicas">
-          <legend>
-            Áreas de desenvolvimento
-            <img
-              src={edit}
-              alt="editar"
-              onClick={() => {
-                setModalContent({ ...initialModalContent, areas: true })
-                setOpenModal(true)
-              }}
-            />
-          </legend>
-          <aside>
-            {project.areas?.map(area => (
-              <span key={area.id}>{area.descricao}</span>
-            ))}
-          </aside>
-          <legend>
-            Habilidades e ferramentas
-            <img
-              src={edit}
-              alt="editar"
-              onClick={() => {
-                setModalContent({ ...initialModalContent, habilidades: true })
-                setOpenModal(true)
-              }}
-            />
-          </legend>
-          <aside>
-            {project.habilidades?.map(habilidade => (
-              <span key={habilidade.id}>{habilidade.nome}</span>
-            ))}
-          </aside>
-        </div>
 
-        <aside>
-          <div className="vagas">
+          <section>
+            <Button theme="yellowG">
+              <img src={like} alt="curtidas" /> Curtir
+            </Button>
+            <a>
+              <span>
+                <img src={like} alt="curtidas" />
+                194
+              </span>
+              <p>Publicado em:</p>
+            </a>
+          </section>
+          <aside>
+            <ButtonList
+              borderBottom={!vacanciesList}
+              onClick={() => {
+                setVacanciesList(false)
+              }}
+            >
+              Sobre
+            </ButtonList>
+            <ButtonList
+              borderBottom={vacanciesList}
+              onClick={() => {
+                setVacanciesList(true)
+              }}
+            >
+              Vagas
+            </ButtonList>
+          </aside>
+        </div>
+      </header>
+      {!vacanciesList && (
+        <DivSobre>
+          <div className="objdes">
+            <section>
+              <legend>
+                <img className="icon-objetivo" src={objetivo} alt="objetivo" />
+                Objetivo
+                <img
+                  src={edit}
+                  alt="editar"
+                  onClick={() => {
+                    setModalContent({ ...initialModalContent, objetivo: true })
+                    setOpenModal(true)
+                  }}
+                />
+              </legend>
+
+              <p>{project.objetivo}</p>
+            </section>
+            <section>
+              <legend>
+                Descrição
+                <img
+                  src={edit}
+                  alt="editar"
+                  onClick={() => {
+                    setModalContent({ ...initialModalContent, descricao: true })
+                    setOpenModal(true)
+                  }}
+                />
+              </legend>
+
+              <p>{project.descricao}</p>
+            </section>
+          </div>
+          <DivTags>
             <legend>
+              Áreas de desenvolvimento
+              <img
+                src={edit}
+                alt="editar"
+                onClick={() => {
+                  setModalContent({ ...initialModalContent, areas: true })
+                  setOpenModal(true)
+                }}
+              />
+            </legend>
+            <aside>
+              {project.areas?.map(area => (
+                <span key={area.id}>{area.descricao}</span>
+              ))}
+            </aside>
+            <legend>
+              Habilidades e ferramentas
+              <img
+                src={edit}
+                alt="editar"
+                onClick={() => {
+                  setModalContent({ ...initialModalContent, habilidades: true })
+                  setOpenModal(true)
+                }}
+              />
+            </legend>
+            <aside>
+              {project.habilidades?.map(habilidade => (
+                <span key={habilidade.id}>{habilidade.nome}</span>
+              ))}
+            </aside>
+          </DivTags>
+        </DivSobre>
+      )}
+      {vacanciesList && (
+        <DivVagas>
+          <section>
+            <legend>
+              <img src={vagas} alt="vagas" />
               Vagas
               <img
                 src={edit}
@@ -332,24 +357,103 @@ const Projects: React.FC = () => {
               />
             </legend>
 
-            <section>
-              <aside>
-                <legend>Ux Designer</legend>
+            <ContainerScroll>
+              <li>
+                <img src={co} alt="colaborador" />
                 <p>
-                  Trainee | Não remunerado <br />2 Vagas
+                  <strong>Ux Designer | Colaborador</strong>
+                  <br />
+                  <span>Trainee </span>
+                  <strong>
+                    | Não remunerado <br />
+                  </strong>
+                  <span>2 vagas</span>
                 </p>
-              </aside>
 
-              <img src={config} alt="duplicar as vagas" />
-            </section>
-          </div>
-          <div className="descricao">
+                <img src={config} alt="duplicar as vagas" />
+              </li>
+              <li>
+                <img src={co} alt="colaborador" />
+                <p>
+                  <strong>Ux Designer | Colaborador</strong>
+                  <br />
+                  <span>Trainee </span>
+                  <strong>
+                    | Não remunerado <br />
+                  </strong>
+                  <span>2 vagas</span>
+                </p>
+
+                <img src={config} alt="duplicar as vagas" />
+              </li>
+              <li>
+                <img src={co} alt="colaborador" />
+                <p>
+                  <strong>Ux Designer | Colaborador</strong>
+                  <br />
+                  <span>Trainee </span>
+                  <strong>
+                    | Não remunerado <br />
+                  </strong>
+                  <span>2 vagas</span>
+                </p>
+
+                <img src={config} alt="duplicar as vagas" />
+              </li>
+              <li>
+                <img src={co} alt="colaborador" />
+                <p>
+                  <strong>Ux Designer | Colaborador</strong>
+                  <br />
+                  <span>Trainee </span>
+                  <strong>
+                    | Não remunerado <br />
+                  </strong>
+                  <span>2 vagas</span>
+                </p>
+
+                <img src={config} alt="duplicar as vagas" />
+              </li>
+              <li>
+                <img src={co} alt="colaborador" />
+                <p>
+                  <strong>Ux Designer | Colaborador</strong>
+                  <br />
+                  <span>Trainee </span>
+                  <strong>
+                    | Não remunerado <br />
+                  </strong>
+                  <span>2 vagas</span>
+                </p>
+
+                <img src={config} alt="duplicar as vagas" />
+              </li>
+              <li>
+                <img src={co} alt="colaborador" />
+                <p>
+                  <strong>Ux Designer | Colaborador</strong>
+                  <br />
+                  <span>Trainee </span>
+                  <strong>
+                    | Não remunerado <br />
+                  </strong>
+                  <span>2 vagas</span>
+                </p>
+
+                <img src={config} alt="duplicar as vagas" />
+              </li>
+            </ContainerScroll>
+          </section>
+          <section>
             <legend>Descrição da vaga</legend>
-            <section>
+            <aside>
+              <strong>Sobre a Empresa:</strong>
               <p>
-                Sobre a Empresa:
-                <br />
-                <br />
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
+                vitae porttitor lacus. Praesent ac nisl ut magna dapibus semper
+              </p>
+              <strong>Main responsibilities</strong>
+              <p>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
                 vitae porttitor lacus. Praesent ac nisl ut magna dapibus semper
                 auctor sed justo. Nulla mattis massa eu ligula consectetur
@@ -357,10 +461,47 @@ const Projects: React.FC = () => {
                 quam vel, tincidunt lacinia nisl. Aliquam tempus elementum
                 mauris
               </p>
-            </section>
-          </div>
-        </aside>
-      </main>
+              <DivTags>
+                <legend>
+                  Áreas de desenvolvimento
+                  <img
+                    src={edit}
+                    alt="editar"
+                    onClick={() => {
+                      setModalContent({ ...initialModalContent, areas: true })
+                      setOpenModal(true)
+                    }}
+                  />
+                </legend>
+                <aside>
+                  {project.areas?.map(area => (
+                    <span key={area.id}>{area.descricao}</span>
+                  ))}
+                </aside>
+                <legend>
+                  Habilidades e ferramentas
+                  <img
+                    src={edit}
+                    alt="editar"
+                    onClick={() => {
+                      setModalContent({
+                        ...initialModalContent,
+                        habilidades: true,
+                      })
+                      setOpenModal(true)
+                    }}
+                  />
+                </legend>
+                <aside>
+                  {project.habilidades?.map(habilidade => (
+                    <span key={habilidade.id}>{habilidade.nome}</span>
+                  ))}
+                </aside>
+              </DivTags>
+            </aside>
+          </section>
+        </DivVagas>
+      )}
     </BodyProjects>
   )
 }
