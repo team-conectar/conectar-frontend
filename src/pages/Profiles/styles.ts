@@ -4,7 +4,7 @@ export const ButtonList = styled.button<{ borderBottom: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.4rem 0;
+  padding: 0.6rem 0;
   border: 0;
   border-top: solid 1px var(--borderDivision);
   border-left: solid 1px var(--borderDivision);
@@ -15,7 +15,7 @@ export const ButtonList = styled.button<{ borderBottom: boolean }>`
     css`
     :after {
     width: calc(100% -3.2rem);
-    height: 0.1rem;
+    height: 2px;
     content: '';
     background: var(--green-bg);
     position: absolute;
@@ -29,7 +29,6 @@ export const Page = styled.div`
   width: 100%;
   height: 100%;
   min-height: 100vh;
-  background: var(--background);
   display: flex;
   flex-direction: column;
   align-items: center;

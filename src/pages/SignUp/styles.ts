@@ -49,7 +49,7 @@ export const BodySignUp = styled.div`
           align-items: center;
           position: relative;
           cursor: pointer;
-          font: 400 0.9rem Roboto;
+          font: 400 0.9rem Raleway;
           height: 2.8rem;
           width: 15rem;
           border-radius: 0.4rem;
@@ -74,13 +74,13 @@ export const BodySignUp = styled.div`
           margin: 0.5rem 0.2rem 0.5rem 0;
         }
         a {
-          font: 400 1.2rem Roboto;
+          font: 400 1.2rem Raleway;
           text-decoration: none;
           color: var(--yellow);
         }
         p {
           margin: 1rem 0;
-          font: 400 1rem Roboto;
+          font: 400 1rem Raleway;
           a {
             text-decoration: none;
             color: var(--green);
@@ -102,11 +102,11 @@ export const BodySignUp = styled.div`
           width: auto;
         }
         > legend {
-          font: 400 1rem Roboto;
+          font: 400 1rem Raleway;
           color: var(--orange);
         }
         > span {
-          font: 400 0.8rem Roboto;
+          font: 400 0.8rem Raleway;
           color: var(--gray);
         }
       }
@@ -145,7 +145,7 @@ export const BodySignUp = styled.div`
         border: 0;
         cursor: pointer;
         background: none;
-        font: 500 1rem Roboto;
+        font: 500 1rem Raleway;
         color: var(--yellow);
         :hover {
           color: var(--yellow-dark);

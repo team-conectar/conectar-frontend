@@ -10,105 +10,32 @@ import SelectArea from '../../components/SelectArea'
 import SelectTool from '../../components/SelectTools'
 import axios, { AxiosError } from 'axios'
 import NavBar from '../../components/NavBar'
-import ProjectCards from '../../components/ProjectCards'
+import ProjectCard from '../../components/ProjectCard'
 import api from '../../services/api'
+import ProfileCard from '../../components/ProfileCard'
+import LinksCard from '../../components/LinksCard'
 
-function ApproveProject() {
-  const history = useHistory()
-  const [formData, setFormData] = useState({
-    nome: '',
-    descricao: '',
-    visibilidade: true,
-    objetivo: '',
-  })
-
-  // function handleCheckBoxChange(event: ChangeEvent<HTMLInputElement>) {
-  //   const { name, value } = event.target;
-
-  //   setFormData({...formData, [name]: value });
-  //   console.log(formData.visibilidade);
-  // }
-
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const target = event.target
-    const { name } = target
-    const value = target.type === 'checkbox' ? target.checked : target.value
-
-    setFormData({ ...formData, [name]: value })
-  }
-
-  function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>) {
-    const { name, value } = event.target
-    setFormData({ ...formData, [name]: value })
-  }
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault()
-
-    const res = await api
-      .post('/api/v1/projeto', formData, {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-    console.log(res)
-    alert(res)
-  }
-
-  const [showNextStep, setShowNextStep] = useState<boolean>(false)
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: 'image/*',
-    onDrop: onDropAcceptedFiles => {
-      console.log(onDropAcceptedFiles)
-    },
-  })
-
+const ApproveProject: React.FC = () => {
   return (
-    <BodyApproveProject showSecondStep={showNextStep}>
+    <>
       <NavBar />
-      <main>
-        <div className="area-esq">
-          <aside>
-            <legend>XXXXXXXXXXXXXXXx</legend>
-            <Button>xxxxxxxxxxx</Button>
-            <p>xxxxxxxxxx</p>
-          </aside>
-        </div>
-        <div className="area-central">
+      <BodyApproveProject>
+        <ProfileCard />
+        <main>
           <section>
-            <img src="" alt="" width="500px" />
+            <img src="" alt="" />
             <h1>Confira as respostas dos candidatos aos convites enviados</h1>
           </section>
-
-          <ProjectCards />
           <section>
-            <Button
-              className="voltar"
-              type="button"
-              onClick={() => setShowNextStep(false)}
-              theme="secondary-yellow"
-            >
-              Finalizar acordos
-            </Button>
-            <Button
-              theme="primary-yellow"
-              onClick={handleSubmit}
-              disabled={false}
-            >
-              Enviar convites
-            </Button>
+            <ProjectCard />
           </section>
-        </div>
-        <div className="area-dir">
-          <aside>
-            <legend>XXXXXXXXXXXXXXXx</legend>
-            <Button>xxxxxxxxxxx</Button>
-            <p>xxxxxxxxxx</p>
-          </aside>
-        </div>
-      </main>
-    </BodyApproveProject>
+          <section>
+            <Button theme="green">Enviar convite</Button>
+          </section>
+        </main>
+        <LinksCard />
+      </BodyApproveProject>
+    </>
   )
 }
 export default ApproveProject

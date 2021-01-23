@@ -14,7 +14,6 @@ import Dropzone from '../../components/Dropzone'
 import { Beforeunload } from 'react-beforeunload'
 import { Context } from '../../context/AuthContext'
 import Logged from '../../components/Logged'
-import { BodyModalDefault } from '../../components/Modal/styles'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -27,11 +26,11 @@ interface ProjectType {
   objetivo: string
 }
 
-function CreateProject() {
+const CreateProject: React.FC = () => {
   const { loading, isAuthenticated } = useContext(Context)
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [showNextStep, setShowNextStep] = useState<boolean>(true)
+  const [showNextStep, setShowNextStep] = useState<boolean>(false)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
   const [selectedFile, setSelectedFile] = useState<File>()
@@ -122,10 +121,8 @@ function CreateProject() {
           setShowModal(!isAuthenticated)
         }}
       >
-        <BodyModalDefault>
-          <h1>Para prosseguir, você precisa estar logado</h1>
-          <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
-        </BodyModalDefault>
+        <h1>Para prosseguir, você precisa estar logado</h1>
+        <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
       </Modal>
       <div className="area-central container">
         <h1>Criar Projeto</h1>
@@ -152,14 +149,10 @@ function CreateProject() {
               <SelectArea name="area" label="Área de desenvolvimento" />
             </div>
             <section>
-              <Button
-                type="button"
-                onClick={history.goBack}
-                theme="secondary-yellow"
-              >
+              <Button type="button" onClick={history.goBack} theme="yellowG">
                 Cancelar
               </Button>
-              <Button theme="primary-yellow" type="submit">
+              <Button theme="yellow" type="submit">
                 Continuar
               </Button>
             </section>
@@ -185,11 +178,11 @@ function CreateProject() {
                 className="voltar"
                 type="button"
                 onClick={() => setShowNextStep(false)}
-                theme="secondary-yellow"
+                theme="yellowG"
               >
                 Voltar
               </Button>
-              <Button theme="primary-yellow" type="submit">
+              <Button theme="yellow" type="submit">
                 Concluir
               </Button>
             </section>

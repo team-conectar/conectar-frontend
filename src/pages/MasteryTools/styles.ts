@@ -39,7 +39,7 @@ export const BodyMasteryTools = styled(Form)`
           height: 10%;
           width: 100%;
           color: var(--green-bg);
-          font: 500 1.2rem Roboto;
+          font: 500 1.2rem Raleway;
           border-bottom: 2px solid var(--yellow);
         }
 
@@ -58,7 +58,7 @@ export const BodyMasteryTools = styled(Form)`
             border-bottom: 2px solid var(--yellow);
             padding: 0 1.4rem;
             color: var(--orange);
-            font: 500 1.2rem Roboto;
+            font: 500 1.2rem Raleway;
             strong {
               color: var(--green);
               font-size: 1.4rem;
@@ -112,7 +112,7 @@ export const BodyMasteryTools = styled(Form)`
           width: 100%;
           background: var(--green-bg);
           color: white;
-          font: 500 1.2rem Roboto;
+          font: 500 1.2rem Raleway;
           border-top-right-radius: 0.4rem;
         }
       }

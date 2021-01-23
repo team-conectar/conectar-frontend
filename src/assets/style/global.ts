@@ -1,3 +1,5 @@
+import styled, { createGlobalStyle } from 'styled-components'
+export const GlobalStyle = createGlobalStyle`
 :root {
     /* font-size: 60%; */
     --yellow: #ebae3c;
@@ -7,9 +9,13 @@
     --green-bg: #072f3f;
     --red: ##d8252c;
     --white: #ffff;
-    --gray: #a6a6a6;
+    --gray: #999999;
     --background: #f1f1f1ff;
-    --borderDivision: #a6a6a6;
+    --borderDivision: #f0eeee;
+    --borderRadius: 0.6rem;
+    --container: min(1100px, 90vw);
+    --boxShadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    
 }
 
 * {
@@ -25,8 +31,10 @@
 #root {
     font-family: Raleway !important;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    background: var(--background);
 }
 
 @media (min-width: 700px) {
@@ -49,3 +57,4 @@ select,
 textarea {
     outline: none;
 }
+`

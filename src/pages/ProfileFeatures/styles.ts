@@ -9,7 +9,7 @@ export const BodyProfileFeatures = styled.div`
   background: var(--green-bg);
   h1 {
     margin: 1.4rem 0;
-    font: 700 3rem Roboto;
+    font: 700 3rem Raleway;
     color: white;
   }
 

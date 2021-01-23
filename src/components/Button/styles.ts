@@ -7,13 +7,17 @@ export const BodyButton = styled.button<PropsBodyButton>`
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1.2rem;
-  font: 500 1rem Raleway;
+  border-radius: 2rem;
+  font: 600 1rem Raleway;
   cursor: pointer;
   border: 0;
   margin: 0;
   padding: 0.4rem 0.8rem;
   outline: 0;
+  gap: 0.4rem;
+  > img {
+    height: 1rem;
+  }
   ${props =>
     props.theme === 'yellow' &&
     css`

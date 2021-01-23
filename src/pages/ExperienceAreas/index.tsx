@@ -62,21 +62,18 @@ const ExperienceAreas: React.FC = () => {
       <Logged />
       <div className="area-central container">
         <h1>Selecione até 5 áreas de atuação de seu conhecimento</h1>
-        <SelectArea
-          defaultValue={['string', 'striasdng', 'outro']}
-          name="areas"
-        />
+        <SelectArea defaultValue={['striasdng', 'outro']} name="areas" />
       </div>
       <footer>
         <Button
-          theme="secondary-yellow"
+          theme="yellowG"
           onClick={() => {
             history.push('/masterytools')
           }}
         >
           Pular
         </Button>
-        <Button type="submit" theme="primary-yellow">
+        <Button type="submit" theme="yellow">
           Continuar
         </Button>
       </footer>

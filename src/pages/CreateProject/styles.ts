@@ -69,7 +69,7 @@ export const BodyCreateProject = styled.div<StepProps>`
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font: 400 1rem Roboto;
+          font: 400 1rem Raleway;
           color: var(--orange);
         }
       }

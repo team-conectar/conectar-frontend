@@ -226,7 +226,7 @@ function SignUp() {
 
               <section>
                 <Link to="login">Já tem uma conta?</Link>
-                <Button theme="primary-yellow" type="submit">
+                <Button theme="yellow" type="submit">
                   Continuar
                 </Button>
               </section>
@@ -328,7 +328,7 @@ function SignUp() {
               >
                 Voltar
               </button>
-              <Button theme="primary-yellow" type="submit" disabled={false}>
+              <Button theme="yellow" type="submit" disabled={false}>
                 Continuar
               </Button>
             </section>

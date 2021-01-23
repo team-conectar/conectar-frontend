@@ -10,7 +10,6 @@ import React, {
 } from 'react'
 import { Link } from 'react-router-dom'
 import { Page, ButtonList } from './styles'
-import { BodyModalDefault } from '../../components/Modal/styles'
 import trabalho from '../../assets/icon/trabalho.svg'
 import educação from '../../assets/icon/educação.svg'
 // import clone from '../../assets/icon/clone.svg'

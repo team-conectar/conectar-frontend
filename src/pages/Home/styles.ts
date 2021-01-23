@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import passos_idealizador from '../../assets/image/passos_idealizador.svg'
+
 export const BodyHome = styled.div`
   background: var(--background);
   > main {
@@ -55,7 +55,7 @@ export const BodyHome = styled.div`
         }
         .area-login {
           > h1 {
-            font: 600 3rem Roboto;
+            font: 700 3rem Raleway;
             color: var(--green-bg);
             &:nth-child(1) {
               color: white;
@@ -112,7 +112,7 @@ export const BodyHome = styled.div`
         h3 {
           background: #f1f1f1ff;
           width: fit-content;
-          font: 700 1.4rem Roboto;
+          font: 700 1.4rem Raleway;
           color: var(--green-bg);
           padding: 0 0.8rem;
         }
@@ -136,7 +136,7 @@ export const BodyHome = styled.div`
           max-width: 700px;
           h4 {
             transform: skewX(-10deg);
-            font: 700 1.4rem Roboto;
+            font: 700 1.4rem Raleway;
             margin-bottom: 1.2rem;
           }
           p {
@@ -176,7 +176,7 @@ export const BodyHome = styled.div`
             width: 4rem;
           }
           h4 {
-            font: 700 1.8rem Roboto;
+            font: 700 1.8rem Raleway;
             margin: 1.2rem 0;
           }
           p {
@@ -215,7 +215,7 @@ export const BodyHome = styled.div`
                 border-left: solid 4px var(--green);
                 padding: 0 0.8rem;
                 margin-bottom: 0.8rem;
-                font: 500 2rem Roboto;
+                font: 500 2rem Raleway;
                 transition: 0.1s;
               }
             }
@@ -288,7 +288,7 @@ export const BodyHome = styled.div`
                     border-left: solid 4px var(--green);
                     padding: 0 0.8rem;
                     margin-bottom: 0.8rem;
-                    font: 500 2rem Roboto;
+                    font: 500 2rem Raleway;
                     transition: 0.1s;
                   }
                 }
@@ -331,7 +331,7 @@ export const BodyHome = styled.div`
         margin-bottom: 4rem;
         background: transparent;
         color: var(--green-bg);
-        font: 700 2rem Roboto;
+        font: 700 2rem Raleway;
         padding: 0 0.8rem;
         width: fit-content;
         position: sticky;
@@ -426,7 +426,7 @@ export const BodyHome = styled.div`
                 }
               }
               legend {
-                font: 600 1.6vw Roboto;
+                font: 600 1.6vw Raleway;
                 color: var(--green-bg);
               }
               p {
@@ -614,10 +614,24 @@ export const BodyHome = styled.div`
         flex-direction: column;
         align-items: center;
         justify-content: space-around;
-        > img {
-          width: 40%;
+
+        > h3 {
+          color: white;
+          font-size: 2rem;
+          height: 4rem;
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
           margin-top: 2rem;
+          img {
+            width: 4rem;
+            align-self: flex-start;
+            :nth-of-type(1) {
+              transform: scaleX(-1);
+            }
+          }
         }
+
         > section {
           height: 4rem;
           display: flex;
@@ -645,7 +659,7 @@ export const BodyHome = styled.div`
             span {
               color: white;
             }
-            font: 700 1.6rem Roboto;
+            font: 700 1.6rem Raleway;
           }
         }
         p {
