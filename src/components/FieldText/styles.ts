@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import Tooltip from '../Tooltip'
 
 export const Error = styled(Tooltip)`
@@ -14,6 +14,17 @@ export const Error = styled(Tooltip)`
       border-color: var(--red) transparent;
     }
   }
+`
+const showMessage = keyframes`
+  0%,80%{
+    opacity: 1;
+    visibility: visible;
+  }
+  100%{
+    opacity: 0;
+    visibility: hidden;
+  }
+
 `
 export const BodyField = styled.label<{ isEmpty: boolean }>`
   --fieldHeight: 2.4rem;
@@ -68,9 +79,14 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
       left: 0.2rem;
       color: var(--green-bg);
     }
-    span {
-      opacity: 1;
-      visibility: visible;
+    ${Error} {
+      &:hover span {
+        opacity: 1;
+        animation-duration: 0s;
+      }
+      span {
+        animation: 3s ease-in 0s 1 none running ${showMessage};
+      }
     }
   }
   ${props =>
@@ -80,10 +96,6 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
         top: -1rem;
         left: 0.2rem;
         color: var(--green-bg);
-      }
-      span {
-        opacity: 0;
-        visibility: hidden;
       }
     `}
 
