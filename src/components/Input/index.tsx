@@ -1,7 +1,17 @@
-import React, { useEffect, useRef, InputHTMLAttributes } from 'react'
+import React, {
+  useEffect,
+  useRef,
+  InputHTMLAttributes,
+  ChangeEvent,
+  useCallback,
+  useState,
+} from 'react'
 import { useField } from '@unform/core'
 import { BodyInput } from './styles'
 import { Link } from 'react-router-dom'
+import { FiAlertCircle } from 'react-icons/fi'
+import FieldText from '../FieldText'
+
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   label?: string
@@ -37,24 +47,36 @@ const Input: React.FC<InputProps> = ({
       path: 'value',
     })
   }, [fieldName, registerField])
+  const [inputIsEmpty, setInputIsEmpty] = useState(
+    !rest.defaultValue && rest.defaultValue !== '',
+  )
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value !== '') {
+      setInputIsEmpty(false)
+    } else {
+      setInputIsEmpty(true)
+    }
+  }, [])
+
   return (
     <BodyInput>
-      <label htmlFor={name}>
-        {label}
-        {pathSubLabel && (
-          <Link to={`/${pathSubLabel}`} tabIndex={1}>
-            {subLabel}
-          </Link>
-        )}
-      </label>
-      <input
-        ref={inputRef}
-        defaultValue={defaultValue}
-        type="text"
-        id={fieldName}
-        {...rest}
-      />
-      {error && <span>{error}</span>}
+      <FieldText
+        name={name}
+        label={label}
+        error={error && error}
+        isEmpty={inputIsEmpty}
+        subLabel={subLabel}
+        pathSubLabel={pathSubLabel}
+      >
+        <input
+          onChange={handleChange}
+          ref={inputRef}
+          defaultValue={defaultValue}
+          type="text"
+          id={fieldName}
+          {...rest}
+        />
+      </FieldText>
     </BodyInput>
   )
 }

@@ -1,7 +1,15 @@
-import React, { TextareaHTMLAttributes, useEffect, useRef } from 'react'
+import React, {
+  ChangeEvent,
+  TextareaHTMLAttributes,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { BodyTextarea } from './styles'
 import { Link } from 'react-router-dom'
 import { useField } from '@unform/core'
+import FieldText from '../FieldText'
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   name: string
   label?: string
@@ -37,20 +45,37 @@ const Textarea: React.FC<TextareaProps> = ({
       path: 'value',
     })
   }, [fieldName, registerField])
-
+  const [textareaIsEmpty, setTextareaIsEmpty] = useState(
+    !rest.defaultValue && rest.defaultValue !== '',
+  )
+  const handleChange = useCallback(
+    (event: ChangeEvent<HTMLTextAreaElement>) => {
+      if (event.target.value !== '') {
+        setTextareaIsEmpty(false)
+      } else {
+        setTextareaIsEmpty(true)
+      }
+    },
+    [],
+  )
   return (
     <BodyTextarea>
-      <label htmlFor={name}>
-        {label}
-        <Link to={`/${pathSubLabel}`}>{subLabel}</Link>{' '}
-      </label>
-      <textarea
-        id={fieldName}
-        ref={textareRef}
-        defaultValue={defaultValue}
-        {...rest}
-      />
-      {error && <span>{error}</span>}
+      <FieldText
+        name={name}
+        label={label}
+        error={error && error}
+        isEmpty={textareaIsEmpty}
+        subLabel={subLabel}
+        pathSubLabel={pathSubLabel}
+      >
+        <textarea
+          onChange={handleChange}
+          id={fieldName}
+          ref={textareRef}
+          defaultValue={defaultValue}
+          {...rest}
+        />
+      </FieldText>
     </BodyTextarea>
   )
 }

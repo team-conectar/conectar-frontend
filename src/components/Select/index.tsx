@@ -1,8 +1,16 @@
 import { BodySelect } from './styles'
 import makeAnimated from 'react-select/animated'
-import React, { useRef, useEffect } from 'react'
+import React, {
+  useRef,
+  useEffect,
+  useCallback,
+  ChangeEvent,
+  useState,
+} from 'react'
 import ReactSelect, { OptionTypeBase, Props as SelectProps } from 'react-select'
 import { useField } from '@unform/core'
+import FieldText from '../FieldText'
+
 interface Props extends SelectProps<OptionTypeBase> {
   name: string
   label?: string
@@ -42,20 +50,42 @@ const Select: React.FC<Props> = ({ name, label, multi, ...rest }) => {
       },
     })
   }, [fieldName, registerField, rest.isMulti])
+  const [selectIsEmpty, setSelectIsEmpty] = useState(!rest.defaultValue)
+  const handleChange = useCallback(
+    (event: any) => {
+      console.log(event)
+
+      if (multi ? event !== null && event.length !== 0 : event.value !== '') {
+        setSelectIsEmpty(false)
+      } else {
+        setSelectIsEmpty(true)
+      }
+    },
+    [multi],
+  )
+
   return (
     <BodySelect>
-      <label htmlFor={name}>{label}</label>
-
-      <ReactSelect
-        ref={selectRef}
-        closeMenuOnSelect={true}
-        components={animatedComponents}
-        placeholder={defaultValue || 'Selecione'}
-        className="react-select-container"
-        classNamePrefix="react-select"
-        isMulti={multi}
-      />
-      {error && <span>{error}</span>}
+      <FieldText
+        name={name}
+        label={label}
+        error={error && error}
+        isEmpty={selectIsEmpty}
+      >
+        <ReactSelect
+          inputId={fieldName}
+          onChange={handleChange}
+          ref={selectRef}
+          closeMenuOnSelect={true}
+          components={animatedComponents}
+          placeholder=""
+          className="react-select-container"
+          classNamePrefix="react-select"
+          isMulti={multi}
+          options={rest.options}
+          defaultValue={rest.defaultValue}
+        />
+      </FieldText>
     </BodySelect>
   )
 }
