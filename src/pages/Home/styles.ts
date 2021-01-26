@@ -55,17 +55,15 @@ export const BodyHome = styled.div`
         }
         .area-login {
           > h1 {
-            font: 700 3rem Raleway;
+            font: 700 3.2rem Raleway;
             color: var(--green-bg);
-            &:nth-child(1) {
-              color: white;
+            strong {
+              color: transparent;
               -webkit-text-stroke-width: 1.5px;
               -webkit-text-stroke-color: var(--green-bg);
             }
           }
-          h1 + h1 {
-            margin-bottom: 0.8rem;
-          }
+
           p {
             color: black;
           }

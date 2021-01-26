@@ -43,8 +43,13 @@ function Home() {
               <img src={hero} alt="imagem de redes neurais" />
             </section>
             <section className="area-login">
-              <h1>Encontre o</h1>
-              <h1>time ideal</h1>
+              <h1>
+                <strong>
+                  Encontre o <br />
+                </strong>
+                time ideal
+              </h1>
+
               <Login
                 onSuccessLogin={() => {
                   setShowModal(true)
