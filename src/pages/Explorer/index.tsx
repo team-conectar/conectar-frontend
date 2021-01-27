@@ -27,12 +27,9 @@ const Explorer: React.FC = () => {
         <ProfileCard />
 
         <ul>
-          <li>
-            <ProjectCard />
-          </li>
-          <li>
-            <ProjectCard />
-          </li>
+          <ProjectCard />
+
+          <ProjectCard />
         </ul>
         <LinksCard />
         <SuccessfulCreatorsCard />

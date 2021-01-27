@@ -11,7 +11,7 @@ export const Page = styled.div`
   grid-template-columns: 0.5fr 1fr 0.5fr;
   grid-template-rows: max-content auto;
   align-items: flex-start;
-  grid-column-gap: 0.6rem;
+  gap: 0.6rem;
   position: relative;
 
   > ${ProfileCard} {
