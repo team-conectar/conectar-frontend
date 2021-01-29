@@ -300,7 +300,7 @@ export const BodyProjects = styled.div`
       column-gap: 1rem;
       box-shadow: var(--boxShadow);
       border-radius: 0.4rem;
-      width: min(1100px, 90vw);
+      width: var(--container);
       margin-top: 1rem;
 
       > img {
