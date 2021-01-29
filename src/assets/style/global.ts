@@ -4,16 +4,15 @@ export const GlobalStyle = createGlobalStyle`
     /* font-size: 60%; */
     --yellow: #ebae3c;
     --yellow-dark: #fea81b;
-    --orange: #ebae3c;
     --green: #99b876;
     --green-bg: #072f3f;
     --red: #d8252c;
-    --white: #ffff;
+    --white: #fafafa;
     --gray: #999999;
     --background: #f1f1f1ff;
     --borderDivision: #f0eeee;
     --borderRadius: 0.6rem;
-    --container: min(1100px, 90vw);
+    --container: min(1156px, 90vw);
     --boxShadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
     
 }
@@ -25,7 +24,7 @@ export const GlobalStyle = createGlobalStyle`
 }
 
 .container {
-    width: min(1100px, 90vw);
+    width: var(--container);
 }
 
 #root {
