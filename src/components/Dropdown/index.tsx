@@ -12,7 +12,7 @@ import { BodyButton } from './styles'
 import { GenIcon } from 'react-icons'
 
 interface DropdownProps {
-  DropButton: ComponentType<IconBaseProps>
+  DropButton: React.ReactNode
 }
 const Dropdown: React.FC<DropdownProps> = ({ DropButton, children }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
@@ -29,7 +29,10 @@ const Dropdown: React.FC<DropdownProps> = ({ DropButton, children }) => {
       ref={buttonRef}
       onBlur={() => setIsOpen(false)}
     >
-      <DropButton onClick={handleClick} id="btn-drop" />
+      <span onClick={handleClick} id="btn-drop">
+        {DropButton}
+      </span>
+
       <aside>{children}</aside>
     </BodyButton>
   )
