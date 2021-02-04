@@ -9,7 +9,14 @@ import React, {
   useCallback,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { Page, ButtonList } from './styles'
+import {
+  Page,
+  ButtonList,
+  PerfilDiv,
+  ProjetosSection,
+  ExperienciasDiv,
+  PerfilMain,
+} from './styles'
 import trabalho from '../../assets/icon/trabalho.svg'
 import educação from '../../assets/icon/educação.svg'
 // import clone from '../../assets/icon/clone.svg'
@@ -100,7 +107,7 @@ function Projects() {
 
   return (
     <Page>
-      <NavBar />
+      {/* <NavBar /> */}
       <main>
         <header>
           <aside>
@@ -126,23 +133,40 @@ function Projects() {
               Favoritos
             </ButtonList>
           </section>
-        </header>
-        <div>
-          <section className="info-perfil">
-            <img
-              src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-              alt=""
-            />
-            <h2>{profile.nome}</h2>
-            <p>@{profile.usuario}</p>
-            <Button theme="green">SEGUIR</Button>
-            <aside>
-              {profile.idealizador && <img src={id} alt="" />}
-              {profile.aliado && <img src={al} alt="" />}
-              {profile.colaborador && <img src={co} alt="" />}
-            </aside>
-            <ol>
-              <li>
+          <PerfilDiv>
+            <PerfilMain>
+              <figure>
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+                  alt=""
+                />
+                <figcaption>
+                  <h2>{profile.nome}</h2>
+                  <p>@{profile.usuario}</p>
+                </figcaption>
+              </figure>
+              <section>
+                <Button theme="green">SEGUIR</Button>
+                <aside>
+                  {profile.idealizador && <img src={id} alt="" />}
+                  {profile.aliado && <img src={al} alt="" />}
+                  {profile.colaborador && <img src={co} alt="" />}
+                </aside>
+              </section>
+            </PerfilMain>
+
+            <ul>
+              <h3>Áreas de atuação</h3>
+              {profile.areas?.map(area => (
+                <li key={area.id}>{area.descricao}</li>
+              ))}
+              <h3>Habilidades e ferramentas de domínio</h3>
+              {profile.habilidades?.map(habilidade => (
+                <li key={habilidade.id}>{habilidade.nome}</li>
+              ))}
+            </ul>
+            <ExperienciasDiv>
+              <button>
                 <img src={educação} alt="" />
                 <aside>
                   <legend>UTFPR</legend>
@@ -151,8 +175,8 @@ function Projects() {
                     Em andamento
                   </p>
                 </aside>
-              </li>
-              <li>
+              </button>
+              <button>
                 <img src={trabalho} alt="" />
                 <aside>
                   <legend>Maynart</legend>
@@ -161,8 +185,8 @@ function Projects() {
                     Fevereiro de 2018 - Até o momento
                   </p>
                 </aside>
-              </li>
-              <li>
+              </button>
+              <button>
                 <img src={projeto} alt="" />
                 <aside>
                   <legend>Conectar</legend>
@@ -174,24 +198,14 @@ function Projects() {
                     Agosto de 2020 - Até o momento
                   </p>
                 </aside>
-              </li>
-            </ol>
+              </button>
+            </ExperienciasDiv>
 
-            <h3>Áreas de atuação</h3>
-            <ul>
-              {profile.areas?.map(area => (
-                <li key={area.id}>{area.descricao}</li>
-              ))}
-            </ul>
-            <h3>Habilidades e ferreamentas de domínio</h3>
-            <ul>
-              {profile.habilidades?.map(habilidade => (
-                <li key={habilidade.id}>{habilidade.nome}</li>
-              ))}
-            </ul>
             <h4>Exibir currículo completo</h4>
-          </section>
-          <section className="projetos">
+          </PerfilDiv>
+        </header>
+        <div>
+          <ProjetosSection>
             {!showFavoritesList ? (
               <ul>
                 <ProjectCard />
@@ -200,7 +214,7 @@ function Projects() {
             ) : (
               <ul></ul>
             )}
-          </section>
+          </ProjetosSection>
         </div>
       </main>
     </Page>
