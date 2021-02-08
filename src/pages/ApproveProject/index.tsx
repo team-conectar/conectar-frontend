@@ -28,9 +28,7 @@ const ApproveProject: React.FC = () => {
             <img src="" alt="" />
             <h1>Confira as respostas dos candidatos aos convites enviados</h1>
           </section>
-          <section>
-            <ProjectCard />
-          </section>
+          <section>{/* <ProjectCard /> */}</section>
           <section>
             <ul>
               <VacancieCard />
