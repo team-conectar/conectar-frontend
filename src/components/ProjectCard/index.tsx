@@ -1,29 +1,52 @@
-import React, { InputHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes, useEffect, useState } from 'react'
 import { BodyCard, ProjectInfo, UserInfo } from './styles'
 import { Link } from 'react-router-dom'
-
-interface ProjectCardProps {
-  projeto: {
-    title: string
-    areas: string[]
-    views: number
-    likes: number
-  }
-  user: {
-    imgProfile: string
-  }
+import api from '../../services/api'
+interface IPessoa {
+  foto_perfil: string
+  usuario: string
+  nome: string
 }
-const ProjectCard: React.FC = () => {
+export interface IProject {
+  nome: string
+  descricao: string
+  visibilidade: true
+  objetivo: string
+  pessoa_id: number
+  id: string
+  areas: [
+    {
+      descricao: string
+      id: number
+    },
+  ]
+  habilidades: [
+    {
+      nome: string
+      id: number
+    },
+  ]
+}
+interface IProjectCardProps {
+  project: IProject
+}
+const ProjectCard: React.FC<IProjectCardProps> = ({ project }) => {
+  const [user, setUser] = useState<IPessoa>()
+  useEffect(() => {
+    api.get(`/api/v1/pessoas/${project.pessoa_id}`).then(response => {
+      setUser(response.data)
+    })
+  }, [project.pessoa_id])
   return (
     <BodyCard>
       <img
         src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-        alt=""
+        alt={user?.nome}
       />
       <UserInfo>
         <aside>
-          <h2>Jefeeeeeeee</h2>
-          <p>@Jeef</p>
+          <h2>{user?.nome}</h2>
+          <p>@{user?.usuario}</p>
         </aside>
       </UserInfo>
       <div>
@@ -31,24 +54,23 @@ const ProjectCard: React.FC = () => {
           <aside>
             <img
               src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU"
-              alt=""
+              alt={project.nome}
             />
 
             <section>
-              <h3>Title</h3>
+              <h3>{project.nome}</h3>
               <ul>
-                <li></li>
+                {project.habilidades.map(habilidade => (
+                  <li key={habilidade.id}>{habilidade.nome}</li>
+                ))}
+                {project.areas.map(area => (
+                  <li key={area.id}>{area.descricao}</li>
+                ))}
               </ul>
               <p>publicado em</p>
             </section>
           </aside>
-          <p>
-            orem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industrys standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic
-          </p>
+          <p>{project.descricao}</p>
         </ProjectInfo>
         <aside>
           <button>Favoritar</button>

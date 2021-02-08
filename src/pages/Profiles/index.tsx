@@ -39,7 +39,7 @@ import SelectTool, { ToolType } from '../../components/SelectTools'
 import Modal from '../../components/Modal'
 import { Context } from '../../context/AuthContext'
 import NavBar from '../../components/NavBar'
-import ProjectCard from '../../components/ProjectCard'
+import ProjectCard, { IProject } from '../../components/ProjectCard'
 
 interface routeParms {
   id: string
@@ -76,7 +76,7 @@ interface ProfileType {
  * @content is the iten of the modal
  */
 
-function Projects() {
+const Profiles: React.FC = () => {
   const { loading, isAuthenticated } = useContext(Context)
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
   const initialModalContent = {
@@ -91,10 +91,11 @@ function Projects() {
   const history = useHistory()
   const [showFavoritesList, setShowFavoritesList] = useState<boolean>(false)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
+  const [projects, setProjects] = useState<IProject[]>([] as IProject[])
   const profile_id = useParams<routeParms>().id
 
   useEffect(() => {
-    const res = api
+    api
       .get(`/api/v1/pessoas/${profile_id}`)
       .then(response => {
         setProfile(response.data)
@@ -102,7 +103,14 @@ function Projects() {
       .catch((err: AxiosError) => {
         return err?.response?.data.detail
       })
-    console.log(res)
+    api
+      .get(`/api/v1/projetos?pessoa_id=${profile_id}&visibilidade=true`)
+      .then(response => {
+        setProjects(response.data)
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
   }, [profile_id])
 
   return (
@@ -208,8 +216,9 @@ function Projects() {
           <ProjetosSection>
             {!showFavoritesList ? (
               <ul>
-                <ProjectCard />
-                <ProjectCard />
+                {projects.map(project => (
+                  <ProjectCard key={project.id} project={project} />
+                ))}
               </ul>
             ) : (
               <ul></ul>
@@ -220,4 +229,4 @@ function Projects() {
     </Page>
   )
 }
-export default Projects
+export default Profiles
