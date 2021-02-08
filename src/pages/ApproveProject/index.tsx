@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react'
+import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react'
 import { BodyApproveProject } from './styles'
 import Input from '../../components/Input'
 import Textarea from '../../components/Textarea'
@@ -10,14 +10,29 @@ import SelectArea from '../../components/SelectArea'
 import SelectTool from '../../components/SelectTools'
 import axios, { AxiosError } from 'axios'
 import NavBar from '../../components/NavBar'
-import ProjectCard from '../../components/ProjectCard'
+import ProjectCard, { IProject } from '../../components/ProjectCard'
 import api from '../../services/api'
 import ProfileCard from '../../components/ProfileCard'
 import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import VacancieCard from '../../components/VacancieCard'
-
+import { useParams } from 'react-router-dom'
+interface routeParms {
+  id: string
+}
 const ApproveProject: React.FC = () => {
+  const project_id = useParams<routeParms>().id
+  const [project, setProject] = useState<IProject>({} as IProject)
+  useEffect(() => {
+    api
+      .get(`/api/v1/projeto/${project_id}`)
+      .then(response => {
+        setProject(response.data)
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
+  }, [project_id])
   return (
     <>
       <NavBar />
@@ -28,7 +43,9 @@ const ApproveProject: React.FC = () => {
             <img src="" alt="" />
             <h1>Confira as respostas dos candidatos aos convites enviados</h1>
           </section>
-          <section>{/* <ProjectCard /> */}</section>
+          <section>
+            <ProjectCard project={project} />
+          </section>
           <section>
             <ul>
               <VacancieCard />
