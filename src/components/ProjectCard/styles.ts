@@ -2,12 +2,12 @@ import styled from 'styled-components'
 export const UserInfo = styled.main`
   display: flex;
 
-  > aside {
+  > a {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.4rem;
+    color: var(--green-bg);
     > h2 {
-      color: var(--green-bg);
       font-size: 1rem;
     }
     > p {
@@ -27,24 +27,46 @@ export const ProjectInfo = styled.main`
     display: flex;
     width: 100%;
     border-bottom: 1px solid var(--borderDivision);
-    padding: 0 0.6rem var(--gap);
-    img {
+    padding-bottom: var(--gap);
+    > a {
       width: 50%;
-      height: 180px;
-      object-fit: cover;
-      object-position: center;
-      border-radius: var(--borderRadius);
+
+      img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        object-position: center;
+        border-radius: var(--borderRadius);
+      }
     }
     > section {
       color: var(--green-bg);
       width: 50%;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      gap: var(--gap);
       justify-content: center;
       align-items: center;
-      ul {
+      > a {
+        font: 600 1.8rem Raleway;
+        color: var(--green-bg);
+        :first-letter {
+          text-transform: uppercase;
+        }
+      }
+      > ul {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 0.4rem;
+        padding: 0.4rem 0;
+        width: 100%;
+        padding-left: var(--gap);
         li {
+          list-style: none;
+          border: solid 1px var(--green-bg);
+          border-radius: 0.2rem;
+          padding: 0.2rem 0.4rem;
+          font-size: 0.8rem;
         }
       }
     }
@@ -53,6 +75,9 @@ export const ProjectInfo = styled.main`
     color: var(--green-bg);
     font-size: 0.8rem;
     line-height: 1.2rem;
+    :first-letter {
+      text-transform: uppercase;
+    }
   }
 `
 export const BodyCard = styled.li`
@@ -62,10 +87,12 @@ export const BodyCard = styled.li`
   grid-template-columns: 2.4rem auto;
   grid-template-rows: 1.2rem auto;
   gap: 0.6rem;
-  > img {
-    width: 100%;
+  > a {
     grid-column: 1;
     grid-row: 1 / -1;
+    img {
+      width: 100%;
+    }
   }
   ${UserInfo} {
     > aside {

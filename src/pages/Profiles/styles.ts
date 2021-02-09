@@ -186,7 +186,7 @@ export const PerfilDiv = styled.div`
 
     li {
       list-style: none;
-      box-shadow: 0 0 1px 1px var(--green-bg);
+      border: solid 1px var(--green-bg);
       border-radius: 0.8rem;
       padding: 0.2rem 0.4rem;
       font-size: 0.8rem;

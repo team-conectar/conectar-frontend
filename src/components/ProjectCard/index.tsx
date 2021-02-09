@@ -6,6 +6,7 @@ interface IPessoa {
   foto_perfil: string
   usuario: string
   nome: string
+  id: number
 }
 export interface IProject {
   nome: string
@@ -39,35 +40,38 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project }) => {
   }, [project.pessoa_id])
   return (
     <BodyCard>
-      <img
-        src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-        alt={user?.nome}
-      />
+      <Link to={`/profiles/${user?.id}`}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          alt={user?.nome}
+        />
+      </Link>
       <UserInfo>
-        <aside>
+        <Link to={`/profiles/${user?.id}`}>
           <h2>{user?.nome}</h2>
           <p>@{user?.usuario}</p>
-        </aside>
+        </Link>
       </UserInfo>
       <div>
         <ProjectInfo>
           <aside>
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU"
-              alt={project.nome}
-            />
-
+            <Link to={`/projects/${project.id}`}>
+              <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU"
+                alt={project.nome}
+              />
+            </Link>
             <section>
-              <h3>{project.nome}</h3>
+              <Link to={`/projects/${project.id}`}>{project.nome}</Link>
               <ul>
-                {project.habilidades.map(habilidade => (
+                {project.habilidades?.map(habilidade => (
                   <li key={habilidade.id}>{habilidade.nome}</li>
                 ))}
-                {project.areas.map(area => (
+                {project.areas?.map(area => (
                   <li key={area.id}>{area.descricao}</li>
                 ))}
               </ul>
-              <p>publicado em</p>
+              <p>publicado em </p>
             </section>
           </aside>
           <p>{project.descricao}</p>
