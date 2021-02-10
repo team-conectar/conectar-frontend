@@ -4,7 +4,7 @@ import { ToolType } from '../components/SelectTools'
 
 export const createOptionAreas = (areas: Array<AreaType>) => {
   const newOptions: Array<OptionHTMLAttributes<HTMLOptionElement>> = []
-  areas.forEach(area => {
+  areas?.forEach(area => {
     area.area_pai_id &&
       newOptions.push({ value: area.descricao, label: area.descricao })
   })
@@ -12,7 +12,7 @@ export const createOptionAreas = (areas: Array<AreaType>) => {
 }
 export const createOptionTools = (tools: Array<ToolType>) => {
   const newOptions: Array<OptionHTMLAttributes<HTMLOptionElement>> = []
-  tools.forEach(tool => {
+  tools?.forEach(tool => {
     newOptions.push({ value: tool.nome, label: tool.nome })
   })
   return newOptions

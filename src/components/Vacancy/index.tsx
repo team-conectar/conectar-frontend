@@ -40,7 +40,7 @@ interface VacanciesType {
 interface ProjectType {
   nome: string
   descricao: string
-  visibilidade: true
+  visibilidade: boolean
   objetivo: string
   foto_capa: string
   areas: AreaType[]

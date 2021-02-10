@@ -1,4 +1,10 @@
-import React, { useState, useContext, useRef, useCallback } from 'react'
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useCallback,
+  useEffect,
+} from 'react'
 import { BodyCreateProject } from './styles'
 import Input from '../../components/Input'
 import Textarea from '../../components/Textarea'
@@ -18,23 +24,33 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
+import Vacancy from '../../components/Vacancy'
 
 interface ProjectType {
   nome: string
   descricao: string
-  visibilidade: string
+  visibilidade: boolean
   objetivo: string
+  foto_capa: string
+  areas: AreaType[]
+  habilidades: ToolType[]
+  id: number
 }
 
 const CreateProject: React.FC = () => {
-  const { loading, isAuthenticated } = useContext(Context)
+  const { isAuthenticated } = useContext(Context)
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [showNextStep, setShowNextStep] = useState<boolean>(false)
+  const [shownStep, setShownStep] = useState<1 | 2 | 3>(3)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
+  const [project, setProject] = useState<ProjectType>({} as ProjectType)
   const [selectedFile, setSelectedFile] = useState<File>()
-
+  useEffect(() => {
+    api.get(`/api/v1/projeto/${idProject}`).then(response => {
+      setProject(response.data)
+    })
+  }, [idProject !== 0])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -52,11 +68,11 @@ const CreateProject: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
-        const visibilidade = formData.visibilidade === 'visibilidade'
+
         const data = new FormData()
 
         data.append('nome', formData.nome)
-        data.append('visibilidade', JSON.stringify(visibilidade))
+        data.append('visibilidade', JSON.stringify(formData.visibilidade))
         selectedFile &&
           data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
         data.append('descricao', 'Não informado')
@@ -67,7 +83,7 @@ const CreateProject: React.FC = () => {
           })
         ).data
         setIdProject(id)
-        setShowNextStep(true)
+        setShownStep(2)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -111,8 +127,8 @@ const CreateProject: React.FC = () => {
   )
 
   return (
-    <BodyCreateProject showSecondStep={showNextStep}>
-      <Beforeunload onBeforeunload={event => event.preventDefault()} />
+    <BodyCreateProject>
+      {/* <Beforeunload onBeforeunload={event => event.preventDefault()} /> */}
       <Logged />
       <Modal
         open={showModal}
@@ -127,7 +143,7 @@ const CreateProject: React.FC = () => {
       <div className="area-central container">
         <h1>Criar Projeto</h1>
 
-        {!showNextStep ? (
+        {(shownStep === 1 && (
           <Form
             ref={formRef}
             className="primeira-etapa"
@@ -157,37 +173,39 @@ const CreateProject: React.FC = () => {
               </Button>
             </section>
           </Form>
-        ) : (
-          <Form
-            ref={formRef}
-            className="segunda-etapa"
-            onSubmit={handleSecondSubmit}
-          >
-            <div className="coluna-um">
-              <Textarea label="Objetivo do projeto" name="objetivo" />
-              <Textarea label="Descrição simples" name="descricao" />
-            </div>
-            <div className="coluna-dois">
-              <SelectTool
-                name="habilidades"
-                label="Ferramentas, matérias e habilidades que o time precisa dominar"
-              />
-            </div>
-            <section>
-              <Button
-                className="voltar"
-                type="button"
-                onClick={() => setShowNextStep(false)}
-                theme="yellowG"
-              >
-                Voltar
-              </Button>
-              <Button theme="yellow" type="submit">
-                Concluir
-              </Button>
-            </section>
-          </Form>
-        )}
+        )) ||
+          (shownStep === 2 && (
+            <Form
+              ref={formRef}
+              className="segunda-etapa"
+              onSubmit={handleSecondSubmit}
+            >
+              <div className="coluna-um">
+                <Textarea label="Objetivo do projeto" name="objetivo" />
+                <Textarea label="Descrição simples" name="descricao" />
+              </div>
+              <div className="coluna-dois">
+                <SelectTool
+                  name="habilidades"
+                  label="Ferramentas, matérias e habilidades que o time precisa dominar"
+                />
+              </div>
+              <section>
+                <Button
+                  className="voltar"
+                  type="button"
+                  onClick={() => setShownStep(1)}
+                  theme="yellowG"
+                >
+                  Voltar
+                </Button>
+                <Button theme="yellow" type="submit">
+                  Concluir
+                </Button>
+              </section>
+            </Form>
+          )) ||
+          (shownStep === 3 && <Vacancy project={project} />)}
       </div>
     </BodyCreateProject>
   )
