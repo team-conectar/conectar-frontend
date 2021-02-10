@@ -40,6 +40,8 @@ import Modal from '../../components/Modal'
 import { Context } from '../../context/AuthContext'
 import NavBar from '../../components/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
+import { useLoggedUser } from '../../context/LoggedUserContext'
+import Logged from '../../components/Logged'
 
 interface routeParms {
   id: string
@@ -77,7 +79,6 @@ interface ProfileType {
  */
 
 const Profiles: React.FC = () => {
-  const { loading, isAuthenticated } = useContext(Context)
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
   const initialModalContent = {
     nome: false,
@@ -88,12 +89,13 @@ const Profiles: React.FC = () => {
     areas: false,
     habilidades: false,
   }
+  const [loadingPage, setLoadingPage] = useState(true)
   const history = useHistory()
+  const loggedUser = useLoggedUser()
   const [showFavoritesList, setShowFavoritesList] = useState<boolean>(false)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
   const profile_id = useParams<routeParms>().id
-
   useEffect(() => {
     api
       .get(`/api/v1/pessoas/${profile_id}`)
@@ -101,6 +103,7 @@ const Profiles: React.FC = () => {
         setProfile(response.data)
       })
       .catch((err: AxiosError) => {
+        if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
     api
@@ -111,6 +114,7 @@ const Profiles: React.FC = () => {
       .catch((err: AxiosError) => {
         return err?.response?.data.detail
       })
+    setLoadingPage(false)
   }, [profile_id])
 
   return (
@@ -154,7 +158,10 @@ const Profiles: React.FC = () => {
                 </figcaption>
               </figure>
               <section>
-                <Button theme="green">SEGUIR</Button>
+                {console.log(loggedUser)}
+                <Button theme="green">
+                  {loggedUser.id === profile.id ? 'EDITAR' : 'SEGUIR'}
+                </Button>
                 <aside>
                   {profile.idealizador && <img src={id} alt="" />}
                   {profile.aliado && <img src={al} alt="" />}

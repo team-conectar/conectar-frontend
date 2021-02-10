@@ -12,22 +12,25 @@ import Profiles from './pages/Profiles'
 import { GlobalStyle } from './assets/style/global'
 import { AuthProvider } from './context/AuthContext'
 import Explorer from './pages/Explorer'
-function Routes() {
+import { LoggedUserProvider } from './context/LoggedUserContext'
+const Routes: React.FC = () => {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Route exact path="/" component={Home} />
-        <Route path="/signup/:step" component={SignUp} />
-        <Route path="/profilefeatures" component={ProfileFeatures} />
-        <Route path="/experienceareas" component={ExperienceAreas} />
-        <Route path="/masterytools" component={MasteryTools} />
-        <Route path="/createproject" component={CreateProject} />
-        <Route path="/approveproject" component={ApproveProject} />
-        <Route path="/projects/:id" component={Projects} />
-        <Route path="/profiles/:id" component={Profiles} />
-        <Route path="/explorer" component={Explorer} />
-        <GlobalStyle />
-      </BrowserRouter>
+      <LoggedUserProvider>
+        <BrowserRouter>
+          <Route exact path="/" component={Home} />
+          <Route path="/signup/:step" component={SignUp} />
+          <Route path="/profilefeatures" component={ProfileFeatures} />
+          <Route path="/experienceareas" component={ExperienceAreas} />
+          <Route path="/masterytools" component={MasteryTools} />
+          <Route path="/createproject" component={CreateProject} />
+          <Route path="/approveproject" component={ApproveProject} />
+          <Route path="/projects/:id" component={Projects} />
+          <Route path="/profiles/:id" component={Profiles} />
+          <Route path="/explorer" component={Explorer} />
+          <GlobalStyle />
+        </BrowserRouter>
+      </LoggedUserProvider>
     </AuthProvider>
   )
 }
