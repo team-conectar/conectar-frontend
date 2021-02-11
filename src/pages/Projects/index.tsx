@@ -33,7 +33,7 @@ import Modal from '../../components/Modal'
 import { Context } from '../../context/AuthContext'
 import Login from '../../components/Login'
 import NavBar from '../../components/NavBar'
-import Vacancy from '../../components/Vacancy'
+import Vacancy, { VacanciesType } from '../../components/Vacancy'
 import Textarea from '../../components/Textarea'
 import Input from '../../components/Input'
 import Dropzone from '../../components/Dropzone'
@@ -43,6 +43,7 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import { ButtonList } from '../Profiles/styles'
 import ContainerScroll from '../../components/ContainerScroll'
+import VacancieListItem from '../../components/VacancieListItem'
 interface routeParms {
   id: string
 }
@@ -81,9 +82,13 @@ const Projects: React.FC = () => {
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
+  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+  const [vacancyDetail, setVacancyDetail] = useState<VacanciesType>(
+    vacancies[0],
+  )
   const formRef = useRef<FormHandles>(null)
   useEffect(() => {
-    const res = api
+    api
       .get(`/api/v1/projeto/${projeto_id}`)
       .then(response => {
         setProject(response.data)
@@ -91,10 +96,20 @@ const Projects: React.FC = () => {
         setStoredAreas(response.data.areas)
       })
       .catch((err: AxiosError) => {
-        return err?.response?.data.detail
+        console.log(err?.response?.data.detail)
       })
-    console.log(res)
+
+    api
+      .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
+      .then(response => {
+        setVacancies(response.data)
+        setVacancyDetail(response.data[0])
+      })
+      .catch((err: AxiosError) => {
+        console.log(err?.response?.data.detail)
+      })
   }, [projeto_id])
+
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -358,109 +373,24 @@ const Projects: React.FC = () => {
             </legend>
 
             <ContainerScroll>
-              <li>
-                <img src={co} alt="colaborador" />
-                <p>
-                  <strong>Ux Designer | Colaborador</strong>
-                  <br />
-                  <span>Trainee </span>
-                  <strong>
-                    | Não remunerado <br />
-                  </strong>
-                  <span>2 vagas</span>
-                </p>
-
-                <img src={config} alt="duplicar as vagas" />
-              </li>
-              <li>
-                <img src={co} alt="colaborador" />
-                <p>
-                  <strong>Ux Designer | Colaborador</strong>
-                  <br />
-                  <span>Trainee </span>
-                  <strong>
-                    | Não remunerado <br />
-                  </strong>
-                  <span>2 vagas</span>
-                </p>
-
-                <img src={config} alt="duplicar as vagas" />
-              </li>
-              <li>
-                <img src={co} alt="colaborador" />
-                <p>
-                  <strong>Ux Designer | Colaborador</strong>
-                  <br />
-                  <span>Trainee </span>
-                  <strong>
-                    | Não remunerado <br />
-                  </strong>
-                  <span>2 vagas</span>
-                </p>
-
-                <img src={config} alt="duplicar as vagas" />
-              </li>
-              <li>
-                <img src={co} alt="colaborador" />
-                <p>
-                  <strong>Ux Designer | Colaborador</strong>
-                  <br />
-                  <span>Trainee </span>
-                  <strong>
-                    | Não remunerado <br />
-                  </strong>
-                  <span>2 vagas</span>
-                </p>
-
-                <img src={config} alt="duplicar as vagas" />
-              </li>
-              <li>
-                <img src={co} alt="colaborador" />
-                <p>
-                  <strong>Ux Designer | Colaborador</strong>
-                  <br />
-                  <span>Trainee </span>
-                  <strong>
-                    | Não remunerado <br />
-                  </strong>
-                  <span>2 vagas</span>
-                </p>
-
-                <img src={config} alt="duplicar as vagas" />
-              </li>
-              <li>
-                <img src={co} alt="colaborador" />
-                <p>
-                  <strong>Ux Designer | Colaborador</strong>
-                  <br />
-                  <span>Trainee </span>
-                  <strong>
-                    | Não remunerado <br />
-                  </strong>
-                  <span>2 vagas</span>
-                </p>
-
-                <img src={config} alt="duplicar as vagas" />
-              </li>
+              {vacancies.map(vacancy => (
+                <VacancieListItem
+                  key={vacancy.id}
+                  vacancy={vacancy}
+                  onClick={() => setVacancyDetail(vacancy)}
+                  style={
+                    vacancyDetail === vacancy
+                      ? { background: 'var(--backgroudElevation)' }
+                      : { background: 'transparent' }
+                  }
+                />
+              ))}
             </ContainerScroll>
           </section>
           <section>
             <legend>Descrição da vaga</legend>
             <aside>
-              <strong>Sobre a Empresa:</strong>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                vitae porttitor lacus. Praesent ac nisl ut magna dapibus semper
-              </p>
-              <strong>Main responsibilities</strong>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                vitae porttitor lacus. Praesent ac nisl ut magna dapibus semper
-                auctor sed justo. Nulla mattis massa eu ligula consectetur
-                consequat. Donec a ante nisl. Donec quam erat, feugiat eleifend
-                quam vel, tincidunt lacinia nisl. Aliquam tempus elementum
-                mauris
-              </p>
+              <p>{vacancyDetail.descricao}</p>
               <DivTags>
                 <legend>
                   Áreas de desenvolvimento
@@ -474,7 +404,7 @@ const Projects: React.FC = () => {
                   />
                 </legend>
                 <aside>
-                  {project.areas?.map(area => (
+                  {vacancyDetail.areas?.map(area => (
                     <span key={area.id}>{area.descricao}</span>
                   ))}
                 </aside>
@@ -493,7 +423,7 @@ const Projects: React.FC = () => {
                   />
                 </legend>
                 <aside>
-                  {project.habilidades?.map(habilidade => (
+                  {vacancyDetail.habilidades?.map(habilidade => (
                     <span key={habilidade.id}>{habilidade.nome}</span>
                   ))}
                 </aside>

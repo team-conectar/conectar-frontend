@@ -115,29 +115,6 @@ export const DivVagas = styled.div`
 
   ${DivScroll} {
     width: 100%;
-
-    li {
-      box-shadow: var(--boxShadow);
-      border-radius: var(--borderRadius);
-      background: white;
-      border: 0;
-      padding: 0.6rem 1rem;
-      display: grid;
-      grid-template-columns: 2rem 1fr 2rem;
-      align-items: center;
-      gap: 1rem;
-      margin: var(--gap) 0;
-      > p {
-        line-height: 1.6rem;
-        font-size: 0.8rem;
-      }
-      > img {
-        width: 2rem;
-        :nth-of-type(2) {
-          cursor: pointer;
-        }
-      }
-    }
   }
 
   @media (min-width: 768px) {
@@ -153,13 +130,12 @@ export const DivVagas = styled.div`
       }
       > legend {
         font: 600 1.2rem Raleway;
-        margin: 0.2rem 0;
         border-bottom: solid 1px var(--borderDivision);
         padding: 0.6rem 0.8rem;
         display: flex;
         align-items: center;
         position: relative;
-        height: 10%;
+        height: 3rem;
         img {
           width: 1.2rem;
           margin: 0 0.5rem;
@@ -174,15 +150,16 @@ export const DivVagas = styled.div`
         border-bottom: solid 1px var(--borderDivision);
         padding-bottom: 1rem;
         overflow-y: auto;
-        height: 90%;
-
+        height: calc(100% - 2rem);
+        min-height: 500px;
         li {
           border-radius: 0;
           border-bottom: solid 1px var(--borderDivision);
           box-shadow: none;
           margin: 0;
           padding: 0.6rem 2rem;
-          gap: 1.6rem;
+          cursor: pointer;
+          transition: 0.2s;
         }
       }
       > aside {
