@@ -18,11 +18,12 @@ export const BodyNavBar = styled.header<NavBarProps>`
   }
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
   .searchBlock {
-    border: 2px solid var(--green);
+    background: white;
+    box-shadow: var(--boxShadow);
     height: 2rem;
     margin-top: 0.2rem;
     padding: 0;
-    border-radius: 0.3rem;
+    border-radius: 0.2rem;
     display: flex;
     align-items: center;
     input {
@@ -39,7 +40,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
       border: 0;
       background: transparent;
       padding: 0 0.4rem;
-      border-right: 2px solid var(--green);
+      border-right: 2px solid var(--borderDivision);
       cursor: pointer;
       img {
         width: 16px;
