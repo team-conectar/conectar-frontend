@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled, { css } from 'styled-components'
 
 export const BodyProfileFeatures = styled.div`
   display: flex;
@@ -6,10 +6,10 @@ export const BodyProfileFeatures = styled.div`
   align-items: center;
   min-height: 100vh;
   width: 100vw;
-  background: var(--green-bg);
+  background: var(--textGreen);
   h1 {
     margin: 1.4rem 0;
-    font: 700 3rem Roboto;
+    font: 700 3rem Raleway;
     color: white;
   }
 
@@ -22,4 +22,4 @@ export const BodyProfileFeatures = styled.div`
     justify-content: space-between;
     margin: 1.6rem 0;
   }
-`;
+`
