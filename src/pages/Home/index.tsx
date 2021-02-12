@@ -30,19 +30,21 @@ function Home() {
   const { handleLogin } = useContext(Context)
   return (
     <BodyHome>
+
       <Modal open={showModal} setOpen={setShowModal}>
         <h1>
           Será redimensionado para a pagina de explorar projetos(faltante)
         </h1>
       </Modal>
+
       <main>
         <div className="topo-background">
-          <NavBar />
           <div className="container topo">
             <section className="hero">
               <img src={hero} alt="imagem de redes neurais" />
             </section>
             <section className="area-login">
+
               <h1>
                 <strong>
                   Encontre o <br />
@@ -56,6 +58,7 @@ function Home() {
                   handleLogin(true)
                 }}
               />
+
             </section>
             <label className="arrow-bottom">
               <a href="#introducao">
@@ -267,6 +270,7 @@ function Home() {
                 </section>
               </aside>
             </div>
+
             <Button theme="primary">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
@@ -313,6 +317,7 @@ function Home() {
               </aside>
             </div>
             <Button theme="primary">Criar sua conta</Button>
+
           </section>
           <label className="arrow-bottom">
             <a href="#rodape">
@@ -332,7 +337,9 @@ function Home() {
           </p>
           <aside>
             <img src={curtiu} alt="e aí curtiu? vem pra cá!" />
+
             <Button theme="primary">Crie sua conta</Button>
+
           </aside>
           <footer>
             <h3>

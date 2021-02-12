@@ -16,6 +16,7 @@ import { LoggedUserProvider } from './context/LoggedUserContext'
 const Routes: React.FC = () => {
   return (
     <AuthProvider>
+
       <LoggedUserProvider>
         <BrowserRouter>
           <Route exact path="/" component={Home} />
@@ -31,6 +32,7 @@ const Routes: React.FC = () => {
           <GlobalStyle />
         </BrowserRouter>
       </LoggedUserProvider>
+
     </AuthProvider>
   )
 }
