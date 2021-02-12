@@ -15,12 +15,12 @@ function Routes() {
     <AuthProvider>
       <BrowserRouter>
         <Route exact path="/" component={Home} />
-        <Route path="/signup/:step" component={SignUp} />
-        <Route path="/profilefeatures" component={ProfileFeatures} />
-        <Route path="/experienceareas" component={ ExperienceAreas} />
-        <Route path="/masterytools" component={ MasteryTools} />
-        <Route path="/createproject" component={ CreateProject} />
-        <Route path="/approveproject" component={ ApproveProject} />
+        <Route path="/cadastrar/:step" component={SignUp} />
+        <Route path="/experiencias" component={ProfileFeatures} />
+        <Route path="/areas" component={ ExperienceAreas} />
+        <Route path="/habilidades-ou-ferramentas" component={ MasteryTools} />
+        <Route path="/criar-um-projeto" component={ CreateProject} />
+        <Route path="/projeto-conectado" component={ ApproveProject} />
       </BrowserRouter>
     </AuthProvider>
   )
