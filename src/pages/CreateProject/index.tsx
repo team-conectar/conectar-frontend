@@ -141,8 +141,7 @@ const CreateProject: React.FC = () => {
         <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
       </Modal>
       <div className="area-central container">
-        <h1>Criar Projeto</h1>
-
+        {shownStep === 1 || (shownStep === 2 && <h1>Criar Projeto</h1>)}
         {(shownStep === 1 && (
           <Form
             ref={formRef}
@@ -165,10 +164,10 @@ const CreateProject: React.FC = () => {
               <SelectArea name="area" label="Área de desenvolvimento" />
             </div>
             <section>
-              <Button type="button" onClick={history.goBack} theme="yellowG">
+              <Button type="button" onClick={history.goBack} theme="primary">
                 Cancelar
               </Button>
-              <Button theme="yellow" type="submit">
+              <Button theme="primary" type="submit">
                 Continuar
               </Button>
             </section>
@@ -195,11 +194,11 @@ const CreateProject: React.FC = () => {
                   className="voltar"
                   type="button"
                   onClick={() => setShownStep(1)}
-                  theme="yellowG"
+                  theme="primary"
                 >
                   Voltar
                 </Button>
-                <Button theme="yellow" type="submit">
+                <Button theme="primary" type="submit">
                   Concluir
                 </Button>
               </section>

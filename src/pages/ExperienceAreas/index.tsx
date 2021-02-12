@@ -66,14 +66,14 @@ const ExperienceAreas: React.FC = () => {
       </div>
       <footer>
         <Button
-          theme="yellowG"
+          theme="primary"
           onClick={() => {
             history.push('/masterytools')
           }}
         >
           Pular
         </Button>
-        <Button type="submit" theme="yellow">
+        <Button type="submit" theme="primary">
           Continuar
         </Button>
       </footer>

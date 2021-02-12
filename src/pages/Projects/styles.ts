@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { BodyButton } from '../../components/Button/styles'
 import { DivScroll } from '../../components/ContainerScroll/styles'
 import { DivModalWindow } from '../../components/Modal/styles'
 
@@ -9,7 +10,7 @@ export const DivTags = styled.div`
   padding: 0.6rem;
   legend {
     font: 600 1.2rem Raleway;
-    color: var(--green-bg);
+    
     margin: 0.4rem 0;
     padding-left: 0.4rem;
     img {
@@ -30,7 +31,7 @@ export const DivTags = styled.div`
       padding: 0.2rem;
       margin: 0.2rem;
       border-radius: 0.2rem;
-      border: solid 1px var(--green-bg);
+      border: solid 1px var(--textGreen);
     }
     & + legend {
       margin-top: 0.8rem;
@@ -98,7 +99,7 @@ export const DivSobre = styled.div`
 export const DivVagas = styled.div`
   width: 100%;
   display: flex;
-  color: var(--green-bg);
+  
   > section {
     width: 100%;
     > legend {
@@ -235,7 +236,7 @@ export const BodyProjects = styled.div`
       gap: 1rem;
       h1 {
         font-size: 2rem;
-        color: var(--green-bg);
+        
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -251,6 +252,10 @@ export const BodyProjects = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
+        ${BodyButton} {
+          border-color: var(--yellow);
+          color: var(--yellow);
+        }
         a {
           font-size: 0.6rem;
           color: var(--gray);

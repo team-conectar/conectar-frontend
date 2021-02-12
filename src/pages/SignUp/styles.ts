@@ -6,10 +6,10 @@ export const BodySignUp = styled.div`
   align-items: center;
   height: 100vh;
   width: 100vw;
-  background: var(--green-bg);
+  background: var(--textGreen);
 
   form.area-central {
-    background: var(--white);
+    background: var(--backgroudElevation);
     padding: 2.4rem;
     border-radius: 0.8rem;
     border: 2px solid var(--green);
@@ -18,7 +18,7 @@ export const BodySignUp = styled.div`
     }
     h1 {
       margin: 1.4rem 0;
-      color: var(--green-bg);
+      
     }
     .primeira-etapa {
       display: grid;
@@ -65,7 +65,7 @@ export const BodySignUp = styled.div`
         }
         .google-button {
           border: 1px solid var(--green);
-          background-color: var(--white);
+          background-color: var(--backgroudElevation);
           margin: 0.5rem 0 0.5rem 0.2rem;
         }
         .facebook-button {
@@ -119,7 +119,7 @@ export const BodySignUp = styled.div`
           legend {
             border-radius: 0.3rem 0.3rem 0 0;
             width: 100%;
-            background: var(--green-bg);
+            background: var(--textGreen);
             padding: 0.2rem;
             color: white;
             text-align: center;

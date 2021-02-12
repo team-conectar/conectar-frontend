@@ -118,7 +118,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         subLabel="Esqueceu a senha?"
         pathSubLabel="#"
       />
-      <Button type="submit" theme="yellow">
+      <Button type="submit" theme="primary">
         Entrar
       </Button>
       <p>ou</p>

@@ -24,7 +24,7 @@ const Routes: React.FC = () => {
           <Route path="/experienceareas" component={ExperienceAreas} />
           <Route path="/masterytools" component={MasteryTools} />
           <Route path="/createproject" component={CreateProject} />
-          <Route path="/approveproject" component={ApproveProject} />
+          <Route path="/approveproject/:id" component={ApproveProject} />
           <Route path="/projects/:id" component={Projects} />
           <Route path="/profiles/:id" component={Profiles} />
           <Route path="/explorer" component={Explorer} />

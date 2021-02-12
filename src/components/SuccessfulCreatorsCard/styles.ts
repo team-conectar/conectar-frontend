@@ -15,12 +15,12 @@ export const BodyCard = styled.div`
   justify-content: space-evenly;
   > h2 {
     font-size: 1rem;
-    color: var(--green-bg);
+    
     align-self: flex-start;
     margin-left: 1rem;
   }
   > button {
-    color: var(--green-bg);
+    
     width: 100%;
     border: 0;
     background: white;

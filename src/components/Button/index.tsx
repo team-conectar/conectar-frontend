@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes } from 'react'
 import { BodyButton } from './styles'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  theme?: 'yellow' | 'yellowG' | 'green' | 'greenG'
+  theme?: 'yellow' | 'yellowG' | 'primary' | 'secondary'
   color?: string
 }
 /**
@@ -10,7 +10,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * @component
  * @example
  * return (
- *   <Button theme="green">Enviar convite</Button>
+ *   <Button theme="primary">Enviar convite</Button>
  * )
  */
 const Button: React.FC<ButtonProps> = ({ theme, color, children, ...rest }) => {

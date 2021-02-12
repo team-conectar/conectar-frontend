@@ -17,7 +17,7 @@ export const ButtonList = styled.button<{ borderBottom: boolean }>`
         width: calc(100% -3.2rem);
         height: 2px;
         content: '';
-        background: var(--green-bg);
+        background: var(--textGreen);
         position: absolute;
         left: 1.6rem;
         right: 1.6rem;
@@ -173,7 +173,7 @@ export const PerfilDiv = styled.div`
   align-items: center;
   justify-content: space-evenly;
   width: 90vw;
-  color: var(--green-bg);
+  
   > ul {
     display: flex;
     flex-flow: row wrap;
@@ -186,7 +186,7 @@ export const PerfilDiv = styled.div`
 
     li {
       list-style: none;
-      border: solid 1px var(--green-bg);
+      border: solid 1px var(--textGreen);
       border-radius: 0.8rem;
       padding: 0.2rem 0.4rem;
       font-size: 0.8rem;
@@ -304,7 +304,7 @@ export const Page = styled.div`
         display: grid;
         grid-template-columns: var(--PerfilWidth) 1.4fr;
         width: 100%;
-        color: var(--green-bg);
+        
         gap: 1rem;
       }
     }

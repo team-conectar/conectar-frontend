@@ -28,7 +28,7 @@ export const BodyHome = styled.div`
       a {
         cursor: pointer;
         font-size: 2rem;
-        color: var(--green-bg);
+
         outline: none;
       }
       :hover {
@@ -56,11 +56,11 @@ export const BodyHome = styled.div`
         .area-login {
           > h1 {
             font: 700 3.2rem Raleway;
-            color: var(--green-bg);
+
             strong {
               color: transparent;
-              -webkit-text-stroke-width: 1.5px;
-              -webkit-text-stroke-color: var(--green-bg);
+              -webkit-text-stroke-width: 1.6px;
+              -webkit-text-stroke-color: var(--textGreen);
             }
           }
 
@@ -111,7 +111,7 @@ export const BodyHome = styled.div`
           background: #f1f1f1ff;
           width: fit-content;
           font: 700 1.4rem Raleway;
-          color: var(--green-bg);
+
           padding: 0 0.8rem;
         }
       }
@@ -124,7 +124,6 @@ export const BodyHome = styled.div`
         .intro-box {
           position: relative;
           margin: 0 2rem;
-          color: white;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -133,11 +132,13 @@ export const BodyHome = styled.div`
           transform: skewX(10deg);
           max-width: 700px;
           h4 {
+            color: white;
             transform: skewX(-10deg);
             font: 700 1.4rem Raleway;
             margin-bottom: 1.2rem;
           }
           p {
+            color: white;
             transform: skewX(-10deg);
             line-height: 2rem;
           }
@@ -166,7 +167,7 @@ export const BodyHome = styled.div`
             height: 80%;
             right: 15px;
             transform: skewX(-3deg);
-            background: var(--green-bg);
+            background: var(--textGreen);
           }
         }
         .texto {
@@ -328,7 +329,7 @@ export const BodyHome = styled.div`
       > h3 {
         margin-bottom: 4rem;
         background: transparent;
-        color: var(--green-bg);
+
         font: 700 2rem Raleway;
         padding: 0 0.8rem;
         width: fit-content;
@@ -425,10 +426,8 @@ export const BodyHome = styled.div`
               }
               legend {
                 font: 600 1.6vw Raleway;
-                color: var(--green-bg);
               }
               p {
-                color: var(--green-bg);
                 margin-top: 1.2rem;
                 text-align: center;
                 font-size: 1vw;
@@ -606,7 +605,7 @@ export const BodyHome = styled.div`
         }
       }
       footer {
-        background: var(--green-bg);
+        background: var(--textGreen);
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -653,11 +652,13 @@ export const BodyHome = styled.div`
           a {
             display: flex;
             align-items: center;
-            color: var(--green);
             span {
               color: white;
             }
             font: 700 1.6rem Raleway;
+            svg {
+              color: var(--green) !important;
+            }
           }
         }
         p {

@@ -235,7 +235,7 @@ const ProjectExperiences: React.FC = () => {
         <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
         <footer>
           <Button
-            theme="yellow"
+            theme="primary"
             onClick={() =>
               experienceExcluded &&
               handleDeleteExperience(experienceExcluded?.id)
@@ -243,7 +243,7 @@ const ProjectExperiences: React.FC = () => {
           >
             Excluir
           </Button>
-          <Button theme="yellowG" onClick={() => setOpenModal(false)}>
+          <Button theme="primary" onClick={() => setOpenModal(false)}>
             Manter
           </Button>
         </footer>
@@ -417,13 +417,13 @@ const ProjectExperiences: React.FC = () => {
             <section className="area-botoes">
               <Button
                 type="submit"
-                theme="green"
+                theme="primary"
                 // disabled={academicFormData === {} as AcademicType? false:true}
               >
                 Salvar
               </Button>
               <Button
-                theme="greenG"
+                theme="secondary"
                 onClick={() => {
                   if (editStored.id) {
                     setOpenModal(true)

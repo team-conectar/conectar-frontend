@@ -32,8 +32,7 @@ export const BodySwitch = styled.div`
     }
   }
   .checkbox:checked + .switch {
-    background-color: var(--green-bg);
-    ::after {
+    background- ::after {
       left: 25px;
       right: 0;
     }

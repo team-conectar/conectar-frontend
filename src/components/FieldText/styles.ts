@@ -77,7 +77,7 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
     label {
       top: -1rem;
       left: 0.2rem;
-      color: var(--green-bg);
+      color: var(--textGreen);
     }
     ${Error} {
       &:hover span {
@@ -85,7 +85,7 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
         animation-duration: 0s;
       }
       span {
-        animation: 3s ease-in 0s 1 none running ${showMessage};
+        animation: 3s ease-in-out 0s 1 none running ${showMessage};
       }
     }
   }
@@ -95,7 +95,6 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
       label {
         top: -1rem;
         left: 0.2rem;
-        color: var(--green-bg);
       }
     `}
 
@@ -103,7 +102,7 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
     width: calc(100% -3.2rem);
     height: 1.92px;
     content: '';
-    background: var(--green-bg);
+    background: var(--textGreen);
     position: absolute;
     left: 1.6rem;
     right: 1.6rem;

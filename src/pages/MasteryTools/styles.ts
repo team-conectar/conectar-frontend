@@ -8,10 +8,10 @@ export const BodyMasteryTools = styled(Form)`
   align-items: center;
   min-height: 100vh;
   width: 100vw;
-  background: var(--green-bg);
+  background: var(--textGreen);
   h1 {
     margin: 1.4rem 0;
-    color: var(--green-bg);
+    
   }
   .area-central {
     padding: 2.4rem 3.2rem;
@@ -38,7 +38,7 @@ export const BodyMasteryTools = styled(Form)`
           align-items: center;
           height: 10%;
           width: 100%;
-          color: var(--green-bg);
+          
           font: 500 1.2rem Raleway;
           border-bottom: 2px solid var(--yellow);
         }
@@ -110,7 +110,7 @@ export const BodyMasteryTools = styled(Form)`
           align-items: center;
           height: 10%;
           width: 100%;
-          background: var(--green-bg);
+          background: var(--textGreen);
           color: white;
           font: 500 1.2rem Raleway;
           border-top-right-radius: 0.4rem;

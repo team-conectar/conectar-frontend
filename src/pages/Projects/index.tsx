@@ -88,26 +88,28 @@ const Projects: React.FC = () => {
   )
   const formRef = useRef<FormHandles>(null)
   useEffect(() => {
-    api
-      .get(`/api/v1/projeto/${projeto_id}`)
-      .then(response => {
-        setProject(response.data)
-        setStoredTools(response.data.habilidades)
-        setStoredAreas(response.data.areas)
-      })
-      .catch((err: AxiosError) => {
-        console.log(err?.response?.data.detail)
-      })
-
-    api
-      .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
-      .then(response => {
-        setVacancies(response.data)
-        setVacancyDetail(response.data[0])
-      })
-      .catch((err: AxiosError) => {
-        console.log(err?.response?.data.detail)
-      })
+    const res = [
+      api
+        .get(`/api/v1/projeto/${projeto_id}`)
+        .then(response => {
+          setProject(response.data)
+          setStoredTools(response.data.habilidades)
+          setStoredAreas(response.data.areas)
+        })
+        .catch((err: AxiosError) => {
+          console.log(err?.response?.data.detail)
+        }),
+      api
+        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
+        .then(response => {
+          setVacancies(response.data)
+          setVacancyDetail(response.data[0])
+        })
+        .catch((err: AxiosError) => {
+          console.log(err?.response?.data.detail)
+        }),
+    ]
+    console.log(res)
   }, [projeto_id])
 
   const handleSubmit = useCallback(
@@ -226,7 +228,7 @@ const Projects: React.FC = () => {
                     defaultValue={toolTypeToString()}
                   />
                 )}
-                <Button theme="green" type="submit">
+                <Button theme="primary" type="submit">
                   Salvar
                 </Button>
               </Form>
@@ -254,8 +256,8 @@ const Projects: React.FC = () => {
           </section>
 
           <section>
-            <Button theme="yellowG">
-              <img src={like} alt="curtidas" /> Curtir
+            <Button theme="secondary">
+              <img src={like} alt="curtidas" /> Favoritar
             </Button>
             <a>
               <span>

@@ -40,7 +40,7 @@ export const BodyModal = styled.div<styleProps>`
 `
 
 export const DivModalWindow = styled.div`
-  width: min(900px, 90vw);
+  width: min(1000px, 90vw);
   max-height: 90%;
   background: white;
   border-radius: 0.8rem;

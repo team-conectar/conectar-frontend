@@ -5,9 +5,9 @@ export const GlobalStyle = createGlobalStyle`
     --yellow: #ebae3c;
     --yellow-dark: #fea81b;
     --green: #99b876;
-    --green-bg: #072f3f;
+    --textGreen: #072f3f;
     --red: #d8252c;
-    --white: #fafafa;
+    --backgroudElevation: #fafafa;
     --gray: #999999;
     --background: #f1f1f1ff;
     --borderDivision: #f0eeee;
@@ -21,6 +21,7 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    
 }
 
 .container {
@@ -34,6 +35,7 @@ export const GlobalStyle = createGlobalStyle`
     align-items: center;
     justify-content: center;
     background: var(--background);
+    color: var(--textGreen);
 }
 
 @media (min-width: 700px) {
@@ -50,6 +52,7 @@ button {
     cursor: pointer;
 }
 a{
+    color: var(--textGreen);
     text-decoration: none;
 }
 input,

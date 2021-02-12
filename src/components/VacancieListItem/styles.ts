@@ -5,7 +5,7 @@ import { BodyButton as DropdownStyle } from '../Dropdown/styles'
 export const DropdownList = styled(Dropdown)`
   position: absolute;
   right: 0;
-  color: var(--green-bg);
+
   li {
     list-style: none;
     width: 100%;

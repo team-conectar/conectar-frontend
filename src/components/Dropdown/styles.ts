@@ -22,7 +22,7 @@ export const BodyButton = styled.button<styleProps>`
     opacity: 0;
     visibility: hidden;
     position: absolute;
-    background-color: var(--white);
+    background-color: var(--backgroudElevation);
     min-width: 10rem;
     width: fit-content;
     min-height: 2rem;
@@ -54,7 +54,7 @@ export const BodyButton = styled.button<styleProps>`
       z-index: 80;
     }
     &:after {
-      border-color: transparent transparent var(--white) transparent;
+      border-color: transparent transparent var(--backgroudElevation) transparent;
       bottom: 100%;
       z-index: 100;
     }

@@ -34,7 +34,7 @@ export const BodySelectTool = styled.div`
         align-items: center;
         height: 50px;
         width: 100%;
-        color: var(--green-bg);
+
         font: 500 1.2rem Raleway;
         border-bottom: 2px solid var(--borderDivision);
       }
@@ -67,7 +67,6 @@ export const BodySelectTool = styled.div`
               position: absolute;
             }
             > legend {
-              color: var(--green-bg);
               display: flex;
               align-items: center;
               justify-content: center;
@@ -97,7 +96,6 @@ export const BodySelectTool = styled.div`
           height: 2rem;
         }
         > legend {
-          color: var(--green-bg);
           padding: 0.2rem;
         }
       }
@@ -112,7 +110,7 @@ export const BodySelectTool = styled.div`
         align-items: center;
         height: 50px;
         width: 100%;
-        background: var(--green-bg);
+        background: var(--textGreen);
         color: white;
         font: 500 1.2rem Raleway;
         border-top-right-radius: 0.4rem;
@@ -145,7 +143,6 @@ export const BodySelectTool = styled.div`
           }
 
           > legend {
-            color: var(--green-bg);
             display: flex;
             align-items: center;
             justify-content: flex-start;

@@ -6,7 +6,7 @@ export const UserInfo = styled.main`
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    color: var(--green-bg);
+
     > h2 {
       font-size: 1rem;
     }
@@ -40,7 +40,6 @@ export const ProjectInfo = styled.main`
       }
     }
     > section {
-      color: var(--green-bg);
       width: 50%;
       display: flex;
       flex-direction: column;
@@ -49,7 +48,7 @@ export const ProjectInfo = styled.main`
       align-items: center;
       > a {
         font: 600 1.8rem Raleway;
-        color: var(--green-bg);
+
         :first-letter {
           text-transform: uppercase;
         }
@@ -63,7 +62,7 @@ export const ProjectInfo = styled.main`
         padding-left: var(--gap);
         li {
           list-style: none;
-          border: solid 1px var(--green-bg);
+          border: solid 1px var(--textGreen);
           border-radius: 0.2rem;
           padding: 0.2rem 0.4rem;
           font-size: 0.8rem;
@@ -72,7 +71,6 @@ export const ProjectInfo = styled.main`
     }
   }
   p {
-    color: var(--green-bg);
     font-size: 0.8rem;
     line-height: 1.2rem;
     :first-letter {

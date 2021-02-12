@@ -20,19 +20,19 @@ export const BodyLogin = styled(Form)`
     }
     .google-button {
       font-size: 3rem;
-      border: 1px solid var(--white);
+      border: 1px solid var(--backgroudElevation);
       width: 3rem;
       height: 3rem;
-      background-color: var(--white);
+      background-color: var(--backgroudElevation);
       border-radius: 50%;
     }
     .facebook-button {
       color: #3b5998;
       font-size: 3rem;
-      border: 3px solid var(--white);
+      border: 3px solid var(--backgroudElevation);
       width: 3rem;
       height: 3rem;
-      background-color: var(--white);
+      background-color: var(--backgroudElevation);
       border-radius: 50%;
       display: flex;
       align-items: center;

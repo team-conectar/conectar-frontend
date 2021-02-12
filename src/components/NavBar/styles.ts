@@ -56,7 +56,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
     a {
       text-decoration: none;
       font: 500 0.9rem Raleway;
-      color: var(--green-bg);
+
       display: flex;
       align-items: center;
     }
@@ -70,7 +70,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
       ${props =>
         props.sobre &&
         css`
-          border-bottom: solid 4px var(--green-bg);
+          border-bottom: solid 4px var(--textGreen);
         `}
     }
     .explorar {
@@ -78,7 +78,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
       ${props =>
         props.explorar &&
         css`
-          border-bottom: solid 4px var(--green-bg);
+          border-bottom: solid 4px var(--textGreen);
           transition: 0.5s ease-out;
         `}
       padding:0 .3rem;
@@ -89,9 +89,12 @@ export const BodyNavBar = styled.header<NavBarProps>`
     }
     .create {
       padding: 0.4rem 2rem;
-      border-radius: 0.4rem;
-      border: solid 2px var(--green);
+      border-radius: 8rem;
+      border: solid 1px var(--textGreen);
       transition: background-color 0.2s;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 700;
     }
 
     #dropdown {

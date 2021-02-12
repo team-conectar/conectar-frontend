@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 export const BodyCard = styled.div`
   border-radius: var(--borderRadius);
-  background: var(--green-bg);
+  background: var(--textGreen);
   padding: 2rem 0.6rem 2.4rem 0.6rem;
   width: 100%;
   height: fit-content;

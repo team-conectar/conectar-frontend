@@ -59,14 +59,14 @@ const MasteryTools: React.FC = () => {
       </div>
       <footer>
         <Button
-          theme="yellowG"
+          theme="primary"
           onClick={() => {
             history.push('/profilefeatures')
           }}
         >
           Pular
         </Button>
-        <Button theme="yellow" type="submit">
+        <Button theme="primary" type="submit">
           Continuar
         </Button>
       </footer>

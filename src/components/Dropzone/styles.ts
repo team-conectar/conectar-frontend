@@ -18,7 +18,7 @@ export const BodyDropzone = styled.div`
       padding: 0.6em;
       cursor: pointer;
       border-radius: 0.4rem;
-      background: var(--green-bg);
+      background: var(--textGreen);
       color: white;
       font: 500 1rem Raleway;
     }

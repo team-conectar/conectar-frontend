@@ -12,7 +12,7 @@ export const BodyApproveProject = styled.div`
   grid-template-rows: max-content auto;
   grid-column-gap: 0.6rem;
   position: relative;
-  color: var(--green-bg);
+  
 
   > ${ProfileCard} {
     grid-column: 1;

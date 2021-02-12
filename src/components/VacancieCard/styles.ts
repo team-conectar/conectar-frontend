@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
 import Dropdown from '../Dropdown'
-import { BodyButton } from '../Dropdown/styles'
+import { BodyButton as DropdownStyle } from '../Dropdown/styles'
 interface CardProps {
   isAvailable: boolean
   status?: 'accepted' | 'pending' | 'refused'
@@ -8,7 +8,7 @@ interface CardProps {
 export const DropdownList = styled(Dropdown)`
   position: absolute;
   right: 0;
-  color: var(--green-bg);
+
   li {
     list-style: none;
     width: 100%;
@@ -20,7 +20,7 @@ export const DropdownList = styled(Dropdown)`
 `
 export const BodyCard = styled.li<CardProps>`
   width: 168px;
-  color: var(--green-bg);
+
   border-radius: var(--borderRadius);
   border: solid 1px var(--borderDivision);
   display: flex;
@@ -30,7 +30,7 @@ export const BodyCard = styled.li<CardProps>`
   padding: 0.8rem 0.6rem;
   text-align: center;
   position: relative;
-  ${BodyButton} {
+  ${DropdownStyle} {
     aside {
       li {
         text-align: start;
@@ -91,10 +91,9 @@ export const BodyCard = styled.li<CardProps>`
       isAvailable
         ? css`
             background: var(--green);
-            color: var(--green-bg);
           `
         : css`
-            background: var(--green-bg);
+            background: var(--textGreen);
             color: white;
           `}
     //border-radius: var(--borderRadius);

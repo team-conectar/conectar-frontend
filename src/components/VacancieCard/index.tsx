@@ -1,4 +1,5 @@
 import React, {
+  HTMLAttributes,
   InputHTMLAttributes,
   useContext,
   useEffect,
@@ -18,6 +19,21 @@ import Button from '../Button'
 import Dropdown from '../Dropdown'
 import { GiHamburgerMenu } from 'react-icons/gi'
 
+interface Props extends HTMLAttributes<HTMLLIElement> {
+  vacancy: {
+    projeto_id: number
+    pessoa_id: number
+    papel_id: number
+    tipo_acordo_id: number
+    descricao: string
+    situacao?:
+      | 'PENDENTE_IDEALIZADOR'
+      | 'PENDENTE_COLABORADOR'
+      | 'ACEITE_COLABORADOR'
+      | 'FINALIZADO'
+    id: number
+  }
+}
 interface ProfileType {
   data_nascimento: string
   usuario: string
@@ -35,25 +51,45 @@ interface ProfileType {
   data_criacao: string
   data_atualizacao: string
 }
-const VacancieCard: React.FC = () => {
+const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
+  const [agreement, setAgreement] = useState<string>('')
+  const [office, setOffice] = useState<string>('')
+
   useEffect(() => {
-    const res = api
-      .get(`/api/v1/pessoas/me`)
-      .then(response => {
-        setProfile(response.data)
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
+    const res = [
+      api
+        .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
+        .then(response => {
+          setProfile(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        }),
+      api
+        .get(`/api/v1/tipoAcordo?id=${vacancy.tipo_acordo_id}`)
+        .then(response => {
+          setAgreement(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        }),
+      api
+        .get(`/api/v1/papel?id=${vacancy.tipo_acordo_id}`)
+        .then(response => {
+          setOffice(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        }),
+    ]
     console.log(res)
-  }, [])
+  }, [vacancy.pessoa_id, vacancy.tipo_acordo_id])
   return (
-    <BodyCard isAvailable status="refused">
+    <BodyCard isAvailable status="refused" {...rest}>
       <label>
         <DropdownList DropButton={<GiHamburgerMenu />}>
           <li>Clonar vaga</li>
-          <li>Editar vaga</li>
           <li>Exluir vaga</li>
         </DropdownList>
       </label>
@@ -61,15 +97,15 @@ const VacancieCard: React.FC = () => {
         src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
         alt=""
       />
-      <h2>Maynara</h2>
+      <h2>{profile.nome}</h2>
       <h3>
         Colaborador
         <br />
-        UX Designer
+        {office}
       </h3>
 
-      <Button theme="green">Ver currículo</Button>
-      <DropdownList DropButton={<Button theme="greenG">Nova busca</Button>}>
+      <Button theme="primary">Ver currículo</Button>
+      <DropdownList DropButton={<Button theme="secondary">Nova busca</Button>}>
         <li>Perfis similares</li>
         <li>Perfis interessados</li>
       </DropdownList>

@@ -8,7 +8,8 @@ export const BodyButton = styled.button<PropsBodyButton>`
   align-items: center;
   justify-content: center;
   border-radius: 2rem;
-  font: 600 1rem Raleway;
+  font: 600 0.8rem Raleway;
+  text-transform: uppercase;
   cursor: pointer;
   border: 0;
   margin: 0;
@@ -22,7 +23,7 @@ export const BodyButton = styled.button<PropsBodyButton>`
     props.theme === 'yellow' &&
     css`
       background: var(--yellow);
-      color: var(--green-bg);
+
       :hover {
         background: var(--yellow-dark);
       }
@@ -38,16 +39,16 @@ export const BodyButton = styled.button<PropsBodyButton>`
       }
     `}
   ${props =>
-    props.theme === 'green' &&
+    props.theme === 'primary' &&
     css`
-      background: var(--green-bg);
+      background: var(--textGreen);
       color: white;
     `}
   ${props =>
-    props.theme === 'greenG' &&
+    props.theme === 'secondary' &&
     css`
-      border: 2px solid var(--green-bg);
-      color: var(--green-bg);
+      border: 1px solid var(--textGreen);
+
       background: transparent;
     `}
   :disabled {

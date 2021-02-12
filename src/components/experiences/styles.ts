@@ -32,7 +32,7 @@ export const BodyExperiences = styled.section`
           font: 500 1.4rem Raleway;
         }
         font: 400 1.2rem Raleway;
-        color: var(--green-bg);
+        
         .textos {
           display: flex;
           align-items: flex-start;
@@ -72,7 +72,7 @@ export const BodyExperiences = styled.section`
   }
   > h2 {
     margin: 1.4rem 0;
-    color: var(--green-bg);
+    
   }
   .area-registro {
     display: grid;

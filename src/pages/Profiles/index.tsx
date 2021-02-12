@@ -159,7 +159,7 @@ const Profiles: React.FC = () => {
               </figure>
               <section>
                 {console.log(loggedUser)}
-                <Button theme="green">
+                <Button theme="primary">
                   {loggedUser.id === profile.id ? 'EDITAR' : 'SEGUIR'}
                 </Button>
                 <aside>

@@ -21,7 +21,6 @@ export const BodyLink = styled(Link)`
     align-items: flex-start;
 
     > h2 {
-      color: var(--green-bg);
       font-size: 1rem;
     }
     > p {

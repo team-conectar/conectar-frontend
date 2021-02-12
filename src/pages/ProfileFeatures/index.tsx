@@ -26,10 +26,10 @@ function ProfileFeatures() {
         <ProfessionalExperiences />
         <ProjectExperiences />
         <footer>
-          <Button theme="yellowG" onClick={() => setShowModal(true)}>
+          <Button theme="primary" onClick={() => setShowModal(true)}>
             Pular
           </Button>{' '}
-          <Button onClick={() => history.push('/')} theme="yellow">
+          <Button onClick={() => history.push('/')} theme="primary">
             Continuar
           </Button>
         </footer>

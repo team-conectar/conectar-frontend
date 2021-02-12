@@ -17,21 +17,34 @@ import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import VacancieCard from '../../components/VacancieCard'
 import { useParams } from 'react-router-dom'
+import { VacanciesType } from '../../components/Vacancy'
 interface routeParms {
   id: string
 }
 const ApproveProject: React.FC = () => {
   const project_id = useParams<routeParms>().id
   const [project, setProject] = useState<IProject>({} as IProject)
+  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+
   useEffect(() => {
-    api
-      .get(`/api/v1/projeto/${project_id}`)
-      .then(response => {
-        setProject(response.data)
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
+    const res = [
+      api
+        .get(`/api/v1/projeto/${project_id}`)
+        .then(response => {
+          setProject(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        }),
+      api
+        .get(`/api/v1/pessoa_projeto/projeto/${project_id}`)
+        .then(response => {
+          setVacancies(response.data)
+        })
+        .catch((err: AxiosError) => {
+          console.log(err?.response?.data.detail)
+        }),
+    ]
   }, [project_id])
   return (
     <>
@@ -48,13 +61,11 @@ const ApproveProject: React.FC = () => {
           </section>
           <section>
             <ul>
-              <VacancieCard />
-              <VacancieCard />
-              <VacancieCard />
-              <VacancieCard />
-              <VacancieCard />
+              {vacancies.map(vacancy => (
+                <VacancieCard key={vacancy.id} vacancy={vacancy} />
+              ))}
             </ul>
-            <Button theme="green">Enviar convite</Button>
+            <Button theme="primary">Enviar convite</Button>
           </section>
         </main>
         <LinksCard />

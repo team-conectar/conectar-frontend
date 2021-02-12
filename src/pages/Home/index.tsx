@@ -130,7 +130,7 @@ function Home() {
                     do papel e finalmente colocá-la em prática.
                   </p>
                   <a href="#idealizador">
-                    <Button theme="green">Saiba mais</Button>
+                    <Button theme="primary">Saiba mais</Button>
                   </a>
                 </div>
               </aside>
@@ -154,7 +154,7 @@ function Home() {
                     uma ideia fresquinha e revolucionária
                   </p>
                   <a href="#colaborador">
-                    <Button theme="green">Saiba mais</Button>
+                    <Button theme="primary">Saiba mais</Button>
                   </a>
                 </div>
               </aside>
@@ -173,7 +173,7 @@ function Home() {
                     ideias em grandes realizações.
                   </p>
                   <a href="#aliado">
-                    <Button theme="green">Saiba mais</Button>
+                    <Button theme="primary">Saiba mais</Button>
                   </a>
                 </div>
               </aside>
@@ -222,7 +222,7 @@ function Home() {
                 </section>
               </aside>
             </div>
-            <Button theme="green">Criar sua conta</Button>
+            <Button theme="primary">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
             <a href="#colaborador">
@@ -267,7 +267,7 @@ function Home() {
                 </section>
               </aside>
             </div>
-            <Button theme="green">Criar sua conta</Button>
+            <Button theme="primary">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
           <label className="arrow-bottom">
@@ -312,7 +312,7 @@ function Home() {
                 </section>
               </aside>
             </div>
-            <Button theme="green">Criar sua conta</Button>
+            <Button theme="primary">Criar sua conta</Button>
           </section>
           <label className="arrow-bottom">
             <a href="#rodape">
@@ -332,7 +332,7 @@ function Home() {
           </p>
           <aside>
             <img src={curtiu} alt="e aí curtiu? vem pra cá!" />
-            <Button theme="green">Crie sua conta</Button>
+            <Button theme="primary">Crie sua conta</Button>
           </aside>
           <footer>
             <h3>
@@ -357,7 +357,7 @@ function Home() {
                 <span>/boraconectar</span>
               </a>
               <a href="https://www.linkedin.com/company/boraconectar/">
-                <FaLinkedinIn />
+                <FaLinkedinIn color="#fff" />
                 <span>/company/boraconectar</span>
               </a>
             </section>

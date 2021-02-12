@@ -29,12 +29,21 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
-interface VacanciesType {
-  nome: string
+import VacancieListItem from '../VacancieListItem'
+
+export interface VacanciesType {
+  projeto_id: number
+  pessoa_id: number
+  papel_id: number
+  tipo_acordo_id: number
   descricao: string
-  visibilidade: true
-  objetivo: string
-  foto_capa: string
+  situacao?:
+    | 'PENDENTE_IDEALIZADOR'
+    | 'PENDENTE_COLABORADOR'
+    | 'ACEITE_COLABORADOR'
+    | 'FINALIZADO'
+  habilidades: Array<ToolType>
+  areas: Array<AreaType>
   id: number
 }
 interface ProjectType {
@@ -47,12 +56,23 @@ interface ProjectType {
   habilidades: ToolType[]
   id: number
 }
+interface IFormData {
+  cargo: string
+  perfil: string
+  quantidade: number
+  descricao: string
+  tipoContrato: string
+  areas: Array<string>
+  habilidade: Array<string>
+  remunerado: boolean
+}
 interface VacancyProps {
   project: ProjectType
 }
 
 const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
+  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [editingId, setEditingId] = useState<number>(0)
   const formRef = useRef<FormHandles>(null)
   const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
@@ -84,7 +104,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         return err?.response?.data.detail
       })
   }, [editingId, showRegister])
-  const handleSubmit = useCallback(async (formData: ProjectType) => {
+  const handleSubmit = useCallback(async (formData: IFormData) => {
     console.log(formData)
     try {
       // Remove all previogeus errors
@@ -92,7 +112,9 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
       const schema = Yup.object().shape({
         cargo: Yup.string().required('Cargo é obrigatório'),
         perfil: Yup.string().required('Perfil é obrigatório'),
-        quantidade: Yup.string().required('Quantidade é obrigatório'),
+        quantidade: Yup.number()
+          .required('Quantidade é obrigatório')
+          .min(1, 'Deve conter no mínimo uma vaga'),
         descricao: Yup.string().required('Descrição é obrigatório'),
         tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
         areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
@@ -102,8 +124,54 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         abortEarly: false,
       })
       // Validation passed
+      let papel_id = 0
+      let tipo_acordo_id = 0
 
-      // await api.put(`/api/v1/projeto/`, formData);
+      const res = [
+        await api
+          .post(
+            '/api/v1/tipo_acordo',
+            { descricao: formData.tipoContrato },
+            { withCredentials: true },
+          )
+          .then(response => {
+            tipo_acordo_id = response.data.id
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          }),
+        await api
+          .post(
+            '/api/v1/papel',
+            { descricao: formData.cargo },
+            { withCredentials: true },
+          )
+          .then(response => {
+            papel_id = response.data.id
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          }),
+      ]
+      const areas = [{} as AreaType]
+      // formData.areas.map(area => {
+      //   areas.push({ descricao: area })
+      // })
+
+      const vacancy = {
+        projeto_id: project.id,
+        papel_id,
+        tipo_acordo_id,
+      } as VacanciesType
+      await api
+        .post('/api/v1/pessoa_projeto', vacancy, {
+          withCredentials: true,
+        })
+        .then(() => {})
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+      console.log(res)
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         // Validation failed
@@ -112,102 +180,27 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
       }
     }
   }, [])
+  useEffect(() => {
+    api.get(`/api/v1/pessoa_projeto/projeto/${project.id}`).then(response => {
+      setVacancies(response.data)
+    })
+  }, [project.id])
   return (
     <BodyVacancy>
-      <h2>Vagas</h2>
+      <h1>Vagas</h1>
       {!showRegister ? (
         <div className="vagas">
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
+          {vacancies.map(vacancy => (
+            <VacancieListItem key={vacancy.id} vacancy={vacancy} />
+          ))}
+
           <button onClick={() => setShowRegister(true)}>
             <span>+ </span>
             Adicionar
           </button>
         </div>
       ) : (
-        <Form ref={formRef} onSubmit={handleSubmit} className="form-vaga">
+        <Form ref={formRef} onSubmit={handleSubmit}>
           <Input
             label="Cargo"
             name="cargo"
@@ -224,15 +217,16 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             type="number"
             // defaultValue={academicFormData?.instituicao}
           />
+
+          <Select
+            label="Habilidade ou Ferramentas"
+            name="habilidade"
+            options={optionsTools}
+            multi
+          />
           <div className="bloco-area">
-            <Select
-              label="Habilidade ou Ferramentas"
-              name="habilidade"
-              options={optionsTools}
-              multi
-            />
+            <Select label="Áreas" name="areas" options={optionsAreas} multi />
           </div>
-          <Select label="Áreas" name="areas" options={optionsAreas} multi />
 
           <Textarea name="descricao" label="Descrição" />
           <section className="bloco-contrato">
@@ -248,15 +242,16 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             />
           </section>
           <section className="area-botoes">
-            <Button type="submit" theme="green">
+            <Button type="submit" theme="primary">
               Salvar
             </Button>
-            <Button theme="greenG">Excluir</Button>
+            <Button theme="secondary">Excluir</Button>
             <Button
               onClick={() => {
                 setShowRegister(false)
                 setEditingId(0)
               }}
+              theme="secondary"
             >
               Cancelar
             </Button>

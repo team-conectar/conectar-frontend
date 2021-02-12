@@ -52,7 +52,7 @@ export const BodySelectArea = styled.div<Props>`
           border: 0;
           border-bottom: 2px solid var(--borderDivision);
           padding: 0 1.4rem;
-          color: var(--green-bg);
+
           font: 500 1rem Raleway;
           cursor: pointer;
           input {
@@ -76,17 +76,15 @@ export const BodySelectArea = styled.div<Props>`
           border-bottom: 2px solid var(--borderDivision);
           padding: 0 0.4rem;
           > legend {
-            color: var(--green-bg);
             font: 500 1rem Raleway;
           }
           > button {
             position: absolute;
             left: 1rem;
-            border: 1px solid var(--green-bg);
+            border: 1px solid var(--textGreen);
             border-radius: 0.2rem;
             padding: 0.2rem;
             background: none;
-            color: var(--green-bg);
           }
         }
         > ul {
@@ -116,7 +114,6 @@ export const BodySelectArea = styled.div<Props>`
                 position: absolute;
               }
               legend {
-                color: var(--green-bg);
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -138,11 +135,11 @@ export const BodySelectArea = styled.div<Props>`
         align-items: center;
         height: 50px;
         width: 100%;
-        background: var(--green-bg);
+        background: var(--textGreen);
         color: white;
         font: 500 1.2rem Raleway;
         border-top-right-radius: 0.4rem;
-        border-bottom: 2px solid var(--green-bg);
+        border-bottom: 2px solid var(--textGreen);
       }
       > ul {
         height: 90%;
@@ -171,7 +168,6 @@ export const BodySelectArea = styled.div<Props>`
           }
         }
         > legend {
-          color: var(--green-bg);
           display: flex;
           align-items: center;
           justify-content: flex-start;
