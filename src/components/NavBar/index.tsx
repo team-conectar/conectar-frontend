@@ -79,7 +79,7 @@ const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
         <input placeholder="Buscar"></input>
       </div>
       <aside>
-        <Link to="/createproject" className="create">
+        <Link to="/criar-um-projeto" className="create">
           Criar um Projeto
         </Link>
         {!loading && isAuthenticated && (

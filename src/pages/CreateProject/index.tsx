@@ -17,7 +17,6 @@ import api from '../../services/api'
 import Modal from '../../components/Modal'
 import Login from '../../components/Login'
 import Dropzone from '../../components/Dropzone'
-import { Beforeunload } from 'react-beforeunload'
 import { Context } from '../../context/AuthContext'
 import Logged from '../../components/Logged'
 import * as Yup from 'yup'
@@ -41,7 +40,7 @@ const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [shownStep, setShownStep] = useState<1 | 2 | 3>(3)
+  const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
@@ -115,6 +114,7 @@ const CreateProject: React.FC = () => {
         await api.put(`/api/v1/projeto/${idProject}`, formData, {
           withCredentials: true,
         })
+        setShownStep(3)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -140,7 +140,7 @@ const CreateProject: React.FC = () => {
         <h1>Para prosseguir, você precisa estar logado</h1>
         <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
       </Modal>
-      <div className="area-central container">
+      <main>
         {shownStep === 1 || (shownStep === 2 && <h1>Criar Projeto</h1>)}
         {(shownStep === 1 && (
           <Form
@@ -164,7 +164,7 @@ const CreateProject: React.FC = () => {
               <SelectArea name="area" label="Área de desenvolvimento" />
             </div>
             <section>
-              <Button type="button" onClick={history.goBack} theme="primary">
+              <Button type="button" onClick={history.goBack} theme="secondary">
                 Cancelar
               </Button>
               <Button theme="primary" type="submit">
@@ -194,18 +194,25 @@ const CreateProject: React.FC = () => {
                   className="voltar"
                   type="button"
                   onClick={() => setShownStep(1)}
-                  theme="primary"
+                  theme="secondary"
                 >
                   Voltar
                 </Button>
                 <Button theme="primary" type="submit">
-                  Concluir
+                  Continuar
                 </Button>
               </section>
             </Form>
           )) ||
-          (shownStep === 3 && <Vacancy project={project} />)}
-      </div>
+          (shownStep === 3 && (
+            <aside>
+              <Vacancy project={{ ...project, id: idProject }} />
+              <Button theme="primary" onClick={() => history.push('/')}>
+                Concluir
+              </Button>
+            </aside>
+          ))}
+      </main>
     </BodyCreateProject>
   )
 }

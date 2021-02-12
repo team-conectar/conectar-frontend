@@ -7,14 +7,22 @@ export const BodyCreateProject = styled.div`
   height: 100vh;
   width: 100vw;
 
-  .area-central {
+  > main {
     background: white;
     box-shadow: var(--boxShadow);
     padding: 2.4rem;
     border-radius: 0.8rem;
+    width: var(--container);
     h1 {
       margin: 1.4rem 0;
-      
+    }
+    > aside {
+      display: flex;
+      flex-direction: column;
+
+      > button {
+        align-self: flex-end;
+      }
     }
     section {
       display: flex;
@@ -27,12 +35,12 @@ export const BodyCreateProject = styled.div`
     }
 
     > form {
+      width: 100%;
       display: grid;
       grid-template-columns: 2fr 3fr;
       grid-template-rows: 1fr;
       grid-gap: 2rem;
       justify-content: center;
-      align-items: center;
       > section {
         grid-row: 2;
         grid-column: 1/-1;
