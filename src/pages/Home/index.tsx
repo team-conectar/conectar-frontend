@@ -38,6 +38,7 @@ function Home() {
 
       <main>
         <div className="topo-background">
+          <NavBar />
           <div className="container topo">
             <section className="hero">
               <img src={hero} alt="imagem de redes neurais" />
