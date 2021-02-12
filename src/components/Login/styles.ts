@@ -6,7 +6,7 @@ export const BodyLogin = styled(Form)`
   flex-direction: column;
   align-items: center;
   button {
-    margin: 1.2rem 0;
+    margin: 2.2rem 0 1.2rem;
   }
 
   aside {
