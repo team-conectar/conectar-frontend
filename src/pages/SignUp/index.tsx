@@ -1,245 +1,232 @@
-import React, { useState, ChangeEvent, FormEvent, useCallback, useEffect } from "react";
-import { BodySignUp } from "./styles";
-import logo from "../../assets/image/logo_fundoClaro.svg";
-import Input from "../../components/Input";
-import Select from "../../components/Select";
-import { Link } from "react-router-dom";
-import Button from "../../components/Button";
-import ToggleSwitch from "../../components/ToggleSwitch";
+import React, {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+} from 'react'
+import { BodySignUp } from './styles'
+import logo from '../../assets/image/logo_fundoClaro.svg'
+import cadastro_banner from '../../assets/image/cadastro_banner.svg'
+import Input from '../../components/Input'
+import Select from '../../components/Select'
+import { Link } from 'react-router-dom'
+import Button from '../../components/Button'
+import ToggleSwitch from '../../components/ToggleSwitch'
 import {
   ReactFacebookLoginInfo,
   ReactFacebookFailureResponse,
-} from "react-facebook-login";
-import FacebookLogin from "react-facebook-login";
+} from 'react-facebook-login'
+import FacebookLogin from 'react-facebook-login'
 import GoogleLogin, {
   GoogleLoginResponse,
   GoogleLoginResponseOffline,
-} from "react-google-login";
-import { FcGoogle } from "react-icons/fc";
-import { FaFacebookF } from "react-icons/fa";
-import { useHistory, useParams } from "react-router";
-import { daysOptions, monthOptions, yearOptions } from "../../utils/dates";
-import { AxiosError } from 'axios';
-import api from "../../services/api";
-import { createTrue } from "typescript";
-
+} from 'react-google-login'
+import { FcGoogle } from 'react-icons/fc'
+import { FaFacebookF } from 'react-icons/fa'
+import { useHistory, useParams } from 'react-router'
+import { daysOptions, monthOptions, yearOptions } from '../../utils/dates'
+import { AxiosError } from 'axios'
+import api from '../../services/api'
+import { createTrue } from 'typescript'
+import InputMask from '../../components/InputMask'
+import * as Yup from 'yup'
+import { FormHandles, UnformErrors } from '@unform/core'
+import { Form } from '@unform/web'
+import getValidationErrors from '../../utils/getValidationErrors'
 interface renderFacebook {
-  onClick: () => void;
-  disabled?: boolean;
+  onClick: () => void
+  disabled?: boolean
 }
 interface routeParms {
-  step: string;
+  step: string
+}
+interface PessoaType {
+  email: string
+  telefone: string
+  nome: string
+  username: string
+  password: string
+  year: string
+  month: string
+  day: string
+  idealizador: string
+  colaborador: string
+  aliado: string
 }
 function SignUp() {
-  const history = useHistory();
-  const [formData, setFormData] = useState({
-    email: "",
-    telefone: "",
-    nome: "",
-    username: "",
-    password: "",
-    year: "",
-    month: "",
-    day: "",
-    idealizador: false,
-    colaborador: false,
-    aliado: false,
-  });
+  const history = useHistory()
+  const formRef = useRef<FormHandles>(null)
 
   const [showNextStep, setShowNextStep] = useState<boolean>(
-    Number(useParams<routeParms>().step) === 2
-      ? true
-      : false
-  );
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
-    const target = event.target;
-    const reg = new RegExp(/^\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$/)
-    const { name } = target;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    if (target.type === "tel" && target.value.match(reg)) {
+    Number(useParams<routeParms>().step) === 2,
+  )
 
-    } else {
+  const handleSubmit = useCallback(async (formData: PessoaType) => {
+    try {
+      // Remove all previous errors
+      formRef.current?.setErrors({})
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .email('Não corresponde ao formato exemple@ex.com')
+          .required('Email é obrigatório'),
+        password: Yup.string()
+          .matches(/(?=.*[!@#$%^&*])/g, 'Deve conter caracteres especiais')
+          .matches(/(?=.*[A-Z])/g, 'Deve conter caracteres maiúsculas')
+          .matches(/(?=.*[0-9])/g, 'Deve conter caracteres numéricos')
+          .matches(/(?=.*[a-z])/g, 'Deve conter caracteres minúsculas')
+          .min(8, 'Deve conter no mínimo 8 caracteres')
+          .required('Senha é obritória'),
+        username: Yup.string()
+          .min(4, 'Deve conter no mínimo 4 caracteres')
+          .max(20, 'Deve conter no máximo 20 caracteres')
+          .required('Usuário é obrigatório'),
+        nome: Yup.string()
+          .max(80)
+          .matches(/(?=.*[ ])/g, 'Informe o nome completo')
+          .required('Usuário é obrigatório'),
+      })
+      await schema.validate(formData, {
+        abortEarly: false,
+      })
+      // Validation passed
+      const data = new FormData()
 
-      setFormData({ ...formData, [name]: value });
-    }
-  }
-
-  function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    /**
-     * Helper function to handle selectChanges when using hooks
-     * @param {ChangeEvent<HTMLSelectElement>} event
-     * @param {Function} setFormData
-     * @param {Object} formData
-     */
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  }
-  const checkPassword = useCallback(
-    () => {
-      let forca = 0;
-
-      if ((formData.password.length >= 8)) {
-
-        if (formData.password.match(/[a-z]+/)) {
-          forca++;
-        }
-        else if (formData.password.match(/[A-Z]+/)) {
-          forca++;
-        }
-        else if (formData.password.match(/[@#$%&;*]/)) {
-          forca++;
-        }
-
-        else if (formData.password.match(/([1-9]+)\1{1,}/)) {
-          forca++;
-        }
+      data.append('email', formData.email)
+      data.append('nome', formData.nome)
+      data.append('username', formData.username)
+      data.append('password', formData.password)
+      await api.post('/api/signup', data)
+      setShowNextStep(true)
+      console.log(formData)
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        // Validation failed
+        const errors = getValidationErrors(err)
+        formRef.current?.setErrors(errors)
+        // alert(errors);
       }
-    }, [formData.password]
-  );
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    const {
-      email,
-      nome,
-      username,
-      password,
-    } = formData;
-
-    const data = new FormData();
-
-    data.append("email", email);
-    data.append("nome", nome);
-    data.append("username", username);
-    data.append("password", password);
-    try {
-      await api.post("/api/signup", data);
-      setShowNextStep(true);
-    } catch (error) {
-      return error.response.data.detail;
     }
-  }
-
-  async function handleSecondSubmit(event: FormEvent) {
-    event.preventDefault();
-
-    const { year, month, day } = formData;
-
-    const data_nascimento = `${year}-${month}-${day}`;
-
-    const data = { ...formData, data_nascimento };
+  }, [])
+  const handleSecondSubmit = useCallback(async (formData: PessoaType) => {
     try {
-      await api.put("/api/v1/pessoas", data, {
+      // Remove all previogeus errors
+      formRef.current?.setErrors({})
+      const schema = Yup.object().shape({
+        telefone: Yup.string().required('Telefone é obrigatório'),
+        year: Yup.string().required('Ano é obrigatório'),
+        month: Yup.string().required('Mês é obrigatório'),
+        day: Yup.string().required('Dia é obrigatório'),
+        aliado: Yup.string(),
+        colaborador: Yup.string(),
+        idealizador: Yup.string(),
+      })
+      await schema.validate(formData, {
+        abortEarly: false,
+      })
+      // Validation passed
+      const { year, month, day, telefone } = formData
+
+      const data_nascimento = `${year}-${month}-${day}`
+
+      const aliado = formData.aliado === 'aliado'
+      const colaborador = formData.colaborador === 'colaborador'
+      const idealizador = formData.idealizador === 'idealizador'
+
+      const data = {
+        data_nascimento,
+        aliado,
+        colaborador,
+        idealizador,
+        telefone,
+      }
+
+      await api.put('/api/v1/pessoas', data, {
         withCredentials: true,
-      });
-      history.push("/experienceareas");
-    } catch (error) {
-      return error.response.data.detail;
+      })
+      history.push('/experienceareas')
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        // Validation failed
+        const errors = getValidationErrors(err)
+        formRef.current?.setErrors(errors)
+      }
     }
-  }
-  /**This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
+  }, [])
+
+  /** This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {
-    const { aliado, colaborador, idealizador, nome, email } = (await api.get("/api/v1/pessoas/me")).data;
+    const { aliado, colaborador, idealizador, nome, email } = (
+      await api.get('/api/v1/pessoas/me')
+    ).data
     if (!aliado || !colaborador || !idealizador) {
-      setShowNextStep(true);
+      setShowNextStep(true)
     }
-    //setFormData({ ...formData, nome, email });
+    // setFormData({ ...formData, nome, email });
   }
   const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
-
-    const { email, name } = resposta;
-    const foto_perfil = resposta.picture?.data.url;
+    const { email, name } = resposta
+    const foto_perfil = resposta.picture?.data.url
     const res = await api
       .post(`/api/login?provider=facebook`, {
         email,
-        "nome":name,
-        foto_perfil
+        nome: name,
+        foto_perfil,
       })
       .then(checkProfileType)
       .catch((err: AxiosError) => {
         // Returns error message from backend
-        return err?.response?.data.detail;
-      });
+        return err?.response?.data.detail
+      })
 
-    console.log(res);
+    console.log(res)
   }
   const responseGoogle = async (response: GoogleLoginResponse | any) => {
-    let { tokenId } = response;
+    const { tokenId } = response
     const res = await api
       .post(`/api/login?provider=google&token=${tokenId}`)
       .then(checkProfileType)
       .catch((err: AxiosError) => {
         // Returns error message from backend
-        return err?.response?.data.detail;
-      });
-    console.log(res);
+        return err?.response?.data.detail
+      })
+    console.log(res)
   }
 
   return (
-
-    <BodySignUp showSecondStep={showNextStep}>
-
+    <BodySignUp>
       {!showNextStep && (
-        <form onSubmit={handleSubmit} className="area-central container">
+        <Form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="area-central container"
+        >
           <Link to="/">
             <img src={logo} alt="logo" />
           </Link>
           <div className="primeira-etapa">
-            <img src="" alt="#" className="area-img" />
+            <div className="area-img">
+              <img src={cadastro_banner} alt="cadastro" />
+            </div>
 
             <div className="area-form">
               <h1>Criar sua conta</h1>
-              <Input
-                mask=""
-                name="nome"
-                label="Nome Completo"
-                onChange={handleInputChange}
-              />
-              <Input
-                mask=""
-                type="email"
-                name="email"
-                label="E-mail"
-                onChange={handleInputChange}
-                minLength={5}
-                maxLength={70}
-              />
+              <Input name="nome" label="Nome Completo" />
+              <Input type="email" name="email" label="E-mail" />
               <section>
-                <Input
-                  mask=""
-                  name="username"
-                  label="Nome de usuário"
-                  onChange={handleInputChange}
-                  minLength={3}
-                  maxLength={50}
-                />
-                <Input
-                  mask=""
-                  type="password"
-                  name="password"
-                  label="Senha"
-                  onChange={handleInputChange}
-                  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                />
+                <Input name="username" label="Nome de usuário" />
+                <Input type="password" name="password" label="Senha" />
               </section>
               <p>
-                Ao prosseguir, você concorda com os{" "}
-                <Link to="#">Termos de Uso</Link> e{" "}
+                Ao prosseguir, você concorda com os{' '}
+                <Link to="#">Termos de Uso</Link> e{' '}
                 <Link to="#">Política de Privacidade.</Link>
               </p>
 
               <section>
                 <Link to="login">Já tem uma conta?</Link>
-                <Button
-                  theme="primary-yellow"
-                  type="submit"
-                  disabled={
-                    formData.nome === "" ||
-                    formData.email === "" ||
-                    formData.username === "" ||
-                    formData.password === ""
-                  }
-                >
+                <Button theme="primary" type="submit">
                   Continuar
                 </Button>
               </section>
@@ -255,7 +242,7 @@ function SignUp() {
                 />
                 <GoogleLogin
                   clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-                  render={(renderProps) => (
+                  render={renderProps => (
                     <button
                       className="google-button"
                       onClick={renderProps.onClick}
@@ -268,49 +255,42 @@ function SignUp() {
                   buttonText="Login"
                   onSuccess={responseGoogle}
                   onFailure={responseGoogle}
-                  cookiePolicy={"single_host_origin"}
+                  cookiePolicy={'single_host_origin'}
                 />
               </section>
             </div>
           </div>
-        </form>
+        </Form>
       )}
       {showNextStep && (
-        <form onSubmit={handleSecondSubmit} className="area-central container">
+        <Form
+          ref={formRef}
+          onSubmit={handleSecondSubmit}
+          className="area-central container"
+        >
           <div className="segunda-etapa">
             <legend>
               <h1>Bem vindo(a) ao Conectar</h1>
             </legend>
             <section>
-
-              {console.log(formData.telefone)}
-              <Input
+              <InputMask
                 type="tel"
                 name="telefone"
                 label="Celular"
-                onChange={handleInputChange}
                 mask="(99) 99999-9999 "
               />
-
               <Select
                 label="Data de Nascimento"
                 name="year"
                 defaultOption="Ano"
                 options={yearOptions}
-                onChange={handleSelectChange}
               />
-              <Select
-                name="month"
-                defaultOption="Mês"
-                options={monthOptions}
-                onChange={handleSelectChange}
-              />
+              <Select name="month" defaultOption="Mês" options={monthOptions} />
 
               <Select
                 name="day"
                 defaultOption="Dia"
-                options={daysOptions(Number(formData.month), Number(formData.year))}
-                onChange={handleSelectChange}
+                options={daysOptions(4, 2000)}
               />
             </section>
             <section>
@@ -322,33 +302,21 @@ function SignUp() {
                 <legend>Idealizador</legend>
                 <aside>
                   <p>Interessado em criar projetos</p>
-                  <ToggleSwitch
-                    name="idealizador"
-                    id="idealizador"
-                    onChange={handleInputChange}
-                  />
+                  <ToggleSwitch name="idealizador" value="idealizador" />
                 </aside>
               </fieldset>
               <fieldset>
                 <legend>Colaborador</legend>
                 <aside>
                   <p>Interessado em participar de projetos</p>
-                  <ToggleSwitch
-                    name="colaborador"
-                    id="colaborador"
-                    onChange={handleInputChange}
-                  />
+                  <ToggleSwitch name="colaborador" value="colaborador" />
                 </aside>
               </fieldset>
               <fieldset>
                 <legend>Aliado</legend>
                 <aside>
                   <p>Interessado em ajudar projetos</p>
-                  <ToggleSwitch
-                    name="aliado"
-                    id="aliado"
-                    onChange={handleInputChange}
-                  />
+                  <ToggleSwitch name="aliado" value="aliado" />
                 </aside>
               </fieldset>
             </section>
@@ -360,28 +328,14 @@ function SignUp() {
               >
                 Voltar
               </button>
-              <Button
-                theme="primary-yellow"
-                type="submit"
-                disabled={
-                  formData.telefone === "" ||
-                  formData.day === "" ||
-                  formData.month === "" ||
-                  formData.year === "" ||
-                  !(
-                    formData.aliado ||
-                    formData.colaborador ||
-                    formData.idealizador
-                  )
-                }
-              >
+              <Button theme="primary" type="submit" disabled={false}>
                 Continuar
               </Button>
             </section>
           </div>
-        </form>
+        </Form>
       )}
     </BodySignUp>
-  );
+  )
 }
-export default SignUp;
+export default SignUp

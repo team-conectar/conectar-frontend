@@ -1,33 +1,40 @@
-import styled from 'styled-components';
-
-
+import styled from 'styled-components'
 
 export const BodySelect = styled.div`
-  width:100%;
-  min-width:10rem;
-  margin: 0.3rem 0 ;
-  label{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font: 400 1rem Roboto;
-    color:var(--orange);
-    a{
-      justify-content:flex-end;
-      text-decoration:none;
-      color: var(--gray);
-      font-size:0.7rem;
+  width: 100%;
+  .react-select-container {
+    width: 100%;
+    min-width: 10rem;
+    position: relative;
+    text-align: left;
+    flex: 1;
+    .react-select__control {
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      font: 400 0.8rem Raleway;
+      .react-select__value-container {
+        padding: 0;
+
+        .react-select__input {
+        }
+      }
+      .react-select__indicators {
+        svg {
+          color: var(--green);
+        }
+      }
+      .react-select__indicator-separator {
+        display: none;
+      }
+    }
+    .react-select__menu {
+      .react-select__menu-list {
+        .react-select__option {
+          margin-left: 0;
+        }
+      }
     }
   }
-  select{
-    border: 2px solid var(--yellow);
-    width:100%;
-    height: 2rem;
-    margin-top: 0.2rem;
-    border-radius: 0.3rem;
-    outline: 0;
-    padding: 0 0.8rem;
-    font: 1.6rem;
-    background:white;
-  }
-`;
+`
