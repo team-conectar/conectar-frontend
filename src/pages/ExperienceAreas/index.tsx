@@ -40,7 +40,7 @@ const ExperienceAreas: React.FC = () => {
             withCredentials: true,
           })
           .then(() => {
-            history.push('/masterytools')
+            history.push('/habilidades-e-ferramentas')
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
@@ -68,7 +68,7 @@ const ExperienceAreas: React.FC = () => {
         <Button
           theme="primary"
           onClick={() => {
-            history.push('/masterytools')
+            history.push('/habilidades-e-ferramentas')
           }}
         >
           Pular

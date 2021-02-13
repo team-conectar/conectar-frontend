@@ -2,6 +2,9 @@ import styled from 'styled-components'
 
 export const BodyHome = styled.div`
   background: var(--background);
+  area {
+    background: black;
+  }
   > main {
     height: 100vh;
     scroll-snap-type: y mandatory;

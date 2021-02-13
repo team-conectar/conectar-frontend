@@ -13,16 +13,16 @@ import { GlobalStyle } from './assets/style/global'
 import { AuthProvider } from './context/AuthContext'
 import Explorer from './pages/Explorer'
 import { LoggedUserProvider } from './context/LoggedUserContext'
+import NavBar from './components/NavBar'
 const Routes: React.FC = () => {
   return (
     <AuthProvider>
-
-
       <LoggedUserProvider>
         <BrowserRouter>
+          {/* <NavBar /> */}
           <Route exact path="/" component={Home} />
           <Route path="/cadastrar/:parte" component={SignUp} />
-          <Route path="/experiencias" component={ProfileFeatures} />
+          <Route path="/experiencias-do-usuario" component={ProfileFeatures} />
           <Route path="/areas-de-atuacao" component={ExperienceAreas} />
           <Route path="/habilidades-e-ferramentas" component={MasteryTools} />
           <Route path="/criar-um-projeto" component={CreateProject} />
@@ -33,7 +33,6 @@ const Routes: React.FC = () => {
           <GlobalStyle />
         </BrowserRouter>
       </LoggedUserProvider>
-
     </AuthProvider>
   )
 }

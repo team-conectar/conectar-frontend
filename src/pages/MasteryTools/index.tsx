@@ -33,7 +33,7 @@ const MasteryTools: React.FC = () => {
             withCredentials: true,
           })
           .then(() => {
-            history.push('/profilefeatures')
+            history.push('/experiencias-do-usuario')
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
@@ -61,7 +61,7 @@ const MasteryTools: React.FC = () => {
         <Button
           theme="primary"
           onClick={() => {
-            history.push('/profilefeatures')
+            history.push('/experiencias-do-usuario')
           }}
         >
           Pular

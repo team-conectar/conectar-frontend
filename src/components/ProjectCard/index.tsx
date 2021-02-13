@@ -40,14 +40,14 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project }) => {
   }, [project.pessoa_id])
   return (
     <BodyCard>
-      <Link to={`/profiles/${user?.id}`}>
+      <Link to={`/perfil/${user?.id}`}>
         <img
           src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
           alt={user?.nome}
         />
       </Link>
       <UserInfo>
-        <Link to={`/profiles/${user?.id}`}>
+        <Link to={`/perfil/${user?.id}`}>
           <h2>{user?.nome}</h2>
           <p>@{user?.usuario}</p>
         </Link>
@@ -55,14 +55,14 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project }) => {
       <div>
         <ProjectInfo>
           <aside>
-            <Link to={`/projects/${project.id}`}>
+            <Link to={`/projeto/${project.id}`}>
               <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU"
                 alt={project.nome}
               />
             </Link>
             <section>
-              <Link to={`/projects/${project.id}`}>{project.nome}</Link>
+              <Link to={`/projeto/${project.id}`}>{project.nome}</Link>
               <ul>
                 {project.habilidades?.map(habilidade => (
                   <li key={habilidade.id}>{habilidade.nome}</li>

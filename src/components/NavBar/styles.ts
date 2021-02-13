@@ -5,7 +5,7 @@ interface NavBarProps {
 }
 
 export const BodyNavBar = styled.header<NavBarProps>`
-  width: 100%;
+  width: 100vw;
   padding: 0 1.8rem;
   margin: 0;
   background: #f1f1f1ff;
@@ -13,6 +13,9 @@ export const BodyNavBar = styled.header<NavBarProps>`
   justify-content: space-between;
   align-items: center;
   height: 45px;
+  /* position: absolute;
+  top: 0;
+  z-index: 2; */
   img {
     width: 12rem;
   }

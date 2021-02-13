@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { BodyNavBar } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
 import { Link } from 'react-router-dom'
@@ -7,8 +7,7 @@ import notification from '../../assets/icon/notification.svg'
 import explorar from '../../assets/icon/explorar.svg'
 import userDefault from '../../assets/icon/user.svg'
 import { Context } from '../../context/AuthContext'
-import api from '../../services/api'
-import { AxiosError } from 'axios'
+import { useLoggedUser } from '../../context/LoggedUserContext'
 interface UserTypes {
   email: string
   nome: string
@@ -24,8 +23,8 @@ const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const [userButton, setUserButton] = useState(false)
   const [notificationButton, setNotificationButton] = useState(false)
-  const [user, setUser] = useState<UserTypes>({} as UserTypes)
   const divRef = useRef(null)
+  const user = useLoggedUser()
   document.addEventListener('mousedown', (event: any) => {
     if (
       event.target.id !== 'dropdown' &&
@@ -42,27 +41,13 @@ const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
     }
   })
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      const res = api
-        .get('/api/v1/pessoas/me')
-        .then(response => {
-          setUser(response.data)
-        })
-        .catch((err: AxiosError) => {
-          return err?.response?.data.detail
-        })
-      console.log(res)
-    }
-  }, [isAuthenticated])
-
   return (
     <BodyNavBar explorar={!!pageIsExplorar} sobre={!!pageIsSobre}>
       <aside>
         <Link to="/">
           <img src={logo} alt="logo conectar" />
         </Link>
-        <Link to="/explorer" className="explorar">
+        <Link to="/explorar" className="explorar">
           <img src={explorar} alt="Explore os demais projetos" />
           Explorar
         </Link>
@@ -114,7 +99,7 @@ const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
                     <p>{user.usuario}</p>
                     <p>{user.email}</p>
                   </section>
-                  <Link id="itens" to="/explore">
+                  <Link id="itens" to={`/perfil/${user.id}`}>
                     Perfil no Conectar
                   </Link>
                   <Link id="itens" to="/explore">
