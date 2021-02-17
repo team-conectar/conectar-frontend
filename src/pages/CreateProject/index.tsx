@@ -43,7 +43,7 @@ const CreateProject: React.FC = () => {
   const id_pessoa = useLoggedUser().id
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [shownStep, setShownStep] = useState<1 | 2 | 3>(2)
+  const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
