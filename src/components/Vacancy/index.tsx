@@ -58,7 +58,7 @@ interface IFormData {
   descricao: string
   tipoContrato: string
   areas: Array<string>
-  habilidade: Array<string>
+  habilidades: Array<string>
   remunerado: boolean
 }
 interface VacancyProps {
@@ -113,7 +113,10 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         descricao: Yup.string().required('Descrição é obrigatório'),
         tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
         areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
-        habilidade: Yup.array().min(1, 'Habilidades de contrato é obrigatório'),
+        habilidades: Yup.array().min(
+          1,
+          'Habilidades de contrato é obrigatório',
+        ),
       })
       await schema.validate(formData, {
         abortEarly: false,
@@ -153,13 +156,19 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
       //   areas.push({ descricao: area })
       // })
 
-      const vacancy = {
+      const data = {
         projeto_id: project.id,
         papel_id,
         tipo_acordo_id,
-      } as VacanciesType
+        areas: formData.areas.map(area => {
+          return { destricao: area }
+        }),
+        habilidades: formData.habilidades.map(habilidade => {
+          return { nome: habilidade }
+        }),
+      }
       await api
-        .post('/api/v1/pessoa_projeto', vacancy, {
+        .post('/api/v1/pessoa_projeto', data, {
           withCredentials: true,
         })
         .then(() => {})
@@ -215,7 +224,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
 
           <Select
             label="Habilidade ou Ferramentas"
-            name="habilidade"
+            name="habilidades"
             options={optionsTools}
             multi
           />
