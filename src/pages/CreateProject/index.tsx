@@ -18,6 +18,7 @@ import Modal from '../../components/Modal'
 import Login from '../../components/Login'
 import Dropzone from '../../components/Dropzone'
 import { Context } from '../../context/AuthContext'
+import { useLoggedUser } from '../../context/LoggedUserContext'
 import Logged from '../../components/Logged'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
@@ -39,6 +40,7 @@ interface ProjectType {
 
 const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
+  const id_pessoa = useLoggedUser().id
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
   const [shownStep, setShownStep] = useState<1 | 2 | 3>(2)
@@ -47,10 +49,12 @@ const CreateProject: React.FC = () => {
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
   const [selectedFile, setSelectedFile] = useState<File>()
   useEffect(() => {
-    api.get(`/api/v1/projeto/${idProject}`).then(response => {
-      setProject(response.data)
-    })
-  }, [idProject !== 0])
+    if (idProject !== 0) {
+      api.get(`/api/v1/projeto/${idProject}`).then(response => {
+        setProject(response.data)
+      })
+    }
+  }, [idProject])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -99,6 +103,7 @@ const CreateProject: React.FC = () => {
     },
     [selectedFile],
   )
+  function convertArrayStringToFOrmFormact(area: Array<string>) {}
   const handleSecondSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -116,9 +121,19 @@ const CreateProject: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
-
+        const data = {
+          objetivo: formData.objetivo,
+          descricao: formData.descricao,
+          pessoa_id: id_pessoa,
+          areas: formData.areas.map(area => {
+            return { destricao: area }
+          }),
+          habilidades: formData.habilidades.map(habilidade => {
+            return { nome: habilidade }
+          }),
+        }
         await api
-          .put(`/api/v1/projeto/${idProject}`, formData, {
+          .put(`/api/v1/projeto/${idProject}`, data, {
             withCredentials: true,
           })
           .then(() => setShownStep(3))
