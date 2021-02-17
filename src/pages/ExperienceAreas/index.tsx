@@ -62,7 +62,7 @@ const ExperienceAreas: React.FC = () => {
       <Logged />
       <div className="area-central container">
         <h1>Selecione até 5 áreas de atuação de seu conhecimento</h1>
-        <SelectArea defaultValue={['striasdng', 'outro']} name="areas" />
+        <SelectArea name="areas" />
       </div>
       <footer>
         <Button
