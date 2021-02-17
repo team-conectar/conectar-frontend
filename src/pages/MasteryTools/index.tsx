@@ -28,8 +28,13 @@ const MasteryTools: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        const data = {
+          habilidades: formData.habilidades.map(habilidade => {
+            return { nome: habilidade }
+          }),
+        }
         const res = await api
-          .put('/api/v1/pessoas', formData, {
+          .put('/api/v1/pessoas', data, {
             withCredentials: true,
           })
           .then(() => {

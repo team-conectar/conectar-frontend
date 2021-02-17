@@ -20,7 +20,7 @@ const Input: React.FC<InputProps> = ({ name, options, ...rest }) => {
       name: fieldName,
       ref: inputRefs.current,
       getValue: (refs: HTMLInputElement[]) => {
-        return refs.filter(ref => ref.checked).map(ref => ref.value)
+        return refs.filter(ref => ref.checked !== null).map(ref => ref.value)
       },
       clearValue: (refs: HTMLInputElement[]) => {
         refs.forEach(ref => {

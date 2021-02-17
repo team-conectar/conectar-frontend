@@ -103,7 +103,7 @@ const CreateProject: React.FC = () => {
     },
     [selectedFile],
   )
-  function convertArrayStringToFOrmFormact(area: Array<string>) {}
+
   const handleSecondSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)

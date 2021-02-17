@@ -35,8 +35,13 @@ const ExperienceAreas: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        const data = {
+          areas: formData.areas.map(area => {
+            return { destricao: area }
+          }),
+        }
         const res = await api
-          .put('/api/v1/pessoas', formData, {
+          .put('/api/v1/pessoas', data, {
             withCredentials: true,
           })
           .then(() => {
