@@ -59,9 +59,7 @@ function SignUp() {
   const history = useHistory()
   const formRef = useRef<FormHandles>(null)
 
-  const [showNextStep, setShowNextStep] = useState<boolean>(
-    Number(useParams<routeParms>().step) === 2,
-  )
+  const [showNextStep, setShowNextStep] = useState<boolean>(true)
 
   const handleSubmit = useCallback(async (formData: PessoaType) => {
     try {
@@ -110,6 +108,8 @@ function SignUp() {
     }
   }, [])
   const handleSecondSubmit = useCallback(async (formData: PessoaType) => {
+    console.log(formData)
+
     try {
       // Remove all previogeus errors
       formRef.current?.setErrors({})
@@ -118,9 +118,6 @@ function SignUp() {
         year: Yup.string().required('Ano é obrigatório'),
         month: Yup.string().required('Mês é obrigatório'),
         day: Yup.string().required('Dia é obrigatório'),
-        aliado: Yup.string(),
-        colaborador: Yup.string(),
-        idealizador: Yup.string(),
       })
       await schema.validate(formData, {
         abortEarly: false,
@@ -130,9 +127,9 @@ function SignUp() {
 
       const data_nascimento = `${year}-${month}-${day}`
 
-      const aliado = formData.aliado === 'aliado'
-      const colaborador = formData.colaborador === 'colaborador'
-      const idealizador = formData.idealizador === 'idealizador'
+      const aliado = !!(formData.aliado[0] === 'aliado')
+      const colaborador = !!(formData.colaborador[0] === 'colaborador')
+      const idealizador = !!(formData.idealizador[0] === 'idealizador')
 
       const data = {
         data_nascimento,
@@ -141,6 +138,7 @@ function SignUp() {
         idealizador,
         telefone,
       }
+      console.log(data)
 
       await api.put('/api/v1/pessoas', data, {
         withCredentials: true,
@@ -149,6 +147,8 @@ function SignUp() {
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         // Validation failed
+        console.log(err)
+
         const errors = getValidationErrors(err)
         formRef.current?.setErrors(errors)
       }
