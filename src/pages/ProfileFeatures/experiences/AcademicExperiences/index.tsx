@@ -27,7 +27,7 @@ import getValidationErrors from '../../../../utils/getValidationErrors'
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
  * so we can create a full date from it and modify the state properly
  */
-interface AcademicType {
+export interface AcademicType {
   id: number
   instituicao: string
   escolaridade: string

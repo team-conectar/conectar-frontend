@@ -42,6 +42,9 @@ import NavBar from '../../components/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
 import { useLoggedUser } from '../../context/LoggedUserContext'
 import Logged from '../../components/Logged'
+import { AcademicType } from '../ProfileFeatures/experiences/AcademicExperiences'
+import { ProfessionalType } from '../ProfileFeatures/experiences/ProfessionalExperiences'
+import { IExperienceProject } from '../ProfileFeatures/experiences/ProjectExperiences'
 
 interface routeParms {
   id: string
@@ -72,6 +75,9 @@ interface ProfileType {
   id: number
   data_criacao: string
   data_atualizacao: string
+  experiencia_profissional: ProfessionalType[]
+  experiencia_projetos: IExperienceProject[]
+  experiencia_academica: AcademicType[]
 }
 /**
  * @constructor
@@ -100,7 +106,26 @@ const Profiles: React.FC = () => {
     api
       .get(`/api/v1/pessoas/${profile_id}`)
       .then(response => {
-        setProfile(response.data)
+        console.log(response.data)
+
+        setProfile({
+          ...response.data,
+          experiencia_academica: response.data.experiencia_academica.filter(
+            (experience: AcademicType) => {
+              return experience.situacao === 'Incompleto'
+            },
+          )[0],
+          experiencia_profissional: response.data.experiencia_profissional.filter(
+            (experience: ProfessionalType) => {
+              return experience.data_fim === null
+            },
+          ),
+          experiencia_projetos: response.data.experiencia_projeto.filter(
+            (experience: IExperienceProject) => {
+              return experience.data_fim === null
+            },
+          ),
+        })
       })
       .catch((err: AxiosError) => {
         if (err.code === undefined) history.push('/404')
@@ -115,7 +140,8 @@ const Profiles: React.FC = () => {
         return err?.response?.data.detail
       })
     setLoadingPage(false)
-  }, [profile_id])
+  }, [history, profile_id])
+  console.log(profile.experiencia_academica)
 
   return (
     <Page>
@@ -181,39 +207,61 @@ const Profiles: React.FC = () => {
               ))}
             </ul>
             <ExperienciasDiv>
-              <button>
-                <img src={educação} alt="" />
-                <aside>
-                  <legend>UTFPR</legend>
-                  <p>
-                    Engenharia de Software <br />
-                    Em andamento
-                  </p>
-                </aside>
-              </button>
-              <button>
-                <img src={trabalho} alt="" />
-                <aside>
-                  <legend>Maynart</legend>
-                  <p>
-                    Digital Artist | Freelancer <br />
-                    Fevereiro de 2018 - Até o momento
-                  </p>
-                </aside>
-              </button>
-              <button>
-                <img src={projeto} alt="" />
-                <aside>
-                  <legend>Conectar</legend>
-                  <p>
-                    UTFPR | UI/UX Designer
-                    <br />
-                    Projeto em andamento
-                    <br />
-                    Agosto de 2020 - Até o momento
-                  </p>
-                </aside>
-              </button>
+              {profile.experiencia_academica.length > 0 && (
+                <button>
+                  <img
+                    src={educação}
+                    alt={profile.experiencia_academica[0].curso}
+                  />
+                  <aside>
+                    <legend>
+                      {profile.experiencia_academica[0].instituicao}
+                    </legend>
+                    <p>
+                      {profile.experiencia_academica[0].curso} <br />
+                      {profile.experiencia_academica[0].situacao}
+                    </p>
+                  </aside>
+                </button>
+              )}
+              {profile.experiencia_profissional.length > 0 && (
+                <button>
+                  <img
+                    src={trabalho}
+                    alt={profile.experiencia_profissional[0].cargo}
+                  />
+                  <aside>
+                    <legend>
+                      {profile.experiencia_profissional[0].organizacao}
+                    </legend>
+                    <p>
+                      {`
+                      ${profile.experiencia_profissional[0].cargo} | 
+                      ${profile.experiencia_profissional[0].vinculo} \\n 
+                      ${profile.experiencia_profissional[0].data_inicio}
+                    `}
+                    </p>
+                  </aside>
+                </button>
+              )}
+              {profile.experiencia_projetos.length > 0 && (
+                <button>
+                  <img
+                    src={projeto}
+                    alt={profile.experiencia_projetos[0].cargo}
+                  />
+                  <aside>
+                    <legend>{profile.experiencia_projetos[0].nome}</legend>
+                    <p>
+                      {profile.experiencia_projetos[0].cargo}
+                      <br />
+                      {profile.experiencia_projetos[0].situacao}
+                      <br />
+                      {profile.experiencia_projetos[0].data_inicio}
+                    </p>
+                  </aside>
+                </button>
+              )}
             </ExperienciasDiv>
 
             <h4>Exibir currículo completo</h4>

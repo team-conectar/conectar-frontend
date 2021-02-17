@@ -27,7 +27,7 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
-interface ProfessionalType {
+export interface ProfessionalType {
   id: number
   organizacao: string
   descricao: string

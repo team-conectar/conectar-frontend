@@ -33,6 +33,8 @@ const MasteryTools: React.FC = () => {
             return { nome: habilidade }
           }),
         }
+        console.log(data)
+
         const res = await api
           .put('/api/v1/pessoas', data, {
             withCredentials: true,

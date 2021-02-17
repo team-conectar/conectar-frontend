@@ -28,7 +28,7 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
-interface ProjectType {
+export interface IExperienceProject {
   id: number
   nome: string
   descricao: string
@@ -55,7 +55,7 @@ const ProjectExperiences: React.FC = () => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [initialYear, setInitialYear] = useState<number>(1970)
   const [currentilyProject, setCurrentilyProject] = useState<boolean>(false)
-  const [stored, setStored] = useState<ProjectType[]>([])
+  const [stored, setStored] = useState<IExperienceProject[]>([])
   const initialProjectData = {
     id: 0,
     currentProject: false,
@@ -203,7 +203,7 @@ const ProjectExperiences: React.FC = () => {
     },
     [currentilyProject, editStored],
   )
-  function handleEditExperience(experience: ProjectType) {
+  function handleEditExperience(experience: IExperienceProject) {
     const {
       id,
       nome,
@@ -212,7 +212,7 @@ const ProjectExperiences: React.FC = () => {
       data_fim,
       cargo,
       situacao,
-    }: ProjectType = experience
+    }: IExperienceProject = experience
 
     const [initialYear, initialMonth] = data_inicio.split('-')
 
@@ -254,7 +254,7 @@ const ProjectExperiences: React.FC = () => {
 
       {!showRegister ? (
         <div className="experiencias">
-          {stored?.map((experience: ProjectType) => (
+          {stored?.map((experience: IExperienceProject) => (
             <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
                 <img
