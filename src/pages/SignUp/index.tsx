@@ -59,7 +59,7 @@ function SignUp() {
   const history = useHistory()
   const formRef = useRef<FormHandles>(null)
 
-  const [showNextStep, setShowNextStep] = useState<boolean>(true)
+  const [showNextStep, setShowNextStep] = useState<boolean>(false)
 
   const handleSubmit = useCallback(async (formData: PessoaType) => {
     try {
@@ -143,7 +143,7 @@ function SignUp() {
       await api.put('/api/v1/pessoas', data, {
         withCredentials: true,
       })
-      history.push('/experienceareas')
+      history.push('/experiencias-do-usuario')
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         // Validation failed

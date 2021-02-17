@@ -24,6 +24,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import Vacancy from '../../components/Vacancy'
+import { AxiosError } from 'axios'
 
 interface ProjectType {
   nome: string
@@ -40,7 +41,7 @@ const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
+  const [shownStep, setShownStep] = useState<1 | 2 | 3>(2)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
@@ -75,7 +76,7 @@ const CreateProject: React.FC = () => {
         }
         data.append(
           'visibilidade',
-          formData.visibilidade.length > 0 ? 'true' : 'false',
+          JSON.stringify(formData.visibilidade[0] === 'visivel'),
         )
         selectedFile &&
           data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
@@ -116,10 +117,14 @@ const CreateProject: React.FC = () => {
         })
         // Validation passed
 
-        await api.put(`/api/v1/projeto/${idProject}`, formData, {
-          withCredentials: true,
-        })
-        setShownStep(3)
+        await api
+          .put(`/api/v1/projeto/${idProject}`, formData, {
+            withCredentials: true,
+          })
+          .then(() => setShownStep(3))
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          })
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -133,7 +138,6 @@ const CreateProject: React.FC = () => {
 
   return (
     <BodyCreateProject>
-      {/* <Beforeunload onBeforeunload={event => event.preventDefault()} /> */}
       <Logged />
       <Modal
         open={showModal}
