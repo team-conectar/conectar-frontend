@@ -7,27 +7,27 @@ import React, {
   OptionHTMLAttributes,
   useRef,
 } from 'react'
-import Input from '../../Input'
-import Textarea from '../../Textarea'
-import Select from '../../Select'
-import ToggleSwitch from '../../ToggleSwitch'
-import Button from '../../Button'
+import Input from '../../../../components/Input'
+import Textarea from '../../../../components/Textarea'
+import Select from '../../../../components/Select'
+import ToggleSwitch from '../../../../components/ToggleSwitch'
+import Button from '../../../../components/Button'
 import { BodyExperiences } from '../styles'
 import {
   yearOptions,
   monthOptions,
   toMonth,
   finalYearOptions,
-} from '../../../utils/dates'
+} from '../../../../utils/dates'
 import { AxiosError } from 'axios'
-import api from '../../../services/api'
-import edit from '../../../assets/icon/editar.svg'
-import trash from '../../../assets/icon/lixeira.svg'
-import Modal from '../../Modal'
+import api from '../../../../services/api'
+import edit from '../../../../assets/icon/editar.svg'
+import trash from '../../../../assets/icon/lixeira.svg'
+import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
-import getValidationErrors from '../../../utils/getValidationErrors'
+import getValidationErrors from '../../../../utils/getValidationErrors'
 interface ProjectType {
   id: number
   nome: string
@@ -107,6 +107,8 @@ const ProjectExperiences: React.FC = () => {
 
   const handleSubmit = useCallback(
     async (formData: ProjectDataType) => {
+      console.log(formData)
+
       formRef.current?.setErrors({})
       try {
         const schema = Yup.object().shape({
@@ -367,9 +369,14 @@ const ProjectExperiences: React.FC = () => {
               </aside>
               <aside>
                 <ToggleSwitch
-                  label="Estou nesse projeto atualmente"
+                  options={[
+                    {
+                      label: 'Estou nesse projeto atualmente',
+                      id: 'currentProject',
+                      value: 'currentProject',
+                    },
+                  ]}
                   name="currentProject"
-                  id="currentProject"
                   onChange={(event: ChangeEvent<HTMLInputElement>) =>
                     setCurrentilyProject(event.target.checked)
                   }

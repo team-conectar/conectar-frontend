@@ -13,14 +13,9 @@ import Select from '../Select'
 import ToggleSwitch from '../ToggleSwitch'
 import Button from '../Button'
 import { BodyVacancy } from './styles'
-import { inputChange } from '../../utils/inputChange'
-import { selectChange } from '../../utils/selectChange'
-import { textareaChange } from '../../utils/textareaChange'
 import { finalYearOptions, yearOptions } from '../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import edit from '../../assets/icon/editar.svg'
-import trash from '../../assets/icon/lixeira.svg'
 import Modal from '../Modal'
 import { AreaType } from '../../components/SelectArea'
 import { ToolType } from '../../components/SelectTools'
@@ -49,7 +44,7 @@ export interface VacanciesType {
 interface ProjectType {
   nome: string
   descricao: string
-  visibilidade: boolean
+  visibilidade: Array<string>
   objetivo: string
   foto_capa: string
   areas: AreaType[]
@@ -236,9 +231,10 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
               name="tipoContrato"
             />
             <ToggleSwitch
-              label="Remunerado"
+              options={[
+                { label: 'Remunerado', id: 'remunerado', value: 'remunerado' },
+              ]}
               name="remunerado"
-              id="remunerado"
             />
           </section>
           <section className="area-botoes">

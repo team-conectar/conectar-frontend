@@ -6,22 +6,22 @@ import React, {
   useEffect,
   OptionHTMLAttributes,
 } from 'react'
-import Input from '../../Input'
-import Textarea from '../../Textarea'
-import Select from '../../Select'
-import ToggleSwitch from '../../ToggleSwitch'
-import Button from '../../Button'
+import Input from '../../../../components/Input'
+import Textarea from '../../../../components/Textarea'
+import Select from '../../../../components/Select'
+import ToggleSwitch from '../../../../components/ToggleSwitch'
+import Button from '../../../../components/Button'
 import { BodyExperiences } from '../styles'
-import { finalYearOptions, yearOptions } from '../../../utils/dates'
+import { finalYearOptions, yearOptions } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
-import api from '../../../services/api'
-import edit from '../../../assets/icon/editar.svg'
-import trash from '../../../assets/icon/lixeira.svg'
-import Modal from '../../Modal'
+import api from '../../../../services/api'
+import edit from '../../../../assets/icon/editar.svg'
+import trash from '../../../../assets/icon/lixeira.svg'
+import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
-import getValidationErrors from '../../../utils/getValidationErrors'
+import getValidationErrors from '../../../../utils/getValidationErrors'
 /**
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
@@ -100,6 +100,7 @@ const AcademicExperiences: React.FC = () => {
   }
   const handleSubmit = useCallback(
     async (formData: AcademicType) => {
+      console.log(formData)
       formRef.current?.setErrors({})
       try {
         const schema = Yup.object().shape({
@@ -136,8 +137,9 @@ const AcademicExperiences: React.FC = () => {
             situacao !== 'Incompleto' && data_fim ? `${data_fim}-02-01` : null,
           escolaridade,
           curso,
-          situacao,
+          situacao: situacao[0],
         }
+        console.log(data)
 
         /**
          * Sends data to backend
@@ -350,22 +352,20 @@ const AcademicExperiences: React.FC = () => {
             </section>
             <section className="bloco-tres area-toggle">
               <ToggleSwitch
-                label="Incompleto"
                 name="situacao"
-                type="radio"
-                value="Incompleto"
-              />
-              <ToggleSwitch
-                label="Em andamento"
-                name="situacao"
-                type="radio"
-                value="Em andamento"
-              />
-              <ToggleSwitch
-                label="Concluído"
-                name="situacao"
-                type="radio"
-                value="Concluído"
+                options={[
+                  {
+                    label: 'Incompleto',
+                    id: 'incompleto',
+                    value: 'Incompleto',
+                  },
+                  {
+                    label: 'Em andamento',
+                    id: 'em_andamento',
+                    value: 'Em andamento',
+                  },
+                  { id: 'concluido', label: 'Concluído', value: 'Concluído' },
+                ]}
               />
             </section>
             <section className="bloco-quatro">
@@ -404,6 +404,7 @@ const AcademicExperiences: React.FC = () => {
                   setShowRegister(false)
                   setEditStored(initialAcademicData)
                 }}
+                theme="secondary"
               >
                 Cancelar
               </Button>

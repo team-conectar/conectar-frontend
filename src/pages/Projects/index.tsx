@@ -50,7 +50,7 @@ interface routeParms {
 interface ProjectType {
   nome: string
   descricao: string
-  visibilidade: true
+  visibilidade: Array<string>
   objetivo: string
   foto_capa: string
   areas: AreaType[]

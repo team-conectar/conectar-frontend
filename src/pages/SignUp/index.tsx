@@ -302,21 +302,30 @@ function SignUp() {
                 <legend>Idealizador</legend>
                 <aside>
                   <p>Interessado em criar projetos</p>
-                  <ToggleSwitch name="idealizador" value="idealizador" />
+                  <ToggleSwitch
+                    name="idealizador"
+                    options={[{ id: 'idealizador', value: 'idealizador' }]}
+                  />
                 </aside>
               </fieldset>
               <fieldset>
                 <legend>Colaborador</legend>
                 <aside>
                   <p>Interessado em participar de projetos</p>
-                  <ToggleSwitch name="colaborador" value="colaborador" />
+                  <ToggleSwitch
+                    name="colaborador"
+                    options={[{ id: 'colaborador', value: 'colaborador' }]}
+                  />
                 </aside>
               </fieldset>
               <fieldset>
                 <legend>Aliado</legend>
                 <aside>
                   <p>Interessado em ajudar projetos</p>
-                  <ToggleSwitch name="aliado" value="aliado" />
+                  <ToggleSwitch
+                    name="aliado"
+                    options={[{ id: 'aliado', value: 'aliado' }]}
+                  />
                 </aside>
               </fieldset>
             </section>
