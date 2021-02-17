@@ -5,7 +5,7 @@ import { BodySwitch } from './styles'
 interface IOptionsCheckbox {
   id: string
   value: string
-  label: string
+  label?: string
 }
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
