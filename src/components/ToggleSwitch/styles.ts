@@ -5,7 +5,7 @@ export const BodySwitch = styled.div`
     display: flex;
     flex-flow: row-reverse wrap;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     margin: 0.6rem;
     label {
       margin-left: 0.8rem;

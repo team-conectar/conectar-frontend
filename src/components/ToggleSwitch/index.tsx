@@ -52,7 +52,7 @@ const Input: React.FC<InputProps> = ({ name, options, ...rest }) => {
             id={option.id}
             {...rest}
           />
-          <label htmlFor={fieldName} className="switch" />
+          <label htmlFor={option.id} className="switch" />
         </label>
       ))}
     </BodySwitch>
