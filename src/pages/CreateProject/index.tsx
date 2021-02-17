@@ -28,7 +28,7 @@ import Vacancy from '../../components/Vacancy'
 interface ProjectType {
   nome: string
   descricao: string
-  visibilidade: boolean
+  visibilidade: Array<string>
   objetivo: string
   foto_capa: string
   areas: AreaType[]
@@ -58,8 +58,8 @@ const CreateProject: React.FC = () => {
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
           nome: Yup.string().required('Nome é obrigatório'),
-          visibilidade: Yup.string(),
-          habilidades: Yup.array()
+
+          areas: Yup.array()
             .min(1, 'Seleciono pelo menos 1 item')
             .max(5, 'Seleciono no máximo 5'),
         })
@@ -71,7 +71,12 @@ const CreateProject: React.FC = () => {
         const data = new FormData()
 
         data.append('nome', formData.nome)
-        data.append('visibilidade', JSON.stringify(formData.visibilidade))
+        if (formData.visibilidade.length > 0) {
+        }
+        data.append(
+          'visibilidade',
+          formData.visibilidade.length > 0 ? 'true' : 'false',
+        )
         selectedFile &&
           data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
         data.append('descricao', 'Não informado')
@@ -102,7 +107,7 @@ const CreateProject: React.FC = () => {
         const schema = Yup.object().shape({
           descricao: Yup.string().required('Descrição é obrigatório'),
           objetivo: Yup.string().required('Objetivo é obrigatório'),
-          areas: Yup.array()
+          habilidades: Yup.array()
             .min(1, 'Seleciono pelo menos 1 área')
             .max(5, 'Seleciono no máximo 5'),
         })
@@ -157,11 +162,17 @@ const CreateProject: React.FC = () => {
               <ToggleSwitch
                 name="visibilidade"
                 value="visibilidade"
-                label="Tornar este projeto privado"
+                options={[
+                  {
+                    label: 'Tornar este projeto privado',
+                    id: 'visibilidade',
+                    value: 'visivel',
+                  },
+                ]}
               />
             </div>
             <div className="coluna-dois">
-              <SelectArea name="area" label="Área de desenvolvimento" />
+              <SelectArea name="areas" label="Área de desenvolvimento" />
             </div>
             <section>
               <Button type="button" onClick={history.goBack} theme="secondary">
