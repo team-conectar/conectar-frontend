@@ -45,6 +45,7 @@ import Logged from '../../components/Logged'
 import { AcademicType } from '../ProfileFeatures/experiences/AcademicExperiences'
 import { ProfessionalType } from '../ProfileFeatures/experiences/ProfessionalExperiences'
 import { IExperienceProject } from '../ProfileFeatures/experiences/ProjectExperiences'
+import { toMonth } from '../../utils/dates'
 
 interface routeParms {
   id: string
@@ -105,30 +106,30 @@ const Profiles: React.FC = () => {
   useEffect(() => {
     api
       .get(`/api/v1/pessoas/${profile_id}`)
-      .then(response => {
+      .then((response: { data: ProfileType }) => {
         console.log(response.data)
-
+        setProfile(response.data)
         setProfile({
           ...response.data,
-          experiencia_academica: response.data.experiencia_academica.filter(
-            (experience: AcademicType) => {
-              return experience.situacao === 'Incompleto'
-            },
-          )[0],
           experiencia_profissional: response.data.experiencia_profissional.filter(
             (experience: ProfessionalType) => {
-              return experience.data_fim === null
+              return experience.data_fim === undefined
             },
           ),
-          experiencia_projetos: response.data.experiencia_projeto.filter(
+          experiencia_projetos: response.data.experiencia_projetos.filter(
             (experience: IExperienceProject) => {
-              return experience.data_fim === null
+              return experience.situacao === 'Em andamento'
+            },
+          ),
+          experiencia_academica: response.data.experiencia_academica.filter(
+            (experience: AcademicType) => {
+              return experience.situacao === 'Em andamento'
             },
           ),
         })
       })
       .catch((err: AxiosError) => {
-        if (err.code === undefined) history.push('/404')
+        // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
     api
@@ -145,7 +146,7 @@ const Profiles: React.FC = () => {
 
   return (
     <Page>
-      {/* <NavBar /> */}
+      <NavBar />
       <main>
         <header>
           <aside>
@@ -207,7 +208,7 @@ const Profiles: React.FC = () => {
               ))}
             </ul>
             <ExperienciasDiv>
-              {profile.experiencia_academica.length > 0 && (
+              {profile.experiencia_academica?.length > 0 && (
                 <button>
                   <img
                     src={educação}
@@ -224,7 +225,7 @@ const Profiles: React.FC = () => {
                   </aside>
                 </button>
               )}
-              {profile.experiencia_profissional.length > 0 && (
+              {profile?.experiencia_profissional?.length > 0 && (
                 <button>
                   <img
                     src={trabalho}
@@ -237,14 +238,23 @@ const Profiles: React.FC = () => {
                     <p>
                       {`
                       ${profile.experiencia_profissional[0].cargo} | 
-                      ${profile.experiencia_profissional[0].vinculo} \\n 
-                      ${profile.experiencia_profissional[0].data_inicio}
-                    `}
+                      ${profile.experiencia_profissional[0].vinculo} 
+                      `}
+                      <br />
+                      {`${toMonth(
+                        profile.experiencia_profissional[0].data_inicio.split(
+                          '-',
+                        )[1],
+                      )} de  ${
+                        profile.experiencia_profissional[0].data_inicio.split(
+                          '-',
+                        )[0]
+                      } até o momento`}
                     </p>
                   </aside>
                 </button>
               )}
-              {profile.experiencia_projetos.length > 0 && (
+              {profile.experiencia_projetos?.length > 0 && (
                 <button>
                   <img
                     src={projeto}
@@ -255,9 +265,15 @@ const Profiles: React.FC = () => {
                     <p>
                       {profile.experiencia_projetos[0].cargo}
                       <br />
-                      {profile.experiencia_projetos[0].situacao}
-                      <br />
-                      {profile.experiencia_projetos[0].data_inicio}
+                      {`${toMonth(
+                        profile.experiencia_projetos[0].data_inicio.split(
+                          '-',
+                        )[1],
+                      )} de  ${
+                        profile.experiencia_projetos[0].data_inicio.split(
+                          '-',
+                        )[0]
+                      } até o momento`}
                     </p>
                   </aside>
                 </button>

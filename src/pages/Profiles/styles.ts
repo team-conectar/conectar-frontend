@@ -173,7 +173,7 @@ export const PerfilDiv = styled.div`
   align-items: center;
   justify-content: space-evenly;
   width: 90vw;
-  
+
   > ul {
     display: flex;
     flex-flow: row wrap;
@@ -231,6 +231,7 @@ export const Page = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+  gap: 2rem;
   --PerfilWidth: 432px;
   > main {
     display: flex;
@@ -304,7 +305,7 @@ export const Page = styled.div`
         display: grid;
         grid-template-columns: var(--PerfilWidth) 1.4fr;
         width: 100%;
-        
+
         gap: 1rem;
       }
     }
