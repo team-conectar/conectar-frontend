@@ -29,7 +29,7 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
           return err?.response?.data.detail
         }),
       api
-        .get(`/api/v1/papel?id=${vacancy.tipo_acordo_id}`)
+        .get(`/api/v1/papel/${vacancy.tipo_acordo_id}`)
         .then(response => {
           setOffice(response.data)
         })

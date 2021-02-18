@@ -392,7 +392,7 @@ const Projects: React.FC = () => {
           <section>
             <legend>Descrição da vaga</legend>
             <aside>
-              <p>{vacancyDetail.descricao}</p>
+              <p>{vacancyDetail?.descricao}</p>
               <DivTags>
                 <legend>
                   Áreas de desenvolvimento
@@ -406,7 +406,7 @@ const Projects: React.FC = () => {
                   />
                 </legend>
                 <aside>
-                  {vacancyDetail.areas?.map(area => (
+                  {vacancyDetail?.areas?.map(area => (
                     <span key={area.id}>{area.descricao}</span>
                   ))}
                 </aside>
@@ -425,7 +425,7 @@ const Projects: React.FC = () => {
                   />
                 </legend>
                 <aside>
-                  {vacancyDetail.habilidades?.map(habilidade => (
+                  {vacancyDetail?.habilidades?.map(habilidade => (
                     <span key={habilidade.id}>{habilidade.nome}</span>
                   ))}
                 </aside>
