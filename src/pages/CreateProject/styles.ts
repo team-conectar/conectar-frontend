@@ -43,7 +43,7 @@ export const BodyCreateProject = styled.div`
       justify-content: center;
       > section {
         grid-row: 2;
-        grid-column: 1/-1;
+        grid-column: 1 / -1;
       }
       .area-select {
         justify-content: space-around;

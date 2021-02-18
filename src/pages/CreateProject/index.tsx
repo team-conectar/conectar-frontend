@@ -183,17 +183,6 @@ const CreateProject: React.FC = () => {
               <div className="upload-img">
                 <Dropzone name="img" />
               </div>
-
-              <ToggleSwitch
-                name="visibilidade"
-                options={[
-                  {
-                    label: 'Tornar este projeto privado',
-                    id: 'visibilidade',
-                    value: 'visivel',
-                  },
-                ]}
-              />
             </div>
             <div className="coluna-dois">
               <SelectArea name="areas" label="Área de desenvolvimento" />
