@@ -42,6 +42,7 @@ const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
   const id_pessoa = useLoggedUser().id
   const formRef = useRef<FormHandles>(null)
+  const formRefSecond = useRef<FormHandles>(null)
   const history = useHistory()
   const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
@@ -111,7 +112,7 @@ const CreateProject: React.FC = () => {
       console.log(formData)
       try {
         // Remove all previogeus errors
-        formRef.current?.setErrors({})
+        formRefSecond.current?.setErrors({})
         const schema = Yup.object().shape({
           descricao: Yup.string().required('Descrição é obrigatório'),
           objetivo: Yup.string().required('Objetivo é obrigatório'),
@@ -146,7 +147,7 @@ const CreateProject: React.FC = () => {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
           const errors = getValidationErrors(err)
-          formRef.current?.setErrors(errors)
+          formRefSecond.current?.setErrors(errors)
         }
       }
     },
@@ -167,7 +168,7 @@ const CreateProject: React.FC = () => {
         <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
       </Modal>
       <main>
-        {shownStep === 1 || (shownStep === 2 && <h1>Criar Projeto</h1>)}
+        {(shownStep === 1 || shownStep === 2) && <h1>Criar Projeto</h1>}
         {(shownStep === 1 && (
           <Form
             ref={formRef}
@@ -206,7 +207,7 @@ const CreateProject: React.FC = () => {
         )) ||
           (shownStep === 2 && (
             <Form
-              ref={formRef}
+              ref={formRefSecond}
               className="segunda-etapa"
               onSubmit={handleSecondSubmit}
             >
