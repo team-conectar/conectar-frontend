@@ -37,7 +37,7 @@ const ExperienceAreas: React.FC = () => {
         // Validation passed
         const data = {
           areas: formData.areas.map(area => {
-            return { destricao: area }
+            return { descricao: area }
           }),
         }
         const res = await api

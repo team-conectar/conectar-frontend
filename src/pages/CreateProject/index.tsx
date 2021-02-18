@@ -133,7 +133,7 @@ const CreateProject: React.FC = () => {
           descricao: formData.descricao,
           pessoa_id: id_pessoa,
           areas: firstData.areas.map(area => {
-            return { destricao: area }
+            return { descricao: area }
           }),
           habilidades: formData.habilidades.map(habilidade => {
             return { nome: habilidade }
