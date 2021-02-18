@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components'
-interface Props {
-  showStage: 1 | 2 | 3
-}
-export const BodyCreateProject = styled.div<Props>`
+
+export const BodyCreateProject = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,7 +17,7 @@ export const BodyCreateProject = styled.div<Props>`
       margin: 1.4rem 0;
     }
     > aside {
-      display: none;
+      display: flex;
       flex-direction: column;
 
       > button {
@@ -38,7 +36,7 @@ export const BodyCreateProject = styled.div<Props>`
 
     > form {
       width: 100%;
-      display: none;
+      display: grid;
       grid-template-columns: 2fr 3fr;
       grid-template-rows: 1fr;
       grid-gap: 2rem;
@@ -61,42 +59,5 @@ export const BodyCreateProject = styled.div<Props>`
         }
       }
     }
-    ${props =>
-      (props.showStage === 1 &&
-        css`
-          .primeira-etapa {
-            display: grid;
-          }
-          .segunda-etapa {
-            display: none;
-          }
-          .terceira-etapa {
-            display: none;
-          }
-        `) ||
-      (props.showStage === 2 &&
-        css`
-          .primeira-etapa {
-            display: none;
-          }
-          .segunda-etapa {
-            display: grid;
-          }
-          .terceira-etapa {
-            display: none;
-          }
-        `) ||
-      (props.showStage === 3 &&
-        css`
-          .primeira-etapa {
-            display: none;
-          }
-          .segunda-etapa {
-            display: none;
-          }
-          .terceira-etapa {
-            display: flex;
-          }
-        `)}
   }
 `

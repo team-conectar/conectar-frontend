@@ -25,6 +25,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import VacancieListItem from '../VacancieListItem'
+import { ProjectType } from '../../pages/CreateProject'
 
 export interface VacanciesType {
   projeto_id: number
@@ -41,16 +42,7 @@ export interface VacanciesType {
   areas: Array<AreaType>
   id: number
 }
-interface ProjectType {
-  nome: string
-  descricao: string
-  visibilidade: Array<string>
-  objetivo: string
-  foto_capa: string
-  areas: AreaType[]
-  habilidades: ToolType[]
-  id: number
-}
+
 interface IFormData {
   cargo: string
   perfil: string

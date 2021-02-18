@@ -27,17 +27,26 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import Vacancy from '../../components/Vacancy'
 import { AxiosError } from 'axios'
 
-interface ProjectType {
-  nome: string
+export interface ProjectType {
   descricao: string
-  visibilidade: Array<string>
   objetivo: string
+  habilidades: ToolType[]
+  nome: string
+  visibilidade: string[]
   foto_capa: string
   areas: AreaType[]
-  habilidades: ToolType[]
   id: number
 }
-
+interface FirstFormData {
+  nome: string
+  visibilidade: Array<string>
+  areas: string[]
+}
+interface SecondFormData {
+  descricao: string
+  objetivo: string
+  habilidades: string[]
+}
 const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
   const id_pessoa = useLoggedUser().id
@@ -45,6 +54,11 @@ const CreateProject: React.FC = () => {
   const formRefSecond = useRef<FormHandles>(null)
   const history = useHistory()
   const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
+  const [firstData, setfirstData] = useState<FirstFormData>({
+    areas: [],
+    nome: '',
+    visibilidade: [],
+  })
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
@@ -57,7 +71,7 @@ const CreateProject: React.FC = () => {
     }
   }, [idProject])
   const handleSubmit = useCallback(
-    async (formData: ProjectType) => {
+    async (formData: FirstFormData) => {
       console.log(formData)
       try {
         // Remove all previogeus errors
@@ -77,18 +91,16 @@ const CreateProject: React.FC = () => {
         const data = new FormData()
 
         data.append('nome', formData.nome)
-
         data.append(
           'visibilidade',
           JSON.stringify(formData.visibilidade[0] === 'visivel'),
         )
-
         selectedFile &&
           data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
         data.append('descricao', 'Não informado')
         data.append('objetivo', 'Não informado')
         console.log(JSON.stringify(formData.visibilidade[0] === 'visivel'))
-
+        setfirstData(formData)
         const { id } = await (
           await api.post('/api/v1/projeto', data, {
             withCredentials: true,
@@ -108,7 +120,7 @@ const CreateProject: React.FC = () => {
   )
 
   const handleSecondSubmit = useCallback(
-    async (formData: ProjectType) => {
+    async (formData: SecondFormData) => {
       console.log(formData)
       try {
         // Remove all previogeus errors
@@ -128,18 +140,22 @@ const CreateProject: React.FC = () => {
           objetivo: formData.objetivo,
           descricao: formData.descricao,
           pessoa_id: id_pessoa,
-          areas: formData.areas.map(area => {
+          areas: firstData.areas.map(area => {
             return { destricao: area }
           }),
           habilidades: formData.habilidades.map(habilidade => {
             return { nome: habilidade }
           }),
         }
+        console.log(data)
+
         await api.put(`/api/v1/projeto/${idProject}`, data, {
           withCredentials: true,
         })
         setShownStep(3)
       } catch (err) {
+        console.log(err)
+
         if (err instanceof Yup.ValidationError) {
           // Validation failed
           const errors = getValidationErrors(err)
@@ -147,81 +163,90 @@ const CreateProject: React.FC = () => {
         }
       }
     },
-    [idProject],
+    [firstData.areas, idProject, id_pessoa],
   )
 
   return (
-    <BodyCreateProject showStage={shownStep}>
+    <BodyCreateProject>
       <Logged />
 
       <main>
         {(shownStep === 1 || shownStep === 2) && <h1>Criar Projeto</h1>}
-        <Form ref={formRef} className="primeira-etapa" onSubmit={handleSubmit}>
-          <div className="coluna-um">
-            <Input name="nome" label="Título do projeto" />
-            <div className="upload-img">
-              <Dropzone name="img" />
+        {(shownStep === 1 && (
+          <Form
+            ref={formRef}
+            className="primeira-etapa"
+            onSubmit={handleSubmit}
+          >
+            <div className="coluna-um">
+              <Input name="nome" label="Título do projeto" />
+              <div className="upload-img">
+                <Dropzone name="img" />
+              </div>
+
+              <ToggleSwitch
+                name="visibilidade"
+                options={[
+                  {
+                    label: 'Tornar este projeto privado',
+                    id: 'visibilidade',
+                    value: 'visivel',
+                  },
+                ]}
+              />
             </div>
-
-            <ToggleSwitch
-              name="visibilidade"
-              options={[
-                {
-                  label: 'Tornar este projeto privado',
-                  id: 'visibilidade',
-                  value: 'visivel',
-                },
-              ]}
-            />
-          </div>
-          <div className="coluna-dois">
-            <SelectArea name="areas" label="Área de desenvolvimento" />
-          </div>
-          <section>
-            <Button type="button" onClick={history.goBack} theme="secondary">
-              Cancelar
-            </Button>
-            <Button theme="primary" type="submit">
-              Continuar
-            </Button>
-          </section>
-        </Form>
-        <Form
-          ref={formRefSecond}
-          className="segunda-etapa"
-          onSubmit={handleSecondSubmit}
-        >
-          <div className="coluna-um">
-            <Textarea label="Objetivo do projeto" name="objetivo" />
-            <Textarea label="Descrição simples" name="descricao" />
-          </div>
-          <div className="coluna-dois">
-            <SelectTool
-              name="habilidades"
-              label="Ferramentas, matérias e habilidades que o time precisa dominar"
-            />
-          </div>
-          <section>
-            <Button
-              className="voltar"
-              type="button"
-              onClick={() => setShownStep(1)}
-              theme="secondary"
+            <div className="coluna-dois">
+              <SelectArea name="areas" label="Área de desenvolvimento" />
+            </div>
+            <section>
+              <Button type="button" onClick={history.goBack} theme="secondary">
+                Cancelar
+              </Button>
+              <Button theme="primary" type="submit">
+                Continuar
+              </Button>
+            </section>
+          </Form>
+        )) ||
+          (shownStep === 2 && (
+            <Form
+              ref={formRefSecond}
+              className="segunda-etapa"
+              onSubmit={handleSecondSubmit}
             >
-              Voltar
-            </Button>
-            <Button theme="primary" type="submit">
-              Continuar
-            </Button>
-          </section>
-        </Form>
-
-        <aside className="terceira-etapa">
-          <Vacancy project={{ ...project, id: idProject }} />
-          <Button theme="primary" onClick={() => history.push('/')}>
-            Concluir
-          </Button>
-        </aside>
+              <div className="coluna-um">
+                <Textarea label="Objetivo do projeto" name="objetivo" />
+                <Textarea label="Descrição simples" name="descricao" />
+              </div>
+              <div className="coluna-dois">
+                <SelectTool
+                  name="habilidades"
+                  label="Ferramentas, matérias e habilidades que o time precisa dominar"
+                />
+              </div>
+              <section>
+                <Button
+                  className="voltar"
+                  type="button"
+                  onClick={() => setShownStep(1)}
+                  theme="secondary"
+                >
+                  Voltar
+                </Button>
+                <Button theme="primary" type="submit">
+                  Continuar
+                </Button>
+              </section>
+            </Form>
+          )) ||
+          (shownStep === 3 && (
+            <aside className="terceira-etapa">
+              <Vacancy project={{ ...project, id: idProject }} />
+              <Button theme="primary" onClick={() => history.push('/')}>
+                Concluir
+              </Button>
+            </aside>
+          ))}
       </main>
     </BodyCreateProject>
   )
