@@ -86,6 +86,8 @@ const CreateProject: React.FC = () => {
           data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
         data.append('descricao', 'Não informado')
         data.append('objetivo', 'Não informado')
+        console.log(JSON.stringify(formData.visibilidade[0] === 'visivel'))
+
         const { id } = await (
           await api.post('/api/v1/projeto', data, {
             withCredentials: true,
@@ -180,7 +182,6 @@ const CreateProject: React.FC = () => {
 
               <ToggleSwitch
                 name="visibilidade"
-                value="visibilidade"
                 options={[
                   {
                     label: 'Tornar este projeto privado',
