@@ -44,7 +44,7 @@ const CreateProject: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
   const formRefSecond = useRef<FormHandles>(null)
   const history = useHistory()
-  const [shownStep, setShownStep] = useState<1 | 2 | 3>(2)
+  const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
   const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
@@ -135,14 +135,10 @@ const CreateProject: React.FC = () => {
             return { nome: habilidade }
           }),
         }
-        await api
-          .put(`/api/v1/projeto/${idProject}`, data, {
-            withCredentials: true,
-          })
-          .then(() => setShownStep(3))
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
+        await api.put(`/api/v1/projeto/${idProject}`, data, {
+          withCredentials: true,
+        })
+        setShownStep(3)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -157,16 +153,7 @@ const CreateProject: React.FC = () => {
   return (
     <BodyCreateProject showStage={shownStep}>
       <Logged />
-      <Modal
-        open={showModal}
-        setOpen={setShowModal}
-        onAfterClose={() => {
-          setShowModal(!isAuthenticated)
-        }}
-      >
-        <h1>Para prosseguir, você precisa estar logado</h1>
-        <Login onSuccessLogin={() => setShowModal(isAuthenticated)} />
-      </Modal>
+
       <main>
         {(shownStep === 1 || shownStep === 2) && <h1>Criar Projeto</h1>}
         <Form ref={formRef} className="primeira-etapa" onSubmit={handleSubmit}>
