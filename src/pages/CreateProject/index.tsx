@@ -70,54 +70,46 @@ const CreateProject: React.FC = () => {
       })
     }
   }, [idProject])
-  const handleSubmit = useCallback(
-    async (formData: FirstFormData) => {
-      console.log(formData)
-      try {
-        // Remove all previogeus errors
-        formRef.current?.setErrors({})
-        const schema = Yup.object().shape({
-          nome: Yup.string().required('Nome é obrigatório'),
+  const handleSubmit = useCallback(async (formData: FirstFormData) => {
+    console.log(formData)
+    try {
+      // Remove all previogeus errors
+      formRef.current?.setErrors({})
+      const schema = Yup.object().shape({
+        nome: Yup.string().required('Nome é obrigatório'),
+        areas: Yup.array()
+          .min(1, 'Seleciono pelo menos 1 item')
+          .max(5, 'Seleciono no máximo 5'),
+      })
+      await schema.validate(formData, {
+        abortEarly: false,
+      })
+      // Validation passed
 
-          areas: Yup.array()
-            .min(1, 'Seleciono pelo menos 1 item')
-            .max(5, 'Seleciono no máximo 5'),
+      const data = new FormData()
+
+      data.append('nome', formData.nome)
+      data.append('visibilidade', JSON.stringify(true))
+      // selectedFile &&
+      //   data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
+      data.append('descricao', 'Não informado')
+      data.append('objetivo', 'Não informado')
+      setfirstData(formData)
+      const { id } = await (
+        await api.post('/api/v1/projeto', data, {
+          withCredentials: true,
         })
-        await schema.validate(formData, {
-          abortEarly: false,
-        })
-        // Validation passed
-
-        const data = new FormData()
-
-        data.append('nome', formData.nome)
-        data.append(
-          'visibilidade',
-          JSON.stringify(formData.visibilidade[0] === 'visivel'),
-        )
-        selectedFile &&
-          data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
-        data.append('descricao', 'Não informado')
-        data.append('objetivo', 'Não informado')
-        console.log(JSON.stringify(formData.visibilidade[0] === 'visivel'))
-        setfirstData(formData)
-        const { id } = await (
-          await api.post('/api/v1/projeto', data, {
-            withCredentials: true,
-          })
-        ).data
-        setIdProject(id)
-        setShownStep(2)
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          // Validation failed
-          const errors = getValidationErrors(err)
-          formRef.current?.setErrors(errors)
-        }
+      ).data
+      setIdProject(id)
+      setShownStep(2)
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        // Validation failed
+        const errors = getValidationErrors(err)
+        formRef.current?.setErrors(errors)
       }
-    },
-    [selectedFile],
-  )
+    }
+  }, [])
 
   const handleSecondSubmit = useCallback(
     async (formData: SecondFormData) => {
