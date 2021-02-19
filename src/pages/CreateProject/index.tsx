@@ -51,7 +51,6 @@ const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
   const id_pessoa = useLoggedUser().id
   const formRef = useRef<FormHandles>(null)
-  const formRefSecond = useRef<FormHandles>(null)
   const history = useHistory()
   const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
   const [firstData, setfirstData] = useState<FirstFormData>({
@@ -63,13 +62,7 @@ const CreateProject: React.FC = () => {
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
   const [selectedFile, setSelectedFile] = useState<File>()
-  useEffect(() => {
-    if (idProject !== 0) {
-      api.get(`/api/v1/projeto/${idProject}`).then(response => {
-        setProject(response.data)
-      })
-    }
-  }, [idProject])
+
   const handleSubmit = useCallback(async (formData: FirstFormData) => {
     console.log(formData)
     try {
@@ -116,7 +109,7 @@ const CreateProject: React.FC = () => {
       console.log(formData)
       try {
         // Remove all previogeus errors
-        formRefSecond.current?.setErrors({})
+        formRef.current?.setErrors({})
         const schema = Yup.object().shape({
           descricao: Yup.string().required('Descrição é obrigatório'),
           objetivo: Yup.string().required('Objetivo é obrigatório'),
@@ -141,9 +134,14 @@ const CreateProject: React.FC = () => {
         }
         console.log(data)
 
-        await api.put(`/api/v1/projeto/${idProject}`, data, {
-          withCredentials: true,
-        })
+        await api
+          .put(`/api/v1/projeto/${idProject}`, data, {
+            withCredentials: true,
+          })
+          .then(response => {
+            console.log(response.data)
+            setProject(response.data)
+          })
         setShownStep(3)
       } catch (err) {
         console.log(err)
@@ -151,7 +149,7 @@ const CreateProject: React.FC = () => {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
           const errors = getValidationErrors(err)
-          formRefSecond.current?.setErrors(errors)
+          formRef.current?.setErrors(errors)
         }
       }
     },
@@ -191,7 +189,7 @@ const CreateProject: React.FC = () => {
         )) ||
           (shownStep === 2 && (
             <Form
-              ref={formRefSecond}
+              ref={formRef}
               className="segunda-etapa"
               onSubmit={handleSecondSubmit}
             >
@@ -222,7 +220,7 @@ const CreateProject: React.FC = () => {
           )) ||
           (shownStep === 3 && (
             <aside className="terceira-etapa">
-              <Vacancy project={{ ...project, id: idProject }} />
+              <Vacancy project={project} />
               <Button theme="primary" onClick={() => history.push('/')}>
                 Concluir
               </Button>
