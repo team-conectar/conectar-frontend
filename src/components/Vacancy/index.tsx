@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useEffect,
   OptionHTMLAttributes,
+  InputHTMLAttributes,
 } from 'react'
 import Input from '../Input'
 import Textarea from '../Textarea'
@@ -51,7 +52,7 @@ interface IFormData {
   tipoContrato: string
   areas: Array<string>
   habilidades: Array<string>
-  remunerado: boolean
+  remunerado: string
 }
 interface VacancyProps {
   project: ProjectType
@@ -63,16 +64,21 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [editingId, setEditingId] = useState<number>(0)
   const formRef = useRef<FormHandles>(null)
   const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
-    { value: 'trainee', label: 'Trainee' },
-    { value: 'terceirizado', label: 'Terceirizado' },
-    { value: 'intermitente', label: 'Intermitente' },
-    { value: 'aprendiz', label: 'Aprendiz' },
-    { value: 'estágio', label: 'Estágio' },
-    { value: 'temporário', label: 'Temporário' },
-    { value: 'freelance', label: 'Freelance' },
-    { value: 'autônomo', label: 'Autônomo' },
-    { value: 'meioPeríodo', label: 'Meio Período' },
-    { value: 'tempoIntegral', label: ' Tempo Integral' },
+    { value: '1', label: 'Trainee' },
+    { value: '2', label: 'Terceirizado' },
+    { value: '3', label: 'Intermitente' },
+    { value: '4', label: 'Aprendiz' },
+    { value: '5', label: 'Estágio' },
+    { value: '6', label: 'Temporário' },
+    { value: '7', label: 'Freelance' },
+    { value: '8', label: 'Autônomo' },
+    { value: '9', label: 'Meio Período' },
+    { value: '10', label: ' Tempo Integral' },
+  ]
+  const optionsPerfil: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
+    { value: '1', label: 'Aliado' },
+    { value: '2', label: 'Colaborador' },
+    { value: '3', label: 'Idealizador' },
   ]
 
   const optionsAreas: Array<
@@ -91,98 +97,90 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         return err?.response?.data.detail
       })
   }, [editingId, showRegister])
-  const handleSubmit = useCallback(async (formData: IFormData) => {
-    console.log(formData)
-    try {
-      // Remove all previogeus errors
-      formRef.current?.setErrors({})
-      const schema = Yup.object().shape({
-        cargo: Yup.string().required('Cargo é obrigatório'),
-        perfil: Yup.string().required('Perfil é obrigatório'),
-        quantidade: Yup.number()
-          .required('Quantidade é obrigatório')
-          .min(1, 'Deve conter no mínimo uma vaga'),
-        descricao: Yup.string().required('Descrição é obrigatório'),
-        tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
-        areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
-        habilidades: Yup.array().min(
-          1,
-          'Habilidades de contrato é obrigatório',
-        ),
-      })
-      await schema.validate(formData, {
-        abortEarly: false,
-      })
-      // Validation passed
-      let papel_id = 0
-      let tipo_acordo_id = 0
+  const handleSubmit = useCallback(
+    async (formData: IFormData) => {
+      console.log(formData)
+      try {
+        // Remove all previogeus errors
+        formRef.current?.setErrors({})
+        const schema = Yup.object().shape({
+          cargo: Yup.string().required('Cargo é obrigatório'),
+          perfil: Yup.string().required('Perfil é obrigatório'),
+          quantidade: Yup.number()
+            .required('Quantidade é obrigatório')
+            .min(1, 'Deve conter no mínimo uma vaga'),
+          descricao: Yup.string().required('Descrição é obrigatório'),
+          tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
+          areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
+          habilidades: Yup.array().min(
+            1,
+            'Habilidades de contrato é obrigatório',
+          ),
+        })
+        await schema.validate(formData, {
+          abortEarly: false,
+        })
+        // Validation passed
 
-      const res = [
-        await api
-          .post(
-            '/api/v1/tipo_acordo',
-            { descricao: formData.tipoContrato },
-            { withCredentials: true },
-          )
-          .then(response => {
-            tipo_acordo_id = response.data.id
+        const areas = [{} as AreaType]
+        // formData.areas.map(area => {
+        //   areas.push({ descricao: area })
+        // })
+
+        const data = {
+          ...formData,
+          projeto_id: project.id,
+          titulo: formData.cargo,
+          papel_id: formData.perfil,
+          tipo_acordo_id: formData.tipoContrato,
+          remunerado: !!(formData.remunerado === 'remunerado'),
+          situacao: 'Não enviado',
+        }
+        const res = await api
+          .post('/api/v1/pessoa_projeto', data, {
+            withCredentials: true,
+          })
+          .then(async response => {
+            await api
+              .put(
+                `/api/v1/pessoa_projeto/${response.data.id}`,
+                {
+                  areas: formData.areas.map(area => {
+                    return { destricao: area }
+                  }),
+                  habilidades: formData.habilidades.map(habilidade => {
+                    return { nome: habilidade }
+                  }),
+                },
+                {
+                  withCredentials: true,
+                },
+              )
+              .catch((err: AxiosError) => {
+                return err?.response?.data.detail
+              })
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
-          }),
-        await api
-          .post(
-            '/api/v1/papel',
-            { descricao: formData.cargo },
-            { withCredentials: true },
-          )
-          .then(response => {
-            papel_id = response.data.id
           })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          }),
-      ]
-      const areas = [{} as AreaType]
-      // formData.areas.map(area => {
-      //   areas.push({ descricao: area })
-      // })
-
-      const data = {
-        projeto_id: project.id,
-        papel_id,
-        tipo_acordo_id,
-        areas: formData.areas.map(area => {
-          return { destricao: area }
-        }),
-        habilidades: formData.habilidades.map(habilidade => {
-          return { nome: habilidade }
-        }),
+        console.log(res)
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          // Validation failed
+          const errors = getValidationErrors(err)
+          formRef.current?.setErrors(errors)
+        }
       }
-      await api
-        .post('/api/v1/pessoa_projeto', data, {
-          withCredentials: true,
-        })
-        .then(() => {})
-        .catch((err: AxiosError) => {
-          return err?.response?.data.detail
-        })
-      console.log(res)
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        // Validation failed
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-      }
-    }
-  }, [])
+    },
+    [project.id],
+  )
   useEffect(() => {
     api.get(`/api/v1/pessoa_projeto/projeto/${project.id}`).then(response => {
       setVacancies(response.data)
     })
   }, [project.id])
   return (
-    <BodyVacancy>
+    <BodyVacancy className={showRegister ? 'registro' : ''}>
       <h1>Vagas</h1>
       {!showRegister ? (
         <div className="vagas">
@@ -202,11 +200,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             name="cargo"
             // defaultValue={academicFormData?.instituicao}
           />
-          <Input
-            label="Perfil"
-            name="perfil"
-            // defaultValue={academicFormData?.instituicao}
-          />
+          <Select label="Perfil" options={optionsPerfil} name="perfil" />
           <Input
             label="Quantidade"
             name="quantidade"

@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { BodyVacancy } from '../../components/Vacancy/styles'
 
 export const BodyCreateProject = styled.div`
   display: flex;
@@ -22,6 +23,9 @@ export const BodyCreateProject = styled.div`
 
       > button {
         align-self: flex-end;
+      }
+      ${BodyVacancy}.registro + button {
+        display: none;
       }
     }
     section {
