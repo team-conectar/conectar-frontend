@@ -143,21 +143,19 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })
+        const restDate = {
+          areas: formData.areas.map(area => {
+            return { destricao: area }
+          }),
+          habilidades: formData.habilidades.map(habilidade => {
+            return { nome: habilidade }
+          }),
+        }
+        console.log(restDate)
         const res = await api
-          .put(
-            `/api/v1/pessoa_projeto/${id}`,
-            {
-              areas: formData.areas.map(area => {
-                return { destricao: area }
-              }),
-              habilidades: formData.habilidades.map(habilidade => {
-                return { nome: habilidade }
-              }),
-            },
-            {
-              withCredentials: true,
-            },
-          )
+          .put(`/api/v1/pessoa_projeto/${id}`, restDate, {
+            withCredentials: true,
+          })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })

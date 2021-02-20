@@ -52,7 +52,7 @@ const CreateProject: React.FC = () => {
   const id_pessoa = useLoggedUser().id
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
+  const [shownStep, setShownStep] = useState<1 | 2 | 3>(3)
   const [firstData, setfirstData] = useState<FirstFormData>({
     areas: [],
     nome: '',
