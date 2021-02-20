@@ -136,30 +136,28 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           remunerado: !!(formData.remunerado === 'remunerado'),
           situacao: 'Não enviado',
         }
-        const res = await api
+        const { id } = await api
           .post('/api/v1/pessoa_projeto', data, {
             withCredentials: true,
           })
-          .then(async response => {
-            await api
-              .put(
-                `/api/v1/pessoa_projeto/${response.data.id}`,
-                {
-                  areas: formData.areas.map(area => {
-                    return { destricao: area }
-                  }),
-                  habilidades: formData.habilidades.map(habilidade => {
-                    return { nome: habilidade }
-                  }),
-                },
-                {
-                  withCredentials: true,
-                },
-              )
-              .catch((err: AxiosError) => {
-                return err?.response?.data.detail
-              })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
           })
+        const res = await api
+          .put(
+            `/api/v1/pessoa_projeto/${id}`,
+            {
+              areas: formData.areas.map(area => {
+                return { destricao: area }
+              }),
+              habilidades: formData.habilidades.map(habilidade => {
+                return { nome: habilidade }
+              }),
+            },
+            {
+              withCredentials: true,
+            },
+          )
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })
@@ -178,7 +176,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
     api.get(`/api/v1/pessoa_projeto/projeto/${project.id}`).then(response => {
       setVacancies(response.data)
     })
-  }, [project.id])
+  }, [project.id, showRegister])
   return (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
       <h1>Vagas</h1>
