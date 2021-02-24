@@ -46,7 +46,7 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
   ${Error} {
     align-self: flex-start;
     margin-top: calc(
-      (var(--fieldHeight) - var(--marginTop) + var(--iconSize) / 2) / 2
+      (var(--fieldHeight) + var(--iconSize) / 2) / 2 - var(--marginTop)
     );
     svg {
       font-size: var(--iconSize);
@@ -55,7 +55,7 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
   a {
     text-decoration: none;
     position: absolute;
-    top: -1rem;
+    top: calc(var(--marginTop) * -1);
     right: 0.2rem;
     color: var(--gray);
     font-size: 0.7rem;

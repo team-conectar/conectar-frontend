@@ -375,6 +375,7 @@ const Projects: React.FC = () => {
             </legend>
 
             <ContainerScroll>
+              {console.log(vacancies)}
               {vacancies.map(vacancy => (
                 <VacancieListItem
                   key={vacancy.id}

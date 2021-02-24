@@ -30,6 +30,8 @@ import { ProjectType } from '../../pages/CreateProject'
 
 export interface VacanciesType {
   projeto_id: number
+  remunerado: boolean
+  titulo: string
   pessoa_id: number
   papel_id: number
   tipo_acordo_id: number
@@ -111,55 +113,56 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             .min(1, 'Deve conter no mínimo uma vaga'),
           descricao: Yup.string().required('Descrição é obrigatório'),
           tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
-          areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
-          habilidades: Yup.array().min(
-            1,
-            'Habilidades de contrato é obrigatório',
-          ),
+          // areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
+          // habilidades: Yup.array().min(
+          //   1,
+          //   'Habilidades de contrato é obrigatório',
+          // ),
         })
         await schema.validate(formData, {
           abortEarly: false,
         })
         // Validation passed
 
-        const areas = [{} as AreaType]
-        // formData.areas.map(area => {
-        //   areas.push({ descricao: area })
-        // })
-
         const data = {
-          ...formData,
+          descricao: formData.descricao,
           projeto_id: project.id,
           titulo: formData.cargo,
           papel_id: formData.perfil,
           tipo_acordo_id: formData.tipoContrato,
-          remunerado: !!(formData.remunerado === 'remunerado'),
+          remunerado: !!(formData.remunerado[0] === 'remunerado'),
           situacao: 'Não enviado',
         }
-        const { id } = await api
+        console.log(data)
+
+        await api
           .post('/api/v1/pessoa_projeto', data, {
             withCredentials: true,
           })
+          .then(async response => {
+            const res = await api
+              .put(
+                `/api/v1/pessoa_projeto/${response.data.id}`,
+                {
+                  areas: formData.areas.map(area => {
+                    return { destricao: area }
+                  }),
+                  habilidades: formData.habilidades.map(habilidade => {
+                    return { nome: habilidade }
+                  }),
+                },
+                {
+                  withCredentials: true,
+                },
+              )
+              .catch((err: AxiosError) => {
+                return err?.response?.data.detail
+              })
+            console.log(res)
+          })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })
-        const restDate = {
-          areas: formData.areas.map(area => {
-            return { destricao: area }
-          }),
-          habilidades: formData.habilidades.map(habilidade => {
-            return { nome: habilidade }
-          }),
-        }
-        console.log(restDate)
-        const res = await api
-          .put(`/api/v1/pessoa_projeto/${id}`, restDate, {
-            withCredentials: true,
-          })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
-        console.log(res)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed

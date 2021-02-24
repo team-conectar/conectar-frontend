@@ -6,59 +6,54 @@ import co from '../../assets/icon/co.svg'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
 import { GiHamburgerMenu } from 'react-icons/gi'
+import { VacanciesType } from '../Vacancy'
 
 interface Props extends HTMLAttributes<HTMLLIElement> {
-  vacancy: {
-    papel_id: number
-    tipo_acordo_id: number
-    id: number
-    perfil?: string
-  }
+  vacancy: VacanciesType
 }
 const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
-  const [office, setOffice] = useState<string>('')
+  const [profile, setProfile] = useState<string>('')
   const [agreement, setAgreement] = useState<string>('')
   useEffect(() => {
     const res = [
       api
         .get(`/api/v1/tipoAcordo?id=${vacancy.tipo_acordo_id}`)
         .then(response => {
-          setAgreement(response.data)
+          setAgreement(response.data.descricao)
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         }),
       api
-        .get(`/api/v1/papel/${vacancy.tipo_acordo_id}`)
+        .get(`/api/v1/papel/${vacancy.papel_id}`)
         .then(response => {
-          setOffice(response.data)
+          setProfile(response.data.descricao)
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         }),
     ]
     console.log(res)
-  }, [vacancy.tipo_acordo_id])
+  }, [vacancy.papel_id, vacancy.tipo_acordo_id])
   return (
     <VacancieLi {...rest}>
       <img
         src={
-          (vacancy.perfil?.toLowerCase() === 'colaborador' && co) ||
-          (vacancy.perfil?.toLowerCase() === 'idealizador' && al) ||
-          (vacancy.perfil?.toLowerCase() === 'a;iado' && id) ||
+          (profile?.toLowerCase() === 'colaborador' && co) ||
+          (profile?.toLowerCase() === 'idealizador' && al) ||
+          (profile?.toLowerCase() === 'aliado' && id) ||
           ''
         }
-        alt={vacancy.perfil}
+        alt={profile}
       />
       <p>
         <strong>
-          {office} | {vacancy.perfil}
+          {vacancy.titulo} | {profile}
         </strong>
         <br />
         <span>{agreement} </span>
-        <strong>
-          | Não remunerado <br />
-        </strong>
+        <strong>{vacancy.remunerado ? 'Remunerado' : 'Não remunerado'}</strong>
+        <br />
         <span>2 vagas</span>
       </p>
 
