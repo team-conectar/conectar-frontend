@@ -8,8 +8,9 @@ export const BodyButton = styled.button<PropsBodyButton>`
   align-items: center;
   justify-content: center;
   border-radius: 2rem;
-  font: 600 0.8rem Raleway;
+  font: 600 14px Raleway;
   text-transform: uppercase;
+  letter-spacing: 1.25px;
   cursor: pointer;
   border: 0;
   margin: 0;

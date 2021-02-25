@@ -56,11 +56,6 @@ interface IFormData {
   habilidades: Array<string>
   remunerado: string
 }
-interface IPutVacancy {
-  id: number
-  areas: Array<string>
-  habilidades: Array<string>
-}
 interface VacancyProps {
   project: ProjectType
 }
@@ -68,7 +63,6 @@ interface VacancyProps {
 const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
-  const [vacancyDetails, setVacancyDetails] = useState({} as IPutVacancy)
   const [editingId, setEditingId] = useState<number>(0)
   const formRef = useRef<FormHandles>(null)
   const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
@@ -131,7 +125,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         // Validation passed
 
         const data = {
-          descricao: formData.descricao,
+          ...formData,
           projeto_id: project.id,
           titulo: formData.cargo,
           papel_id: formData.perfil,
@@ -146,7 +140,25 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             withCredentials: true,
           })
           .then(async response => {
-            setVacancyDetails({ ...formData, id: response.data.id })
+            const res = await api
+              .put(
+                `/api/v1/pessoa_projeto/${response.data.id}`,
+                {
+                  areas: formData.areas.map(area => {
+                    return { destricao: area }
+                  }),
+                  habilidades: formData.habilidades.map(habilidade => {
+                    return { nome: habilidade }
+                  }),
+                },
+                {
+                  withCredentials: true,
+                },
+              )
+              .catch((err: AxiosError) => {
+                return err?.response?.data.detail
+              })
+            console.log(res)
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
@@ -161,29 +173,6 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
     },
     [project.id],
   )
-  useEffect(() => {
-    console.log('entrou')
-
-    const res = api
-      .put(
-        `/api/v1/pessoa_projeto/${vacancyDetails.id}`,
-        {
-          areas: vacancyDetails.areas.map(area => {
-            return { destricao: area }
-          }),
-          habilidades: vacancyDetails.habilidades.map(habilidade => {
-            return { nome: habilidade }
-          }),
-        },
-        {
-          withCredentials: true,
-        },
-      )
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-    console.log(res)
-  }, [vacancyDetails])
   useEffect(() => {
     api.get(`/api/v1/pessoa_projeto/projeto/${project.id}`).then(response => {
       setVacancies(response.data)
