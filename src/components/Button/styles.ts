@@ -14,9 +14,10 @@ export const BodyButton = styled.button<PropsBodyButton>`
   cursor: pointer;
   border: 0;
   margin: 0;
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem;
   outline: 0;
   gap: 0.4rem;
+  width: 12rem;
   > img {
     height: 1rem;
   }
@@ -55,9 +56,5 @@ export const BodyButton = styled.button<PropsBodyButton>`
   :disabled {
     cursor: no-drop;
     opacity: 0.5;
-  }
-  @media (min-width: 768px) {
-    width: 12rem;
-    padding: 0.6rem;
   }
 `

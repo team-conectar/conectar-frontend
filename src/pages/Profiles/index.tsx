@@ -46,6 +46,7 @@ import { AcademicType } from '../ProfileFeatures/experiences/AcademicExperiences
 import { ProfessionalType } from '../ProfileFeatures/experiences/ProfessionalExperiences'
 import { IExperienceProject } from '../ProfileFeatures/experiences/ProjectExperiences'
 import { toMonth } from '../../utils/dates'
+import Skeleton from 'react-loading-skeleton'
 
 interface routeParms {
   id: string
@@ -136,23 +137,23 @@ const Profiles: React.FC = () => {
       .get(`/api/v1/projetos?pessoa_id=${profile_id}&visibilidade=true`)
       .then(response => {
         setProjects(response.data)
+        setLoadingPage(false)
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail
       })
-    setLoadingPage(false)
   }, [history, profile_id])
   console.log(profile.experiencia_academica)
 
   return (
     <Page>
-      <NavBar />
+      {/* <NavBar /> */}
       <main>
         <header>
           <aside>
-            {profile.idealizador && <img src={capa_id} alt="" />}
-            {profile.aliado && <img src={capa_al} alt="" />}
-            {profile.colaborador && <img src={capa_co} alt="" />}
+            {profile.idealizador && <img src={capa_id} alt="Idealizador" />}
+            {profile.aliado && <img src={capa_al} alt="Aliado" />}
+            {profile.colaborador && <img src={capa_co} alt="Colaborador" />}
           </aside>
           <section>
             <ButtonList
@@ -175,20 +176,28 @@ const Profiles: React.FC = () => {
           <PerfilDiv>
             <PerfilMain>
               <figure>
-                <img
-                  src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-                  alt=""
-                />
+                {/* <img
+                      src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+                      alt=""
+                    /> */}
+                <Skeleton circle height="100px" width="100px" />
                 <figcaption>
-                  <h2>{profile.nome}</h2>
-                  <p>@{profile.usuario}</p>
+                  <h2>{profile.nome || <Skeleton width="150px" />}</h2>
+                  <p>
+                    {(profile.usuario && '@' + profile.usuario) || (
+                      <Skeleton width="100px" />
+                    )}
+                  </p>
                 </figcaption>
               </figure>
               <section>
-                {console.log(loggedUser)}
-                <Button theme="primary">
-                  {loggedUser.id === profile.id ? 'EDITAR' : 'SEGUIR'}
-                </Button>
+                {profile.id ? (
+                  <Button theme="primary">
+                    {loggedUser.id === profile.id ? 'EDITAR' : 'SEGUIR'}
+                  </Button>
+                ) : (
+                  <Skeleton width="150px" height="30px" />
+                )}
                 <aside>
                   {profile.idealizador && <img src={id} alt="" />}
                   {profile.aliado && <img src={al} alt="" />}
@@ -285,14 +294,18 @@ const Profiles: React.FC = () => {
         </header>
         <div>
           <ProjetosSection>
-            {!showFavoritesList ? (
-              <ul>
-                {projects.map(project => (
-                  <ProjectCard key={project.id} project={project} />
-                ))}
-              </ul>
+            {profile.id ? (
+              !showFavoritesList ? (
+                <ul>
+                  {projects.map(project => (
+                    <ProjectCard key={project.id} project={project} />
+                  ))}
+                </ul>
+              ) : (
+                <ul></ul>
+              )
             ) : (
-              <ul></ul>
+              <Skeleton width="100%" height="200px" />
             )}
           </ProjetosSection>
         </div>

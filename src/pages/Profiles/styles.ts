@@ -252,6 +252,7 @@ export const Page = styled.div`
       }
       > aside {
         width: 100%;
+
         display: flex;
         justify-content: flex-end;
         padding-right: 1rem;
@@ -292,6 +293,7 @@ export const Page = styled.div`
           grid-row: 1;
           padding: 0 2rem;
           border-bottom: 0;
+          min-height: 10rem;
           > img {
             width: calc(100% / 3 - 2rem);
           }

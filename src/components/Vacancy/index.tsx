@@ -145,7 +145,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
                 `/api/v1/pessoa_projeto/${response.data.id}`,
                 {
                   areas: formData.areas.map(area => {
-                    return { destricao: area }
+                    return { descricao: area }
                   }),
                   habilidades: formData.habilidades.map(habilidade => {
                     return { nome: habilidade }
