@@ -11,6 +11,7 @@ import { AxiosError } from 'axios'
 import trash from '../../assets/icon/lixeira.svg'
 import api from '../../services/api'
 import { useField } from '@unform/core'
+import { IconTrash } from '../../assets/icon'
 interface SelectToolProps {
   name: string
   defaultValue?: string[]
@@ -129,7 +130,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
               <li key={nome}>
                 <legend>{nome}</legend>
                 <label htmlFor={nome}>
-                  <img src={trash} alt="apagar experiencia" />
+                  <IconTrash />
                 </label>
               </li>
             ))}

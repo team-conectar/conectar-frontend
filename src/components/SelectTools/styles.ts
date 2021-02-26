@@ -9,7 +9,7 @@ export const BodySelectTool = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font: 400 1rem Raleway;
+    font: 400 0.8rem Raleway;
   }
   > div {
     margin-top: 0.2rem;
@@ -135,11 +135,8 @@ export const BodySelectTool = styled.div`
             font-size: 1.3rem;
           }
           > label {
-            > img {
-              cursor: pointer;
-              height: 1.4rem;
-              cursor: pointer;
-            }
+            display: flex;
+            align-items: center;
           }
 
           > legend {

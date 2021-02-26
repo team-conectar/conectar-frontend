@@ -13,7 +13,7 @@ export const BodySelectArea = styled.div<Props>`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font: 400 1rem Raleway;
+    font: 400 0.8rem Raleway;
   }
   > div {
     margin-top: 0.2rem;
@@ -82,8 +82,8 @@ export const BodySelectArea = styled.div<Props>`
             position: absolute;
             left: 1rem;
             border: 1px solid var(--textGreen);
-            border-radius: 0.2rem;
-            padding: 0.2rem;
+            border-radius: 8rem;
+            padding: 0.2rem 0.6rem;
             background: none;
           }
         }
@@ -160,11 +160,8 @@ export const BodySelectArea = styled.div<Props>`
             font-size: 1.3rem;
           }
           > label {
-            > img {
-              cursor: pointer;
-              height: 1.4rem;
-              cursor: pointer;
-            }
+            display: flex;
+            align-items: center;
           }
         }
         > legend {

@@ -12,6 +12,7 @@ import { AxiosError } from 'axios'
 import api from '../../services/api'
 import trash from '../../assets/icon/lixeira.svg'
 import { useField } from '@unform/core'
+import { IconTrash } from '../../assets/icon'
 /**
  *descricao: string;
  *id: number;
@@ -121,7 +122,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({
               <li key={descricao}>
                 <legend>{descricao}</legend>
                 <label htmlFor={descricao}>
-                  <img src={trash} alt="apagar experiencia" />
+                  <IconTrash />
                 </label>
               </li>
             ))}
