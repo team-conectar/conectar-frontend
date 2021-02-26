@@ -29,11 +29,11 @@ const showMessage = keyframes`
 export const BodyField = styled.label<{ isEmpty: boolean }>`
   --fieldHeight: 2.4rem;
   --marginTop: 1.6rem;
-  --fontSize: 0.8rem;
+  --fontSize: 0.9rem;
   --iconSize: 1.2rem;
   width: max(100%, 10rem);
   min-height: var(--fieldHeight);
-  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--boxShadow);
   border-radius: 0.2rem;
   margin-top: var(--marginTop) !important;
   padding: 0 0.4rem 0 0.8rem;
@@ -45,9 +45,7 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
   font: 400 0.8rem Raleway;
   ${Error} {
     align-self: flex-start;
-    margin-top: calc(
-      (var(--fieldHeight) + var(--iconSize) / 2) / 2 - var(--marginTop)
-    );
+    margin-top: calc((var(--fieldHeight) - var(--iconSize)) / 2);
     svg {
       font-size: var(--iconSize);
     }
@@ -55,18 +53,20 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
   a {
     text-decoration: none;
     position: absolute;
-    top: calc(var(--marginTop) * -1);
+    top: -1.2rem;
     right: 0.2rem;
     color: var(--gray);
-    font-size: 0.7rem;
+    font-size: 0.8rem;
   }
 
   label {
+    height: var(--fontSize);
+    font-size: var(--fontSize);
     display: flex;
     justify-content: space-between;
     align-items: center;
     position: absolute;
-    top: calc((var(--fieldHeight) - var(--marginTop) + var(--fontSize)) / 2);
+    top: calc((var(--fieldHeight) - var(--fontSize)) / 2);
     color: gray;
     left: 0.8rem;
     transition: 0.5s;
@@ -75,7 +75,7 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
 
   :focus-within {
     label {
-      top: -1rem;
+      top: -1.2rem;
       left: 0.2rem;
       color: var(--textGreen);
     }
@@ -93,8 +93,9 @@ export const BodyField = styled.label<{ isEmpty: boolean }>`
     !props.isEmpty &&
     css`
       label {
-        top: -1rem;
+        top: -1.2rem;
         left: 0.2rem;
+        color: var(--textGreen);
       }
     `}
 

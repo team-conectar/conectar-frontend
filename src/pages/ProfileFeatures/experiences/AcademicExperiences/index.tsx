@@ -16,12 +16,12 @@ import { finalYearOptions, yearOptions } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../../../services/api'
 import edit from '../../../../assets/icon/editar.svg'
-import trash from '../../../../assets/icon/lixeira.svg'
 import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
+import { IconEdit, IconTrash } from '../../../../assets/icon'
 /**
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
@@ -185,7 +185,7 @@ const AcademicExperiences: React.FC = () => {
 
       // Do something
     },
-    [isIncomplete, editStored],
+    [editStored.id, initialAcademicData],
   )
   function handleEditExperience(experience: AcademicType) {
     const {
@@ -231,22 +231,26 @@ const AcademicExperiences: React.FC = () => {
           </Button>
         </footer>
       </Modal>
-      <h2>Educação</h2>
+      <h2>
+        Educação
+        {!showRegister && (
+          <button onClick={() => setShowRegister(true)}>
+            <span>+ </span>
+            Adicionar
+          </button>
+        )}
+      </h2>
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: AcademicType) => (
             <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
-                <img
-                  src={edit}
-                  alt="editar experiencia"
+                <IconEdit
                   onClick={() => {
                     handleEditExperience(experience)
                   }}
                 />
-                <img
-                  src={trash}
-                  alt="apagar experiencia"
+                <IconTrash
                   onClick={() => {
                     setOpenModal(true)
                     setExperienceExcluded({
@@ -263,10 +267,6 @@ const AcademicExperiences: React.FC = () => {
                 <p>
                   {experience.instituicao} <br />
                   {experience.situacao} <br />
-                  {/* 
-                      Get only the year from data by spliting the date and getting the first
-                      index of the array.
-                  */}
                   {`${experience?.data_inicio?.split('-')[0]} até ${
                     experience?.data_fim?.split('-')[0]
                   }`}
@@ -274,11 +274,6 @@ const AcademicExperiences: React.FC = () => {
               </fieldset>
             </div>
           ))}
-
-          <button onClick={() => setShowRegister(true)}>
-            <span>+ </span>
-            Adicionar
-          </button>
         </div>
       ) : (
         <Form
@@ -376,11 +371,7 @@ const AcademicExperiences: React.FC = () => {
               />
             </section>
             <section className="area-botoes">
-              <Button
-                type="submit"
-                theme="primary"
-                // disabled={academicFormData === {} as AcademicType? false:true}
-              >
+              <Button type="submit" theme="primary">
                 Salvar
               </Button>
               <Button

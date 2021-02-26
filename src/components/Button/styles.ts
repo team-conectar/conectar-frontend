@@ -18,6 +18,7 @@ export const BodyButton = styled.button<PropsBodyButton>`
   outline: 0;
   gap: 0.4rem;
   width: 12rem;
+  height: 2.2rem;
   > img {
     height: 1rem;
   }

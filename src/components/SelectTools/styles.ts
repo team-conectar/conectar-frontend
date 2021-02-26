@@ -9,7 +9,7 @@ export const BodySelectTool = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font: 400 0.8rem Raleway;
+    font: 400 0.9rem Raleway;
   }
   > div {
     margin-top: 0.2rem;
@@ -34,8 +34,7 @@ export const BodySelectTool = styled.div`
         align-items: center;
         height: 50px;
         width: 100%;
-
-        font: 500 1.2rem Raleway;
+        font: 600 1.2rem Raleway;
         border-bottom: 2px solid var(--borderDivision);
       }
       > ul {
@@ -48,6 +47,7 @@ export const BodySelectTool = styled.div`
           input {
             display: none;
           }
+
           > label {
             position: relative;
             display: flex;
@@ -72,6 +72,7 @@ export const BodySelectTool = styled.div`
               justify-content: center;
               margin-left: 0.4rem;
               width: 100%;
+              font-size: 1rem;
             }
           }
         }
@@ -145,6 +146,7 @@ export const BodySelectTool = styled.div`
             justify-content: flex-start;
             margin-left: 0.4rem;
             width: 100%;
+            font-size: 1rem;
           }
         }
       }

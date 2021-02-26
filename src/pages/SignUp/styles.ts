@@ -5,33 +5,29 @@ export const BodySignUp = styled.div`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 100vw;
-  background: var(--textGreen);
+  width: 100%;
 
   form.area-central {
     background: var(--backgroudElevation);
     padding: 2.4rem;
     border-radius: 0.8rem;
-    border: 2px solid var(--green);
+    box-shadow: var(--boxShadow);
     img {
       width: 40%;
     }
     h1 {
-      margin: 1.4rem 0;
-      
+      margin-top: 1.4rem;
     }
     .primeira-etapa {
       display: grid;
-      .area-img {
-        grid-area: img;
-        display: flex;
-        img {
-          width: 100%;
-        }
+
+      > img {
+        grid-column: 2;
+        width: calc(100% - 1.8rem);
       }
-      grid-template-rows: 500px;
-      grid-template-columns: 60% 40%;
-      grid-template-areas: 'form img';
+
+      grid-template-columns: 0.6fr 0.4fr;
+      align-items: center;
       grid-gap: 1.8rem;
       section {
         display: flex;
@@ -42,7 +38,12 @@ export const BodySignUp = styled.div`
         }
       }
       .area-form {
-        grid-area: form;
+        grid-column: 1;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.6rem;
         .google-button,
         .facebook-button {
           display: flex;
@@ -50,69 +51,82 @@ export const BodySignUp = styled.div`
           position: relative;
           cursor: pointer;
           font: 400 0.9rem Raleway;
-          height: 2.8rem;
+          height: 2.2rem;
           width: 15rem;
-          border-radius: 0.4rem;
+          border-radius: 8rem;
           padding: 0.4rem;
+
           > svg {
             color: #3b5998;
             padding: 0 0.4rem;
-            border-right: 1px solid var(--green);
+            border-right: 1px solid var(--textGreen);
             width: 2rem;
             height: 1.2rem;
             margin-right: 0.4rem;
           }
         }
         .google-button {
-          border: 1px solid var(--green);
+          border: 1px solid var(--textGreen);
           background-color: var(--backgroudElevation);
           margin: 0.5rem 0 0.5rem 0.2rem;
         }
         .facebook-button {
-          border: 1px solid var(--green);
+          border: 1px solid var(--textGreen);
           background-color: var(--blue);
           margin: 0.5rem 0.2rem 0.5rem 0;
         }
-        a {
-          font: 400 1.2rem Raleway;
-          text-decoration: none;
-          color: var(--yellow);
+        section {
+          display: flex;
+          align-items: center;
+          > a {
+            font: 400 1.2rem Raleway;
+            text-decoration: none;
+            color: var(--yellow);
+          }
+          & + section {
+            margin-top: 0.6rem;
+          }
         }
         p {
           margin: 1rem 0;
           font: 400 1rem Raleway;
-          a {
-            text-decoration: none;
-            color: var(--green);
+          > a {
+            text-decoration: underline;
           }
         }
       }
     }
     .segunda-etapa {
       display: flex;
-
+      gap: 2rem;
       flex-direction: column;
+      justify-content: space-between;
       > section {
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
-        margin: 0.6rem 0;
         > div + div {
           margin-left: 0.8rem;
           width: auto;
-        }
-        > legend {
-          font: 400 1rem Raleway;
-          color: var(--orange);
-        }
-        > span {
-          font: 400 0.8rem Raleway;
-          color: var(--gray);
         }
       }
       .tipo-perfil {
         justify-content: space-around;
         flex-wrap: wrap;
+        > section {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          > legend {
+            font: 400 0.9rem Raleway;
+            height: 0.9rem;
+            color: var(--orange);
+          }
+          > span {
+            font: 400 0.8rem Raleway;
+            color: var(--gray);
+          }
+        }
         > fieldset {
           margin-top: 0.4rem;
           width: max(30%, 150px);
@@ -132,7 +146,7 @@ export const BodySignUp = styled.div`
             justify-content: space-around;
             align-items: center;
             height: 200px;
-            border: 2px solid var(--yellow);
+            box-shadow: var(--boxShadow);
             border-top: 0;
             padding-bottom: 0.8rem;
             p {

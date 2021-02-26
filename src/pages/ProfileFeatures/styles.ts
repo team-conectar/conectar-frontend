@@ -1,16 +1,15 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 
 export const BodyProfileFeatures = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  width: 100vw;
-  background: var(--textGreen);
+  width: 100%;
   h1 {
     margin: 1.4rem 0;
     font: 700 3rem Raleway;
-    color: white;
+    color: var(--textGreen);
   }
 
   .area-central {

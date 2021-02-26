@@ -66,7 +66,7 @@ const MasteryTools: React.FC = () => {
       </div>
       <footer>
         <Button
-          theme="primary"
+          theme="secondary"
           onClick={() => {
             history.push('/experiencias-do-usuario')
           }}

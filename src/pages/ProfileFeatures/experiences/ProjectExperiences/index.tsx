@@ -28,6 +28,7 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
+import { IconEdit, IconTrash } from '../../../../assets/icon'
 export interface IExperienceProject {
   id: number
   nome: string
@@ -201,7 +202,7 @@ const ProjectExperiences: React.FC = () => {
 
       // Do something
     },
-    [currentilyProject, editStored],
+    [editStored.id, initialProjectData],
   )
   function handleEditExperience(experience: IExperienceProject) {
     const {
@@ -250,21 +251,23 @@ const ProjectExperiences: React.FC = () => {
           </Button>
         </footer>
       </Modal>
-      <h2>Projetos</h2>
+      <h2>
+        Projetos
+        {!showRegister && (
+          <button onClick={() => setShowRegister(true)}>
+            <span>+ </span>
+            Adicionar
+          </button>
+        )}
+      </h2>
 
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: IExperienceProject) => (
             <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
-                <img
-                  src={edit}
-                  alt="editar experiencia"
-                  onClick={() => handleEditExperience(experience)}
-                />
-                <img
-                  src={trash}
-                  alt="apagar experiencia"
+                <IconEdit onClick={() => handleEditExperience(experience)} />
+                <IconTrash
                   onClick={() => {
                     setOpenModal(true)
                     setExperienceExcluded(experience)
@@ -295,10 +298,6 @@ const ProjectExperiences: React.FC = () => {
               </fieldset>
             </div>
           ))}
-          <button onClick={() => setShowRegister(true)}>
-            <span>+ </span>
-            Adicionar
-          </button>
         </div>
       ) : (
         <Form

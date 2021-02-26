@@ -5,7 +5,7 @@ interface NavBarProps {
 }
 
 export const BodyNavBar = styled.header<NavBarProps>`
-  width: 100vw;
+  width: 100%;
   padding: 0 1.8rem;
   margin: 0;
   background: #f1f1f1ff;

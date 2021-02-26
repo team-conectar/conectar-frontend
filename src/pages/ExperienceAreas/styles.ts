@@ -7,11 +7,9 @@ export const BodyExperienceAreas = styled(Form)`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  width: 100vw;
-  background: var(--textGreen);
+  width: 100%;
   h1 {
     margin: 1.4rem 0;
-    
   }
 
   .area-central {

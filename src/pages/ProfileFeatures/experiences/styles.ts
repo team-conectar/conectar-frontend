@@ -4,23 +4,38 @@ export const BodyExperiences = styled.section`
   .form--experiencia {
     width: 100%;
   }
-  textarea {
-    resize: none;
+  > h2 {
+    margin: 1.4rem 0;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    > button {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 0;
+      background: none;
+      font: 500 1.2rem Raleway;
+      color: var(--green);
+      span {
+        font: 500 2rem Raleway;
+      }
+    }
   }
   background: white;
-  padding: 0.8rem;
+  padding: 2rem 4rem;
   margin: 0.8rem 0;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
   border-radius: 0.4rem;
-  border: 2px solid var(--green);
+  box-shadow: var(--boxShadow);
   .experiencias {
     width: 100%;
     .experiencia-cadastrada {
       border-radius: 0.4rem;
-      border: 2px solid var(--green);
+      box-shadow: var(--boxShadow);
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -32,7 +47,7 @@ export const BodyExperiences = styled.section`
           font: 500 1.4rem Raleway;
         }
         font: 400 1.2rem Raleway;
-        
+
         .textos {
           display: flex;
           align-items: flex-start;
@@ -46,34 +61,18 @@ export const BodyExperiences = styled.section`
         }
       }
       .icones {
-        border-right: 2px solid var(--green);
+        border-right: 2px solid var(--borderDivision);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
-        padding: 0.6rem;
+        padding: 0.4rem;
 
-        img {
-          width: 1.4rem;
-          cursor: pointer;
-          margin: 0.4rem 0;
-        }
-      }
-    }
-    > button {
-      border: 0;
-      background: none;
-      font: 500 1rem Raleway;
-      color: var(--yellow);
-      span {
-        font: 500 1.2rem Raleway;
+        gap: 0.6rem;
       }
     }
   }
-  > h2 {
-    margin: 1.4rem 0;
-    
-  }
+
   .area-registro {
     display: grid;
     width: 100%;

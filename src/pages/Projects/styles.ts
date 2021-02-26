@@ -10,7 +10,6 @@ export const DivTags = styled.div`
   padding: 0.6rem;
   legend {
     font: 600 1.2rem Raleway;
-    
     margin: 0.4rem 0;
     padding-left: 0.4rem;
     img {
@@ -99,7 +98,7 @@ export const DivSobre = styled.div`
 export const DivVagas = styled.div`
   width: 100%;
   display: flex;
-  
+
   > section {
     width: 100%;
     > legend {
@@ -207,7 +206,7 @@ export const BodyProjects = styled.div`
   }
   > header {
     background: white;
-    width: 100vw;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -236,7 +235,7 @@ export const BodyProjects = styled.div`
       gap: 1rem;
       h1 {
         font-size: 2rem;
-        
+
         display: flex;
         align-items: center;
         justify-content: space-between;

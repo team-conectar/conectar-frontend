@@ -26,7 +26,7 @@ function ProfileFeatures() {
         <ProfessionalExperiences />
         <ProjectExperiences />
         <footer>
-          <Button theme="primary" onClick={() => setShowModal(true)}>
+          <Button theme="secondary" onClick={() => setShowModal(true)}>
             Pular
           </Button>{' '}
           <Button onClick={() => history.push('/')} theme="primary">

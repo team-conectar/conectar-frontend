@@ -40,7 +40,7 @@ interface renderFacebook {
   disabled?: boolean
 }
 interface routeParms {
-  step: string
+  parte: string
 }
 interface PessoaType {
   email: string
@@ -57,9 +57,12 @@ interface PessoaType {
 }
 function SignUp() {
   const history = useHistory()
+  const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
 
-  const [showNextStep, setShowNextStep] = useState<boolean>(false)
+  const [showNextStep, setShowNextStep] = useState<boolean>(
+    params.parte === '2',
+  )
 
   const handleSubmit = useCallback(async (formData: PessoaType) => {
     try {
@@ -206,9 +209,7 @@ function SignUp() {
             <img src={logo} alt="logo" />
           </Link>
           <div className="primeira-etapa">
-            <div className="area-img">
-              <img src={cadastro_banner} alt="cadastro" />
-            </div>
+            <img src={cadastro_banner} alt="cadastro" />
 
             <div className="area-form">
               <h1>Criar sua conta</h1>
@@ -280,24 +281,30 @@ function SignUp() {
                 mask="(99) 99999-9999 "
               />
               <Select
-                label="Data de Nascimento"
+                label="Ano de Nascimento"
                 name="year"
                 defaultOption="Ano"
                 options={yearOptions}
               />
-              <Select name="month" defaultOption="Mês" options={monthOptions} />
+              <Select
+                label="Mês de Nascimento"
+                name="month"
+                defaultOption="Mês"
+                options={monthOptions}
+              />
 
               <Select
+                label="Dia de Nascimento"
                 name="day"
                 defaultOption="Dia"
                 options={daysOptions(4, 2000)}
               />
             </section>
-            <section>
-              <legend>Tipo de Perfil</legend>
-              <span>Selecione um ou mais tipos</span>
-            </section>
             <section className="tipo-perfil">
+              <section>
+                <legend>Tipo de Perfil</legend>
+                <span>Selecione um ou mais tipos</span>
+              </section>
               <fieldset>
                 <legend>Idealizador</legend>
                 <aside>
@@ -330,14 +337,14 @@ function SignUp() {
               </fieldset>
             </section>
             <section>
-              <button
-                className="voltar"
-                type="button"
+              <Button
+                theme="secondary"
+                type="submit"
                 onClick={() => setShowNextStep(false)}
               >
-                Voltar
-              </button>
-              <Button theme="primary" type="submit" disabled={false}>
+                Continuar
+              </Button>
+              <Button theme="primary" type="submit">
                 Continuar
               </Button>
             </section>

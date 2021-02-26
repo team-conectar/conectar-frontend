@@ -27,6 +27,7 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
+import { IconEdit, IconTrash } from '../../../../assets/icon'
 export interface ProfessionalType {
   id: number
   organizacao: string
@@ -214,7 +215,7 @@ const ProfessionalExperiences: React.FC = () => {
 
       // Do something
     },
-    [currentilyWork, editStored],
+    [currentilyWork, editStored.id, initialProfessionalData],
   )
   // Edit
   function handleEditExperience(experience: ProfessionalType) {
@@ -266,20 +267,22 @@ const ProfessionalExperiences: React.FC = () => {
           </Button>
         </footer>
       </Modal>
-      <h2>Atuação Profissional</h2>
+      <h2>
+        Atuação Profissional
+        {!showRegister && (
+          <button onClick={() => setShowRegister(true)}>
+            <span>+ </span>
+            Adicionar
+          </button>
+        )}
+      </h2>
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: ProfessionalType) => (
             <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
-                <img
-                  src={edit}
-                  alt="editar experiencia"
-                  onClick={() => handleEditExperience(experience)}
-                />
-                <img
-                  src={trash}
-                  alt="apagar experiencia"
+                <IconEdit onClick={() => handleEditExperience(experience)} />
+                <IconTrash
                   onClick={() => {
                     setOpenModal(true)
                     setExperienceExcluded({
@@ -312,10 +315,6 @@ const ProfessionalExperiences: React.FC = () => {
               </fieldset>
             </div>
           ))}
-          <button onClick={() => setShowRegister(true)}>
-            <span>+ </span>
-            Adicionar
-          </button>
         </div>
       ) : (
         <Form

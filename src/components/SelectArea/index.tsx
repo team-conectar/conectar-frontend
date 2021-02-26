@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { BodySelectArea } from './styles'
 import { GoCheck, GoPlus } from 'react-icons/go'
+import { IoMdArrowBack } from 'react-icons/io'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
 import trash from '../../assets/icon/lixeira.svg'
@@ -161,9 +162,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({
           </ul>
           <aside>
             <header>
-              <button type="button" onClick={() => setListedArea(nullArea)}>
-                Voltar
-              </button>
+              <IoMdArrowBack onClick={() => setListedArea(nullArea)} />
               <legend>{listedArea?.area?.descricao}</legend>
             </header>
             <ul>

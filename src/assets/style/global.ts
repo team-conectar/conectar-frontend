@@ -36,6 +36,7 @@ export const GlobalStyle = createGlobalStyle`
     justify-content: center;
     background: var(--background);
     color: var(--textGreen);
+    
 }
 
 @media (min-width: 700px) {

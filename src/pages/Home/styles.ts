@@ -73,7 +73,7 @@ export const BodyHome = styled.div`
         }
         .hero {
           > img {
-            width: 50%;
+            width: 100%;
             margin: 1rem 0;
           }
         }

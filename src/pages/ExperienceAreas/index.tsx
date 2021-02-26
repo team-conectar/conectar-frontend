@@ -71,7 +71,7 @@ const ExperienceAreas: React.FC = () => {
       </div>
       <footer>
         <Button
-          theme="primary"
+          theme="secondary"
           onClick={() => {
             history.push('/habilidades-e-ferramentas')
           }}
