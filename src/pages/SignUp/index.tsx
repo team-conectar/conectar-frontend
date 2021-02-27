@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import { BodySignUp } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
 import cadastro_banner from '../../assets/image/cadastro_banner.svg'
@@ -14,31 +7,21 @@ import Select from '../../components/Select'
 import { Link } from 'react-router-dom'
 import Button from '../../components/Button'
 import ToggleSwitch from '../../components/ToggleSwitch'
-import {
-  ReactFacebookLoginInfo,
-  ReactFacebookFailureResponse,
-} from 'react-facebook-login'
+import { ReactFacebookLoginInfo } from 'react-facebook-login'
 import FacebookLogin from 'react-facebook-login'
-import GoogleLogin, {
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login'
+import GoogleLogin, { GoogleLoginResponse } from 'react-google-login'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebookF } from 'react-icons/fa'
 import { useHistory, useParams } from 'react-router'
 import { daysOptions, monthOptions, yearOptions } from '../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import { createTrue } from 'typescript'
 import InputMask from '../../components/InputMask'
 import * as Yup from 'yup'
-import { FormHandles, UnformErrors } from '@unform/core'
+import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
-interface renderFacebook {
-  onClick: () => void
-  disabled?: boolean
-}
+
 interface routeParms {
   parte: string
 }
@@ -55,7 +38,7 @@ interface PessoaType {
   colaborador: string
   aliado: string
 }
-function SignUp() {
+const SignUp: React.FC = () => {
   const history = useHistory()
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
@@ -110,57 +93,60 @@ function SignUp() {
       }
     }
   }, [])
-  const handleSecondSubmit = useCallback(async (formData: PessoaType) => {
-    console.log(formData)
+  const handleSecondSubmit = useCallback(
+    async (formData: PessoaType) => {
+      console.log(formData)
 
-    try {
-      // Remove all previogeus errors
-      formRef.current?.setErrors({})
-      const schema = Yup.object().shape({
-        telefone: Yup.string().required('Telefone é obrigatório'),
-        year: Yup.string().required('Ano é obrigatório'),
-        month: Yup.string().required('Mês é obrigatório'),
-        day: Yup.string().required('Dia é obrigatório'),
-      })
-      await schema.validate(formData, {
-        abortEarly: false,
-      })
-      // Validation passed
-      const { year, month, day, telefone } = formData
+      try {
+        // Remove all previogeus errors
+        formRef.current?.setErrors({})
+        const schema = Yup.object().shape({
+          telefone: Yup.string().required('Telefone é obrigatório'),
+          year: Yup.string().required('Ano é obrigatório'),
+          month: Yup.string().required('Mês é obrigatório'),
+          day: Yup.string().required('Dia é obrigatório'),
+        })
+        await schema.validate(formData, {
+          abortEarly: false,
+        })
+        // Validation passed
+        const { year, month, day, telefone } = formData
 
-      const data_nascimento = `${year}-${month}-${day}`
+        const data_nascimento = `${year}-${month}-${day}`
 
-      const aliado = !!(formData.aliado[0] === 'aliado')
-      const colaborador = !!(formData.colaborador[0] === 'colaborador')
-      const idealizador = !!(formData.idealizador[0] === 'idealizador')
+        const aliado = !!(formData.aliado[0] === 'aliado')
+        const colaborador = !!(formData.colaborador[0] === 'colaborador')
+        const idealizador = !!(formData.idealizador[0] === 'idealizador')
 
-      const data = {
-        data_nascimento,
-        aliado,
-        colaborador,
-        idealizador,
-        telefone,
+        const data = {
+          data_nascimento,
+          aliado,
+          colaborador,
+          idealizador,
+          telefone,
+        }
+        console.log(data)
+
+        await api.put('/api/v1/pessoas', data, {
+          withCredentials: true,
+        })
+        history.push('/experiencias-do-usuario')
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          // Validation failed
+          console.log(err)
+
+          const errors = getValidationErrors(err)
+          formRef.current?.setErrors(errors)
+        }
       }
-      console.log(data)
-
-      await api.put('/api/v1/pessoas', data, {
-        withCredentials: true,
-      })
-      history.push('/experiencias-do-usuario')
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        // Validation failed
-        console.log(err)
-
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-      }
-    }
-  }, [])
+    },
+    [history],
+  )
 
   /** This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {
-    const { aliado, colaborador, idealizador, nome, email } = (
+    const { aliado, colaborador, idealizador } = (
       await api.get('/api/v1/pessoas/me')
     ).data
     if (!aliado || !colaborador || !idealizador) {

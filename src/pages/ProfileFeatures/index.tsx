@@ -5,15 +5,10 @@ import { useHistory } from 'react-router-dom'
 import AcademicExperiences from './experiences/AcademicExperiences'
 import ProfessionalExperiences from './experiences/ProfessionalExperiences'
 import ProjectExperiences from './experiences/ProjectExperiences'
-import Modal from '../../components/Modal'
-import Login from '../../components/Login'
 
 import Logged from '../../components/Logged'
 
-function ProfileFeatures() {
-  function sla() {
-    console.log('ḧello world')
-  }
+const ProfileFeatures: React.FC = () => {
   const history = useHistory()
   const [showModal, setShowModal] = useState<boolean>(false)
 

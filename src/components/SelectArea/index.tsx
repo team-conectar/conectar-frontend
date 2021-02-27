@@ -11,7 +11,6 @@ import { GoCheck, GoPlus } from 'react-icons/go'
 import { IoMdArrowBack } from 'react-icons/io'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import trash from '../../assets/icon/lixeira.svg'
 import { useField } from '@unform/core'
 import { IconTrash } from '../../assets/icon'
 /**

@@ -8,7 +8,6 @@ import React, {
 import { BodySelectTool } from './styles'
 import { GoCheck, GoPlus } from 'react-icons/go'
 import { AxiosError } from 'axios'
-import trash from '../../assets/icon/lixeira.svg'
 import api from '../../services/api'
 import { useField } from '@unform/core'
 import { IconTrash } from '../../assets/icon'
@@ -95,7 +94,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
         console.log(res)
       }
     },
-    [newTool],
+    [newTool, tools],
   )
   useEffect(() => {
     api

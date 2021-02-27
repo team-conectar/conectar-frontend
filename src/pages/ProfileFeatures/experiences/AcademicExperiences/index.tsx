@@ -1,6 +1,5 @@
 import React, {
   useRef,
-  FormEvent,
   useState,
   useCallback,
   useEffect,
@@ -15,7 +14,6 @@ import { BodyExperiences } from '../styles'
 import { finalYearOptions, yearOptions } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../../../services/api'
-import edit from '../../../../assets/icon/editar.svg'
 import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
@@ -44,6 +42,7 @@ const AcademicExperiences: React.FC = () => {
   const [isIncomplete, setIsIncomplete] = useState<boolean>(false)
   const [initialYear, setInitialYear] = useState<number>(1970)
   const [stored, setStored] = useState<AcademicType[]>([])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialAcademicData = {
     id: 0,
   } as AcademicType

@@ -1,6 +1,5 @@
 import React, {
   ChangeEvent,
-  FormEvent,
   useState,
   useCallback,
   useEffect,
@@ -21,8 +20,6 @@ import {
 } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../../../services/api'
-import edit from '../../../../assets/icon/editar.svg'
-import trash from '../../../../assets/icon/lixeira.svg'
 import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
@@ -48,8 +45,8 @@ interface ProjectDataType {
   initialYear: string
   initialMonth: string
   // Supressing "The operand of a 'delete' operator must be optional" warning
-  finalYear: any
-  finalMonth: any
+  finalYear?: string
+  finalMonth?: string
 }
 const ProjectExperiences: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
@@ -57,6 +54,7 @@ const ProjectExperiences: React.FC = () => {
   const [initialYear, setInitialYear] = useState<number>(1970)
   const [currentilyProject, setCurrentilyProject] = useState<boolean>(false)
   const [stored, setStored] = useState<IExperienceProject[]>([])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialProjectData = {
     id: 0,
     currentProject: false,

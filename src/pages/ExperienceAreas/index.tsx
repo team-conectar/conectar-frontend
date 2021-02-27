@@ -1,17 +1,11 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  FormEvent,
-  useCallback,
-} from 'react'
+import React, { useRef, useCallback } from 'react'
 import { BodyExperienceAreas } from './styles'
 import Button from '../../components/Button'
 import { useHistory } from 'react-router-dom'
-import SelectArea, { AreaType } from '../../components/SelectArea'
+import SelectArea from '../../components/SelectArea'
 import Logged from '../../components/Logged'
 
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import api from '../../services/api'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
