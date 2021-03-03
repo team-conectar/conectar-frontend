@@ -1,5 +1,15 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+const moveDownUp = keyframes`
+  
+  90%{
+    bottom:20px;
+  }
+  100%{
+    bottom:15px;
+  }
+  
 
+`
 export const BodyHome = styled.div`
   background: var(--background);
   area {
@@ -20,23 +30,22 @@ export const BodyHome = styled.div`
       align-items: center;
     }
     .arrow-bottom {
-      width: 100%;
       position: absolute;
-      bottom: 18px;
-      right: 0;
+      bottom: 20px;
+      right: 50%;
       transition: 0.5s;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      a {
-        cursor: pointer;
-        font-size: 2rem;
 
-        outline: none;
-      }
-      :hover {
-        bottom: 15px;
-      }
+      cursor: pointer;
+      font-size: 2rem;
+
+      outline: none;
+      transition: 0.4s;
+      animation: 3s ${moveDownUp} infinite alternate ease-in-out;
+      animation-play-state: running;
+
       @media (min-width: 768px) {
         height: 140px;
       }

@@ -57,11 +57,10 @@ function Home() {
                 }}
               />
             </section>
-            <label className="arrow-bottom">
-              <a href="#introducao">
-                <IoIosArrowDown />
-              </a>
-            </label>
+
+            <a className="arrow-bottom" href="#introducao">
+              <IoIosArrowDown />
+            </a>
           </div>
         </div>
         <div id="introducao">
@@ -95,11 +94,10 @@ function Home() {
               </p>
             </section>
           </main>
-          <label className="arrow-bottom">
-            <a href="#perfis">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#perfis">
+            <IoIosArrowDown />
+          </a>
         </div>
         <div id="perfis">
           <legend>
@@ -179,11 +177,10 @@ function Home() {
               </aside>
             </section>
           </main>
-          <label className="arrow-bottom">
-            <a href="#idealizador">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#idealizador">
+            <IoIosArrowDown />
+          </a>
         </div>
         <div id="idealizador">
           <h3>Idealizador</h3>
@@ -224,11 +221,10 @@ function Home() {
             </div>
             <Button theme="primary">Criar sua conta</Button>
           </section>
-          <label className="arrow-bottom">
-            <a href="#colaborador">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#colaborador">
+            <IoIosArrowDown />
+          </a>
         </div>
 
         <div id="colaborador">
@@ -271,11 +267,10 @@ function Home() {
             <Button theme="primary">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
-          <label className="arrow-bottom">
-            <a href="#aliado">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#aliado">
+            <IoIosArrowDown />
+          </a>
         </div>
         <div id="aliado">
           <h3>Aliado</h3>
@@ -315,11 +310,10 @@ function Home() {
             </div>
             <Button theme="primary">Criar sua conta</Button>
           </section>
-          <label className="arrow-bottom">
-            <a href="#rodape">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#rodape">
+            <IoIosArrowDown />
+          </a>
         </div>
 
         <div id="rodape">
