@@ -10,9 +10,9 @@ export const BodyNavBar = styled.nav`
   justify-content: space-between;
   align-items: center;
   height: 45px;
-  /* position: absolute;
+  position: sticky;
   top: 0;
-  z-index: 2; */
+  z-index: 2;
   img {
     width: 12rem;
   }
