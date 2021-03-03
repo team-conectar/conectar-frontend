@@ -57,7 +57,7 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
         <span>2 vagas</span>
       </p>
 
-      <DropdownList DropButton={<GiHamburgerMenu />}>
+      <DropdownList IconButton={<GiHamburgerMenu />}>
         <li>Clonar vaga</li>
         <li>Exluir vaga</li>
       </DropdownList>

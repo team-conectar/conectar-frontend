@@ -34,7 +34,7 @@ const Explorer: React.FC = () => {
   }, [])
   return (
     <Fragment>
-      <NavBar pageIsExplorar />
+      <NavBar />
       <Page>
         <ProfileCard />
 

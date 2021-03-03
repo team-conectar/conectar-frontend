@@ -20,8 +20,6 @@ import {
 } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../../../services/api'
-import edit from '../../../../assets/icon/editar.svg'
-import trash from '../../../../assets/icon/lixeira.svg'
 import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'

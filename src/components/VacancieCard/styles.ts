@@ -64,7 +64,7 @@ export const BodyCard = styled.li<CardProps>`
   h4 {
     font-size: 1rem;
   }
-  aside {
+  > aside {
     > span {
       opacity: 0;
       font: 600 0.8rem Raleway;

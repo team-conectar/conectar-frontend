@@ -88,7 +88,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   return (
     <BodyCard isAvailable status="refused" {...rest}>
       <label>
-        <DropdownList DropButton={<GiHamburgerMenu />}>
+        <DropdownList IconButton={<GiHamburgerMenu />}>
           <li>Clonar vaga</li>
           <li>Exluir vaga</li>
         </DropdownList>
@@ -105,8 +105,10 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       </h3>
 
       <Button theme="primary">Ver currículo</Button>
-      <DropdownList DropButton={<Button theme="secondary">Nova busca</Button>}>
+      <DropdownList IconButton={<Button theme="secondary">Nova busca</Button>}>
         <li>Perfis similares</li>
+        <li>Perfis interessados</li>
+        <li>Perfis interessados</li>
         <li>Perfis interessados</li>
       </DropdownList>
       <aside>

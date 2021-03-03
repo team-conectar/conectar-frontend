@@ -3,14 +3,14 @@ import styled from 'styled-components'
 export const Icon = styled.span`
   margin: 0.2rem;
   position: relative;
-  width: 1.6rem;
-  height: 1.6rem;
-
+  width: 2.2rem;
+  height: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   svg {
     position: absolute;
-    right: 0;
-    top: 0;
     width: 1.6rem;
     height: 1.6rem;
     transition: 0.2s;
