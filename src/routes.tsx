@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, BrowserRouter } from 'react-router-dom'
+import { Route, BrowserRouter, useLocation, Switch } from 'react-router-dom'
 import Home from './pages/Home'
 import SignUp from './pages/SignUp'
 import ProfileFeatures from './pages/ProfileFeatures'
@@ -14,30 +14,24 @@ import { AuthProvider } from './context/AuthContext'
 import Explorer from './pages/Explorer'
 import { LoggedUserProvider } from './context/LoggedUserContext'
 import NavBar from './components/NavBar'
-import { SkeletonTheme } from 'react-loading-skeleton'
 const Routes: React.FC = () => {
   return (
     <AuthProvider>
       <LoggedUserProvider>
-        <SkeletonTheme color="#e9e8e8" highlightColor="#f0eeee">
-          <BrowserRouter>
-            {/* <NavBar /> */}
-            <Route exact path="/" component={Home} />
-            <Route path="/cadastrar/:parte" component={SignUp} />
-            <Route
-              path="/experiencias-do-usuario"
-              component={ProfileFeatures}
-            />
-            <Route path="/areas-de-atuacao" component={ExperienceAreas} />
-            <Route path="/habilidades-e-ferramentas" component={MasteryTools} />
-            <Route path="/criar-um-projeto" component={CreateProject} />
-            <Route path="/projeto-conectado/:id" component={ApproveProject} />
-            <Route path="/projeto/:id" component={Projects} />
-            <Route path="/perfil/:id" component={Profiles} />
-            <Route path="/explorar" component={Explorer} />
-            <GlobalStyle />
-          </BrowserRouter>
-        </SkeletonTheme>
+        <BrowserRouter>
+          <Route exact path="/" component={Home} />
+          <Route path="/cadastrar/:parte" component={SignUp} />
+          <Route path="/experiencias-do-usuario" component={ProfileFeatures} />
+          <Route path="/areas-de-atuacao" component={ExperienceAreas} />
+          <Route path="/habilidades-e-ferramentas" component={MasteryTools} />
+          <Route path="/main" component={NavBar} />
+          <Route path="/criar-um-projeto" component={CreateProject} />
+          <Route path="/projeto-conectado/:id" component={ApproveProject} />
+          <Route path="/projeto/:id" component={Projects} />
+          <Route path="/perfil/:id" component={Profiles} />
+          <Route path="/explorar" component={Explorer} />
+        </BrowserRouter>
+        <GlobalStyle />
       </LoggedUserProvider>
     </AuthProvider>
   )

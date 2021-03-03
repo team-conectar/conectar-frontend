@@ -137,7 +137,7 @@ const Profiles: React.FC = () => {
 
   return (
     <Page>
-      {/* <NavBar /> */}
+      <NavBar />
       <main>
         <header>
           <aside>

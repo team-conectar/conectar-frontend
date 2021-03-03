@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef } from 'react'
 import { BodyNavBar } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import lupa from '../../assets/icon/lupa.svg'
 import explorar from '../../assets/icon/explorar.svg'
 import explorar_secondary from '../../assets/icon/explorer_secondary.svg'
@@ -14,26 +14,21 @@ import Dropdown from '../Dropdown'
 const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const user = useLoggedUser()
-  const location = useLocation()
-  console.log(location)
 
   return (
-    <BodyNavBar
-      explorar={!!(location.pathname === '/explorar')}
-      sobre={!!(location.pathname === '/sobre')}
-    >
+    <BodyNavBar>
       <aside>
-        <Link to="/">
+        <NavLink to="/">
           <img src={logo} alt="logo conectar" />
-        </Link>
-        <Link to="/explorar" className="explorar">
+        </NavLink>
+        <NavLink to="/explorar" className="explorar" activeClassName="selected">
           <img src={explorar} alt="Explore os demais projetos" />
           <img src={explorar_secondary} alt="Explore os demais projetos" />
           Explorar
-        </Link>
-        <Link to="/sobre" className="sobre">
+        </NavLink>
+        <NavLink to="/sobre" className="sobre" activeClassName="selected">
           Sobre
-        </Link>
+        </NavLink>
       </aside>
 
       <div className="searchBlock">
@@ -44,9 +39,9 @@ const NavBar: React.FC = () => {
         <input placeholder="Buscar"></input>
       </div>
       <aside>
-        <Link to="/criar-um-projeto" className="create">
+        <NavLink to="/criar-um-projeto" className="create">
           Criar um Projeto
-        </Link>
+        </NavLink>
         {!loading && isAuthenticated && (
           <>
             <Dropdown IconButton={<IconBell />}>

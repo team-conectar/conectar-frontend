@@ -1,11 +1,7 @@
 import styled, { css } from 'styled-components'
 import { DropdownContent } from '../Dropdown/styles'
 
-interface NavBarProps {
-  sobre: boolean
-  explorar: boolean
-}
-export const BodyNavBar = styled.header<NavBarProps>`
+export const BodyNavBar = styled.nav`
   width: 100%;
   padding: 0 1.8rem;
   margin: 0;
@@ -119,14 +115,7 @@ export const BodyNavBar = styled.header<NavBarProps>`
       border-bottom: solid 4px transparent;
       border-top: solid 4px transparent;
     }
-    .sobre {
-      height: 100%;
-      ${props =>
-        props.sobre &&
-        css`
-          border-bottom: solid 4px var(--textGreen);
-        `}
-    }
+
     .explorar {
       height: 100%;
       padding: 0 0.3rem;
@@ -140,20 +129,6 @@ export const BodyNavBar = styled.header<NavBarProps>`
           display: initial;
         }
       }
-      ${props =>
-        props.explorar &&
-        css`
-          border-bottom: solid 4px var(--textGreen);
-          transition: 0.5s ease-out;
-          img {
-            :nth-last-of-type(1) {
-              display: none;
-            }
-            :nth-last-of-type(2) {
-              display: initial;
-            }
-          }
-        `}
       &:hover {
         border-bottom: solid 4px var(--textGreen);
         transition: 0.5s ease-out;
@@ -164,6 +139,18 @@ export const BodyNavBar = styled.header<NavBarProps>`
           :nth-last-of-type(2) {
             display: initial;
           }
+        }
+      }
+    }
+    .selected {
+      border-bottom: solid 4px var(--textGreen);
+      transition: 0.5s ease-out;
+      img {
+        :nth-last-of-type(1) {
+          display: none;
+        }
+        :nth-last-of-type(2) {
+          display: initial;
         }
       }
     }
