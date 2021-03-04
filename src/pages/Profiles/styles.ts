@@ -106,6 +106,12 @@ export const ExperienciasDiv = styled.div`
         padding: 0;
       }
     }
+    > button {
+      &:focus {
+        margin-bottom: 0;
+        border: solid 2px transparent;
+      }
+    }
   }
 `
 export const PerfilMain = styled.main`
@@ -240,13 +246,16 @@ export const Page = styled.div`
     justify-content: center;
     padding-bottom: 2rem;
     width: 100%;
+    position: relative;
     > header {
+      position: sticky;
+      top: calc(6rem - 45px);
       background: white;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      position: relative;
+
       ${PerfilDiv} {
         order: 2;
       }
@@ -284,7 +293,7 @@ export const Page = styled.div`
         ${PerfilDiv} {
           grid-column: 1;
           position: absolute;
-          top: 20%;
+          top: 4rem;
           width: calc(var(--PerfilWidth) - 2rem);
           margin-left: 2rem;
         }

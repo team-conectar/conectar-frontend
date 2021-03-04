@@ -282,7 +282,6 @@ export const BodyProjects = styled.div`
       box-shadow: var(--boxShadow);
       border-radius: 0.4rem;
       width: var(--container);
-      margin-top: 1rem;
 
       > img {
         --marginLeft: 1.2rem;

@@ -174,6 +174,7 @@ const Projects: React.FC = () => {
   }
   return (
     <BodyProjects>
+      <NavBar />
       <Modal
         open={openModal}
         setOpen={setOpenModal}

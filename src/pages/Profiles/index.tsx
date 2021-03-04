@@ -197,11 +197,13 @@ const Profiles: React.FC = () => {
             </PerfilMain>
 
             <ul>
-              <h3>Áreas de atuação</h3>
+              {profile.areas?.length && <h3>Áreas de atuação</h3>}
               {profile.areas?.map(area => (
                 <li key={area.id}>{area.descricao}</li>
               ))}
-              <h3>Habilidades e ferramentas de domínio</h3>
+              {profile.habilidades?.length && (
+                <h3>Habilidades e ferramentas de domínio</h3>
+              )}
               {profile.habilidades?.map(habilidade => (
                 <li key={habilidade.id}>{habilidade.nome}</li>
               ))}
@@ -279,7 +281,7 @@ const Profiles: React.FC = () => {
               )}
             </ExperienciasDiv>
 
-            <h4>Exibir currículo completo</h4>
+            {profile.id && <h4>Exibir currículo completo</h4>}
           </PerfilDiv>
         </header>
         <div>
