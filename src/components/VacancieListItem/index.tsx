@@ -17,7 +17,7 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
   useEffect(() => {
     const res = [
       api
-        .get(`/api/v1/tipoAcordo?id=${vacancy.tipo_acordo_id}`)
+        .get(`/api/v1/tipoAcordo?tipo_acordo_id=${vacancy.tipo_acordo_id}`)
         .then(response => {
           setAgreement(response.data.descricao)
         })
