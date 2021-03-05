@@ -249,7 +249,7 @@ export const Page = styled.div`
     position: relative;
     > header {
       position: sticky;
-      top: calc(6rem - 45px);
+      top: calc(2rem + 45px);
       background: white;
       width: 100%;
       display: flex;
