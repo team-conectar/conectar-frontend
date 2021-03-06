@@ -44,6 +44,8 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import { ButtonList } from '../Profiles/styles'
 import ContainerScroll from '../../components/ContainerScroll'
 import VacancieListItem from '../../components/VacancieListItem'
+import Skeleton from 'react-loading-skeleton'
+import { IconEdit } from '../../assets/icon'
 interface routeParms {
   id: string
 }
@@ -240,20 +242,19 @@ const Projects: React.FC = () => {
       </Modal>
 
       <header>
-        <img src={no_couver} alt="imagem de capa do projeto" />
-        <span>
-          <img
-            src={edit}
-            alt="editar o nome"
-            onClick={() => {
-              setModalContent({ ...initialModalContent, nome: true })
-              setOpenModal(true)
-            }}
-          />
-        </span>
+        {/* <img src={no_couver} alt="imagem de capa do projeto" /> */}
+        <Skeleton height={180} />
+
+        <IconEdit
+          onClick={() => {
+            setModalContent({ ...initialModalContent, nome: true })
+            setOpenModal(true)
+          }}
+        />
+
         <div>
           <section>
-            <h1>{project.nome}</h1>
+            <h1>{project.nome || <Skeleton width="200px" />} </h1>
           </section>
 
           <section>
@@ -288,154 +289,154 @@ const Projects: React.FC = () => {
           </aside>
         </div>
       </header>
-      {!vacanciesList && (
-        <DivSobre>
-          <div className="objdes">
-            <section>
-              <legend>
-                <img className="icon-objetivo" src={objetivo} alt="objetivo" />
-                Objetivo
-                <img
-                  src={edit}
-                  alt="editar"
-                  onClick={() => {
-                    setModalContent({ ...initialModalContent, objetivo: true })
-                    setOpenModal(true)
-                  }}
-                />
-              </legend>
 
-              <p>{project.objetivo}</p>
-            </section>
-            <section>
-              <legend>
-                Descrição
-                <img
-                  src={edit}
-                  alt="editar"
-                  onClick={() => {
-                    setModalContent({ ...initialModalContent, descricao: true })
-                    setOpenModal(true)
-                  }}
-                />
-              </legend>
-
-              <p>{project.descricao}</p>
-            </section>
-          </div>
-          <DivTags>
+      <DivSobre showSobre={!vacanciesList}>
+        <div className="objdes">
+          <section>
             <legend>
-              Áreas de desenvolvimento
-              <img
-                src={edit}
-                alt="editar"
+              <img className="icon-objetivo" src={objetivo} alt="objetivo" />
+              Objetivo
+              <IconEdit
                 onClick={() => {
-                  setModalContent({ ...initialModalContent, areas: true })
+                  setModalContent({ ...initialModalContent, objetivo: true })
                   setOpenModal(true)
                 }}
               />
             </legend>
+
+            <p>{project.objetivo || <Skeleton width={350} />}</p>
+          </section>
+          <section>
+            <legend>
+              Descrição
+              <IconEdit
+                onClick={() => {
+                  setModalContent({ ...initialModalContent, descricao: true })
+                  setOpenModal(true)
+                }}
+              />
+            </legend>
+
+            <p>
+              {project.descricao || (
+                <>
+                  <Skeleton width={300} />
+                  <Skeleton width={300} />
+                  <Skeleton width={300} />
+                </>
+              )}
+            </p>
+          </section>
+        </div>
+        <DivTags>
+          <legend>
+            Áreas de desenvolvimento
+            <IconEdit
+              onClick={() => {
+                setModalContent({ ...initialModalContent, areas: true })
+                setOpenModal(true)
+              }}
+            />
+          </legend>
+          {project.areas?.length ? (
             <aside>
               {project.areas?.map(area => (
                 <span key={area.id}>{area.descricao}</span>
               ))}
             </aside>
-            <legend>
-              Habilidades e ferramentas
-              <img
-                src={edit}
-                alt="editar"
-                onClick={() => {
-                  setModalContent({ ...initialModalContent, habilidades: true })
-                  setOpenModal(true)
-                }}
-              />
-            </legend>
+          ) : (
+            <Skeleton width={50} />
+          )}
+          <legend>
+            Habilidades e ferramentas
+            <IconEdit
+              onClick={() => {
+                setModalContent({ ...initialModalContent, habilidades: true })
+                setOpenModal(true)
+              }}
+            />
+          </legend>
+          {project.habilidades?.length ? (
             <aside>
               {project.habilidades?.map(habilidade => (
                 <span key={habilidade.id}>{habilidade.nome}</span>
               ))}
             </aside>
-          </DivTags>
-        </DivSobre>
-      )}
-      {vacanciesList && (
-        <DivVagas>
-          <section>
-            <legend>
-              <img src={vagas} alt="vagas" />
-              Vagas
-              <img
-                src={edit}
-                alt="editar"
-                onClick={() => {
-                  setModalContent({ ...initialModalContent, vaga: true })
-                  setOpenModal(true)
-                }}
-              />
-            </legend>
+          ) : (
+            <Skeleton width={50} />
+          )}
+        </DivTags>
+      </DivSobre>
 
-            <ContainerScroll>
-              {console.log(vacancies)}
-              {vacancies.map(vacancy => (
-                <VacancieListItem
-                  key={vacancy.id}
-                  vacancy={vacancy}
-                  onClick={() => setVacancyDetail(vacancy)}
-                  style={
-                    vacancyDetail === vacancy
-                      ? { background: 'var(--backgroudElevation)' }
-                      : { background: 'transparent' }
-                  }
+      <DivVagas showVagas={vacanciesList}>
+        <section>
+          <legend>
+            <img src={vagas} alt="vagas" />
+            Vagas
+            <IconEdit
+              onClick={() => {
+                setModalContent({ ...initialModalContent, vaga: true })
+                setOpenModal(true)
+              }}
+            />
+          </legend>
+
+          <ContainerScroll>
+            {console.log(vacancies)}
+            {vacancies.map(vacancy => (
+              <VacancieListItem
+                key={vacancy.id}
+                vacancy={vacancy}
+                onClick={() => setVacancyDetail(vacancy)}
+                style={
+                  vacancyDetail === vacancy
+                    ? { background: 'var(--backgroudElevation)' }
+                    : { background: 'transparent' }
+                }
+              />
+            ))}
+          </ContainerScroll>
+        </section>
+        <section>
+          <legend>Descrição da vaga</legend>
+          <aside>
+            <p>{vacancyDetail?.descricao}</p>
+            <DivTags>
+              <legend>
+                Áreas de desenvolvimento
+                <IconEdit
+                  onClick={() => {
+                    setModalContent({ ...initialModalContent, areas: true })
+                    setOpenModal(true)
+                  }}
                 />
-              ))}
-            </ContainerScroll>
-          </section>
-          <section>
-            <legend>Descrição da vaga</legend>
-            <aside>
-              <p>{vacancyDetail?.descricao}</p>
-              <DivTags>
-                <legend>
-                  Áreas de desenvolvimento
-                  <img
-                    src={edit}
-                    alt="editar"
-                    onClick={() => {
-                      setModalContent({ ...initialModalContent, areas: true })
-                      setOpenModal(true)
-                    }}
-                  />
-                </legend>
-                <aside>
-                  {vacancyDetail?.areas?.map(area => (
-                    <span key={area.id}>{area.descricao}</span>
-                  ))}
-                </aside>
-                <legend>
-                  Habilidades e ferramentas
-                  <img
-                    src={edit}
-                    alt="editar"
-                    onClick={() => {
-                      setModalContent({
-                        ...initialModalContent,
-                        habilidades: true,
-                      })
-                      setOpenModal(true)
-                    }}
-                  />
-                </legend>
-                <aside>
-                  {vacancyDetail?.habilidades?.map(habilidade => (
-                    <span key={habilidade.id}>{habilidade.nome}</span>
-                  ))}
-                </aside>
-              </DivTags>
-            </aside>
-          </section>
-        </DivVagas>
-      )}
+              </legend>
+              <aside>
+                {vacancyDetail?.areas?.map(area => (
+                  <span key={area.id}>{area.descricao}</span>
+                ))}
+              </aside>
+              <legend>
+                Habilidades e ferramentas
+                <IconEdit
+                  onClick={() => {
+                    setModalContent({
+                      ...initialModalContent,
+                      habilidades: true,
+                    })
+                    setOpenModal(true)
+                  }}
+                />
+              </legend>
+              <aside>
+                {vacancyDetail?.habilidades?.map(habilidade => (
+                  <span key={habilidade.id}>{habilidade.nome}</span>
+                ))}
+              </aside>
+            </DivTags>
+          </aside>
+        </section>
+      </DivVagas>
     </BodyProjects>
   )
 }
