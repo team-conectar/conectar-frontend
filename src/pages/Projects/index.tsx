@@ -77,7 +77,9 @@ const Projects: React.FC = () => {
   }
   const [modalContent, setModalContent] = useState(initialModalContent)
   const history = useHistory()
-  const [openModal, setOpenModal] = useState<boolean>(isAuthenticated)
+  const [openModal, setOpenModal] = useState<boolean>(
+    loading && isAuthenticated,
+  )
   const projeto_id = useParams<routeParms>().id
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])

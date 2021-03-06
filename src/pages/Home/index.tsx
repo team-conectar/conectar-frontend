@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import NavBar from '../../components/NavBar'
 import { BodyHome } from './styles'
 
@@ -24,17 +24,11 @@ import { Context } from '../../context/AuthContext'
 
 import Button from '../../components/Button'
 import ContainerScroll from '../../components/ContainerScroll'
-function Home() {
-  const [showModal, setShowModal] = useState<boolean>(false)
+const Home: React.FC = () => {
   const { handleLogin } = useContext(Context)
+  const history = useHistory()
   return (
     <BodyHome>
-      <Modal open={showModal} setOpen={setShowModal}>
-        <h1>
-          Será redimensionado para a pagina de explorar projetos(faltante)
-        </h1>
-      </Modal>
-
       <main>
         <div className="topo-background">
           <NavBar />
@@ -52,7 +46,7 @@ function Home() {
 
               <Login
                 onSuccessLogin={() => {
-                  setShowModal(true)
+                  history.push('/explorar')
                   handleLogin(true)
                 }}
               />
