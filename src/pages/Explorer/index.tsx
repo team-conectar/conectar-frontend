@@ -18,6 +18,7 @@ import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
+import Skeleton from 'react-loading-skeleton'
 
 const Explorer: React.FC = () => {
   const { loading, isAuthenticated } = useContext(Context)
@@ -39,12 +40,18 @@ const Explorer: React.FC = () => {
         <ProfileCard />
 
         <ul>
-          {projects.map(project => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
+          {projects.length ? (
+            projects.map(project => (
+              <ProjectCard key={project.id} project={project} />
+            ))
+          ) : (
+            <Skeleton width="100%" height="200px" />
+          )}
         </ul>
-        <LinksCard />
-        <SuccessfulCreatorsCard />
+        <section>
+          <LinksCard />
+          <SuccessfulCreatorsCard />
+        </section>
       </Page>
     </Fragment>
   )
