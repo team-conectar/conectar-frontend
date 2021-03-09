@@ -40,7 +40,7 @@ const MasteryTools: React.FC = () => {
             withCredentials: true,
           })
           .then(() => {
-            history.push('/experiencias-do-usuario')
+            history.push('/explorar')
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail

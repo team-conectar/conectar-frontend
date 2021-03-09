@@ -15,7 +15,7 @@ export const monthOptions: OptionHTMLAttributes<HTMLOptionElement>[] = [
   { value: 12, label: 'Dezembro' },
 ]
 
-export function toMonth(month: string) {
+export function toMonth(month: string): string {
   /**
    * Helper function to handle inputChanges when using hooks
    * @param {string} month
@@ -38,16 +38,16 @@ export function toMonth(month: string) {
   return stringMonth[parseInt(month) - 1]
 }
 function createYearOptions() {
-  const yearPlusFive = `${new Date().getFullYear() + 5}`
+  const currentYear = `${new Date().getFullYear()}`
 
   const years: OptionHTMLAttributes<HTMLOptionElement>[] = [
     {
-      label: yearPlusFive,
-      value: yearPlusFive,
+      label: currentYear,
+      value: currentYear,
     },
   ]
   for (let index = 1; index < 100; index++) {
-    const year = String(Number(yearPlusFive) - index)
+    const year = String(Number(currentYear) - index)
     years.push({
       value: year,
       label: year,
@@ -55,16 +55,23 @@ function createYearOptions() {
   }
   return years
 }
-export const finalYearOptions = (initialYear: number) => {
-  const yearPlusFive = `${new Date().getFullYear() + 5}`
+/**
+ * Return years option after change iniatial year
+ * @param initialYear
+ * @returns  years: OptionHTMLAttributes<HTMLOptionElement>[]
+ */
+export const finalYearOptions = (
+  initialYear: number,
+): OptionHTMLAttributes<HTMLOptionElement>[] => {
+  const currentYear = `${new Date().getFullYear()}`
 
   const years: OptionHTMLAttributes<HTMLOptionElement>[] = [
     {
-      label: yearPlusFive,
-      value: yearPlusFive,
+      label: currentYear,
+      value: currentYear,
     },
   ]
-  for (let index = Number(yearPlusFive) - 1; index > initialYear; index--) {
+  for (let index = Number(currentYear) - 1; index > initialYear; index--) {
     const year = String(index)
     years.push({
       value: year,
@@ -73,7 +80,10 @@ export const finalYearOptions = (initialYear: number) => {
   }
   return years
 }
-export const daysOptions = (curentMonth: number, curentYear: number) => {
+export const daysOptions = (
+  curentMonth: number,
+  curentYear: number,
+): OptionHTMLAttributes<HTMLOptionElement>[] => {
   const days: OptionHTMLAttributes<HTMLOptionElement>[] = [
     {
       label: '01',

@@ -15,6 +15,7 @@ interface Props extends SelectProps<OptionTypeBase> {
   name: string
   label?: string
   multi?: boolean
+  onChange?(option: any): void
 }
 /**
  * This component receives text in your field by selection
@@ -28,9 +29,9 @@ interface Props extends SelectProps<OptionTypeBase> {
  *   <Select label="Habilidade ou Ferramentas" name="habilidade" options={optionsTools} multi />
  * )
  */
-const Select: React.FC<Props> = ({ name, label, multi, ...rest }) => {
+const Select: React.FC<Props> = ({ name, label, multi, onChange, ...rest }) => {
   const animatedComponents = makeAnimated()
-  const selectRef = useRef(null)
+  const selectRef = useRef<any>(null)
   const { fieldName, defaultValue, registerField, error } = useField(name)
   useEffect(() => {
     registerField({
@@ -49,19 +50,24 @@ const Select: React.FC<Props> = ({ name, label, multi, ...rest }) => {
         return ref.state.value.value
       },
     })
-  }, [fieldName, registerField, rest.isMulti])
+  }, [fieldName, multi, registerField, rest.isMulti])
   const [selectIsEmpty, setSelectIsEmpty] = useState(!rest.defaultValue)
   const handleChange = useCallback(
-    (event: any) => {
-      console.log(event)
-
-      if (multi ? event !== null && event.length !== 0 : event.value !== '') {
+    (option: any) => {
+      if (!multi && onChange) {
+        onChange(option)
         setSelectIsEmpty(false)
       } else {
-        setSelectIsEmpty(true)
+        if (
+          multi ? option !== null && option.length !== 0 : option.value !== ''
+        ) {
+          setSelectIsEmpty(false)
+        } else {
+          setSelectIsEmpty(true)
+        }
       }
     },
-    [multi],
+    [multi, onChange],
   )
 
   return (
@@ -74,7 +80,6 @@ const Select: React.FC<Props> = ({ name, label, multi, ...rest }) => {
       >
         <ReactSelect
           inputId={fieldName}
-          onChange={handleChange}
           ref={selectRef}
           closeMenuOnSelect={true}
           components={animatedComponents}
@@ -82,6 +87,7 @@ const Select: React.FC<Props> = ({ name, label, multi, ...rest }) => {
           className="react-select-container"
           classNamePrefix="react-select"
           isMulti={multi}
+          onChange={handleChange}
           options={rest.options}
           defaultValue={rest.defaultValue}
         />

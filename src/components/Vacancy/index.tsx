@@ -187,11 +187,11 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         )}
       </h1>
       {!showRegister ? (
-        <div className="vagas">
+        <ul>
           {vacancies.map(vacancy => (
             <VacancieListItem key={vacancy.id} vacancy={vacancy} />
           ))}
-        </div>
+        </ul>
       ) : (
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Input
