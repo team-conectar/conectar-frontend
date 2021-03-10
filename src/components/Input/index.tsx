@@ -1,13 +1,36 @@
-import React, { useEffect, useRef, InputHTMLAttributes } from 'react'
+import React, {
+  useEffect,
+  useRef,
+  InputHTMLAttributes,
+  ChangeEvent,
+  useCallback,
+  useState,
+} from 'react'
 import { useField } from '@unform/core'
 import { BodyInput } from './styles'
 import { Link } from 'react-router-dom'
+import { FiAlertCircle } from 'react-icons/fi'
+import FieldText from '../FieldText'
+
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   label?: string
   subLabel?: string
   pathSubLabel?: string
 }
+/**
+ * This component receives text in your field
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {string} subLabel is a link for redirecting to the pathSubLabel
+ * @param {string} pathSubLabel is the url of link subLabel
+ * @example
+ * return (
+ *   <Input name="senha" type="password" label="Senha" subLabel="Esqueceu a senha?" pathSubLabel="/alterar-senha" />
+ * )
+ */
 const Input: React.FC<InputProps> = ({
   name,
   label,
@@ -24,24 +47,36 @@ const Input: React.FC<InputProps> = ({
       path: 'value',
     })
   }, [fieldName, registerField])
+  const [inputIsEmpty, setInputIsEmpty] = useState(
+    !rest.defaultValue && rest.defaultValue !== '',
+  )
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value !== '') {
+      setInputIsEmpty(false)
+    } else {
+      setInputIsEmpty(true)
+    }
+  }, [])
+
   return (
     <BodyInput>
-      <label htmlFor={name}>
-        {label}
-        {pathSubLabel && (
-          <Link to={`/${pathSubLabel}`} tabIndex={1}>
-            {subLabel}
-          </Link>
-        )}
-      </label>
-      <input
-        ref={inputRef}
-        defaultValue={defaultValue}
-        type="text"
-        id={fieldName}
-        {...rest}
-      />
-      {error && <span>{error}</span>}
+      <FieldText
+        name={name}
+        label={label}
+        error={error && error}
+        isEmpty={inputIsEmpty}
+        subLabel={subLabel}
+        pathSubLabel={pathSubLabel}
+      >
+        <input
+          onChange={handleChange}
+          ref={inputRef}
+          defaultValue={defaultValue}
+          type="text"
+          id={fieldName}
+          {...rest}
+        />
+      </FieldText>
     </BodyInput>
   )
 }

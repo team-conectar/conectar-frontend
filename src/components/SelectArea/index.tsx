@@ -7,11 +7,12 @@ import React, {
   ChangeEvent,
 } from 'react'
 import { BodySelectArea } from './styles'
-import { GoCheck } from 'react-icons/go'
+import { GoCheck, GoPlus } from 'react-icons/go'
+import { IoMdArrowBack } from 'react-icons/io'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import trash from '../../assets/icon/lixeira.svg'
 import { useField } from '@unform/core'
+import { IconTrash } from '../../assets/icon'
 /**
  *descricao: string;
  *id: number;
@@ -32,13 +33,31 @@ interface SelectAreaProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string
   defaultValue?: string[]
 }
-
+/**
+ * This component shows all areas of knowledge and allows the user to select their experiences
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {Array<string>} defaultValue are the values ​​that arrive with the standard
+ * @example
+ * return (
+ *   <SelectArea defaultValue={['uma area', 'outro']} name="areas" />
+ * )
+ */
 const SelectArea: React.FC<SelectAreaProps> = ({
   label,
   name,
   defaultValue,
 }) => {
-  const [listedArea, setListedArea] = useState<string>('')
+  const nullArea = {
+    area: {
+      descricao: '',
+      id: 0,
+    },
+    subareas: [],
+  }
+  const [listedArea, setListedArea] = useState<AreaTypes>(nullArea)
   const [areas, setAreas] = useState<AreaTypes[]>([])
   const [selectedAreas, setSelectedAreas] = useState<string[]>(
     defaultValue || [],
@@ -93,7 +112,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({
   )
 
   return (
-    <BodySelectArea showSubarea={!!listedArea}>
+    <BodySelectArea showSubarea={listedArea.area.id !== 0}>
       <label>{label}</label>
       <div>
         <div className="area-selecionadas">
@@ -103,7 +122,7 @@ const SelectArea: React.FC<SelectAreaProps> = ({
               <li key={descricao}>
                 <legend>{descricao}</legend>
                 <label htmlFor={descricao}>
-                  <img src={trash} alt="apagar experiencia" />
+                  <IconTrash />
                 </label>
               </li>
             ))}
@@ -111,55 +130,56 @@ const SelectArea: React.FC<SelectAreaProps> = ({
         </div>
         <div className="area-selecao">
           <ul>
-            {areas.map(area => (
-              <>
-                <li
-                  key={area.area.id}
-                  onClick={() => setListedArea(area.area.descricao)}
-                >
-                  {area.area.descricao}
-                </li>
-                <ul>
-                  {
-                    <header>
-                      <button type="button" onClick={() => setListedArea('')}>
-                        Voltar
-                      </button>
-                      <legend>{listedArea}</legend>
-                    </header>
-                  }
-
-                  {area?.subareas.map((subarea, index) => (
-                    <li key={subarea.id}>
-                      <label htmlFor={subarea.descricao}>
-                        <span>
-                          {selectedAreas?.includes(subarea?.descricao) && (
-                            <GoCheck />
-                          )}
-                        </span>
-                        <legend>{subarea?.descricao}</legend>
-                        <strong>+</strong>
-                      </label>
-                      <input
-                        type="checkbox"
-                        id={subarea.descricao}
-                        value={subarea.descricao}
-                        defaultChecked={
-                          defaultValue
-                            ? selectedAreas.includes(subarea.descricao)
-                            : false
-                        }
-                        ref={ref => {
-                          inputRefs.current[index] = ref as HTMLInputElement
-                        }}
-                        onChange={handleInputCheckChange}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </>
+            {areas?.map(areas => (
+              <li
+                key={areas.area.id}
+                onClick={() => {
+                  setListedArea(areas)
+                  console.log(listedArea)
+                }}
+              >
+                {areas.area.descricao}
+                {areas?.subareas.map(subarea => (
+                  <input
+                    key={subarea.id}
+                    type="checkbox"
+                    id={subarea.descricao}
+                    value={subarea.descricao}
+                    defaultChecked={
+                      defaultValue
+                        ? selectedAreas.includes(subarea.descricao)
+                        : false
+                    }
+                    ref={ref => {
+                      inputRefs.current[subarea.id] = ref as HTMLInputElement
+                    }}
+                    onChange={handleInputCheckChange}
+                  />
+                ))}
+              </li>
             ))}
           </ul>
+          <aside>
+            <header>
+              <IoMdArrowBack onClick={() => setListedArea(nullArea)} />
+              <legend>{listedArea?.area?.descricao}</legend>
+            </header>
+            <ul>
+              {listedArea?.subareas?.map(subarea => (
+                <li key={subarea.id}>
+                  <label htmlFor={subarea.descricao}>
+                    <span>
+                      {selectedAreas?.includes(subarea?.descricao) && (
+                        <GoCheck size={20} />
+                      )}
+                    </span>
+                    <legend>{subarea?.descricao}</legend>
+                    <GoPlus size={15} />
+                  </label>
+                </li>
+              ))}
+            </ul>
+          </aside>
         </div>
       </div>
 

@@ -9,14 +9,19 @@ import React, {
   useCallback,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { BodyProjects } from './styles'
-import { BodyModalDefault } from '../../components/Modal/styles'
+import { BodyProjects, DivSobre, DivTags, DivVagas } from './styles'
 import edit from '../../assets/icon/editar.svg'
-import trash from '../../assets/icon/lixeira.svg'
+import TrashIcon from '../../assets/icon/lixeira.svg'
+import { Scrollbars } from 'react-custom-scrollbars'
+
 // import clone from '../../assets/icon/clone.svg'
 import config from '../../assets/icon/config.svg'
 import no_couver from '../../assets/image/no_couver.svg'
-import view from '../../assets/icon/view.svg'
+import objetivo from '../../assets/icon/objetivo.svg'
+import id from '../../assets/icon/id.svg'
+import al from '../../assets/icon/al.svg'
+import co from '../../assets/icon/co.svg'
+import vagas from '../../assets/icon/vagas.svg'
 import like from '../../assets/icon/like.svg'
 import { useHistory, useParams } from 'react-router'
 import Button from '../../components/Button'
@@ -28,7 +33,7 @@ import Modal from '../../components/Modal'
 import { Context } from '../../context/AuthContext'
 import Login from '../../components/Login'
 import NavBar from '../../components/NavBar'
-import Vacancy from '../../components/Vacancy'
+import Vacancy, { VacanciesType } from '../../components/Vacancy'
 import Textarea from '../../components/Textarea'
 import Input from '../../components/Input'
 import Dropzone from '../../components/Dropzone'
@@ -36,13 +41,18 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
+import { ButtonList } from '../Profiles/styles'
+import ContainerScroll from '../../components/ContainerScroll'
+import VacancieListItem from '../../components/VacancieListItem'
+import Skeleton from 'react-loading-skeleton'
+import { IconEdit } from '../../assets/icon'
 interface routeParms {
   id: string
 }
 interface ProjectType {
   nome: string
   descricao: string
-  visibilidade: true
+  visibilidade: Array<string>
   objetivo: string
   foto_capa: string
   areas: AreaType[]
@@ -61,33 +71,51 @@ const Projects: React.FC = () => {
     nome: false,
     descricao: false,
     objetivo: false,
-    foto: false,
     vaga: false,
     areas: false,
     habilidades: false,
   }
   const [modalContent, setModalContent] = useState(initialModalContent)
   const history = useHistory()
-  const [openModal, setOpenModal] = useState<boolean>(isAuthenticated)
+  const [openModal, setOpenModal] = useState<boolean>(
+    loading && isAuthenticated,
+  )
   const projeto_id = useParams<routeParms>().id
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
   const [selectedImage, setSelectedImage] = useState<File>()
+  const [vacanciesList, setVacanciesList] = useState<boolean>(false)
+  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+  const [vacancyDetail, setVacancyDetail] = useState<VacanciesType>(
+    vacancies[0],
+  )
   const formRef = useRef<FormHandles>(null)
   useEffect(() => {
-    const res = api
-      .get(`/api/v1/projeto/${projeto_id}`)
-      .then(response => {
-        setProject(response.data)
-        setStoredTools(response.data.habilidades)
-        setStoredAreas(response.data.areas)
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
+    const res = [
+      api
+        .get(`/api/v1/projeto/${projeto_id}`)
+        .then(response => {
+          setProject(response.data)
+          setStoredTools(response.data.habilidades)
+          setStoredAreas(response.data.areas)
+        })
+        .catch((err: AxiosError) => {
+          console.log(err?.response?.data.detail)
+        }),
+      api
+        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
+        .then(response => {
+          setVacancies(response.data)
+          setVacancyDetail(response.data[0])
+        })
+        .catch((err: AxiosError) => {
+          console.log(err?.response?.data.detail)
+        }),
+    ]
     console.log(res)
   }, [projeto_id])
+
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -150,6 +178,7 @@ const Projects: React.FC = () => {
   }
   return (
     <BodyProjects>
+      <NavBar />
       <Modal
         open={openModal}
         setOpen={setOpenModal}
@@ -158,21 +187,23 @@ const Projects: React.FC = () => {
         }}
       >
         {!loading && !isAuthenticated ? (
-          <BodyModalDefault>
+          <>
             <h1>Para prosseguir, você precisa estar logado</h1>
             <Login onSuccessLogin={() => setOpenModal(isAuthenticated)} />
-          </BodyModalDefault>
+          </>
         ) : (
           <>
             {!modalContent.vaga && (
-              <Form ref={formRef} className="modal" onSubmit={handleSubmit}>
-                {modalContent.foto && <Dropzone name="capa" />}
+              <Form ref={formRef} onSubmit={handleSubmit}>
                 {modalContent.nome && (
-                  <Input
-                    name="nome"
-                    label="Nome do projeto"
-                    defaultValue={project.nome}
-                  />
+                  <>
+                    <Input
+                      name="nome"
+                      label="Nome do projeto"
+                      defaultValue={project.nome}
+                    />
+                    <Dropzone name="capa" />
+                  </>
                 )}
                 {modalContent.objetivo && (
                   <Textarea
@@ -202,7 +233,7 @@ const Projects: React.FC = () => {
                     defaultValue={toolTypeToString()}
                   />
                 )}
-                <Button theme="primary-green" type="submit">
+                <Button theme="primary" type="submit">
                   Salvar
                 </Button>
               </Form>
@@ -213,154 +244,201 @@ const Projects: React.FC = () => {
       </Modal>
 
       <header>
-        <div className="area-img">
-          <img src={no_couver} alt="imagem de capa do projeto" />
+        {/* <img src={no_couver} alt="imagem de capa do projeto" /> */}
+        <Skeleton height={180} />
+
+        <IconEdit
+          onClick={() => {
+            setModalContent({ ...initialModalContent, nome: true })
+            setOpenModal(true)
+          }}
+        />
+
+        <div>
           <section>
-            <Link to="">+</Link>
-            <img
-              src={edit}
-              alt="editar a imagem de capa"
-              onClick={() => {
-                setModalContent({ ...initialModalContent, foto: true })
-                setOpenModal(true)
-              }}
-            />
+            <h1>{project.nome || <Skeleton width="200px" />} </h1>
           </section>
-        </div>
-        <aside>
-          <h1>
-            {project.nome}
-            <img
-              src={edit}
-              alt="editar o nome"
-              onClick={() => {
-                setModalContent({ ...initialModalContent, nome: true })
-                setOpenModal(true)
-              }}
-            />
-          </h1>
-          <div className="icons">
-            <img src={like} alt="curtidas" />
-            194
-            <img src={view} alt="vizualizações" />
-            2945
-          </div>
-          <p>Publicado em:</p>
+
           <section>
-            <Button theme="primary-green">Curtir</Button>
-            <Button type="submit">Salvar</Button>
+            <Button theme="secondary">
+              <img src={like} alt="curtidas" /> Favoritar
+            </Button>
+            <a>
+              <span>
+                <img src={like} alt="curtidas" />
+                194
+              </span>
+              <p>Publicado em:</p>
+            </a>
           </section>
-        </aside>
-      </header>
-      <main className="container">
-        <div className="objdes">
           <aside>
-            <section>
-              <legend>Objetivo</legend>
-              <img
-                src={edit}
-                alt="editar"
+            <ButtonList
+              borderBottom={!vacanciesList}
+              onClick={() => {
+                setVacanciesList(false)
+              }}
+            >
+              Sobre
+            </ButtonList>
+            <ButtonList
+              borderBottom={vacanciesList}
+              onClick={() => {
+                setVacanciesList(true)
+              }}
+            >
+              Vagas
+            </ButtonList>
+          </aside>
+        </div>
+      </header>
+
+      <DivSobre showSobre={!vacanciesList}>
+        <div className="objdes">
+          <section>
+            <legend>
+              <img className="icon-objetivo" src={objetivo} alt="objetivo" />
+              Objetivo
+              <IconEdit
                 onClick={() => {
                   setModalContent({ ...initialModalContent, objetivo: true })
                   setOpenModal(true)
                 }}
               />
-            </section>
-            <p>{project.objetivo}</p>
-          </aside>
-          <aside>
-            <section>
-              <legend>Descrição</legend>
-              <img
-                src={edit}
-                alt="editar"
+            </legend>
+
+            <p>{project.objetivo || <Skeleton width={350} />}</p>
+          </section>
+          <section>
+            <legend>
+              Descrição
+              <IconEdit
                 onClick={() => {
                   setModalContent({ ...initialModalContent, descricao: true })
                   setOpenModal(true)
                 }}
               />
-            </section>
-            <p>{project.descricao}</p>
-          </aside>
+            </legend>
+
+            <p>
+              {project.descricao || (
+                <>
+                  <Skeleton width={300} />
+                  <Skeleton width={300} />
+                  <Skeleton width={300} />
+                </>
+              )}
+            </p>
+          </section>
         </div>
-        <div className="caracteristicas">
+        <DivTags>
           <legend>
             Áreas de desenvolvimento
-            <img
-              src={edit}
-              alt="editar"
+            <IconEdit
               onClick={() => {
                 setModalContent({ ...initialModalContent, areas: true })
                 setOpenModal(true)
               }}
             />
           </legend>
-          <aside>
-            {project.areas?.map(area => (
-              <span key={area.id}>{area.descricao}</span>
-            ))}
-          </aside>
+          {project.areas?.length ? (
+            <aside>
+              {project.areas?.map(area => (
+                <span key={area.id}>{area.descricao}</span>
+              ))}
+            </aside>
+          ) : (
+            <Skeleton width={50} />
+          )}
           <legend>
             Habilidades e ferramentas
-            <img
-              src={edit}
-              alt="editar"
+            <IconEdit
               onClick={() => {
                 setModalContent({ ...initialModalContent, habilidades: true })
                 setOpenModal(true)
               }}
             />
           </legend>
-          <aside>
-            {project.habilidades?.map(habilidade => (
-              <span key={habilidade.id}>{habilidade.nome}</span>
-            ))}
-          </aside>
-        </div>
+          {project.habilidades?.length ? (
+            <aside>
+              {project.habilidades?.map(habilidade => (
+                <span key={habilidade.id}>{habilidade.nome}</span>
+              ))}
+            </aside>
+          ) : (
+            <Skeleton width={50} />
+          )}
+        </DivTags>
+      </DivSobre>
 
-        <aside>
-          <div className="vagas">
-            <legend>
-              Vagas
-              <img
-                src={edit}
-                alt="editar"
-                onClick={() => {
-                  setModalContent({ ...initialModalContent, vaga: true })
-                  setOpenModal(true)
-                }}
+      <DivVagas showVagas={vacanciesList}>
+        <section>
+          <legend>
+            <img src={vagas} alt="vagas" />
+            Vagas
+            <IconEdit
+              onClick={() => {
+                setModalContent({ ...initialModalContent, vaga: true })
+                setOpenModal(true)
+              }}
+            />
+          </legend>
+
+          <ContainerScroll>
+            {console.log(vacancies)}
+            {vacancies.map(vacancy => (
+              <VacancieListItem
+                key={vacancy.id}
+                vacancy={vacancy}
+                onClick={() => setVacancyDetail(vacancy)}
+                style={
+                  vacancyDetail === vacancy
+                    ? { background: 'var(--backgroudElevation)' }
+                    : { background: 'transparent' }
+                }
               />
-            </legend>
-
-            <section>
+            ))}
+          </ContainerScroll>
+        </section>
+        <section>
+          <legend>Descrição da vaga</legend>
+          <aside>
+            <p>{vacancyDetail?.descricao}</p>
+            <DivTags>
+              <legend>
+                Áreas de desenvolvimento
+                <IconEdit
+                  onClick={() => {
+                    setModalContent({ ...initialModalContent, areas: true })
+                    setOpenModal(true)
+                  }}
+                />
+              </legend>
               <aside>
-                <legend>Ux Designer</legend>
-                <p>
-                  Trainee | Não remunerado <br />2 Vagas
-                </p>
+                {vacancyDetail?.areas?.map(area => (
+                  <span key={area.id}>{area.descricao}</span>
+                ))}
               </aside>
-
-              <img src={config} alt="duplicar as vagas" />
-            </section>
-          </div>
-          <div className="descricao">
-            <legend>Descrição da vaga</legend>
-            <section>
-              <p>
-                Sobre a Empresa:
-                <br />
-                <br />
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-                vitae porttitor lacus. Praesent ac nisl ut magna dapibus semper
-                auctor sed justo. Nulla mattis massa eu ligula consectetur
-                consequat. Donec a ante nisl. Donec quam erat, feugiat eleifend
-                quam vel, tincidunt lacinia nisl. Aliquam tempus elementum
-                mauris
-              </p>
-            </section>
-          </div>
-        </aside>
-      </main>
+              <legend>
+                Habilidades e ferramentas
+                <IconEdit
+                  onClick={() => {
+                    setModalContent({
+                      ...initialModalContent,
+                      habilidades: true,
+                    })
+                    setOpenModal(true)
+                  }}
+                />
+              </legend>
+              <aside>
+                {vacancyDetail?.habilidades?.map(habilidade => (
+                  <span key={habilidade.id}>{habilidade.nome}</span>
+                ))}
+              </aside>
+            </DivTags>
+          </aside>
+        </section>
+      </DivVagas>
     </BodyProjects>
   )
 }

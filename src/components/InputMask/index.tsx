@@ -1,7 +1,13 @@
-import React, { useEffect, useRef } from 'react'
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import { useField } from '@unform/core'
 import { BodyInput } from '../Input/styles'
-import { Link } from 'react-router-dom'
+import FieldText from '../FieldText'
 import ReactInputMask, { Props } from 'react-input-mask'
 interface InputProps extends Props {
   name: string
@@ -10,6 +16,20 @@ interface InputProps extends Props {
   pathSubLabel?: string
   type?: string
 }
+/**
+ * This component receives text in your field whit a possibility of masking
+ *
+ * @component
+ * @param {string} name is the name on the form data
+ * @param {string} label is the title that is displayed above the component
+ * @param {string} subLabel is a link for redirecting to the pathSubLabel
+ * @param {string} pathSubLabel is the url of link subLabel
+ * @param {string | RegExp} mask is the expression for the masking
+ * @example
+ * return (
+ *   <InputMask  type="tel"  name="telefone"  label="Celular"  mask="(99) 99999-9999 "/>
+ * )
+ */
 const InputMask: React.FC<InputProps> = ({
   name,
   label,
@@ -32,25 +52,34 @@ const InputMask: React.FC<InputProps> = ({
       },
     })
   }, [fieldName, registerField])
+  const [inputIsEmpty, setInputIsEmpty] = useState(
+    !rest.defaultValue && rest.defaultValue !== '',
+  )
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.value !== '' || rest.defaultValue !== '') {
+      setInputIsEmpty(false)
+    } else setInputIsEmpty(true)
+  }, [])
   return (
     <BodyInput>
-      <label htmlFor={name}>
-        {label}
-        {pathSubLabel && (
-          <Link to={`/${pathSubLabel}`} tabIndex={1}>
-            {subLabel}
-          </Link>
-        )}
-      </label>
-      <ReactInputMask
-        ref={inputRef}
-        defaultValue={defaultValue}
-        type="text"
-        id={fieldName}
-        maskChar=""
-        {...rest}
-      />
-      {error && <span>{error}</span>}
+      <FieldText
+        name={name}
+        label={label}
+        error={error && error}
+        isEmpty={inputIsEmpty}
+        subLabel={subLabel}
+        pathSubLabel={pathSubLabel}
+      >
+        <ReactInputMask
+          onChange={handleChange}
+          ref={inputRef}
+          defaultValue={defaultValue}
+          type="text"
+          id={fieldName}
+          maskChar=""
+          {...rest}
+        />
+      </FieldText>
     </BodyInput>
   )
 }

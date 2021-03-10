@@ -1,17 +1,11 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  FormEvent,
-  useCallback,
-} from 'react'
+import React, { useRef, useCallback } from 'react'
 import { BodyExperienceAreas } from './styles'
 import Button from '../../components/Button'
 import { useHistory } from 'react-router-dom'
-import SelectArea, { AreaType } from '../../components/SelectArea'
+import SelectArea from '../../components/SelectArea'
 import Logged from '../../components/Logged'
 
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import api from '../../services/api'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
@@ -35,12 +29,17 @@ const ExperienceAreas: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        const data = {
+          areas: formData.areas.map(area => {
+            return { descricao: area }
+          }),
+        }
         const res = await api
-          .put('/api/v1/pessoas', formData, {
+          .put('/api/v1/pessoas', data, {
             withCredentials: true,
           })
           .then(() => {
-            history.push('/masterytools')
+            history.push('/habilidades-e-ferramentas')
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
@@ -62,21 +61,18 @@ const ExperienceAreas: React.FC = () => {
       <Logged />
       <div className="area-central container">
         <h1>Selecione até 5 áreas de atuação de seu conhecimento</h1>
-        <SelectArea
-          defaultValue={['string', 'striasdng', 'outro']}
-          name="areas"
-        />
+        <SelectArea name="areas" />
       </div>
       <footer>
         <Button
-          theme="secondary-yellow"
+          theme="secondary"
           onClick={() => {
-            history.push('/masterytools')
+            history.push('/habilidades-e-ferramentas')
           }}
         >
           Pular
         </Button>
-        <Button type="submit" theme="primary-yellow">
+        <Button type="submit" theme="primary">
           Continuar
         </Button>
       </footer>

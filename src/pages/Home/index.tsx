@@ -1,24 +1,21 @@
 import React, { useState, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import NavBar from '../../components/NavBar'
 import { BodyHome } from './styles'
+
 import Login from '../../components/Login'
-import ProjectCards from '../../components/ProjectCards'
-import hero from '../../assets/image/hero.svg'
+import hero from '../../assets/image/landing_page.svg'
 import lamp from '../../assets/image/lampada.svg'
 import card_colaborador from '../../assets/image/card_colaborador.svg'
 import card_idealizador from '../../assets/image/card_idealizador.svg'
 import card_aliado from '../../assets/image/card_aliado.svg'
 import colaborador from '../../assets/image/colaborador.svg'
 import idealizador from '../../assets/image/idealizador.svg'
+import fc from '../../assets/image/fc.png'
 import aliado from '../../assets/image/aliado.svg'
-import passos_colaborador from '../../assets/image/passos_colaborador.svg'
-import passos_idealizador from '../../assets/image/passos_idealizador.svg'
-import passos_aliado from '../../assets/image/passos_aliado.svg'
 import curtiu from '../../assets/image/curtiu.svg'
-import migos from '../../assets/image/migos.svg'
+import aspasDestaque from '../../assets/image/aspasDestaque.svg'
 import logo from '../../assets/image/logo.svg'
-
 import Modal from '../../components/Modal'
 import { IoIosArrowDown } from 'react-icons/io'
 import { FaLinkedinIn } from 'react-icons/fa'
@@ -26,20 +23,14 @@ import { AiFillFacebook, AiOutlineInstagram } from 'react-icons/ai'
 
 import { Context } from '../../context/AuthContext'
 
-import Logged from '../../components/Logged'
 import Button from '../../components/Button'
-
-function Home() {
-  const [showModal, setShowModal] = useState<boolean>(false)
+import ContainerScroll from '../../components/ContainerScroll'
+import { isAuthenticated } from '../../utils/auth'
+const Home: React.FC = () => {
   const { handleLogin } = useContext(Context)
+  const history = useHistory()
   return (
     <BodyHome>
-      <Modal open={showModal} setOpen={setShowModal}>
-        <h1>
-          Será redimensionado para a pagina de explorar projetos(faltante)
-        </h1>
-      </Modal>
-
       <main>
         <div className="topo-background">
           <NavBar />
@@ -48,20 +39,25 @@ function Home() {
               <img src={hero} alt="imagem de redes neurais" />
             </section>
             <section className="area-login">
-              <h1>Encontre o </h1>
-              <h1>time ideal</h1>
-              <Login
-                onSuccessLogin={() => {
-                  setShowModal(true)
-                  handleLogin(true)
-                }}
-              />
+              <h1>
+                <strong>
+                  Encontre o <br />
+                </strong>
+                time ideal
+              </h1>
+              {!isAuthenticated() && (
+                <Login
+                  onSuccessLogin={() => {
+                    history.push('/explorar')
+                    handleLogin(true)
+                  }}
+                />
+              )}
             </section>
-            <label className="arrow-bottom">
-              <a href="#introducao">
-                <IoIosArrowDown />
-              </a>
-            </label>
+
+            <a className="arrow-bottom" href="#introducao">
+              <IoIosArrowDown />
+            </a>
           </div>
         </div>
         <div id="introducao">
@@ -95,11 +91,10 @@ function Home() {
               </p>
             </section>
           </main>
-          <label className="arrow-bottom">
-            <a href="#perfis">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#perfis">
+            <IoIosArrowDown />
+          </a>
         </div>
         <div id="perfis">
           <legend>
@@ -130,7 +125,7 @@ function Home() {
                     do papel e finalmente colocá-la em prática.
                   </p>
                   <a href="#idealizador">
-                    <Button theme="primary-green">Saiba mais</Button>
+                    <Button theme="primary">Saiba mais</Button>
                   </a>
                 </div>
               </aside>
@@ -154,7 +149,7 @@ function Home() {
                     uma ideia fresquinha e revolucionária
                   </p>
                   <a href="#colaborador">
-                    <Button theme="primary-green">Saiba mais</Button>
+                    <Button theme="primary">Saiba mais</Button>
                   </a>
                 </div>
               </aside>
@@ -173,17 +168,16 @@ function Home() {
                     ideias em grandes realizações.
                   </p>
                   <a href="#aliado">
-                    <Button theme="primary-green">Saiba mais</Button>
+                    <Button theme="primary">Saiba mais</Button>
                   </a>
                 </div>
               </aside>
             </section>
           </main>
-          <label className="arrow-bottom">
-            <a href="#idealizador">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#idealizador">
+            <IoIosArrowDown />
+          </a>
         </div>
         <div id="idealizador">
           <h3>Idealizador</h3>
@@ -222,13 +216,12 @@ function Home() {
                 </section>
               </aside>
             </div>
-            <Button theme="primary-green">Criar sua conta</Button>
+            <Button theme="primary">Criar sua conta</Button>
           </section>
-          <label className="arrow-bottom">
-            <a href="#colaborador">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#colaborador">
+            <IoIosArrowDown />
+          </a>
         </div>
 
         <div id="colaborador">
@@ -267,14 +260,14 @@ function Home() {
                 </section>
               </aside>
             </div>
-            <Button theme="primary-green">Criar sua conta</Button>
+
+            <Button theme="primary">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
-          <label className="arrow-bottom">
-            <a href="#aliado">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#aliado">
+            <IoIosArrowDown />
+          </a>
         </div>
         <div id="aliado">
           <h3>Aliado</h3>
@@ -312,13 +305,12 @@ function Home() {
                 </section>
               </aside>
             </div>
-            <Button theme="primary-green">Criar sua conta</Button>
+            <Button theme="primary">Criar sua conta</Button>
           </section>
-          <label className="arrow-bottom">
-            <a href="#rodape">
-              <IoIosArrowDown />
-            </a>
-          </label>
+
+          <a className="arrow-bottom" href="#rodape">
+            <IoIosArrowDown />
+          </a>
         </div>
 
         <div id="rodape">
@@ -332,10 +324,22 @@ function Home() {
           </p>
           <aside>
             <img src={curtiu} alt="e aí curtiu? vem pra cá!" />
-            <Button theme="primary-green">Crie sua conta</Button>
+
+            <Button theme="primary">Crie sua conta</Button>
           </aside>
           <footer>
-            <img src={migos} alt=" vamos ser amigos nas redes sociais" />
+            <h3>
+              <img
+                src={aspasDestaque}
+                alt=" vamos ser aaspasDestaque nas redes sociais"
+              />
+              Vamos ser amigos nas redes sociais
+              <img
+                src={aspasDestaque}
+                alt=" vamos ser aaspasDestaque nas redes sociais"
+              />
+            </h3>
+
             <section className="redes">
               <a href="https://www.facebook.com/boraConectar/">
                 <AiFillFacebook />
@@ -346,7 +350,7 @@ function Home() {
                 <span>/boraconectar</span>
               </a>
               <a href="https://www.linkedin.com/company/boraconectar/">
-                <FaLinkedinIn />
+                <FaLinkedinIn color="#fff" />
                 <span>/company/boraconectar</span>
               </a>
             </section>

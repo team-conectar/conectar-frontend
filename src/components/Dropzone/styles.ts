@@ -5,7 +5,7 @@ export const BodyDropzone = styled.div`
   padding: 0.5rem 0;
   > main {
     margin: 0.4rem 0;
-    border: 2px dashed var(--yellow);
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
     border-radius: 0.4rem;
     display: flex;
     flex-direction: column;
@@ -18,9 +18,9 @@ export const BodyDropzone = styled.div`
       padding: 0.6em;
       cursor: pointer;
       border-radius: 0.4rem;
-      background: var(--green-bg);
+      background: var(--textGreen);
       color: white;
-      font: 500 1rem Roboto;
+      font: 500 1rem Raleway;
     }
     input {
       display: none;
@@ -38,7 +38,7 @@ export const BodyDropzone = styled.div`
   }
   span {
     color: red;
-    font: 400 0.8rem Roboto;
+    font: 400 0.8rem Raleway;
     position: absolute;
     left: 0;
     bottom: 0;

@@ -36,7 +36,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       await api.get('/api/v1/pessoas/me')
     ).data
     if (!aliado || !colaborador || !idealizador) {
-      history.push('/signup/2')
+      history.push('/cadastrar/2')
     }
   }
   /** Send email name and profile_pic to backend through the login route with provider=facebook then check profile type */
@@ -118,7 +118,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         subLabel="Esqueceu a senha?"
         pathSubLabel="#"
       />
-      <Button type="submit" theme="primary-yellow">
+      <Button type="submit" theme="primary">
         Entrar
       </Button>
       <p>ou</p>
@@ -150,7 +150,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         />
       </aside>
       <p>
-        Novo no Conectar? <Link to="/signup/1">Crie uma conta</Link>
+        Novo no Conectar? <Link to="/cadastrar/1">Crie uma conta</Link>
       </p>
     </BodyLogin>
   )

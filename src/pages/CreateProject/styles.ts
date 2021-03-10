@@ -1,64 +1,53 @@
 import styled, { css } from 'styled-components'
+import { BodyVacancy } from '../../components/Vacancy/styles'
 
-interface StepProps {
-  showSecondStep: boolean
-}
-
-export const BodyCreateProject = styled.div<StepProps>`
+export const BodyCreateProject = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  width: 100vw;
-  background: var(--green-bg);
-  textarea {
-    resize: none;
-  }
-  .area-central {
-    background: var(--white);
+  width: 100%;
+
+  > main {
+    background: white;
+    box-shadow: var(--boxShadow);
     padding: 2.4rem;
     border-radius: 0.8rem;
-    border: 2px solid var(--green);
+    width: var(--container);
     h1 {
       margin: 1.4rem 0;
-      color: var(--green-bg);
+    }
+    > aside {
+      display: flex;
+      flex-direction: column;
+
+      > button {
+        align-self: flex-end;
+      }
+      ${BodyVacancy}.registro + button {
+        display: none;
+      }
     }
     section {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin: 0.6rem 0;
-      div + div {
+      > div + div {
         margin-left: 0.8rem;
       }
     }
-    .primeira-etapa {
-      ${props =>
-        props.showSecondStep
-          ? css`
-              display: none;
-            `
-          : css`
-              display: grid;
-            `}
-    }
-    .segunda-etapa {
-      ${props =>
-        props.showSecondStep
-          ? css`
-              display: grid;
-            `
-          : css`
-              display: none;
-            `}
-    }
-    form {
+
+    > form {
+      width: 100%;
+      display: grid;
       grid-template-columns: 2fr 3fr;
       grid-template-rows: 1fr;
       grid-gap: 2rem;
+      justify-content: center;
       > section {
         grid-row: 2;
-        grid-column: 1/-1;
+        grid-column: 1 / -1;
       }
       .area-select {
         justify-content: space-around;
@@ -69,7 +58,7 @@ export const BodyCreateProject = styled.div<StepProps>`
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font: 400 1rem Roboto;
+          font: 400 1rem Raleway;
           color: var(--orange);
         }
       }

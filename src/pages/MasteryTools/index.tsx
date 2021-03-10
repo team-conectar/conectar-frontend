@@ -28,12 +28,19 @@ const MasteryTools: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        const data = {
+          habilidades: formData.habilidades.map(habilidade => {
+            return { nome: habilidade }
+          }),
+        }
+        console.log(data)
+
         const res = await api
-          .put('/api/v1/pessoas', formData, {
+          .put('/api/v1/pessoas', data, {
             withCredentials: true,
           })
           .then(() => {
-            history.push('/profilefeatures')
+            history.push('/explorar')
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
@@ -59,14 +66,14 @@ const MasteryTools: React.FC = () => {
       </div>
       <footer>
         <Button
-          theme="secondary-yellow"
+          theme="secondary"
           onClick={() => {
-            history.push('/profilefeatures')
+            history.push('/experiencias-do-usuario')
           }}
         >
           Pular
         </Button>
-        <Button theme="primary-yellow" type="submit">
+        <Button theme="primary" type="submit">
           Continuar
         </Button>
       </footer>

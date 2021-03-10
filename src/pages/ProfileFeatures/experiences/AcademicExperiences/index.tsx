@@ -1,33 +1,31 @@
 import React, {
   useRef,
-  FormEvent,
   useState,
   useCallback,
   useEffect,
   OptionHTMLAttributes,
 } from 'react'
-import Input from '../../Input'
-import Textarea from '../../Textarea'
-import Select from '../../Select'
-import ToggleSwitch from '../../ToggleSwitch'
-import Button from '../../Button'
+import Input from '../../../../components/Input'
+import Textarea from '../../../../components/Textarea'
+import Select from '../../../../components/Select'
+import ToggleSwitch from '../../../../components/ToggleSwitch'
+import Button from '../../../../components/Button'
 import { BodyExperiences } from '../styles'
-import { finalYearOptions, yearOptions } from '../../../utils/dates'
+import { finalYearOptions, yearOptions } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
-import api from '../../../services/api'
-import edit from '../../../assets/icon/editar.svg'
-import trash from '../../../assets/icon/lixeira.svg'
-import Modal from '../../Modal'
+import api from '../../../../services/api'
+import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
-import getValidationErrors from '../../../utils/getValidationErrors'
+import getValidationErrors from '../../../../utils/getValidationErrors'
+import { IconEdit, IconTrash } from '../../../../assets/icon'
 /**
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
  * so we can create a full date from it and modify the state properly
  */
-interface AcademicType {
+export interface AcademicType {
   id: number
   instituicao: string
   escolaridade: string
@@ -42,8 +40,11 @@ const AcademicExperiences: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [isIncomplete, setIsIncomplete] = useState<boolean>(false)
-  const [initialYear, setInitialYear] = useState<number>(1970)
+  const [initialYear, setInitialYear] = useState<number>(
+    new Date().getFullYear() + 1,
+  )
   const [stored, setStored] = useState<AcademicType[]>([])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialAcademicData = {
     id: 0,
   } as AcademicType
@@ -100,6 +101,7 @@ const AcademicExperiences: React.FC = () => {
   }
   const handleSubmit = useCallback(
     async (formData: AcademicType) => {
+      console.log(formData)
       formRef.current?.setErrors({})
       try {
         const schema = Yup.object().shape({
@@ -136,8 +138,9 @@ const AcademicExperiences: React.FC = () => {
             situacao !== 'Incompleto' && data_fim ? `${data_fim}-02-01` : null,
           escolaridade,
           curso,
-          situacao,
+          situacao: situacao[0],
         }
+        console.log(data)
 
         /**
          * Sends data to backend
@@ -183,7 +186,7 @@ const AcademicExperiences: React.FC = () => {
 
       // Do something
     },
-    [isIncomplete, editStored],
+    [editStored.id, initialAcademicData],
   )
   function handleEditExperience(experience: AcademicType) {
     const {
@@ -219,32 +222,36 @@ const AcademicExperiences: React.FC = () => {
         <h1>Deseja realmente excluir {experienceExcluded.nome}?</h1>
         <footer>
           <Button
-            theme="primary-yellow"
+            theme="primary"
             onClick={() => handleDeleteExperience(experienceExcluded.id)}
           >
             Excluir
           </Button>
-          <Button theme="secondary-yellow" onClick={() => setOpenModal(false)}>
+          <Button theme="primary" onClick={() => setOpenModal(false)}>
             Manter
           </Button>
         </footer>
       </Modal>
-      <h2>Educação</h2>
+      <h2>
+        Educação
+        {!showRegister && (
+          <button onClick={() => setShowRegister(true)}>
+            <span>+ </span>
+            Adicionar
+          </button>
+        )}
+      </h2>
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: AcademicType) => (
             <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
-                <img
-                  src={edit}
-                  alt="editar experiencia"
+                <IconEdit
                   onClick={() => {
                     handleEditExperience(experience)
                   }}
                 />
-                <img
-                  src={trash}
-                  alt="apagar experiencia"
+                <IconTrash
                   onClick={() => {
                     setOpenModal(true)
                     setExperienceExcluded({
@@ -261,10 +268,6 @@ const AcademicExperiences: React.FC = () => {
                 <p>
                   {experience.instituicao} <br />
                   {experience.situacao} <br />
-                  {/* 
-                      Get only the year from data by spliting the date and getting the first
-                      index of the array.
-                  */}
                   {`${experience?.data_inicio?.split('-')[0]} até ${
                     experience?.data_fim?.split('-')[0]
                   }`}
@@ -272,11 +275,6 @@ const AcademicExperiences: React.FC = () => {
               </fieldset>
             </div>
           ))}
-
-          <button onClick={() => setShowRegister(true)}>
-            <span>+ </span>
-            Adicionar
-          </button>
         </div>
       ) : (
         <Form
@@ -350,22 +348,20 @@ const AcademicExperiences: React.FC = () => {
             </section>
             <section className="bloco-tres area-toggle">
               <ToggleSwitch
-                label="Incompleto"
                 name="situacao"
-                type="radio"
-                value="Incompleto"
-              />
-              <ToggleSwitch
-                label="Em andamento"
-                name="situacao"
-                type="radio"
-                value="Em andamento"
-              />
-              <ToggleSwitch
-                label="Concluído"
-                name="situacao"
-                type="radio"
-                value="Concluído"
+                options={[
+                  {
+                    label: 'Incompleto',
+                    id: 'incompleto',
+                    value: 'Incompleto',
+                  },
+                  {
+                    label: 'Em andamento',
+                    id: 'em_andamento',
+                    value: 'Em andamento',
+                  },
+                  { id: 'concluido', label: 'Concluído', value: 'Concluído' },
+                ]}
               />
             </section>
             <section className="bloco-quatro">
@@ -376,15 +372,11 @@ const AcademicExperiences: React.FC = () => {
               />
             </section>
             <section className="area-botoes">
-              <Button
-                type="submit"
-                theme="primary-green"
-                // disabled={academicFormData === {} as AcademicType? false:true}
-              >
+              <Button type="submit" theme="primary">
                 Salvar
               </Button>
               <Button
-                theme="secondary-green"
+                theme="secondary"
                 onClick={() => {
                   if (editStored.id) {
                     setOpenModal(true)
@@ -404,6 +396,7 @@ const AcademicExperiences: React.FC = () => {
                   setShowRegister(false)
                   setEditStored(initialAcademicData)
                 }}
+                theme="secondary"
               >
                 Cancelar
               </Button>

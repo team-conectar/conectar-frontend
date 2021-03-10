@@ -6,22 +6,26 @@ export const BodyCard = styled.div`
   padding-top: 2rem;
   width: 100%;
   height: fit-content;
-  border: solid 1px var(--borderDivision);
+  box-shadow: var(--boxShadow);
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
   align-items: center;
   justify-content: space-evenly;
   > img {
     border-radius: 50%;
-    width: 40%;
+    width: 4.4rem;
+    height: 4.4rem;
     object-fit: cover;
     object-position: center;
   }
   > p {
     text-align: center;
     color: var(--gray);
+    h2 {
+      color: var(--textGreen);
+    }
   }
   > aside {
     display: flex;
@@ -30,10 +34,10 @@ export const BodyCard = styled.div`
       width: 2rem;
     }
   }
-  > button {
+  > a {
+    font-size: 1rem;
+    text-align: center;
     width: 100%;
-    border: 0;
-    background: white;
     align-self: flex-end;
     padding: 0.6rem;
     border-top: solid 1px var(--borderDivision);

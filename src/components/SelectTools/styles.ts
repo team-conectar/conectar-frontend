@@ -9,8 +9,7 @@ export const BodySelectTool = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font: 400 1rem Roboto;
-    color: var(--orange);
+    font: 400 0.9rem Raleway;
   }
   > div {
     margin-top: 0.2rem;
@@ -18,14 +17,14 @@ export const BodySelectTool = styled.div`
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr;
     grid-gap: 0;
-    border: 2px solid var(--yellow);
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
     border-radius: 0.4rem;
     .area-selecao,
     .area-selecionadas {
       height: 60vh;
     }
     .area-selecao {
-      border-right: 2px solid var(--yellow);
+      border-right: 2px solid var(--borderDivision);
       grid-column: 1;
       grid-row: 1;
       height: 60vh;
@@ -35,12 +34,11 @@ export const BodySelectTool = styled.div`
         align-items: center;
         height: 50px;
         width: 100%;
-        color: var(--green-bg);
-        font: 500 1.2rem Roboto;
-        border-bottom: 2px solid var(--yellow);
+        font: 600 1.2rem Raleway;
+        border-bottom: 2px solid var(--borderDivision);
       }
       > ul {
-        height: 80%;
+        height: 78%;
         overflow-y: auto;
         overflow-x: hidden;
         > li {
@@ -49,6 +47,7 @@ export const BodySelectTool = styled.div`
           input {
             display: none;
           }
+
           > label {
             position: relative;
             display: flex;
@@ -57,39 +56,37 @@ export const BodySelectTool = styled.div`
             width: 100%;
             background: none;
             height: 50px;
-            border-bottom: 2px solid var(--yellow);
+            border-bottom: 2px solid var(--borderDivision);
             padding: 0 1.4rem;
-            font: 500 1.2rem Roboto;
+            font: 500 1.2rem Raleway;
             cursor: pointer;
-            span,
-            strong {
+            svg {
               color: var(--green);
-              font-size: 1.3rem;
             }
             > span {
               position: absolute;
             }
             > legend {
-              color: var(--orange);
               display: flex;
               align-items: center;
               justify-content: center;
               margin-left: 0.4rem;
               width: 100%;
+              font-size: 1rem;
             }
           }
         }
       }
       .area-insercao {
-        border-top: 2px solid var(--yellow);
-        padding-bottom: 0.5rem;
+        border-top: 2px solid var(--borderDivision);
+        height: 10%;
         > button {
           background: none;
           border: none;
           cursor: pointer;
           color: var(--green);
           font-size: 1.3rem;
-          font: 700 1.3rem Roboto;
+          font: 700 1.3rem Raleway;
           text-align: center;
         }
         > input {
@@ -100,7 +97,6 @@ export const BodySelectTool = styled.div`
           height: 2rem;
         }
         > legend {
-          color: var(--orange);
           padding: 0.2rem;
         }
       }
@@ -115,9 +111,9 @@ export const BodySelectTool = styled.div`
         align-items: center;
         height: 50px;
         width: 100%;
-        background: var(--green-bg);
+        background: var(--textGreen);
         color: white;
-        font: 500 1.2rem Roboto;
+        font: 500 1.2rem Raleway;
         border-top-right-radius: 0.4rem;
         padding: 0.8rem;
       }
@@ -132,28 +128,25 @@ export const BodySelectTool = styled.div`
           height: 50px;
           background: none;
           border: 0;
-          border-bottom: 2px solid var(--yellow);
+          border-bottom: 2px solid var(--borderDivision);
           padding: 0 1.4rem;
-          font: 500 1.2rem Roboto;
+          font: 500 1.2rem Raleway;
           > svg {
             color: var(--green);
             font-size: 1.3rem;
           }
           > label {
-            > img {
-              cursor: pointer;
-              height: 1.4rem;
-              cursor: pointer;
-            }
+            display: flex;
+            align-items: center;
           }
 
           > legend {
-            color: var(--green-bg);
             display: flex;
             align-items: center;
             justify-content: flex-start;
             margin-left: 0.4rem;
             width: 100%;
+            font-size: 1rem;
           }
         }
       }
@@ -161,7 +154,7 @@ export const BodySelectTool = styled.div`
   }
   > span {
     color: red;
-    font: 400 0.8rem Roboto;
+    font: 400 0.8rem Raleway;
     position: absolute;
     left: 0;
     bottom: 0;

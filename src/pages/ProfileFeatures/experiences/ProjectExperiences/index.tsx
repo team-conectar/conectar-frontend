@@ -1,88 +1,87 @@
 import React, {
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-  OptionHTMLAttributes,
   ChangeEvent,
+  useState,
+  useCallback,
+  useEffect,
+  OptionHTMLAttributes,
+  useRef,
 } from 'react'
-import Input from '../../Input'
-import Textarea from '../../Textarea'
-import Select from '../../Select'
-import ToggleSwitch from '../../ToggleSwitch'
-import Button from '../../Button'
+import Input from '../../../../components/Input'
+import Textarea from '../../../../components/Textarea'
+import Select from '../../../../components/Select'
+import ToggleSwitch from '../../../../components/ToggleSwitch'
+import Button from '../../../../components/Button'
 import { BodyExperiences } from '../styles'
 import {
   yearOptions,
   monthOptions,
   toMonth,
   finalYearOptions,
-} from '../../../utils/dates'
+} from '../../../../utils/dates'
 import { AxiosError } from 'axios'
-import api from '../../../services/api'
-import edit from '../../../assets/icon/editar.svg'
-import trash from '../../../assets/icon/lixeira.svg'
-import Modal from '../../Modal'
+import api from '../../../../services/api'
+import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
-import getValidationErrors from '../../../utils/getValidationErrors'
-interface ProfessionalType {
+import getValidationErrors from '../../../../utils/getValidationErrors'
+import { IconEdit, IconTrash } from '../../../../assets/icon'
+import { OptionTypeBase, Props as SelectProps } from 'react-select'
+export interface IExperienceProject {
   id: number
-  organizacao: string
+  nome: string
   descricao: string
   data_inicio: string
   data_fim: string
   cargo: string
-  vinculo: string
+  situacao: string
 }
-interface ProfessionalDataType {
+interface ProjectDataType {
   id?: number
-  vinculo: string
-  currentWorking: boolean
-  cargo: string
-  organizacao: string
+  nome: string
   descricao: string
+  currentProject: boolean
+  cargo: string
+  situacao: string
   initialYear: string
   initialMonth: string
   // Supressing "The operand of a 'delete' operator must be optional" warning
-  finalYear: any
-  finalMonth: any
+  finalYear?: string
+  finalMonth?: string
 }
-const ProfessionalExperiences: React.FC = () => {
-  // Global
-  const vinculos: OptionHTMLAttributes<HTMLOptionElement>[] = [
-    { label: 'Trainee', value: 'Trainee' },
-    { label: 'Terceirizado', value: 'Terceirizado' },
-    { label: 'Intermitente', value: 'Intermitente' },
-    { label: 'Aprendiz', value: 'Aprendiz' },
-    { label: 'Estágio', value: 'Estágio' },
-    { label: 'Temporário', value: 'Temporário' },
-    { label: 'Freelance', value: 'Freelance' },
-    { label: 'Autônomo', value: 'Autônomo' },
-    { label: 'Meio Período', value: 'Meio Período' },
-    { label: 'Tempo Integral', value: 'Tempo Integral' },
-  ]
-  const [showRegister, setShowRegister] = useState<boolean>(false)
-  const [openModal, setOpenModal] = useState<boolean>(false)
+const ProjectExperiences: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
-  const [stored, setStored] = useState<ProfessionalType[]>([])
-  const [initialYear, setInitialYear] = useState<number>(1970)
-  const [currentilyWork, setCurrentilyWork] = useState<boolean>(false)
-  const initialProfessionalData = {
-    id: 0,
-    currentWorking: false,
-  } as ProfessionalDataType
-  const [editStored, setEditStored] = useState<ProfessionalDataType>(
-    initialProfessionalData,
+  const situationRef = useRef<SelectProps>(null)
+  const [showRegister, setShowRegister] = useState<boolean>(false)
+  const [initialYear, setInitialYear] = useState<number>(
+    new Date().getFullYear() + 1,
   )
+  const [currentilyProject, setCurrentilyProject] = useState<boolean>(false)
+  const [stored, setStored] = useState<IExperienceProject[]>([])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const initialProjectData = {
+    id: 0,
+    currentProject: false,
+  } as ProjectDataType
+  const [editStored, setEditStored] = useState<ProjectDataType>(
+    initialProjectData,
+  )
+  const [openModal, setOpenModal] = useState<boolean>(false)
   const [experienceExcluded, setExperienceExcluded] = useState({
     id: 0,
     nome: '',
   })
+  const situacao: OptionHTMLAttributes<HTMLOptionElement>[] = [
+    { label: 'Desativado', value: 'Desativado' },
+    { label: 'Em andamento', value: 'Em andamento' },
+    { label: 'Conluído', value: 'Conluído' },
+  ]
+  useEffect(() => {
+    console.log(situationRef.current)
+  }, [situationRef])
   useEffect(() => {
     api
-      .get('/api/v1/experiencias/profissional/me', {
+      .get('/api/v1/experiencias/projeto/me', {
         withCredentials: true,
       })
       .then(response => {
@@ -92,19 +91,19 @@ const ProfessionalExperiences: React.FC = () => {
         // Returns error message from backend
         return err?.response?.data.detail
       })
-  }, [showRegister, editStored, openModal])
+  }, [editStored, showRegister, openModal])
   async function handleDeleteExperience(id: number) {
     if (stored.length === 1) {
       stored.splice(0, 1)
     }
     await api
-      .delete(`/api/v1/experiencias/profissional/${id}`, {
+      .delete(`/api/v1/experiencias/projeto/${id}`, {
         withCredentials: true,
       })
       .then(() => {
         setShowRegister(false)
         setOpenModal(false)
-        setEditStored(initialProfessionalData)
+        setEditStored(initialProjectData)
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -113,12 +112,14 @@ const ProfessionalExperiences: React.FC = () => {
   }
 
   const handleSubmit = useCallback(
-    async (formData: ProfessionalDataType) => {
+    async (formData: ProjectDataType) => {
+      console.log(formData)
+
       formRef.current?.setErrors({})
       try {
-        const validations = {
-          vinculo: Yup.string().required('Informe o vínculo'),
-          organizacao: Yup.string()
+        const schema = Yup.object().shape({
+          nome: Yup.string().required('Informe o nome'),
+          situacao: Yup.string()
             .max(50, 'Excedeu o limite de caractéres (50)')
             .required('Informe a organização'),
           cargo: Yup.string().required('Informe o cargo'),
@@ -126,81 +127,79 @@ const ProfessionalExperiences: React.FC = () => {
             .min(20, 'Descreva um pouco mais')
             .max(500, 'Excedeu o limite de caractéres (500)')
             .required('Informe a descrição'),
-          finalYear: !currentilyWork
+          finalYear: !currentilyProject
             ? Yup.string().required('Ano final é obrigatório')
             : Yup.string(),
           initialYear: Yup.string().required('Ano inicial é obrigatório'),
           initialMonth: Yup.string().required('Mês inicial é obrigatório'),
-          finalMonth: !currentilyWork
+          finalMonth: !currentilyProject
             ? Yup.string().required('Mês final é obrigatório')
             : Yup.string(),
-        }
-
-        const schema = Yup.object().shape(validations)
+        })
 
         await schema.validate(formData, {
           abortEarly: false,
         })
         // Validation passed
         const {
-          vinculo,
-          currentWorking,
-          organizacao,
+          currentProject,
+          nome,
           cargo,
           descricao,
           finalYear,
           initialYear,
-          initialMonth,
           finalMonth,
-        }: ProfessionalDataType = formData
+          initialMonth,
+          situacao,
+        } = formData
         // setting to null because if there a update an experience with an existing data_fim it will not send
         let data_fim = null
         const data_inicio = `${initialYear}-${initialMonth}-01`
 
-        if (!currentWorking) {
+        if (!currentProject) {
           data_fim = `${finalYear}-${finalMonth}-01`
         }
 
         const data = {
-          organizacao,
+          nome,
           descricao,
           data_inicio,
           data_fim,
           cargo,
-          vinculo,
+          situacao,
         }
-
+        console.log(data)
         /**
          * Sends data to backend
          * It's important to notice the withCredentials being true here
          * so it will send the JWT token as cookie
          * */
-        if (editStored.id)
-          await api
-            .put(`/api/v1/experiencias/profissional/${editStored.id}`, data, {
-              withCredentials: true,
-            })
-            .then(() => {
-              setShowRegister(false)
-              setEditStored(initialProfessionalData)
-            })
-            .catch((err: AxiosError) => {
-              // Returns error message from backend
-              return err?.response?.data.detail
-            })
-        else
-          await api
-            .post('/api/v1/experiencias/profissional', data, {
-              withCredentials: true,
-            })
-            .then(() => {
-              setShowRegister(false)
-              setEditStored(initialProfessionalData)
-            })
-            .catch((err: AxiosError) => {
-              // Returns error message from backend
-              return err?.response?.data.detail
-            })
+        const res = editStored.id
+          ? await api
+              .put(`/api/v1/experiencias/projeto/${editStored.id}`, data, {
+                withCredentials: true,
+              })
+              .then(() => {
+                setShowRegister(false)
+                setEditStored(initialProjectData)
+              })
+              .catch((err: AxiosError) => {
+                // Returns error message from backend
+                return err?.response?.data.detail
+              })
+          : await api
+              .post('/api/v1/experiencias/projeto', data, {
+                withCredentials: true,
+              })
+              .then(() => {
+                setShowRegister(false)
+                setEditStored(initialProjectData)
+              })
+              .catch((err: AxiosError) => {
+                // Returns error message from backend
+                return err?.response?.data.detail
+              })
+        console.log(res)
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           // Validation failed
@@ -212,46 +211,43 @@ const ProfessionalExperiences: React.FC = () => {
 
       // Do something
     },
-    [currentilyWork, editStored],
+    [currentilyProject, editStored.id, initialProjectData],
   )
-  // Edit
-  function handleEditExperience(experience: ProfessionalType) {
+  function handleEditExperience(experience: IExperienceProject) {
     const {
       id,
-      organizacao,
+      nome,
       descricao,
       data_inicio,
       data_fim,
       cargo,
-      vinculo,
-    }: ProfessionalType = experience
+      situacao,
+    }: IExperienceProject = experience
 
     const [initialYear, initialMonth] = data_inicio.split('-')
 
     const data = {
       id,
-      vinculo,
-      organizacao,
+      nome,
       cargo,
       descricao,
       initialYear,
       initialMonth,
-      currentWorking: !data_fim,
+      situacao,
+      currentProject: !data_fim,
       finalYear: data_fim ? data_fim.split('-')[0] : data_fim,
       finalMonth: data_fim ? data_fim.split('-')[1] : data_fim,
     }
-
     setShowRegister(true)
     setEditStored(data)
   }
-
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
         <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
         <footer>
           <Button
-            theme="primary-yellow"
+            theme="primary"
             onClick={() =>
               experienceExcluded &&
               handleDeleteExperience(experienceExcluded?.id)
@@ -259,61 +255,58 @@ const ProfessionalExperiences: React.FC = () => {
           >
             Excluir
           </Button>
-          <Button theme="secondary-yellow" onClick={() => setOpenModal(false)}>
+          <Button theme="primary" onClick={() => setOpenModal(false)}>
             Manter
           </Button>
         </footer>
       </Modal>
-      <h2>Atuação Profissional</h2>
+      <h2>
+        Projetos
+        {!showRegister && (
+          <button onClick={() => setShowRegister(true)}>
+            <span>+ </span>
+            Adicionar
+          </button>
+        )}
+      </h2>
+
       {!showRegister ? (
         <div className="experiencias">
-          {stored?.map((experience: ProfessionalType) => (
+          {stored?.map((experience: IExperienceProject) => (
             <div key={experience.id} className="experiencia-cadastrada">
               <section className="icones">
-                <img
-                  src={edit}
-                  alt="editar experiencia"
-                  onClick={() => handleEditExperience(experience)}
-                />
-                <img
-                  src={trash}
-                  alt="apagar experiencia"
+                <IconEdit onClick={() => handleEditExperience(experience)} />
+                <IconTrash
                   onClick={() => {
                     setOpenModal(true)
-                    setExperienceExcluded({
-                      ...experience,
-                      nome: experience.cargo,
-                    })
+                    setExperienceExcluded(experience)
                   }}
                 />
               </section>
               <fieldset className="info-experiencias">
-                <legend>
-                  {`${experience.cargo} | ${experience.organizacao}`}
-                </legend>
+                <legend>{`${experience.cargo} | ${experience.nome}`}</legend>
+
                 <p>
-                  {experience.vinculo} <br />
+                  {experience.situacao} <br />
                   {`
-                    ${toMonth(experience.data_inicio.split('-')[1])} 
-                    de 
-                    ${experience.data_inicio.split('-')[0]} 
-                    até 
-                    ${
-                      experience.data_fim
-                        ? `${toMonth(experience.data_fim.split('-')[1])} 
+                  ${toMonth(experience.data_inicio.split('-')[1])} 
+                  de 
+                  ${experience.data_inicio.split('-')[0]} 
+                  até 
+                  ${
+                    experience.data_fim
+                      ? `
+                      ${toMonth(experience.data_fim.split('-')[1])} 
                       de 
-                      ${experience.data_fim.split('-')[0]}`
-                        : 'o momento atual'
-                    }
+                      ${experience.data_fim.split('-')[0]}
+                    `
+                      : 'o momento atual'
+                  }
                   `}
                 </p>
               </fieldset>
             </div>
           ))}
-          <button onClick={() => setShowRegister(true)}>
-            <span>+ </span>
-            Adicionar
-          </button>
         </div>
       ) : (
         <Form
@@ -324,29 +317,33 @@ const ProfessionalExperiences: React.FC = () => {
           <aside className="area-registro">
             <section className="bloco-um">
               <Input
-                label="Organização"
-                name="organizacao"
-                defaultValue={editStored?.organizacao}
-              />
-              <Input
-                label="Cargo"
-                name="cargo"
-                defaultValue={editStored?.cargo}
+                label="Nome do projeto"
+                name="nome"
+                defaultValue={editStored?.nome}
               />
             </section>
             <section className="bloco-dois">
               <Select
-                label="Vínculo"
-                name="vinculo"
-                options={vinculos}
+                label="Situação"
+                name="situacao"
+                options={situacao}
                 defaultValue={
                   editStored.id
                     ? {
-                        label: editStored?.vinculo,
-                        value: editStored?.vinculo,
+                        label: editStored?.situacao,
+                        value: editStored?.situacao,
                       }
                     : null
                 }
+                onChange={(data: any) => {
+                  setCurrentilyProject(!!(data.value === 'Em andamento'))
+                }}
+              />
+
+              <Input
+                label="Cargo"
+                name="cargo"
+                defaultValue={editStored?.cargo}
               />
             </section>
             <section className="bloco-tres">
@@ -358,12 +355,11 @@ const ProfessionalExperiences: React.FC = () => {
                   defaultValue={
                     editStored.id
                       ? {
-                          label: toMonth(editStored?.initialMonth),
+                          label: editStored?.initialMonth,
                           value: editStored?.initialMonth,
                         }
                       : null
                   }
-                  defaultOption={editStored?.initialMonth}
                 />
                 <Select
                   label="Ano inicial"
@@ -382,18 +378,8 @@ const ProfessionalExperiences: React.FC = () => {
                   }
                 />
               </aside>
-              <aside>
-                <ToggleSwitch
-                  label="Trabalho atual"
-                  name="currentWorking"
-                  id="currentWorking"
-                  defaultChecked={editStored.currentWorking}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    setCurrentilyWork(event.target.checked)
-                  }
-                />
-              </aside>
-              {!currentilyWork && (
+
+              {!currentilyProject && (
                 <aside>
                   <Select
                     label="Mês final"
@@ -402,7 +388,7 @@ const ProfessionalExperiences: React.FC = () => {
                     defaultValue={
                       editStored.id
                         ? {
-                            label: toMonth(editStored?.finalMonth),
+                            label: editStored?.finalMonth,
                             value: editStored?.finalMonth,
                           }
                         : null
@@ -411,13 +397,13 @@ const ProfessionalExperiences: React.FC = () => {
                   <Select
                     label="Ano final"
                     name="finalYear"
-                    options={finalYearOptions(Number(initialYear))}
+                    options={finalYearOptions(initialYear)}
                     defaultValue={
                       editStored.id &&
-                      Number(editStored?.finalYear > initialYear)
+                      Number(editStored?.finalYear) > initialYear
                         ? {
-                            label: editStored?.finalYear,
-                            value: editStored?.finalYear,
+                            label: editStored?.finalMonth,
+                            value: editStored?.finalMonth,
                           }
                         : null
                     }
@@ -433,16 +419,20 @@ const ProfessionalExperiences: React.FC = () => {
               />
             </section>
             <section className="area-botoes">
-              <Button type="submit" theme="primary-green">
+              <Button
+                type="submit"
+                theme="primary"
+                // disabled={academicFormData === {} as AcademicType? false:true}
+              >
                 Salvar
               </Button>
               <Button
-                theme="secondary-green"
+                theme="secondary"
                 onClick={() => {
                   if (editStored.id) {
                     setOpenModal(true)
                     setExperienceExcluded({
-                      nome: editStored.cargo,
+                      nome: editStored.nome,
                       id: editStored?.id,
                     })
                   } else {
@@ -453,9 +443,10 @@ const ProfessionalExperiences: React.FC = () => {
                 Excluir
               </Button>
               <Button
+                theme="secondary"
                 onClick={() => {
                   setShowRegister(false)
-                  setEditStored(initialProfessionalData)
+                  setEditStored(initialProjectData)
                 }}
               >
                 Cancelar
@@ -468,4 +459,4 @@ const ProfessionalExperiences: React.FC = () => {
   )
 }
 
-export default ProfessionalExperiences
+export default ProjectExperiences

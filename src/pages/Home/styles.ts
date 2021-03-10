@@ -1,7 +1,20 @@
-import styled from 'styled-components'
-import passos_idealizador from '../../assets/image/passos_idealizador.svg'
+import styled, { keyframes } from 'styled-components'
+const moveDownUp = keyframes`
+  
+  90%{
+    bottom:20px;
+  }
+  100%{
+    bottom:15px;
+  }
+  
+
+`
 export const BodyHome = styled.div`
   background: var(--background);
+  area {
+    background: black;
+  }
   > main {
     height: 100vh;
     scroll-snap-type: y mandatory;
@@ -17,23 +30,22 @@ export const BodyHome = styled.div`
       align-items: center;
     }
     .arrow-bottom {
-      width: 100%;
       position: absolute;
-      bottom: 18px;
-      right: 0;
+      bottom: 20px;
+      right: 50%;
       transition: 0.5s;
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      a {
-        cursor: pointer;
-        font-size: 2rem;
-        color: var(--green-bg);
-        outline: none;
-      }
-      :hover {
-        bottom: 15px;
-      }
+
+      cursor: pointer;
+      font-size: 2rem;
+
+      outline: none;
+      transition: 0.4s;
+      animation: 3s ${moveDownUp} infinite alternate ease-in-out;
+      animation-play-state: running;
+
       @media (min-width: 768px) {
         height: 140px;
       }
@@ -55,24 +67,22 @@ export const BodyHome = styled.div`
         }
         .area-login {
           > h1 {
-            font: 600 3rem Roboto;
-            color: var(--green-bg);
-            &:nth-child(1) {
-              color: white;
-              -webkit-text-stroke-width: 1.5px;
-              -webkit-text-stroke-color: var(--green-bg);
+            font: 700 3.2rem Raleway;
+
+            strong {
+              color: transparent;
+              -webkit-text-stroke-width: 1.6px;
+              -webkit-text-stroke-color: var(--textGreen);
             }
           }
-          h1 + h1 {
-            margin-bottom: 0.8rem;
-          }
+
           p {
             color: black;
           }
         }
         .hero {
           > img {
-            width: 50%;
+            width: 100%;
             margin: 1rem 0;
           }
         }
@@ -112,8 +122,8 @@ export const BodyHome = styled.div`
         h3 {
           background: #f1f1f1ff;
           width: fit-content;
-          font: 700 1.4rem Roboto;
-          color: var(--green-bg);
+          font: 700 1.4rem Raleway;
+
           padding: 0 0.8rem;
         }
       }
@@ -126,7 +136,6 @@ export const BodyHome = styled.div`
         .intro-box {
           position: relative;
           margin: 0 2rem;
-          color: white;
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -135,11 +144,13 @@ export const BodyHome = styled.div`
           transform: skewX(10deg);
           max-width: 700px;
           h4 {
+            color: white;
             transform: skewX(-10deg);
-            font: 700 1.4rem Roboto;
+            font: 700 1.4rem Raleway;
             margin-bottom: 1.2rem;
           }
           p {
+            color: white;
             transform: skewX(-10deg);
             line-height: 2rem;
           }
@@ -168,7 +179,7 @@ export const BodyHome = styled.div`
             height: 80%;
             right: 15px;
             transform: skewX(-3deg);
-            background: var(--green-bg);
+            background: var(--textGreen);
           }
         }
         .texto {
@@ -176,7 +187,7 @@ export const BodyHome = styled.div`
             width: 4rem;
           }
           h4 {
-            font: 700 1.8rem Roboto;
+            font: 700 1.8rem Raleway;
             margin: 1.2rem 0;
           }
           p {
@@ -215,7 +226,7 @@ export const BodyHome = styled.div`
                 border-left: solid 4px var(--green);
                 padding: 0 0.8rem;
                 margin-bottom: 0.8rem;
-                font: 500 2rem Roboto;
+                font: 500 2rem Raleway;
                 transition: 0.1s;
               }
             }
@@ -288,7 +299,7 @@ export const BodyHome = styled.div`
                     border-left: solid 4px var(--green);
                     padding: 0 0.8rem;
                     margin-bottom: 0.8rem;
-                    font: 500 2rem Roboto;
+                    font: 500 2rem Raleway;
                     transition: 0.1s;
                   }
                 }
@@ -330,8 +341,8 @@ export const BodyHome = styled.div`
       > h3 {
         margin-bottom: 4rem;
         background: transparent;
-        color: var(--green-bg);
-        font: 700 2rem Roboto;
+
+        font: 700 2rem Raleway;
         padding: 0 0.8rem;
         width: fit-content;
         position: sticky;
@@ -426,11 +437,9 @@ export const BodyHome = styled.div`
                 }
               }
               legend {
-                font: 600 1.6vw Roboto;
-                color: var(--green-bg);
+                font: 600 1.6vw Raleway;
               }
               p {
-                color: var(--green-bg);
                 margin-top: 1.2rem;
                 text-align: center;
                 font-size: 1vw;
@@ -608,16 +617,30 @@ export const BodyHome = styled.div`
         }
       }
       footer {
-        background: var(--green-bg);
+        background: var(--textGreen);
         width: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-around;
-        > img {
-          width: 40%;
+
+        > h3 {
+          color: white;
+          font-size: 2rem;
+          height: 4rem;
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
           margin-top: 2rem;
+          img {
+            width: 4rem;
+            align-self: flex-start;
+            :nth-of-type(1) {
+              transform: scaleX(-1);
+            }
+          }
         }
+
         > section {
           height: 4rem;
           display: flex;
@@ -641,11 +664,13 @@ export const BodyHome = styled.div`
           a {
             display: flex;
             align-items: center;
-            color: var(--green);
             span {
               color: white;
             }
-            font: 700 1.6rem Roboto;
+            font: 700 1.6rem Raleway;
+            svg {
+              color: var(--green) !important;
+            }
           }
         }
         p {

@@ -1,6 +1,4 @@
 import React, {
-  ChangeEvent,
-  FormEvent,
   useRef,
   useState,
   useCallback,
@@ -13,15 +11,9 @@ import Select from '../Select'
 import ToggleSwitch from '../ToggleSwitch'
 import Button from '../Button'
 import { BodyVacancy } from './styles'
-import { inputChange } from '../../utils/inputChange'
-import { selectChange } from '../../utils/selectChange'
-import { textareaChange } from '../../utils/textareaChange'
 import { finalYearOptions, yearOptions } from '../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import edit from '../../assets/icon/editar.svg'
-import trash from '../../assets/icon/lixeira.svg'
-import Modal from '../Modal'
 import { AreaType } from '../../components/SelectArea'
 import { ToolType } from '../../components/SelectTools'
 import { createOptionAreas, createOptionTools } from '../../utils/projects'
@@ -29,23 +21,36 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
-interface VacanciesType {
-  nome: string
+import VacancieListItem from '../VacancieListItem'
+import { ProjectType } from '../../pages/CreateProject'
+
+export interface VacanciesType {
+  projeto_id: number
+  remunerado: boolean
+  titulo: string
+  pessoa_id: number
+  papel_id: number
+  tipo_acordo_id: number
   descricao: string
-  visibilidade: true
-  objetivo: string
-  foto_capa: string
+  situacao?:
+    | 'PENDENTE_IDEALIZADOR'
+    | 'PENDENTE_COLABORADOR'
+    | 'ACEITE_COLABORADOR'
+    | 'FINALIZADO'
+  habilidades: Array<ToolType>
+  areas: Array<AreaType>
   id: number
 }
-interface ProjectType {
-  nome: string
+
+interface IFormData {
+  cargo: string
+  perfil: string
+  quantidade: number
   descricao: string
-  visibilidade: true
-  objetivo: string
-  foto_capa: string
-  areas: AreaType[]
-  habilidades: ToolType[]
-  id: number
+  tipoContrato: string
+  areas: Array<string>
+  habilidades: Array<string>
+  remunerado: string
 }
 interface VacancyProps {
   project: ProjectType
@@ -53,19 +58,25 @@ interface VacancyProps {
 
 const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
+  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [editingId, setEditingId] = useState<number>(0)
   const formRef = useRef<FormHandles>(null)
   const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
-    { value: 'trainee', label: 'Trainee' },
-    { value: 'terceirizado', label: 'Terceirizado' },
-    { value: 'intermitente', label: 'Intermitente' },
-    { value: 'aprendiz', label: 'Aprendiz' },
-    { value: 'estágio', label: 'Estágio' },
-    { value: 'temporário', label: 'Temporário' },
-    { value: 'freelance', label: 'Freelance' },
-    { value: 'autônomo', label: 'Autônomo' },
-    { value: 'meioPeríodo', label: 'Meio Período' },
-    { value: 'tempoIntegral', label: ' Tempo Integral' },
+    { value: '1', label: 'Trainee' },
+    { value: '2', label: 'Terceirizado' },
+    { value: '3', label: 'Intermitente' },
+    { value: '4', label: 'Aprendiz' },
+    { value: '5', label: 'Estágio' },
+    { value: '6', label: 'Temporário' },
+    { value: '7', label: 'Freelance' },
+    { value: '8', label: 'Autônomo' },
+    { value: '9', label: 'Meio Período' },
+    { value: '10', label: ' Tempo Integral' },
+  ]
+  const optionsPerfil: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
+    { value: '1', label: 'Aliado' },
+    { value: '2', label: 'Colaborador' },
+    { value: '3', label: 'Idealizador' },
   ]
 
   const optionsAreas: Array<
@@ -84,155 +95,127 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         return err?.response?.data.detail
       })
   }, [editingId, showRegister])
-  const handleSubmit = useCallback(async (formData: ProjectType) => {
-    console.log(formData)
-    try {
-      // Remove all previogeus errors
-      formRef.current?.setErrors({})
-      const schema = Yup.object().shape({
-        cargo: Yup.string().required('Cargo é obrigatório'),
-        perfil: Yup.string().required('Perfil é obrigatório'),
-        quantidade: Yup.string().required('Quantidade é obrigatório'),
-        descricao: Yup.string().required('Descrição é obrigatório'),
-        tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
-        areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
-        habilidade: Yup.array().min(1, 'Habilidades de contrato é obrigatório'),
-      })
-      await schema.validate(formData, {
-        abortEarly: false,
-      })
-      // Validation passed
+  const handleSubmit = useCallback(
+    async (formData: IFormData) => {
+      console.log(formData)
+      try {
+        // Remove all previogeus errors
+        formRef.current?.setErrors({})
+        const schema = Yup.object().shape({
+          cargo: Yup.string().required('Cargo é obrigatório'),
+          perfil: Yup.string().required('Perfil é obrigatório'),
+          quantidade: Yup.number()
+            .required('Quantidade é obrigatório')
+            .min(1, 'Deve conter no mínimo uma vaga'),
+          descricao: Yup.string().required('Descrição é obrigatório'),
+          tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
+          // areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
+          // habilidades: Yup.array().min(
+          //   1,
+          //   'Habilidades de contrato é obrigatório',
+          // ),
+        })
+        await schema.validate(formData, {
+          abortEarly: false,
+        })
+        // Validation passed
 
-      // await api.put(`/api/v1/projeto/`, formData);
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        // Validation failed
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
+        const data = {
+          ...formData,
+          projeto_id: project.id,
+          titulo: formData.cargo,
+          papel_id: formData.perfil,
+          tipo_acordo_id: formData.tipoContrato,
+          remunerado: !!(formData.remunerado[0] === 'remunerado'),
+          situacao: 'Não enviado',
+        }
+        console.log(data)
+
+        await api
+          .post('/api/v1/pessoa_projeto', data, {
+            withCredentials: true,
+          })
+          .then(async response => {
+            const res = await api
+              .put(
+                `/api/v1/pessoa_projeto/${response.data.id}`,
+                {
+                  areas: formData.areas.map(area => {
+                    return { descricao: area }
+                  }),
+                  habilidades: formData.habilidades.map(habilidade => {
+                    return { nome: habilidade }
+                  }),
+                },
+                {
+                  withCredentials: true,
+                },
+              )
+              .catch((err: AxiosError) => {
+                return err?.response?.data.detail
+              })
+            console.log(res)
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          })
+        setShowRegister(false)
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          // Validation failed
+          const errors = getValidationErrors(err)
+          formRef.current?.setErrors(errors)
+        }
       }
-    }
-  }, [])
+    },
+    [project.id],
+  )
+  useEffect(() => {
+    api.get(`/api/v1/pessoa_projeto/projeto/${project.id}`).then(response => {
+      setVacancies(response.data)
+    })
+  }, [project.id, showRegister])
   return (
-    <BodyVacancy>
-      <h2>Vagas</h2>
-      {!showRegister ? (
-        <div className="vagas">
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
-          <div key={1} className="vaga-cadastrada">
-            <section className="icones">
-              <img src={edit} alt="editar vaga" />
-              <img src={trash} alt="apagar vaga" />
-            </section>
-            <fieldset className="info-vagas">
-              <legend>Ux Designer</legend>
-              <p>
-                Trainee | Não remunerado <br />2 Vagas
-              </p>
-            </fieldset>
-          </div>
+    <BodyVacancy className={showRegister ? 'registro' : ''}>
+      <h1>
+        Vagas
+        {!showRegister && (
           <button onClick={() => setShowRegister(true)}>
             <span>+ </span>
             Adicionar
           </button>
-        </div>
+        )}
+      </h1>
+      {!showRegister ? (
+        <ul>
+          {vacancies.map(vacancy => (
+            <VacancieListItem key={vacancy.id} vacancy={vacancy} />
+          ))}
+        </ul>
       ) : (
-        <Form ref={formRef} onSubmit={handleSubmit} className="form-vaga">
+        <Form ref={formRef} onSubmit={handleSubmit}>
           <Input
             label="Cargo"
             name="cargo"
             // defaultValue={academicFormData?.instituicao}
           />
-          <Input
-            label="Perfil"
-            name="perfil"
-            // defaultValue={academicFormData?.instituicao}
-          />
+          <Select label="Perfil" options={optionsPerfil} name="perfil" />
           <Input
             label="Quantidade"
             name="quantidade"
             type="number"
             // defaultValue={academicFormData?.instituicao}
           />
+
+          <Select
+            label="Habilidade ou Ferramentas"
+            name="habilidades"
+            options={optionsTools}
+            multi
+          />
           <div className="bloco-area">
-            <Select
-              label="Habilidade ou Ferramentas"
-              name="habilidade"
-              options={optionsTools}
-              isMulti
-            />
+            <Select label="Áreas" name="areas" options={optionsAreas} multi />
           </div>
-          <Select label="Áreas" name="areas" options={optionsAreas} isMulti />
 
           <Textarea name="descricao" label="Descrição" />
           <section className="bloco-contrato">
@@ -242,21 +225,23 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
               name="tipoContrato"
             />
             <ToggleSwitch
-              label="Remunerado"
+              options={[
+                { label: 'Remunerado', id: 'remunerado', value: 'remunerado' },
+              ]}
               name="remunerado"
-              id="remunerado"
             />
           </section>
           <section className="area-botoes">
-            <Button type="submit" theme="primary-green">
+            <Button type="submit" theme="primary">
               Salvar
             </Button>
-            <Button theme="secondary-green">Excluir</Button>
+            <Button theme="secondary">Excluir</Button>
             <Button
               onClick={() => {
                 setShowRegister(false)
                 setEditingId(0)
               }}
+              theme="secondary"
             >
               Cancelar
             </Button>

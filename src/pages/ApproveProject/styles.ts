@@ -1,51 +1,55 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
+import { BodyCard as LinksCard } from '../../components/LinksCard/styles'
+import { BodyCard as ProfileCard } from '../../components/ProfileCard/styles'
+import { BodyCard as SuccessfulCreatorsCard } from '../../components/SuccessfulCreatorsCard/styles'
 
-interface StepProps {
-  showSecondStep: boolean
-}
+export const BodyApproveProject = styled.div`
+  width: var(--container);
+  padding: 1rem 0;
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
+  grid-template-rows: max-content auto;
+  grid-column-gap: 0.6rem;
+  position: relative;
+  
 
-export const BodyApproveProject = styled.div<StepProps>`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
-  background: var(--green-bg);
+  > ${ProfileCard} {
+    grid-column: 1;
+  }
+  > ${LinksCard} {
+    grid-column: 3;
+    grid-row: 1;
+  }
+  > ${SuccessfulCreatorsCard} {
+    grid-column: 3;
+    grid-row: 2;
+  }
   > main {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 1.4rem;
-    .area-esq,
-    .area-dir {
-      @media screen and (max-width: 1300px) {
-        display: none;
-      }
-      > aside {
-        background: var(--white);
-        padding: 1.4rem;
-        border-radius: 0.8rem;
-        border: 2px solid var(--green);
-        margin: 0 1rem;
-      }
-    }
-    .area-central {
-      width: min(720px, 90vw);
-      background: var(--white);
-      padding: 2.4rem;
-      border-radius: 0.8rem;
-      border: 2px solid var(--green);
-
-      > h1 {
-        margin: 1.4rem 0;
-        color: var(--green-bg);
-      }
-      > section {
+    grid-column: 2;
+    grid-row: 1 / -1;
+    padding: 1.2rem 0;
+    border-radius: var(--borderRadius);
+    background: white;
+    box-shadow: var(--boxShadow);
+    height: fit-content;
+    > section {
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      > ul {
+        padding-bottom: 1.2rem;
         display: flex;
-        justify-content: space-between;
+        flex-flow: row wrap;
         align-items: center;
-        margin: 0.6rem 0;
+        justify-content: space-around;
+        gap: 0.5rem;
+      }
+      & + section {
+        border-top: solid 1px var(--borderDivision);
+      }
+      > button {
+        align-self: flex-end;
       }
     }
   }

@@ -1,11 +1,4 @@
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useRef,
-} from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import { BodySignUp } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
 import cadastro_banner from '../../assets/image/cadastro_banner.svg'
@@ -14,33 +7,23 @@ import Select from '../../components/Select'
 import { Link } from 'react-router-dom'
 import Button from '../../components/Button'
 import ToggleSwitch from '../../components/ToggleSwitch'
-import {
-  ReactFacebookLoginInfo,
-  ReactFacebookFailureResponse,
-} from 'react-facebook-login'
+import { ReactFacebookLoginInfo } from 'react-facebook-login'
 import FacebookLogin from 'react-facebook-login'
-import GoogleLogin, {
-  GoogleLoginResponse,
-  GoogleLoginResponseOffline,
-} from 'react-google-login'
+import GoogleLogin, { GoogleLoginResponse } from 'react-google-login'
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebookF } from 'react-icons/fa'
 import { useHistory, useParams } from 'react-router'
 import { daysOptions, monthOptions, yearOptions } from '../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import { createTrue } from 'typescript'
 import InputMask from '../../components/InputMask'
 import * as Yup from 'yup'
-import { FormHandles, UnformErrors } from '@unform/core'
+import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
-interface renderFacebook {
-  onClick: () => void
-  disabled?: boolean
-}
+
 interface routeParms {
-  step: string
+  parte: string
 }
 interface PessoaType {
   email: string
@@ -55,12 +38,13 @@ interface PessoaType {
   colaborador: string
   aliado: string
 }
-function SignUp() {
+const SignUp: React.FC = () => {
   const history = useHistory()
+  const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
 
   const [showNextStep, setShowNextStep] = useState<boolean>(
-    Number(useParams<routeParms>().step) === 2,
+    params.parte === '2',
   )
 
   const handleSubmit = useCallback(async (formData: PessoaType) => {
@@ -109,55 +93,60 @@ function SignUp() {
       }
     }
   }, [])
-  const handleSecondSubmit = useCallback(async (formData: PessoaType) => {
-    try {
-      // Remove all previogeus errors
-      formRef.current?.setErrors({})
-      const schema = Yup.object().shape({
-        telefone: Yup.string().required('Telefone é obrigatório'),
-        year: Yup.string().required('Ano é obrigatório'),
-        month: Yup.string().required('Mês é obrigatório'),
-        day: Yup.string().required('Dia é obrigatório'),
-        aliado: Yup.string(),
-        colaborador: Yup.string(),
-        idealizador: Yup.string(),
-      })
-      await schema.validate(formData, {
-        abortEarly: false,
-      })
-      // Validation passed
-      const { year, month, day, telefone } = formData
+  const handleSecondSubmit = useCallback(
+    async (formData: PessoaType) => {
+      console.log(formData)
 
-      const data_nascimento = `${year}-${month}-${day}`
+      try {
+        // Remove all previogeus errors
+        formRef.current?.setErrors({})
+        const schema = Yup.object().shape({
+          telefone: Yup.string().required('Telefone é obrigatório'),
+          year: Yup.string().required('Ano é obrigatório'),
+          month: Yup.string().required('Mês é obrigatório'),
+          day: Yup.string().required('Dia é obrigatório'),
+        })
+        await schema.validate(formData, {
+          abortEarly: false,
+        })
+        // Validation passed
+        const { year, month, day, telefone } = formData
 
-      const aliado = formData.aliado === 'aliado'
-      const colaborador = formData.colaborador === 'colaborador'
-      const idealizador = formData.idealizador === 'idealizador'
+        const data_nascimento = `${year}-${month}-${day}`
 
-      const data = {
-        data_nascimento,
-        aliado,
-        colaborador,
-        idealizador,
-        telefone,
+        const aliado = !!(formData.aliado[0] === 'aliado')
+        const colaborador = !!(formData.colaborador[0] === 'colaborador')
+        const idealizador = !!(formData.idealizador[0] === 'idealizador')
+
+        const data = {
+          data_nascimento,
+          aliado,
+          colaborador,
+          idealizador,
+          telefone,
+        }
+        console.log(data)
+
+        await api.put('/api/v1/pessoas', data, {
+          withCredentials: true,
+        })
+        history.push('/experiencias-do-usuario')
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          // Validation failed
+          console.log(err)
+
+          const errors = getValidationErrors(err)
+          formRef.current?.setErrors(errors)
+        }
       }
-
-      await api.put('/api/v1/pessoas', data, {
-        withCredentials: true,
-      })
-      history.push('/experienceareas')
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        // Validation failed
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-      }
-    }
-  }, [])
+    },
+    [history],
+  )
 
   /** This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {
-    const { aliado, colaborador, idealizador, nome, email } = (
+    const { aliado, colaborador, idealizador } = (
       await api.get('/api/v1/pessoas/me')
     ).data
     if (!aliado || !colaborador || !idealizador) {
@@ -206,9 +195,7 @@ function SignUp() {
             <img src={logo} alt="logo" />
           </Link>
           <div className="primeira-etapa">
-            <div className="area-img">
-              <img src={cadastro_banner} alt="cadastro" />
-            </div>
+            <img src={cadastro_banner} alt="cadastro" />
 
             <div className="area-form">
               <h1>Criar sua conta</h1>
@@ -226,7 +213,7 @@ function SignUp() {
 
               <section>
                 <Link to="login">Já tem uma conta?</Link>
-                <Button theme="primary-yellow" type="submit">
+                <Button theme="primary" type="submit">
                   Continuar
                 </Button>
               </section>
@@ -280,55 +267,70 @@ function SignUp() {
                 mask="(99) 99999-9999 "
               />
               <Select
-                label="Data de Nascimento"
+                label="Ano de Nascimento"
                 name="year"
                 defaultOption="Ano"
                 options={yearOptions}
               />
-              <Select name="month" defaultOption="Mês" options={monthOptions} />
+              <Select
+                label="Mês de Nascimento"
+                name="month"
+                defaultOption="Mês"
+                options={monthOptions}
+              />
 
               <Select
+                label="Dia de Nascimento"
                 name="day"
                 defaultOption="Dia"
                 options={daysOptions(4, 2000)}
               />
             </section>
-            <section>
-              <legend>Tipo de Perfil</legend>
-              <span>Selecione um ou mais tipos</span>
-            </section>
             <section className="tipo-perfil">
+              <section>
+                <legend>Tipo de Perfil</legend>
+                <span>Selecione um ou mais tipos</span>
+              </section>
               <fieldset>
                 <legend>Idealizador</legend>
                 <aside>
                   <p>Interessado em criar projetos</p>
-                  <ToggleSwitch name="idealizador" value="idealizador" />
+                  <ToggleSwitch
+                    name="idealizador"
+                    options={[{ id: 'idealizador', value: 'idealizador' }]}
+                  />
                 </aside>
               </fieldset>
               <fieldset>
                 <legend>Colaborador</legend>
                 <aside>
                   <p>Interessado em participar de projetos</p>
-                  <ToggleSwitch name="colaborador" value="colaborador" />
+                  <ToggleSwitch
+                    name="colaborador"
+                    options={[{ id: 'colaborador', value: 'colaborador' }]}
+                  />
                 </aside>
               </fieldset>
               <fieldset>
                 <legend>Aliado</legend>
                 <aside>
                   <p>Interessado em ajudar projetos</p>
-                  <ToggleSwitch name="aliado" value="aliado" />
+                  <ToggleSwitch
+                    name="aliado"
+                    options={[{ id: 'aliado', value: 'aliado' }]}
+                  />
                 </aside>
               </fieldset>
             </section>
             <section>
-              <button
-                className="voltar"
-                type="button"
+              <Button
+                theme="secondary"
+                type="submit"
                 onClick={() => setShowNextStep(false)}
               >
-                Voltar
-              </button>
-              <Button theme="primary-yellow" type="submit" disabled={false}>
+                Continuar
+              </Button>
+              <Button theme="primary" type="submit">
                 Continuar
               </Button>
             </section>

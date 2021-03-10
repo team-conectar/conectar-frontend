@@ -1,72 +1,34 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useContext, useState, useRef } from 'react'
 import { BodyNavBar } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
-import { Link } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import lupa from '../../assets/icon/lupa.svg'
-import notification from '../../assets/icon/notification.svg'
 import explorar from '../../assets/icon/explorar.svg'
+import explorar_secondary from '../../assets/icon/explorer_secondary.svg'
 import userDefault from '../../assets/icon/user.svg'
 import { Context } from '../../context/AuthContext'
-import api from '../../services/api'
-import { AxiosError } from 'axios'
-interface UserTypes {
-  email: string
-  nome: string
-  foto_perfil: string
-  usuario: string
-}
-interface NavBarProps {
-  pageIsSobre?: boolean
-  pageIsExplorar?: boolean
-}
+import { useLoggedUser } from '../../context/LoggedUserContext'
+import { IconBell, IconUser } from '../../assets/icon'
+import Dropdown from '../Dropdown'
 
-const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
+const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
-  const [userButton, setUserButton] = useState(false)
-  const [notificationButton, setNotificationButton] = useState(false)
-  const [user, setUser] = useState<UserTypes>({} as UserTypes)
-  const divRef = useRef(null)
-  document.addEventListener('mousedown', (event: any) => {
-    if (
-      event.target.id !== 'dropdown' &&
-      event.target.id !== 'user' &&
-      event.target.id !== 'notification' &&
-      event.target.id !== 'itens'
-    ) {
-      setUserButton(false)
-      setNotificationButton(false)
-    } else if (event.target.id === 'user' && notificationButton) {
-      setNotificationButton(false)
-    } else if (event.target.id === 'notification' && userButton) {
-      setUserButton(false)
-    }
-  })
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const res = api
-        .get('/api/v1/pessoas/me')
-        .then(response => {
-          setUser(response.data)
-        })
-        .catch((err: AxiosError) => {
-          return err?.response?.data.detail
-        })
-      console.log(res)
-    }
-  }, [isAuthenticated])
+  const user = useLoggedUser()
 
   return (
-    <BodyNavBar explorar={!!pageIsExplorar} sobre={!!pageIsSobre}>
+    <BodyNavBar>
       <aside>
-        <img src={logo} alt="logo conectar" />
-        <Link to="/explore" className="explorar">
+        <NavLink to="/">
+          <img src={logo} alt="logo conectar" />
+        </NavLink>
+        <NavLink to="/explorar" className="explorar" activeClassName="selected">
           <img src={explorar} alt="Explore os demais projetos" />
+          <img src={explorar_secondary} alt="Explore os demais projetos" />
           Explorar
-        </Link>
-        <Link to="/sobre" className="sobre">
+        </NavLink>
+        <NavLink to="/sobre" className="sobre" activeClassName="selected">
           Sobre
-        </Link>
+        </NavLink>
       </aside>
 
       <div className="searchBlock">
@@ -77,56 +39,40 @@ const NavBar: React.FC<NavBarProps> = ({ pageIsSobre, pageIsExplorar }) => {
         <input placeholder="Buscar"></input>
       </div>
       <aside>
-        <Link to="/createproject" className="create">
+        <NavLink to="/criar-um-projeto" className="create">
           Criar um Projeto
-        </Link>
+        </NavLink>
         {!loading && isAuthenticated && (
           <>
-            <div id="dropdown">
-              <img
-                src={notification}
-                alt="sua conta"
-                id="notification"
-                onClick={() => setNotificationButton(!notificationButton)}
-              />
-              {console.log(divRef)}
-              {notificationButton && <div className="dropdown-content"></div>}
-            </div>
-            <div id="dropdown">
-              <img
-                id="user"
-                src={userDefault}
-                alt="sua conta"
-                onClick={() => setUserButton(!userButton)}
-              />
-
-              {console.log(divRef)}
-              {userButton && (
-                <div className="dropdown-content">
-                  <section>
-                    <img
-                      src={user.foto_perfil ? user.foto_perfil : userDefault}
-                      alt="sua conta"
-                    />
-                    <legend>{user.nome}</legend>
-                    <p>{user.usuario}</p>
-                    <p>{user.email}</p>
-                  </section>
-                  <Link id="itens" to="/explore">
-                    Perfil no Conectar
-                  </Link>
-                  <Link id="itens" to="/explore">
-                    Configurações
-                  </Link>
-                  <Link id="itens" to="/explore">
-                    Ajuda
-                  </Link>
-                  <button id="itens" onClick={handleLogout}>
-                    Sair
-                  </button>
-                </div>
-              )}
-            </div>
+            <Dropdown IconButton={<IconBell />}>
+              <li>Voce tem novo convite</li>
+              <li>Que tal aproveitar</li>
+            </Dropdown>
+            <Dropdown
+              IconButton={
+                <figure>
+                  {user.foto_perfil ? (
+                    <img src={user.foto_perfil} alt="sua conta" />
+                  ) : (
+                    <IconUser id="user" />
+                  )}
+                </figure>
+              }
+            >
+              <section>
+                <img
+                  src={user.foto_perfil ? user.foto_perfil : userDefault}
+                  alt={user.nome}
+                />
+                <legend>{user.nome}</legend>
+                <p>{user.usuario}</p>
+                <p>{user.email}</p>
+              </section>
+              <Link to={`/perfil/${user.id}`}>Perfil no Conectar</Link>
+              <Link to="/explore">Configurações</Link>
+              <Link to="/explore">Ajuda</Link>
+              <button onClick={handleLogout}>Sair</button>
+            </Dropdown>
           </>
         )}
       </aside>
