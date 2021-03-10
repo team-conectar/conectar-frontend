@@ -1,12 +1,9 @@
 import React, {
-  ChangeEvent,
-  FormEvent,
   useRef,
   useState,
   useCallback,
   useEffect,
   OptionHTMLAttributes,
-  InputHTMLAttributes,
 } from 'react'
 import Input from '../Input'
 import Textarea from '../Textarea'
@@ -17,7 +14,6 @@ import { BodyVacancy } from './styles'
 import { finalYearOptions, yearOptions } from '../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import Modal from '../Modal'
 import { AreaType } from '../../components/SelectArea'
 import { ToolType } from '../../components/SelectTools'
 import { createOptionAreas, createOptionTools } from '../../utils/projects'
@@ -163,6 +159,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })
+        setShowRegister(false)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -180,18 +177,21 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   }, [project.id, showRegister])
   return (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
-      <h1>Vagas</h1>
-      {!showRegister ? (
-        <div className="vagas">
-          {vacancies.map(vacancy => (
-            <VacancieListItem key={vacancy.id} vacancy={vacancy} />
-          ))}
-
+      <h1>
+        Vagas
+        {!showRegister && (
           <button onClick={() => setShowRegister(true)}>
             <span>+ </span>
             Adicionar
           </button>
-        </div>
+        )}
+      </h1>
+      {!showRegister ? (
+        <ul>
+          {vacancies.map(vacancy => (
+            <VacancieListItem key={vacancy.id} vacancy={vacancy} />
+          ))}
+        </ul>
       ) : (
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Input

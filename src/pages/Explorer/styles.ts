@@ -5,33 +5,41 @@ import { BodyCard as SuccessfulCreatorsCard } from '../../components/SuccessfulC
 
 export const Page = styled.div`
   width: var(--container);
-  padding: 1rem 0;
+  padding: 2rem 0;
   min-height: 100vh;
   display: grid;
   grid-template-columns: 0.5fr 1fr 0.5fr;
-  grid-template-rows: max-content auto;
   align-items: flex-start;
-  gap: 0.6rem;
+  gap: 1rem;
   position: relative;
 
   > ${ProfileCard} {
     grid-column: 1;
+    position: sticky;
+    top: calc(2rem + 45px);
   }
-  > ${LinksCard} {
+  > section {
     grid-column: 3;
-    grid-row: 1;
-  }
-  > ${SuccessfulCreatorsCard} {
-    grid-column: 3;
-    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    position: sticky;
+    top: calc(2rem + 45px);
   }
   > ul {
     grid-column: 2;
-    grid-row: 1 / -1;
-    padding: 1.2rem 0;
     border-radius: var(--borderRadius);
     background: white;
     box-shadow: var(--boxShadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    > span {
+      width: 80%;
+      margin: 2rem 0;
+    }
     > li {
       list-style: none;
       border-bottom: solid 1px var(--borderDivision);

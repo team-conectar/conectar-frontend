@@ -1,6 +1,9 @@
 import styled, { css } from 'styled-components'
 import Dropdown from '../Dropdown'
-import { BodyButton as DropdownStyle } from '../Dropdown/styles'
+import {
+  BodyButton as DropdownStyle,
+  DropdownContent,
+} from '../Dropdown/styles'
 
 export const DropdownList = styled(Dropdown)`
   position: absolute;
@@ -40,8 +43,8 @@ export const VacancieLi = styled.li`
     svg {
       font-size: 1.4rem;
     }
-    aside {
-      li {
+    ${DropdownContent} {
+      > li {
         text-align: start;
         list-style: none;
         width: 10rem;

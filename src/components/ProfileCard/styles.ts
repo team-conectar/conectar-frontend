@@ -24,6 +24,7 @@ export const BodyCard = styled.div`
     text-align: center;
     color: var(--gray);
     h2 {
+      color: var(--textGreen);
     }
   }
   > aside {
@@ -33,10 +34,10 @@ export const BodyCard = styled.div`
       width: 2rem;
     }
   }
-  > button {
+  > a {
+    font-size: 1rem;
+    text-align: center;
     width: 100%;
-    border: 0;
-    background: white;
     align-self: flex-end;
     padding: 0.6rem;
     border-top: solid 1px var(--borderDivision);

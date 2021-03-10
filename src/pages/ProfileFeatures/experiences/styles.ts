@@ -104,24 +104,30 @@ export const BodyExperiences = styled.section`
         margin-left: 0.4rem;
       }
     }
+    .bloco-um {
+      grid-column: 1/-2;
+    }
+    .bloco-dois {
+      grid-column: -2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+    .bloco-tres {
+      grid-column: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+    .bloco-quatro {
+      grid-column: 2/-1;
+    }
     .area-toggle {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       justify-content: center;
       height: 100%;
-    }
-    .bloco-um {
-      grid-column: 1/-2;
-    }
-    .bloco-dois {
-      grid-column: -2;
-    }
-    .bloco-tres {
-      grid-column: 1;
-    }
-    .bloco-quatro {
-      grid-column: 2/-1;
     }
   }
 `

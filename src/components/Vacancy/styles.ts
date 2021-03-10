@@ -9,24 +9,27 @@ export const BodyVacancy = styled.section`
   height: 100%;
   > h1 {
     margin: 1.4rem 0;
-
-    align-self: flex-start;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    > button {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      border: 0;
+      background: none;
+      font: 500 1.2rem Raleway;
+      color: var(--green);
+      span {
+        font: 500 2rem Raleway;
+      }
+    }
   }
-  .vagas {
+  > ul {
     width: 100%;
     height: 100%;
     max-height: 80vh;
     overflow-y: auto;
-
-    > button {
-      border: 0;
-      background: none;
-      font: 500 1rem Raleway;
-      color: var(--yellow);
-      > span {
-        font: 500 1.2rem Raleway;
-      }
-    }
   }
   > form {
     display: flex;
@@ -34,16 +37,13 @@ export const BodyVacancy = styled.section`
     align-items: flex-start;
     justify-content: center;
     height: 100%;
-    overflow-y: auto;
+
     width: 100%;
     .area-botoes {
       display: flex;
       justify-content: space-evenly;
       margin: 0.4rem 0;
     }
-  }
-  > span {
-    color: var(--yellow-dark);
   }
 
   aside {
@@ -62,11 +62,11 @@ export const BodyVacancy = styled.section`
     --gap: 10px;
     width: calc(100% - var(--gap) * 3);
     > form {
-      display: grid;
-      grid-template-columns: calc(50% - var(--gap)) calc(25% - var(--gap)) calc(
-          25% - var(--gap)
-        );
-      grid-gap: var(--gap);
+      display: grid !important;
+      width: 100%;
+      grid-template-columns: 0.5fr 0.25fr 0.25fr;
+      gap: var(--gap) !important;
+      padding: 0 0.2rem;
       .area-botoes {
         grid-column: 1 / -1;
         grid-row: 4;

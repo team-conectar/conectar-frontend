@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import { Icon } from '../../assets/icon/style'
 import { BodyButton } from '../../components/Button/styles'
 import { DivScroll } from '../../components/ContainerScroll/styles'
 import { DivModalWindow } from '../../components/Modal/styles'
@@ -12,12 +13,9 @@ export const DivTags = styled.div`
     font: 600 1.2rem Raleway;
     margin: 0.4rem 0;
     padding-left: 0.4rem;
-    img {
-      align-self: flex-end;
-      width: 1.2rem;
-      cursor: pointer;
-      margin: 0 0.5rem;
-    }
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
   aside {
     display: flex;
@@ -37,9 +35,19 @@ export const DivTags = styled.div`
     }
   }
 `
-
-export const DivSobre = styled.div`
-  display: flex;
+interface IPropsSobre {
+  showSobre: boolean
+}
+export const DivSobre = styled.div<IPropsSobre>`
+  display: none;
+  ${props =>
+    props.showSobre &&
+    css`
+      display: flex;
+      @media (min-width: 1024px) {
+        display: grid;
+      }
+    `}
   flex-direction: column;
   gap: var(--gap);
   .objdes {
@@ -51,6 +59,7 @@ export const DivSobre = styled.div`
       border-radius: 0.6rem;
       box-shadow: var(--boxShadow);
       > legend {
+        height: 3rem;
         font: 600 1.2rem Raleway;
         margin: 0.2rem 0;
         border-bottom: solid 1px var(--borderDivision);
@@ -65,8 +74,8 @@ export const DivSobre = styled.div`
           cursor: initial;
         }
         img {
-          cursor: pointer;
-          width: 1.2rem;
+          font-size: 1.2rem;
+          width: 1.6rem;
           margin: 0 0.5rem;
         }
       }
@@ -77,7 +86,6 @@ export const DivSobre = styled.div`
   }
 
   @media (min-width: 1024px) {
-    display: grid;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: repeat(3, auto);
     column-gap: var(--gap);
@@ -95,9 +103,17 @@ export const DivSobre = styled.div`
     }
   }
 `
-export const DivVagas = styled.div`
+interface IPropsVagas {
+  showVagas: boolean
+}
+export const DivVagas = styled.div<IPropsVagas>`
+  display: none;
+  ${props =>
+    props.showVagas &&
+    css`
+      display: flex;
+    `}
   width: 100%;
-  display: flex;
 
   > section {
     width: 100%;
@@ -137,13 +153,12 @@ export const DivVagas = styled.div`
         position: relative;
         height: 3rem;
         img {
-          width: 1.2rem;
+          width: 1.6rem;
           margin: 0 0.5rem;
-          :nth-of-type(2) {
-            position: absolute;
-            right: 0.5rem;
-            cursor: pointer;
-          }
+        }
+        ${Icon} {
+          position: absolute;
+          right: 0.5rem;
         }
       }
       ${DivScroll} {
@@ -176,7 +191,7 @@ export const DivVagas = styled.div`
           padding: 0;
           legend {
             font-size: 0.8rem;
-            img {
+            ${Icon} {
               display: none;
             }
           }
@@ -199,9 +214,16 @@ export const BodyProjects = styled.div`
   ${DivSobre},${DivVagas},header {
     width: var(--container);
   }
+
   ${DivModalWindow} {
     form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
       width: 100%;
+      button {
+        align-self: flex-end;
+      }
     }
   }
   > header {
@@ -212,17 +234,11 @@ export const BodyProjects = styled.div`
     justify-content: flex-start;
     align-items: center;
     position: relative;
-    > img {
-      width: 100%;
-    }
-    > span {
+    padding: 0 0.6rem; //desktop
+    > ${Icon} {
       position: absolute;
       right: 15px;
       top: 15px;
-      > img {
-        width: 1rem;
-        cursor: pointer;
-      }
     }
 
     > div {

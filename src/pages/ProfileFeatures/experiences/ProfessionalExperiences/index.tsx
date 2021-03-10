@@ -66,7 +66,9 @@ const ProfessionalExperiences: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(false)
   const formRef = useRef<FormHandles>(null)
   const [stored, setStored] = useState<ProfessionalType[]>([])
-  const [initialYear, setInitialYear] = useState<number>(1970)
+  const [initialYear, setInitialYear] = useState<number>(
+    new Date().getFullYear() + 1,
+  )
   const [currentilyWork, setCurrentilyWork] = useState<boolean>(false)
   const initialProfessionalData = {
     id: 0,
@@ -347,6 +349,22 @@ const ProfessionalExperiences: React.FC = () => {
                     : null
                 }
               />
+              <aside>
+                <ToggleSwitch
+                  options={[
+                    {
+                      label: 'Trabalho atual',
+                      id: 'currentWorking',
+                      value: 'currentWorking',
+                    },
+                  ]}
+                  name="currentWorking"
+                  defaultChecked={editStored.currentWorking}
+                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                    setCurrentilyWork(event.target.checked)
+                  }
+                />
+              </aside>
             </section>
             <section className="bloco-tres">
               <aside>
@@ -378,22 +396,6 @@ const ProfessionalExperiences: React.FC = () => {
                           value: editStored?.initialYear,
                         }
                       : null
-                  }
-                />
-              </aside>
-              <aside>
-                <ToggleSwitch
-                  options={[
-                    {
-                      label: 'Trabalho atual',
-                      id: 'currentWorking',
-                      value: 'currentWorking',
-                    },
-                  ]}
-                  name="currentWorking"
-                  defaultChecked={editStored.currentWorking}
-                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    setCurrentilyWork(event.target.checked)
                   }
                 />
               </aside>
@@ -457,6 +459,7 @@ const ProfessionalExperiences: React.FC = () => {
                 Excluir
               </Button>
               <Button
+                theme="secondary"
                 onClick={() => {
                   setShowRegister(false)
                   setEditStored(initialProfessionalData)

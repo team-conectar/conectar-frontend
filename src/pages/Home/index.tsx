@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import NavBar from '../../components/NavBar'
 import { BodyHome } from './styles'
 
@@ -11,6 +11,7 @@ import card_idealizador from '../../assets/image/card_idealizador.svg'
 import card_aliado from '../../assets/image/card_aliado.svg'
 import colaborador from '../../assets/image/colaborador.svg'
 import idealizador from '../../assets/image/idealizador.svg'
+import fc from '../../assets/image/fc.png'
 import aliado from '../../assets/image/aliado.svg'
 import curtiu from '../../assets/image/curtiu.svg'
 import aspasDestaque from '../../assets/image/aspasDestaque.svg'
@@ -24,17 +25,12 @@ import { Context } from '../../context/AuthContext'
 
 import Button from '../../components/Button'
 import ContainerScroll from '../../components/ContainerScroll'
-function Home() {
-  const [showModal, setShowModal] = useState<boolean>(false)
+import { isAuthenticated } from '../../utils/auth'
+const Home: React.FC = () => {
   const { handleLogin } = useContext(Context)
+  const history = useHistory()
   return (
     <BodyHome>
-      <Modal open={showModal} setOpen={setShowModal}>
-        <h1>
-          Será redimensionado para a pagina de explorar projetos(faltante)
-        </h1>
-      </Modal>
-
       <main>
         <div className="topo-background">
           <NavBar />
@@ -49,13 +45,14 @@ function Home() {
                 </strong>
                 time ideal
               </h1>
-
-              <Login
-                onSuccessLogin={() => {
-                  setShowModal(true)
-                  handleLogin(true)
-                }}
-              />
+              {!isAuthenticated() && (
+                <Login
+                  onSuccessLogin={() => {
+                    history.push('/explorar')
+                    handleLogin(true)
+                  }}
+                />
+              )}
             </section>
 
             <a className="arrow-bottom" href="#introducao">

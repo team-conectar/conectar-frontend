@@ -9,11 +9,12 @@ import { Link } from 'react-router-dom'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
 import co from '../../assets/icon/co.svg'
-import { Context } from '../../context/AuthContext'
+import { useLoggedUser } from '../../context/LoggedUserContext'
 import { AxiosError } from 'axios'
 import { AreaType } from '../../components/SelectArea'
 import { ToolType } from '../../components/SelectTools'
 import api from '../../services/api'
+import Skeleton from 'react-loading-skeleton'
 
 interface ProfileType {
   data_nascimento: string
@@ -33,26 +34,20 @@ interface ProfileType {
   data_atualizacao: string
 }
 const ProfileCard: React.FC = () => {
-  const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
-  useEffect(() => {
-    const res = api
-      .get(`/api/v1/pessoas/me`)
-      .then(response => {
-        setProfile(response.data)
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-    console.log(res)
-  }, [])
+  const profile = useLoggedUser()
+
   return (
     <BodyCard>
-      <img
+      {/* <img
         src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
         alt=""
-      />
+      /> */}
+      <Skeleton circle height="100px" width="100px" />
       <p>
-        <h2>{profile.nome}</h2>@{profile.usuario}
+        <h2>{profile.nome || <Skeleton width="150px" />}</h2>
+        {(profile.usuario && '@' + profile.usuario) || (
+          <Skeleton width="100px" />
+        )}
       </p>
 
       <aside>
@@ -60,7 +55,7 @@ const ProfileCard: React.FC = () => {
         {profile.aliado && <img src={al} alt="" />}
         {profile.colaborador && <img src={co} alt="" />}
       </aside>
-      <button>Ver Perfil</button>
+      <Link to={`perfil/${profile.id}`}>Ver Perfil</Link>
     </BodyCard>
   )
 }

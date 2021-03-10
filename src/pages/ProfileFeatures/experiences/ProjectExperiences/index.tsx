@@ -26,6 +26,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
+import { OptionTypeBase, Props as SelectProps } from 'react-select'
 export interface IExperienceProject {
   id: number
   nome: string
@@ -50,8 +51,11 @@ interface ProjectDataType {
 }
 const ProjectExperiences: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
+  const situationRef = useRef<SelectProps>(null)
   const [showRegister, setShowRegister] = useState<boolean>(false)
-  const [initialYear, setInitialYear] = useState<number>(1970)
+  const [initialYear, setInitialYear] = useState<number>(
+    new Date().getFullYear() + 1,
+  )
   const [currentilyProject, setCurrentilyProject] = useState<boolean>(false)
   const [stored, setStored] = useState<IExperienceProject[]>([])
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -72,6 +76,9 @@ const ProjectExperiences: React.FC = () => {
     { label: 'Em andamento', value: 'Em andamento' },
     { label: 'Conluído', value: 'Conluído' },
   ]
+  useEffect(() => {
+    console.log(situationRef.current)
+  }, [situationRef])
   useEffect(() => {
     api
       .get('/api/v1/experiencias/projeto/me', {
@@ -120,10 +127,14 @@ const ProjectExperiences: React.FC = () => {
             .min(20, 'Descreva um pouco mais')
             .max(500, 'Excedeu o limite de caractéres (500)')
             .required('Informe a descrição'),
-          finalYear: Yup.string().required('Ano final é obrigatório'),
+          finalYear: !currentilyProject
+            ? Yup.string().required('Ano final é obrigatório')
+            : Yup.string(),
           initialYear: Yup.string().required('Ano inicial é obrigatório'),
           initialMonth: Yup.string().required('Mês inicial é obrigatório'),
-          finalMonth: Yup.string().required('Mês final é obrigatório'),
+          finalMonth: !currentilyProject
+            ? Yup.string().required('Mês final é obrigatório')
+            : Yup.string(),
         })
 
         await schema.validate(formData, {
@@ -200,7 +211,7 @@ const ProjectExperiences: React.FC = () => {
 
       // Do something
     },
-    [editStored.id, initialProjectData],
+    [currentilyProject, editStored.id, initialProjectData],
   )
   function handleEditExperience(experience: IExperienceProject) {
     const {
@@ -324,6 +335,9 @@ const ProjectExperiences: React.FC = () => {
                       }
                     : null
                 }
+                onChange={(data: any) => {
+                  setCurrentilyProject(!!(data.value === 'Em andamento'))
+                }}
               />
 
               <Input
@@ -364,21 +378,7 @@ const ProjectExperiences: React.FC = () => {
                   }
                 />
               </aside>
-              <aside>
-                <ToggleSwitch
-                  options={[
-                    {
-                      label: 'Estou nesse projeto atualmente',
-                      id: 'currentProject',
-                      value: 'currentProject',
-                    },
-                  ]}
-                  name="currentProject"
-                  onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                    setCurrentilyProject(event.target.checked)
-                  }
-                />
-              </aside>
+
               {!currentilyProject && (
                 <aside>
                   <Select
@@ -443,6 +443,7 @@ const ProjectExperiences: React.FC = () => {
                 Excluir
               </Button>
               <Button
+                theme="secondary"
                 onClick={() => {
                   setShowRegister(false)
                   setEditStored(initialProjectData)

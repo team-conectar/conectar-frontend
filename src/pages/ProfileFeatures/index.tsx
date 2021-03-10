@@ -10,7 +10,6 @@ import Logged from '../../components/Logged'
 
 const ProfileFeatures: React.FC = () => {
   const history = useHistory()
-  const [showModal, setShowModal] = useState<boolean>(false)
 
   return (
     <BodyProfileFeatures>
@@ -21,10 +20,16 @@ const ProfileFeatures: React.FC = () => {
         <ProfessionalExperiences />
         <ProjectExperiences />
         <footer>
-          <Button theme="secondary" onClick={() => setShowModal(true)}>
+          <Button
+            theme="secondary"
+            onClick={() => history.push('/areas-de-atuacao')}
+          >
             Pular
           </Button>{' '}
-          <Button onClick={() => history.push('/')} theme="primary">
+          <Button
+            onClick={() => history.push('/areas-de-atuacao')}
+            theme="primary"
+          >
             Continuar
           </Button>
         </footer>

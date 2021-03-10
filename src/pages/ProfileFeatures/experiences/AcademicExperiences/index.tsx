@@ -40,7 +40,9 @@ const AcademicExperiences: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [isIncomplete, setIsIncomplete] = useState<boolean>(false)
-  const [initialYear, setInitialYear] = useState<number>(1970)
+  const [initialYear, setInitialYear] = useState<number>(
+    new Date().getFullYear() + 1,
+  )
   const [stored, setStored] = useState<AcademicType[]>([])
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const initialAcademicData = {
