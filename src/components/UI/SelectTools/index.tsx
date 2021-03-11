@@ -8,9 +8,9 @@ import React, {
 import { BodySelectTool } from './styles'
 import { GoCheck, GoPlus } from 'react-icons/go'
 import { AxiosError } from 'axios'
-import api from '../../services/api'
+import api from '../../../services/api'
 import { useField } from '@unform/core'
-import { IconTrash } from '../../assets/icon'
+import { IconTrash } from '../../../assets/icon'
 interface SelectToolProps {
   name: string
   defaultValue?: string[]

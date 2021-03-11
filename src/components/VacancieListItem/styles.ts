@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components'
-import Dropdown from '../Dropdown'
+import Dropdown from '../UI/Dropdown'
 import {
   BodyButton as DropdownStyle,
   DropdownContent,
-} from '../Dropdown/styles'
+} from '../UI/Dropdown/styles'
 
 export const DropdownList = styled(Dropdown)`
   position: absolute;

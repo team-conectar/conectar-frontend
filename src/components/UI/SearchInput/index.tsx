@@ -6,7 +6,7 @@ import React, {
   InputHTMLAttributes,
 } from 'react'
 import { Component, LiDrop } from './styles'
-import lupa from '../../assets/icon/lupa.svg'
+import lupa from '../../../assets/icon/lupa.svg'
 import Dropdown from '../Dropdown'
 import { useHistory, useLocation } from 'react-router'
 

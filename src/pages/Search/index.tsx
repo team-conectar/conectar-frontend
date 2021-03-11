@@ -11,7 +11,7 @@ import React, {
 import { Page } from './styles'
 
 import { Context } from '../../context/AuthContext'
-import NavBar from '../../components/NavBar'
+import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
 import ProfileCard from '../../components/ProfileCard'
 import LinksCard from '../../components/LinksCard'
@@ -20,7 +20,7 @@ import api from '../../services/api'
 import { AxiosError } from 'axios'
 import Skeleton from 'react-loading-skeleton'
 import { useHistory, useParams } from 'react-router'
-import SearchInput from '../../components/SearchInput'
+import SearchInput from '../../components/UI/SearchInput'
 interface IParmsProps {
   for?: 'projeto' | 'pessoa' | 'area'
   attribute?: 'area' | 'habilidade' | 'objetivo' | 'nome'

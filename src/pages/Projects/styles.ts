@@ -1,8 +1,8 @@
 import styled, { css } from 'styled-components'
 import { Icon } from '../../assets/icon/style'
-import { BodyButton } from '../../components/Button/styles'
-import { DivScroll } from '../../components/ContainerScroll/styles'
-import { DivModalWindow } from '../../components/Modal/styles'
+import { BodyButton } from '../../components/UI/Button/styles'
+import { DivScroll } from '../../components/UI/ContainerScroll/styles'
+import { DivModalWindow } from '../../components/UI/Modal/styles'
 
 export const DivTags = styled.div`
   background: white;
