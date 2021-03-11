@@ -12,6 +12,9 @@ export const LiDrop = styled.button<ILiDropProps>`
   text-align: center;
   font: 600 1rem Raleway;
   cursor: pointer;
+  ::first-letter {
+    text-transform: uppercase;
+  }
   ${props =>
     props.isSelected
       ? css`
@@ -27,11 +30,14 @@ export const LiDrop = styled.button<ILiDropProps>`
           }
         `}
 `
-export const Component = styled.form`
+interface IComponents {
+  isSearchPage?: boolean
+}
+export const Component = styled.form<IComponents>`
   background: white;
   box-shadow: var(--boxShadow);
   height: 2.4rem;
-  width: 32rem;
+  width: ${props => (props.isSearchPage ? css`100%` : css`32rem`)};
   margin-top: 0.2rem;
   padding-right: 0.6rem;
   border-radius: 0.2rem;
@@ -59,10 +65,6 @@ export const Component = styled.form`
     }
   }
 
-  &:focus-within span {
-    opacity: 1;
-    visibility: visible;
-  }
   ${BodyButton} {
     > button {
       padding: 0.2rem 1rem;
@@ -80,8 +82,53 @@ export const Component = styled.form`
       font: 600 1rem Raleway;
     }
   }
-  &:focus-within ${BodyButton} button {
-    opacity: 1;
-    visibility: visible;
-  }
+  ${props =>
+    props.isSearchPage &&
+    css`
+      ${BodyButton} {
+        > button {
+          display: none;
+        }
+        ${LiDrop} {
+          width: 6rem;
+          margin: 0 0.2rem;
+          height: 100%;
+          border-left: solid 2px var(--borderDivision);
+          &:focus + ${LiDrop} {
+            border-right: solid 2px var(--borderDivision);
+          }
+        }
+      }
+      ${DropdownContent} {
+        opacity: 1;
+        visibility: visible;
+        position: initial;
+        background: transparent;
+        box-shadow: none;
+        width: auto;
+        height: auto;
+        flex-direction: row-reverse;
+        margin: 0;
+        padding: 0;
+        :before,
+        :after {
+          display: none;
+        }
+      }
+    `}
+  ${props =>
+    !props.isSearchPage &&
+    css`
+      &:focus-within span {
+        opacity: 1;
+        visibility: visible;
+      }
+      &:focus-within ${BodyButton} button {
+        opacity: 1;
+        visibility: visible;
+        &::first-letter {
+          text-transform: uppercase;
+        }
+      }
+    `}
 `
