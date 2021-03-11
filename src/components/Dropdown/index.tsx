@@ -35,9 +35,9 @@ const Dropdown: React.FC<DropdownProps> = ({ IconButton, children }) => {
   }, [isOpen])
   return (
     <BodyButton ref={dropdownRef} asideOpen={isOpen}>
-      <span onClick={handleClick} id="btn-drop">
+      <button onClick={handleClick} id="btn-drop">
         {IconButton}
-      </span>
+      </button>
 
       <DropdownContent>{children}</DropdownContent>
     </BodyButton>

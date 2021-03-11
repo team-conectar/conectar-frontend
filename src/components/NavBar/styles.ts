@@ -9,7 +9,7 @@ export const BodyNavBar = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 45px;
+  height: 55px;
   position: sticky;
   top: 0;
   z-index: 2;
@@ -47,61 +47,61 @@ export const BodyNavBar = styled.nav`
       }
     }
   }
-  ${DropdownContent} {
-    section {
-      position: relative;
-      padding: 1rem;
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      grid-template-rows: repeat(3, 1rem);
-      gap: 0.5rem;
-      border-bottom: solid 1px var(--borderDivision);
-      img {
-        grid-column: 1;
-        grid-row: 1 / 3;
-        border-radius: 50%;
-        width: 4rem;
-        height: 4rem;
-        border: solid 2px var(--borderDivision);
-        padding: 0.2rem;
-      }
-      legend {
-        grid-column: 2;
-        grid-row: 1;
-      }
-      p {
-        font-size: 0.8rem;
-        grid-column: 2;
-      }
-      p:nth-child(2) {
-        grid-row: 2;
-      }
-      p:nth-child(3) {
-        grid-row: 3;
-      }
-    }
-    a {
-      text-decoration: none;
-      display: flex;
-      padding: 0.6rem 1.2rem;
-      margin: 0;
-      align-self: flex-start;
-    }
-    button {
-      color: var(--textGreen);
-      border: 0;
-      border-top: solid 1px var(--borderDivision);
-      background: 0;
-      padding: 0.8rem 1.2rem;
-      width: 100%;
-      text-align: start;
-    }
-  }
   aside {
     display: flex;
     align-items: center;
     height: 100%;
     gap: 1.2rem;
+    ${DropdownContent} {
+      section {
+        position: relative;
+        padding: 1rem;
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        grid-template-rows: repeat(3, 1rem);
+        gap: 0.5rem;
+        border-bottom: solid 1px var(--borderDivision);
+        img {
+          grid-column: 1;
+          grid-row: 1 / 3;
+          border-radius: 50%;
+          width: 4rem;
+          height: 4rem;
+          border: solid 2px var(--borderDivision);
+          padding: 0.2rem;
+        }
+        legend {
+          grid-column: 2;
+          grid-row: 1;
+        }
+        p {
+          font-size: 0.8rem;
+          grid-column: 2;
+        }
+        p:nth-child(2) {
+          grid-row: 2;
+        }
+        p:nth-child(3) {
+          grid-row: 3;
+        }
+      }
+      a {
+        text-decoration: none;
+        display: flex;
+        padding: 0.6rem 1.2rem;
+        margin: 0;
+        align-self: flex-start;
+      }
+      button {
+        color: var(--textGreen);
+        border: 0;
+        border-top: solid 1px var(--borderDivision);
+        background: 0;
+        padding: 0.8rem 1.2rem;
+        width: 100%;
+        text-align: start;
+      }
+    }
 
     a {
       text-decoration: none;

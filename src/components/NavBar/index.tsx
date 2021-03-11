@@ -10,11 +10,12 @@ import { Context } from '../../context/AuthContext'
 import { useLoggedUser } from '../../context/LoggedUserContext'
 import { IconBell, IconUser } from '../../assets/icon'
 import Dropdown from '../Dropdown'
+import SearchInput from '../SearchInput'
 
 const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const user = useLoggedUser()
-
+  const location = useLocation()
   return (
     <BodyNavBar>
       <aside>
@@ -30,14 +31,7 @@ const NavBar: React.FC = () => {
           Sobre
         </NavLink>
       </aside>
-
-      <div className="searchBlock">
-        <button type="submit">
-          <img src={lupa} alt="botao de pesquisa" />
-        </button>
-
-        <input placeholder="Buscar"></input>
-      </div>
+      {location.pathname.split('/')[1] !== 'pesquisar' && <SearchInput />}
       <aside>
         <NavLink to="/criar-um-projeto" className="create">
           Criar um Projeto
