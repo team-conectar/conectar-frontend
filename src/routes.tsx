@@ -12,6 +12,7 @@ import Profiles from './pages/Profiles'
 import { GlobalStyle } from './assets/style/global'
 import { AuthProvider } from './context/AuthContext'
 import Explorer from './pages/Explorer'
+import Search from './pages/Search'
 import { LoggedUserProvider } from './context/LoggedUserContext'
 import NavBar from './components/NavBar'
 const Routes: React.FC = () => {
@@ -30,6 +31,7 @@ const Routes: React.FC = () => {
           <Route path="/projeto/:id" component={Projects} />
           <Route path="/perfil/:id" component={Profiles} />
           <Route path="/explorar" component={Explorer} />
+          <Route path="/pesquisar/:for?/:attribute?/:key?" component={Search} />
         </BrowserRouter>
         <GlobalStyle />
       </LoggedUserProvider>

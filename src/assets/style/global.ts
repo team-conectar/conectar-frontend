@@ -1,4 +1,5 @@
 import styled, { createGlobalStyle } from 'styled-components'
+import backgroud from '../image/background.svg'
 export const GlobalStyle = createGlobalStyle`
 :root {
     /* font-size: 60%; */
@@ -34,7 +35,12 @@ export const GlobalStyle = createGlobalStyle`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: var(--background);
+    background-color:var(--background);
+    /* background-image:url(${backgroud});
+    background-position:center;
+    background-attachment:fixed;
+    background-size:100%;
+    background-repeat:no-repeat; */
     color: var(--textGreen);
     
 }
