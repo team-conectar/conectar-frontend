@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { DropdownContent } from '../Dropdown/styles'
 
 export const BodyNavBar = styled.nav`
