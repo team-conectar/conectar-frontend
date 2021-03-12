@@ -21,6 +21,8 @@ import { AxiosError } from 'axios'
 import Skeleton from 'react-loading-skeleton'
 import { useHistory, useParams } from 'react-router'
 import SearchInput from '../../components/UI/SearchInput'
+import { ProjectType } from '../CreateProject'
+import noProject from '../../assets/image/sem_projetos.svg'
 interface IParmsProps {
   for?: 'projeto' | 'pessoa' | 'area'
   attribute?: 'area' | 'habilidade' | 'objetivo' | 'nome'
@@ -33,6 +35,8 @@ const Explorer: React.FC = () => {
   const [peoples, setPeoples] = useState<IProject[]>([] as IProject[])
 
   useEffect(() => {
+    setProjects([])
+    setPeoples([])
     if (parms.key) {
       api
         .get(`/api/v1/${parms.for}/${parms.attribute}/${parms.key}`)
@@ -50,15 +54,18 @@ const Explorer: React.FC = () => {
       <NavBar />
       <Page>
         <SearchInput defaultValue={parms.key} />
-        <ul>
-          {projects.length ? (
-            projects.map(project => (
-              <ProjectCard key={project.id} project={project} />
-            ))
-          ) : (
-            <Skeleton width="100%" height="200px" />
-          )}
-        </ul>
+        {projects ? (
+          <ul>
+            {projects.map(project => (
+              <ProjectCard key={project.id} project={project} hiddeOwner />
+            )) || <Skeleton width="100%" height="200px" />}
+          </ul>
+        ) : (
+          <aside>
+            <h2>Nenhum projeto encontado :(</h2>
+            <img src={noProject} />
+          </aside>
+        )}
       </Page>
     </Fragment>
   )

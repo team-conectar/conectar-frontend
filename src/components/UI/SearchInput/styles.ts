@@ -10,11 +10,13 @@ export const LiDrop = styled.button<ILiDropProps>`
   background: transparent;
   border: 0;
   text-align: center;
+
   font: 600 1rem Raleway;
   cursor: pointer;
   ::first-letter {
     text-transform: uppercase;
   }
+
   ${props =>
     props.isSelected
       ? css`
@@ -37,9 +39,9 @@ export const Component = styled.form<IComponents>`
   background: white;
   box-shadow: var(--boxShadow);
   height: 2.4rem;
-  width: ${props => (props.isSearchPage ? css`100%` : css`32rem`)};
+  width: ${props => (props.isSearchPage ? `100%` : `32rem`)};
   margin-top: 0.2rem;
-  padding-right: 0.6rem;
+  padding: 0 0.2rem;
   border-radius: 0.2rem;
   display: flex;
   align-items: center;
@@ -91,11 +93,18 @@ export const Component = styled.form<IComponents>`
         }
         ${LiDrop} {
           width: 6rem;
-          margin: 0 0.2rem;
+          margin: 0 8px;
           height: 100%;
-          border-left: solid 2px var(--borderDivision);
-          &:focus + ${LiDrop} {
-            border-right: solid 2px var(--borderDivision);
+          position: relative;
+          border-radius: 0.2rem;
+          :after {
+            content: '';
+            width: 2px;
+            height: 100%;
+            background: var(--borderDivision);
+            position: absolute;
+            left: -8px;
+            top: 0;
           }
         }
       }
