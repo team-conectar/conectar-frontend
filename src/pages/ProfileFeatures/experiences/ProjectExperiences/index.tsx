@@ -6,11 +6,12 @@ import React, {
   OptionHTMLAttributes,
   useRef,
 } from 'react'
-import Input from '../../../../components/Input'
-import Textarea from '../../../../components/Textarea'
-import Select from '../../../../components/Select'
-import ToggleSwitch from '../../../../components/ToggleSwitch'
-import Button from '../../../../components/Button'
+import Input from '../../../../components/UI/Input'
+import Textarea from '../../../../components/UI/Textarea'
+import Select from '../../../../components/UI/Select'
+import ToggleSwitch from '../../../../components/UI/ToggleSwitch'
+import Button from '../../../../components/UI/Button'
+import Modal from '../../../../components/UI/Modal'
 import { BodyExperiences } from '../styles'
 import {
   yearOptions,
@@ -20,7 +21,6 @@ import {
 } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../../../services/api'
-import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'

@@ -11,7 +11,7 @@ import React, {
 import { Page } from './styles'
 
 import { Context } from '../../context/AuthContext'
-import NavBar from '../../components/NavBar'
+import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
 import ProfileCard from '../../components/ProfileCard'
 import LinksCard from '../../components/LinksCard'

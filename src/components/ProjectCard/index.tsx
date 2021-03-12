@@ -30,8 +30,9 @@ export interface IProject {
 }
 interface IProjectCardProps {
   project: IProject
+  hiddeOwner?: true
 }
-const ProjectCard: React.FC<IProjectCardProps> = ({ project }) => {
+const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   const [user, setUser] = useState<IPessoa>()
   useEffect(() => {
     api.get(`/api/v1/pessoas/${project.pessoa_id}`).then(response => {
@@ -40,18 +41,22 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project }) => {
   }, [project.pessoa_id])
   return (
     <BodyCard>
-      <Link to={`/perfil/${user?.id}`}>
-        <img
-          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-          alt={user?.nome}
-        />
-      </Link>
-      <UserInfo>
-        <Link to={`/perfil/${user?.id}`}>
-          <h2>{user?.nome}</h2>
-          <p>@{user?.usuario}</p>
-        </Link>
-      </UserInfo>
+      {!hiddeOwner && (
+        <>
+          <Link to={`/perfil/${user?.id}`}>
+            <img
+              src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+              alt={user?.nome}
+            />
+          </Link>
+          <UserInfo>
+            <Link to={`/perfil/${user?.id}`}>
+              <h2>{user?.nome}</h2>
+              <p>@{user?.usuario}</p>
+            </Link>
+          </UserInfo>
+        </>
+      )}
       <div>
         <ProjectInfo>
           <aside>

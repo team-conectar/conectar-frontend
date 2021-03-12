@@ -1,20 +1,20 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext } from 'react'
 import { BodyNavBar } from './styles'
-import logo from '../../assets/image/logo_fundoClaro.svg'
+import logo from '../../../assets/image/logo_fundoClaro.svg'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import lupa from '../../assets/icon/lupa.svg'
-import explorar from '../../assets/icon/explorar.svg'
-import explorar_secondary from '../../assets/icon/explorer_secondary.svg'
-import userDefault from '../../assets/icon/user.svg'
-import { Context } from '../../context/AuthContext'
-import { useLoggedUser } from '../../context/LoggedUserContext'
-import { IconBell, IconUser } from '../../assets/icon'
+import explorar from '../../../assets/icon/explorar.svg'
+import explorar_secondary from '../../../assets/icon/explorer_secondary.svg'
+import userDefault from '../../../assets/icon/user.svg'
+import { Context } from '../../../context/AuthContext'
+import { useLoggedUser } from '../../../context/LoggedUserContext'
+import { IconBell, IconUser } from '../../../assets/icon'
 import Dropdown from '../Dropdown'
+import SearchInput from '../SearchInput'
 
 const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const user = useLoggedUser()
-
+  const location = useLocation()
   return (
     <BodyNavBar>
       <aside>
@@ -30,14 +30,7 @@ const NavBar: React.FC = () => {
           Sobre
         </NavLink>
       </aside>
-
-      <div className="searchBlock">
-        <button type="submit">
-          <img src={lupa} alt="botao de pesquisa" />
-        </button>
-
-        <input placeholder="Buscar"></input>
-      </div>
+      {location.pathname.split('/')[1] !== 'pesquisar' && <SearchInput />}
       <aside>
         <NavLink to="/criar-um-projeto" className="create">
           Criar um Projeto

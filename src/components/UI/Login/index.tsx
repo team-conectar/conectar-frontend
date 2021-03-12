@@ -13,12 +13,12 @@ import GoogleLogin, {
 import { FcGoogle } from 'react-icons/fc'
 import { FaFacebook } from 'react-icons/fa'
 import Button from '../Button'
-import api from '../../services/api'
+import api from '../../../services/api'
 import { AxiosError } from 'axios'
 import { useHistory } from 'react-router'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
-import getValidationErrors from '../../utils/getValidationErrors'
+import getValidationErrors from '../../../utils/getValidationErrors'
 interface loginProps {
   onSuccessLogin(): void
 }

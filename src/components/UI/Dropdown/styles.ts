@@ -52,7 +52,7 @@ export const BodyButton = styled.div<styleProps>`
   position: relative;
   cursor: default;
 
-  > span {
+  > button {
     background: transparent;
     border: 0;
     width: 100%;

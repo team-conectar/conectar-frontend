@@ -10,9 +10,9 @@ import { BodySelectArea } from './styles'
 import { GoCheck, GoPlus } from 'react-icons/go'
 import { IoMdArrowBack } from 'react-icons/io'
 import { AxiosError } from 'axios'
-import api from '../../services/api'
+import api from '../../../services/api'
 import { useField } from '@unform/core'
-import { IconTrash } from '../../assets/icon'
+import { IconTrash } from '../../../assets/icon'
 /**
  *descricao: string;
  *id: number;

@@ -1,6 +1,6 @@
 import { OptionHTMLAttributes } from 'react'
-import { AreaType } from '../components/SelectArea'
-import { ToolType } from '../components/SelectTools'
+import { AreaType } from '../components/UI/SelectArea'
+import { ToolType } from '../components/UI/SelectTools'
 
 export const createOptionAreas = (areas: Array<AreaType>) => {
   const newOptions: Array<OptionHTMLAttributes<HTMLOptionElement>> = []

@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components'
-import Dropdown from '../Dropdown'
-import { BodyButton as DropdownStyle } from '../Dropdown/styles'
+import Dropdown from '../UI/Dropdown'
+import { BodyButton as DropdownStyle } from '../UI/Dropdown/styles'
 interface CardProps {
   isAvailable: boolean
   status?: 'accepted' | 'pending' | 'refused'
