@@ -156,7 +156,7 @@ const Explorer: React.FC = () => {
                 </ul>
               ) : (
                 <aside>
-                  <h2>Nenhum projeto encontado.</h2>
+                  <h2>Nenhum projeto encontrado.</h2>
                   <img src={noProject} />
                 </aside>
               ))}
@@ -169,7 +169,7 @@ const Explorer: React.FC = () => {
                 </ul>
               ) : (
                 <aside>
-                  <h2>Nenhuma pessoa encontada.</h2>
+                  <h2>Nenhuma pessoa encontrada.</h2>
                   <img src={noProject} />
                 </aside>
               ))}
