@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
 } from 'react'
-import { BodyCard } from './styles'
+import { BodyCard, ProfileLink } from './styles'
 import { Link } from 'react-router-dom'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
@@ -14,7 +14,6 @@ import { AxiosError } from 'axios'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import api from '../../services/api'
-import ProfileLink from '../ProfileLink'
 
 interface ProfileType {
   data_nascimento: string
@@ -49,9 +48,16 @@ const SuccessfulCreatorsCard: React.FC = () => {
   return (
     <BodyCard>
       <h2>Criadores de sucesso</h2>
-      <ProfileLink />
-      <ProfileLink />
-      <ProfileLink />
+      <ProfileLink to="">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          alt=""
+        />
+        <aside>
+          <h2>{profile.nome}</h2>
+          <p>@{profile.usuario}</p>
+        </aside>
+      </ProfileLink>
 
       <button>
         <img src={twoUsers} alt="botao ecncontrar usuarios" /> Encontre os que

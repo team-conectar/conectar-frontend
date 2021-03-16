@@ -22,7 +22,7 @@ export const ProjectInfo = styled.main`
   flex-direction: column;
   gap: var(--gap);
   padding: var(--gap);
-
+  text-align: center;
   > aside {
     display: flex;
     width: 100%;

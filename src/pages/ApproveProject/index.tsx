@@ -1,18 +1,11 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BodyApproveProject } from './styles'
-import Input from '../../components/UI/Input'
-import Textarea from '../../components/UI/Textarea'
-import SelectArea from '../../components/UI/SelectArea'
-import SelectTool from '../../components/UI/SelectTools'
-import ToggleSwitch from '../../components/UI/ToggleSwitch'
 import Button from '../../components/UI/Button'
-import { useHistory } from 'react-router'
-import { useDropzone } from 'react-dropzone'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
 import api from '../../services/api'
-import ProfileCard from '../../components/ProfileCard'
+import ProfileLink from '../../components/ProfileLink'
 import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import VacancieCard from '../../components/VacancieCard'
@@ -50,7 +43,7 @@ const ApproveProject: React.FC = () => {
     <>
       <NavBar />
       <BodyApproveProject>
-        <ProfileCard />
+        <ProfileLink />
         <main>
           <section>
             <img src="" alt="" />

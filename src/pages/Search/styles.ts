@@ -54,7 +54,12 @@ export const Page = styled.div`
       font-size: 2rem;
     }
   }
-  ${ProjectCard} {
-    width: calc(50% - 0.5rem);
+  @media (min-width: 1024px) {
+    ${ProjectCard} {
+      width: calc(50% - 0.5rem);
+    }
+    ${ProfileCard} {
+      width: calc(100% / 3 - 0.7rem);
+    }
   }
 `

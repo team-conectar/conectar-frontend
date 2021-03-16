@@ -13,9 +13,7 @@ import { Page, Tag } from './styles'
 import { Context } from '../../context/AuthContext'
 import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
-import ProfileCard from '../../components/ProfileCard'
-import LinksCard from '../../components/LinksCard'
-import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
+import ProfileCard, { IProfile } from '../../components/ProfileCard'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
 import Skeleton from 'react-loading-skeleton'
@@ -42,7 +40,7 @@ const Explorer: React.FC = () => {
     [] as IProject[],
   )
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
-  const [peoples, setPeoples] = useState<IProject[]>([] as IProject[])
+  const [peoples, setPeoples] = useState<IProfile[]>([] as IProfile[])
   const [filterAreaOrTool, setFilterAreaOrTool] = useState<IFilterAreaOrTool>()
   useEffect(() => {
     setProjects([])
@@ -98,8 +96,10 @@ const Explorer: React.FC = () => {
     <Fragment>
       <NavBar />
       <Page>
-        <SearchInput defaultValue={parms.key} />
-        {(user.areas || user.habilidades) && <p>selecione uma para filtrar</p>}
+        <SearchInput defaultValue={parms.key} defaultAttribute={parms.for} />
+        {(user.areas?.length > 0 || user.habilidades?.length > 0) && (
+          <p>selecione uma para filtrar</p>
+        )}
         <section>
           {user.areas?.map(area => (
             <Tag
@@ -138,6 +138,18 @@ const Explorer: React.FC = () => {
           <ul>
             {filtredProjects.map(project => (
               <ProjectCard key={project.id} project={project} hiddeOwner />
+            )) || <Skeleton width="100%" height="200px" />}
+          </ul>
+        ) : (
+          <aside>
+            <h2>Nenhum projeto encontado :(</h2>
+            <img src={noProject} />
+          </aside>
+        )}
+        {peoples ? (
+          <ul>
+            {peoples.map(profile => (
+              <ProfileCard key={profile.id} profile={profile} />
             )) || <Skeleton width="100%" height="200px" />}
           </ul>
         ) : (

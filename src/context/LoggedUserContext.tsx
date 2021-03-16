@@ -32,6 +32,7 @@ const UserContext = createContext({
 } as IUserContext)
 const LoggedUserProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState({} as IUserContext)
+  const { isAuthenticated } = useAuth()
   const [loadingUserRequest, setLoadingUserRequest] = useState(true)
   useEffect(() => {
     api
@@ -42,7 +43,7 @@ const LoggedUserProvider: React.FC = ({ children }) => {
       .finally(() => {
         setLoadingUserRequest(false)
       })
-  }, [])
+  }, [user, isAuthenticated])
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>
 }
