@@ -15,6 +15,7 @@ import Explorer from './pages/Explorer'
 import Search from './pages/Search'
 import { LoggedUserProvider } from './context/LoggedUserContext'
 import NavBar from './components/UI/NavBar'
+
 const Routes: React.FC = () => {
   return (
     <AuthProvider>

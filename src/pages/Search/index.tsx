@@ -16,7 +16,7 @@ import ProjectCard, { IProject } from '../../components/ProjectCard'
 import ProfileCard, { IProfile } from '../../components/ProfileCard'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
-import Skeleton from 'react-loading-skeleton'
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { useHistory, useParams } from 'react-router'
 import SearchInput from '../../components/UI/SearchInput'
 import { ProjectType } from '../CreateProject'
@@ -41,6 +41,7 @@ const Explorer: React.FC = () => {
   )
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
   const [peoples, setPeoples] = useState<IProfile[]>([] as IProfile[])
+  const [loading, setLoading] = useState(true)
   const [filterAreaOrTool, setFilterAreaOrTool] = useState<IFilterAreaOrTool>()
   useEffect(() => {
     setProjects([])
@@ -59,6 +60,7 @@ const Explorer: React.FC = () => {
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
+        .finally(() => setLoading(false))
     } else {
       api
         .get(`/api/v1/${parms.for}s`)
@@ -71,6 +73,7 @@ const Explorer: React.FC = () => {
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
+        .finally(() => setLoading(false))
     }
   }, [parms, filterAreaOrTool])
   useEffect(() => {
@@ -134,29 +137,43 @@ const Explorer: React.FC = () => {
             </Tag>
           ))}
         </section>
-        {filtredProjects ? (
-          <ul>
-            {filtredProjects.map(project => (
-              <ProjectCard key={project.id} project={project} hiddeOwner />
-            )) || <Skeleton width="100%" height="200px" />}
-          </ul>
+        {loading ? (
+          <SkeletonTheme color="#dddcdc" highlightColor="#d3d3d3">
+            <Skeleton width="100%" height="200px" />
+          </SkeletonTheme>
         ) : (
-          <aside>
-            <h2>Nenhum projeto encontado :(</h2>
-            <img src={noProject} />
-          </aside>
-        )}
-        {peoples ? (
-          <ul>
-            {peoples.map(profile => (
-              <ProfileCard key={profile.id} profile={profile} />
-            )) || <Skeleton width="100%" height="200px" />}
-          </ul>
-        ) : (
-          <aside>
-            <h2>Nenhum projeto encontado :(</h2>
-            <img src={noProject} />
-          </aside>
+          <>
+            {parms.for === 'projeto' &&
+              (filtredProjects.length > 0 ? (
+                <ul>
+                  {filtredProjects.map(project => (
+                    <ProjectCard
+                      key={project.id}
+                      project={project}
+                      hiddeOwner
+                    />
+                  ))}
+                </ul>
+              ) : (
+                <aside>
+                  <h2>Nenhum projeto encontado.</h2>
+                  <img src={noProject} />
+                </aside>
+              ))}
+            {parms.for === 'pessoa' &&
+              (peoples.length > 0 ? (
+                <ul>
+                  {peoples.map(profile => (
+                    <ProfileCard key={profile.id} profile={profile} />
+                  ))}
+                </ul>
+              ) : (
+                <aside>
+                  <h2>Nenhuma pessoa encontada.</h2>
+                  <img src={noProject} />
+                </aside>
+              ))}
+          </>
         )}
       </Page>
     </Fragment>

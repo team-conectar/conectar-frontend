@@ -6,7 +6,8 @@ import { BodyCard as SuccessfulCreatorsCard } from '../../components/SuccessfulC
 interface ITagProps {
   isSelected: boolean
 }
-export const Tag = styled.span<ITagProps>`
+export const Tag = styled.button<ITagProps>`
+  background: none;
   font-size: 0.8rem;
   word-break: normal;
   padding: 0.2rem;
@@ -47,6 +48,7 @@ export const Page = styled.div`
     justify-content: center;
     align-items: center;
     gap: 2rem;
+    padding: 2rem 0;
     img {
       width: 60%;
     }
