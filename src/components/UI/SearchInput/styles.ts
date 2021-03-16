@@ -67,23 +67,22 @@ export const Component = styled.form<IComponents>`
     }
   }
 
-  ${BodyButton} {
-    > button {
-      padding: 0.2rem 1rem;
-      background: var(--textGreen);
-      color: white;
-      border-radius: 0.4rem;
-      width: 80%;
-      margin: 0.2rem 0;
-      opacity: 0;
-      visibility: hidden;
-      transition: 0.4s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font: 600 1rem Raleway;
-    }
+  ${BodyButton} > button {
+    padding: 0.2rem 1rem;
+    background: var(--textGreen);
+    color: white;
+    border-radius: 0.4rem;
+    width: 80%;
+    margin: 0.2rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.4s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: 600 1rem Raleway;
   }
+
   ${props =>
     props.isSearchPage &&
     css`

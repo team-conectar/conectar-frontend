@@ -10,19 +10,19 @@ import lupa from '../../../assets/icon/lupa.svg'
 import Dropdown from '../Dropdown'
 import { useHistory, useLocation } from 'react-router'
 
-type TypeAttribute = 'projeto' | 'pessoa' | 'área'
+type TypePeopleOrProject = 'projeto' | 'pessoa'
 interface IProps extends InputHTMLAttributes<HTMLInputElement> {
-  defaultAttribute?: TypeAttribute
+  defaultAttribute?: TypePeopleOrProject
 }
 const SearchInput: React.FC<IProps> = ({ defaultAttribute, ...rest }) => {
   const history = useHistory()
   const location = useLocation()
-  const [searchFor, setSearchFor] = useState<TypeAttribute>(
+  const [searchFor, setSearchFor] = useState<TypePeopleOrProject>(
     defaultAttribute || 'projeto',
   )
   const [searchKey, setSearchKey] = useState<string>('')
 
-  const options: Array<TypeAttribute> = ['projeto', 'pessoa', 'área']
+  const options: Array<TypePeopleOrProject> = ['projeto', 'pessoa']
 
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setSearchKey(event.target.value)

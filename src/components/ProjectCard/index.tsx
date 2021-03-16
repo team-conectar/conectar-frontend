@@ -2,6 +2,8 @@ import React, { InputHTMLAttributes, useEffect, useState } from 'react'
 import { BodyCard, ProjectInfo, UserInfo } from './styles'
 import { Link } from 'react-router-dom'
 import api from '../../services/api'
+import { AreaType } from '../UI/SelectArea'
+import { ToolType } from '../UI/SelectTools'
 interface IPessoa {
   foto_perfil: string
   usuario: string
@@ -15,18 +17,8 @@ export interface IProject {
   objetivo: string
   pessoa_id: number
   id: string
-  areas: [
-    {
-      descricao: string
-      id: number
-    },
-  ]
-  habilidades: [
-    {
-      nome: string
-      id: number
-    },
-  ]
+  areas: AreaType[]
+  habilidades: ToolType[]
 }
 interface IProjectCardProps {
   project: IProject

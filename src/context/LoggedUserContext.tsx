@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { AreaType } from '../components/UI/SelectArea'
+import { ToolType } from '../components/UI/SelectTools'
 import api from '../services/api'
 
 import useAuth from './hooks/useAuth'
@@ -12,6 +14,8 @@ interface IUserContext {
   aliado: boolean
   foto_perfil: string
   id: number
+  areas: AreaType[]
+  habilidades: ToolType[]
 }
 const UserContext = createContext({
   usuario: '',
@@ -23,6 +27,8 @@ const UserContext = createContext({
   aliado: false,
   foto_perfil: '',
   id: 0,
+  areas: [],
+  habilidades: [],
 } as IUserContext)
 const LoggedUserProvider: React.FC = ({ children }) => {
   const [user, setUser] = useState({} as IUserContext)
