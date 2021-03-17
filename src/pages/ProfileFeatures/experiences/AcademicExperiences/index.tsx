@@ -139,9 +139,7 @@ const AcademicExperiences: React.FC = () => {
           descricao,
           data_inicio: `${data_inicio}-02-01`,
           data_fim:
-            situacao !== 'Incompleto' && situacao !== 'Em andamento' && data_fim
-              ? `${data_fim}-02-01`
-              : null,
+            situacao !== 'Incompleto' && data_fim ? `${data_fim}-02-01` : null,
           escolaridade,
           curso,
           situacao: situacao[0],
@@ -357,12 +355,7 @@ const AcademicExperiences: React.FC = () => {
                 name="situacao"
                 type="radio"
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  setIsIncomplete(
-                    !(
-                      event.target.value === 'Em andamento' ||
-                      event.target.value === 'Incompleto'
-                    ),
-                  )
+                  setIsIncomplete(event.target.value === 'Incompleto')
                 }
                 options={[
                   {
