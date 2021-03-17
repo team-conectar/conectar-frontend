@@ -12,7 +12,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   options: Array<IOptionsCheckbox>
 }
 
-const Input: React.FC<InputProps> = ({ name, options, ...rest }) => {
+const ToogleSwitch: React.FC<InputProps> = ({ name, options, ...rest }) => {
   const inputRefs = useRef<HTMLInputElement[]>([])
   const { fieldName, registerField, defaultValue = [] } = useField(name)
   useEffect(() => {
@@ -20,22 +20,34 @@ const Input: React.FC<InputProps> = ({ name, options, ...rest }) => {
       name: fieldName,
       ref: inputRefs.current,
       getValue: (refs: HTMLInputElement[]) => {
-        return refs.filter(ref => ref.checked).map(ref => ref.value)
+        const checked = refs.find(ref => ref.checked)
+        return rest.type === 'radio'
+          ? checked
+            ? checked?.value
+            : ''
+          : refs.filter(ref => ref.checked).map(ref => ref.value)
       },
       clearValue: (refs: HTMLInputElement[]) => {
         refs.forEach(ref => {
           ref.checked = false
         })
       },
-      setValue: (refs: HTMLInputElement[], values: string[]) => {
-        refs.forEach(ref => {
-          if (values.includes(ref.id)) {
-            ref.checked = true
+      setValue: (refs: HTMLInputElement[], value) => {
+        if (rest.type === 'radio') {
+          const item = refs.find(ref => ref.value === value)
+          if (item) {
+            item.checked = true
           }
-        })
+        } else {
+          refs.forEach(ref => {
+            if (value.includes(ref.id)) {
+              ref.checked = true
+            }
+          })
+        }
       },
     })
-  }, [defaultValue, fieldName, registerField])
+  }, [defaultValue, fieldName, registerField, rest.type])
   return (
     <BodySwitch>
       {options.map((option, index) => (
@@ -43,12 +55,17 @@ const Input: React.FC<InputProps> = ({ name, options, ...rest }) => {
           {option.label}
           <input
             className="checkbox"
-            defaultChecked={defaultValue.find((dv: string) => dv === option.id)}
+            defaultChecked={
+              rest.type === 'radio'
+                ? defaultValue === option.id
+                : defaultValue.find((dv: string) => dv === option.id)
+            }
             ref={ref => {
               inputRefs.current[index] = ref as HTMLInputElement
             }}
+            name={fieldName}
             value={option.value}
-            type="checkbox"
+            type={rest.type || 'checkbox'}
             id={option.id}
             {...rest}
           />
@@ -59,4 +76,4 @@ const Input: React.FC<InputProps> = ({ name, options, ...rest }) => {
   )
 }
 
-export default Input
+export default ToogleSwitch
