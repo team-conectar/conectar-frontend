@@ -4,6 +4,7 @@ import React, {
   useCallback,
   useEffect,
   OptionHTMLAttributes,
+  ChangeEvent,
 } from 'react'
 import Input from '../../../../components/UI/Input'
 import Textarea from '../../../../components/UI/Textarea'
@@ -51,6 +52,7 @@ const AcademicExperiences: React.FC = () => {
   const [editStored, setEditStored] = useState<AcademicType>(
     initialAcademicData,
   )
+  const [currentilyEducation, setCurrentilyEducation] = useState('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [experienceExcluded, setExperienceExcluded] = useState({
     id: 0,
@@ -110,7 +112,9 @@ const AcademicExperiences: React.FC = () => {
             .min(20, 'Descreva um pouco mais')
             .max(500, 'Excedeu o limite de caractéres (500)')
             .required('Informe a descrição'),
-          data_fim: Yup.string().required('Ano final é obrigatório'),
+          data_fim: !isIncomplete
+            ? Yup.string().required('Ano final é obrigatório')
+            : Yup.string(),
           data_inicio: Yup.string().required('Ano inicial é obrigatório'),
           curso: Yup.string().required('Informe o curso'),
           instituicao: Yup.string().required('Informe a instituição'),
@@ -135,7 +139,9 @@ const AcademicExperiences: React.FC = () => {
           descricao,
           data_inicio: `${data_inicio}-02-01`,
           data_fim:
-            situacao !== 'Incompleto' && data_fim ? `${data_fim}-02-01` : null,
+            situacao !== 'Incompleto' && situacao !== 'Em andamento' && data_fim
+              ? `${data_fim}-02-01`
+              : null,
           escolaridade,
           curso,
           situacao: situacao[0],
@@ -349,6 +355,15 @@ const AcademicExperiences: React.FC = () => {
             <section className="bloco-tres area-toggle">
               <ToggleSwitch
                 name="situacao"
+                type="radio"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setIsIncomplete(
+                    !(
+                      event.target.value === 'Em andamento' ||
+                      event.target.value === 'Incompleto'
+                    ),
+                  )
+                }
                 options={[
                   {
                     label: 'Incompleto',
