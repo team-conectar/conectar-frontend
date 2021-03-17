@@ -13,7 +13,6 @@ const ProfileFeatures: React.FC = () => {
 
   return (
     <BodyProfileFeatures>
-      <Logged />
       <div className="area-central container">
         <h1>Nos conte sua experiência</h1>
         <AcademicExperiences />

@@ -22,7 +22,7 @@ export const BodyExperiences = styled.section`
       }
     }
   }
-  background: white;
+  background: var(--background);
   padding: 2rem 4rem;
   margin: 0.8rem 0;
   display: flex;

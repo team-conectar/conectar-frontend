@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { Form } from '@unform/web'
+import background from '../../assets/image/background.svg'
 
 export const BodyMasteryTools = styled(Form)`
   display: flex;
@@ -8,13 +9,18 @@ export const BodyMasteryTools = styled(Form)`
   align-items: center;
   min-height: 100vh;
   width: 100%;
+  background-image: url(${background});
+  background-position: center;
+  background-attachment: fixed;
+  background-size: 100%;
+  background-repeat: no-repeat;
   h1 {
     margin: 1.4rem 0;
   }
   .area-central {
     padding: 2.4rem 3.2rem;
     border-radius: 0.8rem;
-    background: white;
+    background: var(--background);
   }
   footer {
     width: min(1100px, 90vw);

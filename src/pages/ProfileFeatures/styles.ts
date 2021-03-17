@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import background from '../../assets/image/background.svg'
 
 export const BodyProfileFeatures = styled.div`
   display: flex;
@@ -6,6 +7,11 @@ export const BodyProfileFeatures = styled.div`
   align-items: center;
   min-height: 100vh;
   width: 100%;
+  background-image: url(${background});
+  background-position: center;
+  background-attachment: fixed;
+  background-size: 100%;
+  background-repeat: no-repeat;
   h1 {
     margin: 1.4rem 0;
     font: 700 3rem Raleway;

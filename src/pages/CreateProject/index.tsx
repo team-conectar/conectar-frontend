@@ -1,15 +1,8 @@
-import React, {
-  useState,
-  useContext,
-  useRef,
-  useCallback,
-  useEffect,
-} from 'react'
+import React, { useState, useContext, useRef, useCallback } from 'react'
 import { BodyCreateProject } from './styles'
 import Button from '../../components/UI/Button'
 import Input from '../../components/UI/Input'
 import Textarea from '../../components/UI/Textarea'
-import ToggleSwitch from '../../components/UI/ToggleSwitch'
 import { useHistory } from 'react-router'
 import SelectArea, { AreaType } from '../../components/UI/SelectArea'
 import SelectTool, { ToolType } from '../../components/UI/SelectTools'
@@ -19,7 +12,6 @@ import api from '../../services/api'
 import Login from '../../components/UI/Login'
 import { Context } from '../../context/AuthContext'
 import { useLoggedUser } from '../../context/LoggedUserContext'
-import Logged from '../../components/Logged'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -158,8 +150,6 @@ const CreateProject: React.FC = () => {
 
   return (
     <BodyCreateProject>
-      <Logged />
-
       <main>
         {(shownStep === 1 || shownStep === 2) && <h1>Criar Projeto</h1>}
         {(shownStep === 1 && (

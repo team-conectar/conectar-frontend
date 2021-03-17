@@ -1,14 +1,18 @@
 import styled from 'styled-components'
-
+import background from '../../assets/image/background.svg'
 export const BodySignUp = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
   width: 100%;
-
+  background-image: url(${background});
+  background-position: center;
+  background-attachment: fixed;
+  background-size: 100%;
+  background-repeat: no-repeat;
   form.area-central {
-    background: var(--backgroudElevation);
+    background: var(--background);
     padding: 2.4rem;
     border-radius: 0.8rem;
     box-shadow: var(--boxShadow);
@@ -67,7 +71,7 @@ export const BodySignUp = styled.div`
         }
         .google-button {
           border: 1px solid var(--textGreen);
-          background-color: var(--backgroudElevation);
+          background-color: transparent;
           margin: 0.5rem 0 0.5rem 0.2rem;
         }
         .facebook-button {
@@ -128,6 +132,7 @@ export const BodySignUp = styled.div`
           }
         }
         > fieldset {
+          background: white;
           margin-top: 0.4rem;
           width: max(30%, 150px);
           legend {

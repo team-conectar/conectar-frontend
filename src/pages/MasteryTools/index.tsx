@@ -59,7 +59,6 @@ const MasteryTools: React.FC = () => {
 
   return (
     <BodyMasteryTools onSubmit={handleSubmit} ref={formRef}>
-      <Logged />
       <div className="area-central container">
         <h1>Selecione suas habilidades e ferramentas de domínio</h1>
         <SelectTool name="habilidades" />

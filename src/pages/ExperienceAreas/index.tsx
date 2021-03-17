@@ -58,7 +58,6 @@ const ExperienceAreas: React.FC = () => {
 
   return (
     <BodyExperienceAreas onSubmit={handleSubmit} ref={formRef}>
-      <Logged />
       <div className="area-central container">
         <h1>Selecione até 5 áreas de atuação de seu conhecimento</h1>
         <SelectArea name="areas" />
