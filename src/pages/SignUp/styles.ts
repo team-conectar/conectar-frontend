@@ -1,5 +1,21 @@
 import styled from 'styled-components'
 import background from '../../assets/image/background.svg'
+import Tooltip from '../../components/UI/Tooltip'
+
+export const Error = styled(Tooltip)`
+  svg {
+    margin: 0;
+    color: var(--red);
+    cursor: pointer;
+  }
+  span {
+    background: var(--red);
+    color: white;
+    &::before {
+      border-color: var(--red) transparent;
+    }
+  }
+`
 export const BodySignUp = styled.div`
   display: flex;
   justify-content: center;
@@ -125,6 +141,12 @@ export const BodySignUp = styled.div`
             font: 400 0.9rem Raleway;
             height: 0.9rem;
             color: var(--orange);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            svg {
+              font-size: 1.2rem;
+            }
           }
           > span {
             font: 400 0.8rem Raleway;

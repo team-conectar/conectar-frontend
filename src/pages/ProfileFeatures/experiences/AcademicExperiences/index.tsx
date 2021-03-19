@@ -304,9 +304,6 @@ const AcademicExperiences: React.FC = () => {
                 label="Nível de formação"
                 name="escolaridade"
                 options={niveisFormacao}
-                onChange={(option: any) => {
-                  setIsIncomplete(option.value === 'Incompleto')
-                }}
                 defaultValue={
                   editStored.id
                     ? {

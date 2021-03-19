@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useRef } from 'react'
-import { BodySignUp } from './styles'
+import React, { useState, useCallback, useRef, ChangeEvent } from 'react'
+import { BodySignUp, Error } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
 import cadastro_banner from '../../assets/image/cadastro_banner.svg'
 import Input from '../../components/UI/Input'
@@ -21,6 +21,7 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
+import { IoMdAlert } from 'react-icons/io'
 
 interface routeParms {
   parte: string
@@ -42,7 +43,12 @@ const SignUp: React.FC = () => {
   const history = useHistory()
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
-
+  const [profileType, setProfyleType] = useState({
+    colaborador: false,
+    aliado: false,
+    idealizador: false,
+  })
+  const [profileTypeError, setProfyleTypeError] = useState(false)
   const [showNextStep, setShowNextStep] = useState<boolean>(
     params.parte === '2',
   )
@@ -71,6 +77,7 @@ const SignUp: React.FC = () => {
           .matches(/(?=.*[ ])/g, 'Informe o nome completo')
           .required('Usuário é obrigatório'),
       })
+
       await schema.validate(formData, {
         abortEarly: false,
       })
@@ -106,6 +113,15 @@ const SignUp: React.FC = () => {
           month: Yup.string().required('Mês é obrigatório'),
           day: Yup.string().required('Dia é obrigatório'),
         })
+        if (
+          !(
+            profileType.aliado ||
+            profileType.colaborador ||
+            profileType.idealizador
+          )
+        ) {
+          setProfyleTypeError(true)
+        }
         await schema.validate(formData, {
           abortEarly: false,
         })
@@ -126,11 +142,12 @@ const SignUp: React.FC = () => {
           telefone,
         }
         console.log(data)
-
-        await api.put('/api/v1/pessoas', data, {
-          withCredentials: true,
-        })
-        history.push('/experiencias-do-usuario')
+        if (!profileTypeError) {
+          await api.put('/api/v1/pessoas', data, {
+            withCredentials: true,
+          })
+          history.push('/experiencias-do-usuario')
+        }
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -288,7 +305,14 @@ const SignUp: React.FC = () => {
             </section>
             <section className="tipo-perfil">
               <section>
-                <legend>Tipo de Perfil</legend>
+                <legend>
+                  Tipo de Perfil{' '}
+                  {profileTypeError && (
+                    <Error message="Deve selecionar ao menos um tipo de perfil abaixo">
+                      <IoMdAlert />
+                    </Error>
+                  )}
+                </legend>
                 <span>Selecione um ou mais tipos</span>
               </section>
               <fieldset>
@@ -298,6 +322,13 @@ const SignUp: React.FC = () => {
                   <ToggleSwitch
                     name="idealizador"
                     options={[{ id: 'idealizador', value: 'idealizador' }]}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setProfyleType(
+                        event.target.checked
+                          ? { ...profileType, idealizador: true }
+                          : { ...profileType, idealizador: false },
+                      )
+                    }
                   />
                 </aside>
               </fieldset>
@@ -308,6 +339,13 @@ const SignUp: React.FC = () => {
                   <ToggleSwitch
                     name="colaborador"
                     options={[{ id: 'colaborador', value: 'colaborador' }]}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setProfyleType(
+                        event.target.checked
+                          ? { ...profileType, colaborador: true }
+                          : { ...profileType, colaborador: false },
+                      )
+                    }
                   />
                 </aside>
               </fieldset>
@@ -318,6 +356,13 @@ const SignUp: React.FC = () => {
                   <ToggleSwitch
                     name="aliado"
                     options={[{ id: 'aliado', value: 'aliado' }]}
+                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                      setProfyleType(
+                        event.target.checked
+                          ? { ...profileType, aliado: true }
+                          : { ...profileType, aliado: false },
+                      )
+                    }
                   />
                 </aside>
               </fieldset>
