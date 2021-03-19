@@ -111,7 +111,7 @@ export const BodyExperiences = styled.section`
       grid-column: -2;
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
+      justify-content: space-between;
     }
     .bloco-tres {
       grid-column: 1;

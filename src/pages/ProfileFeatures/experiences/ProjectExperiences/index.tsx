@@ -321,32 +321,13 @@ const ProjectExperiences: React.FC = () => {
                 name="nome"
                 defaultValue={editStored?.nome}
               />
-            </section>
-            <section className="bloco-dois">
-              <Select
-                label="Situação"
-                name="situacao"
-                options={situacao}
-                defaultValue={
-                  editStored.id
-                    ? {
-                        label: editStored?.situacao,
-                        value: editStored?.situacao,
-                      }
-                    : null
-                }
-                onChange={(data: any) => {
-                  setCurrentilyProject(!!(data.value === 'Em andamento'))
-                }}
-              />
-
               <Input
                 label="Cargo"
                 name="cargo"
                 defaultValue={editStored?.cargo}
               />
             </section>
-            <section className="bloco-tres">
+            <section className="bloco-dois">
               <aside>
                 <Select
                   label="Mês inicial"
@@ -410,6 +391,27 @@ const ProjectExperiences: React.FC = () => {
                   />
                 </aside>
               )}
+            </section>
+            <section className="bloco-tres">
+              <ToggleSwitch
+                name="situacao"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setCurrentilyProject(event.target.value === 'Em andamento')
+                }
+                options={[
+                  {
+                    label: 'Incompleto',
+                    id: 'incompleto',
+                    value: 'Incompleto',
+                  },
+                  {
+                    label: 'Em andamento',
+                    id: 'em_andamento',
+                    value: 'Em andamento',
+                  },
+                  { id: 'concluido', label: 'Concluído', value: 'Concluído' },
+                ]}
+              />
             </section>
             <section className="bloco-quatro">
               <Textarea
