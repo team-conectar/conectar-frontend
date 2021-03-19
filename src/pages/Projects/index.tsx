@@ -392,7 +392,7 @@ const Projects: React.FC = () => {
                 onClick={() => setVacancyDetail(vacancy)}
                 style={
                   vacancyDetail === vacancy
-                    ? { background: 'var(--backgroudElevation)' }
+                    ? { background: 'var(--backgroundElevation)' }
                     : { background: 'transparent' }
                 }
               />

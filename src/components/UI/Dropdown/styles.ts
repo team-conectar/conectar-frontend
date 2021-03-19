@@ -8,7 +8,7 @@ export const DropdownContent = styled.div`
   opacity: 0;
   visibility: hidden;
   position: absolute;
-  background-color: var(--backgroudElevation);
+  background-color: var(--backgroundElevation);
   min-width: 10rem;
   width: fit-content;
   min-height: 2rem;
@@ -41,7 +41,7 @@ export const DropdownContent = styled.div`
     z-index: 80;
   }
   &:after {
-    border-color: transparent transparent var(--backgroudElevation) transparent;
+    border-color: transparent transparent var(--backgroundElevation) transparent;
     bottom: 100%;
     z-index: 100;
   }
