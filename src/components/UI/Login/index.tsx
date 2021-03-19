@@ -19,6 +19,7 @@ import { useHistory } from 'react-router'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import getValidationErrors from '../../../utils/getValidationErrors'
+import useAuth from '../../../context/hooks/useAuth'
 interface loginProps {
   onSuccessLogin(): void
 }
@@ -30,6 +31,7 @@ interface SignInFormData {
 const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   const history = useHistory()
   const formRef = useRef<FormHandles>(null)
+  const { handleLogin } = useAuth()
   /** This function checks the profile is idealizer, collaborator or ally, then redirects to registration these */
   async function checkProfileType() {
     const { aliado, colaborador, idealizador } = (
@@ -52,6 +54,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       .then(() => {
         checkProfileType()
         onSuccessLogin()
+        handleLogin(true)
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -67,6 +70,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       .then(() => {
         checkProfileType()
         onSuccessLogin()
+        handleLogin(true)
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -93,6 +97,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
 
         await api.post('/api/token', data)
         onSuccessLogin()
+        handleLogin(true)
       } catch (error) {
         if (error instanceof Yup.ValidationError) {
           const errors = getValidationErrors(error)
