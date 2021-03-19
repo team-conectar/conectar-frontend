@@ -395,6 +395,7 @@ const ProjectExperiences: React.FC = () => {
             <section className="bloco-tres">
               <ToggleSwitch
                 name="situacao"
+                type="radio"
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   setCurrentilyProject(event.target.value === 'Em andamento')
                 }
