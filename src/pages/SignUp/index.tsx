@@ -43,11 +43,6 @@ const SignUp: React.FC = () => {
   const history = useHistory()
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
-  const [profileType, setProfyleType] = useState({
-    colaborador: false,
-    aliado: false,
-    idealizador: false,
-  })
   const [profileTypeError, setProfyleTypeError] = useState(false)
   const [showNextStep, setShowNextStep] = useState<boolean>(
     params.parte === '2',
@@ -113,15 +108,15 @@ const SignUp: React.FC = () => {
           month: Yup.string().required('Mês é obrigatório'),
           day: Yup.string().required('Dia é obrigatório'),
         })
-        if (
+
+        setProfyleTypeError(
           !(
-            profileType.aliado ||
-            profileType.colaborador ||
-            profileType.idealizador
-          )
-        ) {
-          setProfyleTypeError(true)
-        }
+            formData.aliado[0] === 'aliado' ||
+            formData.colaborador[0] === 'colaborador' ||
+            formData.idealizador[0] === 'idealizador'
+          ),
+        )
+
         await schema.validate(formData, {
           abortEarly: false,
         })
@@ -142,7 +137,11 @@ const SignUp: React.FC = () => {
           telefone,
         }
         console.log(data)
-        if (!profileTypeError) {
+        if (
+          formData.aliado[0] === 'aliado' ||
+          formData.colaborador[0] === 'colaborador' ||
+          formData.idealizador[0] === 'idealizador'
+        ) {
           await api.put('/api/v1/pessoas', data, {
             withCredentials: true,
           })
@@ -322,13 +321,6 @@ const SignUp: React.FC = () => {
                   <ToggleSwitch
                     name="idealizador"
                     options={[{ id: 'idealizador', value: 'idealizador' }]}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setProfyleType(
-                        event.target.checked
-                          ? { ...profileType, idealizador: true }
-                          : { ...profileType, idealizador: false },
-                      )
-                    }
                   />
                 </aside>
               </fieldset>
@@ -339,13 +331,6 @@ const SignUp: React.FC = () => {
                   <ToggleSwitch
                     name="colaborador"
                     options={[{ id: 'colaborador', value: 'colaborador' }]}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setProfyleType(
-                        event.target.checked
-                          ? { ...profileType, colaborador: true }
-                          : { ...profileType, colaborador: false },
-                      )
-                    }
                   />
                 </aside>
               </fieldset>
@@ -356,13 +341,6 @@ const SignUp: React.FC = () => {
                   <ToggleSwitch
                     name="aliado"
                     options={[{ id: 'aliado', value: 'aliado' }]}
-                    onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                      setProfyleType(
-                        event.target.checked
-                          ? { ...profileType, aliado: true }
-                          : { ...profileType, aliado: false },
-                      )
-                    }
                   />
                 </aside>
               </fieldset>
