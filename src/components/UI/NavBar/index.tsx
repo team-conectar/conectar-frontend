@@ -6,14 +6,14 @@ import explorar from '../../../assets/icon/explorar.svg'
 import explorar_secondary from '../../../assets/icon/explorer_secondary.svg'
 import userDefault from '../../../assets/icon/user.svg'
 import { Context } from '../../../context/AuthContext'
-import { useLoggedUser } from '../../../context/LoggedUserContext'
 import { IconBell, IconUser } from '../../../assets/icon'
 import Dropdown from '../Dropdown'
 import SearchInput from '../SearchInput'
+import useAuth from '../../../context/hooks/useAuth'
 
 const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
-  const user = useLoggedUser()
+  const { user } = useContext(Context)
   const location = useLocation()
   return (
     <BodyNavBar>

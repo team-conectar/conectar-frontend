@@ -11,7 +11,6 @@ import Modal from '../../components/UI/Modal'
 import api from '../../services/api'
 import Login from '../../components/UI/Login'
 import { Context } from '../../context/AuthContext'
-import { useLoggedUser } from '../../context/LoggedUserContext'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -41,7 +40,7 @@ interface SecondFormData {
 }
 const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
-  const id_pessoa = useLoggedUser().id
+  const id_pessoa = useContext(Context).user.id
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
   const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)

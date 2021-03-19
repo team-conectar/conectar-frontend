@@ -1,13 +1,4 @@
-import React, {
-  useState,
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useRef,
-  useContext,
-  Fragment,
-  useCallback,
-} from 'react'
+import React, { useState, useEffect, useContext, Fragment } from 'react'
 import { Page, Tag } from './styles'
 
 import { Context } from '../../context/AuthContext'
@@ -21,9 +12,7 @@ import { useHistory, useParams } from 'react-router'
 import SearchInput from '../../components/UI/SearchInput'
 import { ProjectType } from '../CreateProject'
 import noProject from '../../assets/image/sem_projetos.svg'
-import { useLoggedUser } from '../../context/LoggedUserContext'
-import { AreaType } from '../../components/UI/SelectArea'
-import { ToolType } from '../../components/UI/SelectTools'
+
 interface IParmsProps {
   for?: 'projeto' | 'pessoa'
   attribute?: 'area' | 'habilidade' | 'objetivo' | 'nome'
@@ -35,7 +24,7 @@ interface IFilterAreaOrTool {
 }
 const Explorer: React.FC = () => {
   const parms = useParams<IParmsProps>()
-  const user = useLoggedUser()
+  const { user } = useContext(Context)
   const [filtredProjects, setFiltredProjects] = useState<IProject[]>(
     [] as IProject[],
   )
