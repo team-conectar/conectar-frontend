@@ -9,11 +9,12 @@ export const BodyMasteryTools = styled(Form)`
   align-items: center;
   min-height: 100vh;
   width: 100%;
+  background-color: #d9d9d9;
   background-image: url(${background});
   background-position: center;
   background-attachment: fixed;
-  background-size: 100%;
-  background-repeat: no-repeat;
+  background-size: 50%;
+  background-repeat: repeat-x;
   h1 {
     margin: 1.4rem 0;
   }

@@ -67,7 +67,7 @@ const MasteryTools: React.FC = () => {
         <Button
           theme="secondary"
           onClick={() => {
-            history.push('/experiencias-do-usuario')
+            history.push('/explorar')
           }}
         >
           Pular

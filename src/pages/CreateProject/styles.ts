@@ -8,11 +8,12 @@ export const BodyCreateProject = styled.div`
   align-items: center;
   height: 100vh;
   width: 100%;
+  background-color: #d9d9d9;
   background-image: url(${background});
   background-position: center;
   background-attachment: fixed;
-  background-size: 100%;
-  background-repeat: no-repeat;
+  background-size: 50%;
+  background-repeat: repeat-x;
   > main {
     background: var(--background);
     box-shadow: var(--boxShadow);

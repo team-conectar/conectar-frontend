@@ -371,9 +371,9 @@ const SignUp: React.FC = () => {
               <Button
                 theme="secondary"
                 type="submit"
-                onClick={() => setShowNextStep(false)}
+                onClick={() => history.push('/experiencias-do-usuario')}
               >
-                Continuar
+                Pular
               </Button>
               <Button theme="primary" type="submit">
                 Continuar
