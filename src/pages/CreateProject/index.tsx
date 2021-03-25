@@ -210,7 +210,10 @@ const CreateProject: React.FC = () => {
           (shownStep === 3 && (
             <aside className="terceira-etapa">
               <Vacancy project={project} />
-              <Button theme="primary" onClick={() => history.push('/')}>
+              <Button
+                theme="primary"
+                onClick={() => history.push(`/projeto/${idProject}`)}
+              >
                 Concluir
               </Button>
             </aside>
