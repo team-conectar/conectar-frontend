@@ -11,6 +11,7 @@ import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import VacancieCard from '../../components/VacancieCard'
 import { useParams } from 'react-router-dom'
 import { VacanciesType } from '../../components/Vacancy'
+import hero from '../../assets/image/temos_um_time_para_seu_projeto.svg'
 interface routeParms {
   id: string
 }
@@ -38,6 +39,7 @@ const ApproveProject: React.FC = () => {
           console.log(err?.response?.data.detail)
         }),
     ]
+    console.log(res)
   }, [project_id])
   return (
     <>
@@ -45,12 +47,14 @@ const ApproveProject: React.FC = () => {
       <BodyApproveProject>
         <ProfileLink />
         <main>
+          <figure>
+            <img src={hero} alt="Confira as vagas" />
+            <figcaption>
+              Confira o resumo da conexão do seu projeto com os candidatos
+            </figcaption>
+          </figure>
           <section>
-            <img src="" alt="" />
-            <h1>Confira as respostas dos candidatos aos convites enviados</h1>
-          </section>
-          <section>
-            <ProjectCard project={project} />
+            <ProjectCard project={project} hiddeOwner />
           </section>
           <section>
             <ul>

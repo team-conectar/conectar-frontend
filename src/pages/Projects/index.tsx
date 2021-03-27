@@ -304,7 +304,12 @@ const Projects: React.FC = () => {
 
           <section>
             {isOwner() ? (
-              <Button theme="primary">Buscar Time</Button>
+              <Button
+                theme="primary"
+                onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
+              >
+                Buscar Time
+              </Button>
             ) : (
               <Button theme="secondary" className="fav-button">
                 <img src={like} alt="curtidas" /> Favoritar

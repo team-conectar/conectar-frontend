@@ -32,6 +32,16 @@ export const BodyApproveProject = styled.div`
     background: white;
     box-shadow: var(--boxShadow);
     height: fit-content;
+    > figure {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      > figcaption {
+        text-align: center;
+        font: 600 1.8rem Raleway;
+      }
+    }
     > section {
       padding: 1.2rem;
       display: flex;
