@@ -22,7 +22,7 @@ export const BodyExperiences = styled.section`
       }
     }
   }
-  background: white;
+  background: var(--background);
   padding: 2rem 4rem;
   margin: 0.8rem 0;
   display: flex;
@@ -111,7 +111,7 @@ export const BodyExperiences = styled.section`
       grid-column: -2;
       display: flex;
       flex-direction: column;
-      justify-content: space-around;
+      justify-content: space-between;
     }
     .bloco-tres {
       grid-column: 1;

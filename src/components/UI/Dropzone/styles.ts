@@ -4,6 +4,7 @@ export const BodyDropzone = styled.div`
   position: relative;
   padding: 0.5rem 0;
   > main {
+    background: white;
     margin: 0.4rem 0;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
     border-radius: 0.4rem;

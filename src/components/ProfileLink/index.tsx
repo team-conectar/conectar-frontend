@@ -1,61 +1,34 @@
-import React, {
-  InputHTMLAttributes,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import { BodyLink } from './styles'
+import React, { useContext } from 'react'
+import { BodyCard } from './styles'
 import { Link } from 'react-router-dom'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
 import co from '../../assets/icon/co.svg'
+import Skeleton from 'react-loading-skeleton'
 import { Context } from '../../context/AuthContext'
-import { AxiosError } from 'axios'
-import { AreaType } from '../../components/SelectArea'
-import { ToolType } from '../../components/SelectTools'
-import api from '../../services/api'
 
-interface ProfileType {
-  data_nascimento: string
-  usuario: string
-  email: string
-  ativo: boolean
-  nome: string
-  telefone: string
-  colaborador: boolean
-  idealizador: boolean
-  aliado: boolean
-  foto_perfil: string
-  habilidades: ToolType[]
-  areas: AreaType[]
-  id: number
-  data_criacao: string
-  data_atualizacao: string
-}
 const ProfileLink: React.FC = () => {
-  const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
-  useEffect(() => {
-    const res = api
-      .get(`/api/v1/pessoas/me`)
-      .then(response => {
-        setProfile(response.data)
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-    console.log(res)
-  }, [])
+  const { user } = useContext(Context)
+
   return (
-    <BodyLink to="">
-      <img
+    <BodyCard>
+      {/* <img
         src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
         alt=""
-      />
+      /> */}
+      <Skeleton circle height="100px" width="100px" />
+      <p>
+        <h2>{user.nome || <Skeleton width="150px" />}</h2>
+        {(user.usuario && '@' + user.usuario) || <Skeleton width="100px" />}
+      </p>
+
       <aside>
-        <h2>{profile.nome}</h2>
-        <p>@{profile.usuario}</p>
+        {user.idealizador && <img src={id} alt="" />}
+        {user.aliado && <img src={al} alt="" />}
+        {user.colaborador && <img src={co} alt="" />}
       </aside>
-    </BodyLink>
+      <Link to={`perfil/${user.id}`}>Ver Perfil</Link>
+    </BodyCard>
   )
 }
 export default ProfileLink

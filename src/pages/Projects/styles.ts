@@ -1,8 +1,9 @@
 import styled, { css } from 'styled-components'
 import { Icon } from '../../assets/icon/style'
-import { BodyButton } from '../../components/Button/styles'
-import { DivScroll } from '../../components/ContainerScroll/styles'
-import { DivModalWindow } from '../../components/Modal/styles'
+import { BodyButton } from '../../components/UI/Button/styles'
+import { DivScroll } from '../../components/UI/ContainerScroll/styles'
+import { DivModalWindow } from '../../components/UI/Modal/styles'
+import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
 
 export const DivTags = styled.div`
   background: white;
@@ -235,7 +236,10 @@ export const BodyProjects = styled.div`
     align-items: center;
     position: relative;
     padding: 0 0.6rem; //desktop
-    > ${Icon} {
+    ${ProfileLink} {
+      display: none;
+    }
+    > ${Icon}, ${ProfileLink} {
       position: absolute;
       right: 15px;
       top: 15px;
@@ -267,7 +271,7 @@ export const BodyProjects = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        ${BodyButton} {
+        .fav-button {
           border-color: var(--yellow);
           color: var(--yellow);
         }
@@ -298,7 +302,9 @@ export const BodyProjects = styled.div`
       box-shadow: var(--boxShadow);
       border-radius: 0.4rem;
       width: var(--container);
-
+      ${ProfileLink} {
+        display: flex;
+      }
       > img {
         --marginLeft: 1.2rem;
         grid-column: 1;

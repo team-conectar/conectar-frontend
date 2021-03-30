@@ -6,11 +6,12 @@ import React, {
   OptionHTMLAttributes,
   useRef,
 } from 'react'
-import Input from '../../../../components/Input'
-import Textarea from '../../../../components/Textarea'
-import Select from '../../../../components/Select'
-import ToggleSwitch from '../../../../components/ToggleSwitch'
-import Button from '../../../../components/Button'
+import Input from '../../../../components/UI/Input'
+import Textarea from '../../../../components/UI/Textarea'
+import Select from '../../../../components/UI/Select'
+import ToggleSwitch from '../../../../components/UI/ToggleSwitch'
+import Button from '../../../../components/UI/Button'
+import Modal from '../../../../components/UI/Modal'
 import { BodyExperiences } from '../styles'
 import {
   yearOptions,
@@ -20,7 +21,6 @@ import {
 } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../../../services/api'
-import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -321,32 +321,13 @@ const ProjectExperiences: React.FC = () => {
                 name="nome"
                 defaultValue={editStored?.nome}
               />
-            </section>
-            <section className="bloco-dois">
-              <Select
-                label="Situação"
-                name="situacao"
-                options={situacao}
-                defaultValue={
-                  editStored.id
-                    ? {
-                        label: editStored?.situacao,
-                        value: editStored?.situacao,
-                      }
-                    : null
-                }
-                onChange={(data: any) => {
-                  setCurrentilyProject(!!(data.value === 'Em andamento'))
-                }}
-              />
-
               <Input
                 label="Cargo"
                 name="cargo"
                 defaultValue={editStored?.cargo}
               />
             </section>
-            <section className="bloco-tres">
+            <section className="bloco-dois">
               <aside>
                 <Select
                   label="Mês inicial"
@@ -410,6 +391,28 @@ const ProjectExperiences: React.FC = () => {
                   />
                 </aside>
               )}
+            </section>
+            <section className="bloco-tres">
+              <ToggleSwitch
+                name="situacao"
+                type="radio"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setCurrentilyProject(event.target.value === 'Em andamento')
+                }
+                options={[
+                  {
+                    label: 'Incompleto',
+                    id: 'incompleto',
+                    value: 'Incompleto',
+                  },
+                  {
+                    label: 'Em andamento',
+                    id: 'em_andamento',
+                    value: 'Em andamento',
+                  },
+                  { id: 'concluido', label: 'Concluído', value: 'Concluído' },
+                ]}
+              />
             </section>
             <section className="bloco-quatro">
               <Textarea

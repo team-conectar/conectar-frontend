@@ -1,8 +1,8 @@
 import React, { useCallback, useRef } from 'react'
 import { BodyMasteryTools } from './styles'
-import Button from '../../components/Button'
+import Button from '../../components/UI/Button'
 import { useHistory } from 'react-router-dom'
-import SelectTool from '../../components/SelectTools'
+import SelectTool from '../../components/UI/SelectTools'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
 import Logged from '../../components/Logged'
@@ -59,7 +59,6 @@ const MasteryTools: React.FC = () => {
 
   return (
     <BodyMasteryTools onSubmit={handleSubmit} ref={formRef}>
-      <Logged />
       <div className="area-central container">
         <h1>Selecione suas habilidades e ferramentas de domínio</h1>
         <SelectTool name="habilidades" />
@@ -68,7 +67,7 @@ const MasteryTools: React.FC = () => {
         <Button
           theme="secondary"
           onClick={() => {
-            history.push('/experiencias-do-usuario')
+            history.push('/explorar')
           }}
         >
           Pular

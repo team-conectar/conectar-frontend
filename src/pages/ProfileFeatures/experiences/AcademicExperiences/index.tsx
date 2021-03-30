@@ -4,17 +4,18 @@ import React, {
   useCallback,
   useEffect,
   OptionHTMLAttributes,
+  ChangeEvent,
 } from 'react'
-import Input from '../../../../components/Input'
-import Textarea from '../../../../components/Textarea'
-import Select from '../../../../components/Select'
-import ToggleSwitch from '../../../../components/ToggleSwitch'
-import Button from '../../../../components/Button'
+import Input from '../../../../components/UI/Input'
+import Textarea from '../../../../components/UI/Textarea'
+import Select from '../../../../components/UI/Select'
+import ToggleSwitch from '../../../../components/UI/ToggleSwitch'
+import Modal from '../../../../components/UI/Modal'
+import Button from '../../../../components/UI/Button'
 import { BodyExperiences } from '../styles'
 import { finalYearOptions, yearOptions } from '../../../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../../../services/api'
-import Modal from '../../../../components/Modal'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -51,6 +52,7 @@ const AcademicExperiences: React.FC = () => {
   const [editStored, setEditStored] = useState<AcademicType>(
     initialAcademicData,
   )
+  const [currentilyEducation, setCurrentilyEducation] = useState('')
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [experienceExcluded, setExperienceExcluded] = useState({
     id: 0,
@@ -110,7 +112,9 @@ const AcademicExperiences: React.FC = () => {
             .min(20, 'Descreva um pouco mais')
             .max(500, 'Excedeu o limite de caractéres (500)')
             .required('Informe a descrição'),
-          data_fim: Yup.string().required('Ano final é obrigatório'),
+          data_fim: !isIncomplete
+            ? Yup.string().required('Ano final é obrigatório')
+            : Yup.string(),
           data_inicio: Yup.string().required('Ano inicial é obrigatório'),
           curso: Yup.string().required('Informe o curso'),
           instituicao: Yup.string().required('Informe a instituição'),
@@ -300,9 +304,6 @@ const AcademicExperiences: React.FC = () => {
                 label="Nível de formação"
                 name="escolaridade"
                 options={niveisFormacao}
-                onChange={(option: any) => {
-                  setIsIncomplete(option.value === 'Incompleto')
-                }}
                 defaultValue={
                   editStored.id
                     ? {
@@ -349,6 +350,10 @@ const AcademicExperiences: React.FC = () => {
             <section className="bloco-tres area-toggle">
               <ToggleSwitch
                 name="situacao"
+                type="radio"
+                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                  setIsIncomplete(event.target.value === 'Incompleto')
+                }
                 options={[
                   {
                     label: 'Incompleto',

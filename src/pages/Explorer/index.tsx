@@ -11,9 +11,9 @@ import React, {
 import { Page } from './styles'
 
 import { Context } from '../../context/AuthContext'
-import NavBar from '../../components/NavBar'
+import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
-import ProfileCard from '../../components/ProfileCard'
+import ProfileLink from '../../components/ProfileLink'
 import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import api from '../../services/api'
@@ -37,7 +37,7 @@ const Explorer: React.FC = () => {
     <Fragment>
       <NavBar />
       <Page>
-        <ProfileCard />
+        <ProfileLink />
 
         <ul>
           {projects.length ? (

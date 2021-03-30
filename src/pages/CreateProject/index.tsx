@@ -1,25 +1,16 @@
-import React, {
-  useState,
-  useContext,
-  useRef,
-  useCallback,
-  useEffect,
-} from 'react'
+import React, { useState, useContext, useRef, useCallback } from 'react'
 import { BodyCreateProject } from './styles'
-import Input from '../../components/Input'
-import Textarea from '../../components/Textarea'
-import Button from '../../components/Button'
-import ToggleSwitch from '../../components/ToggleSwitch'
+import Button from '../../components/UI/Button'
+import Input from '../../components/UI/Input'
+import Textarea from '../../components/UI/Textarea'
 import { useHistory } from 'react-router'
-import SelectArea, { AreaType } from '../../components/SelectArea'
-import SelectTool, { ToolType } from '../../components/SelectTools'
+import SelectArea, { AreaType } from '../../components/UI/SelectArea'
+import SelectTool, { ToolType } from '../../components/UI/SelectTools'
+import Dropzone from '../../components/UI/Dropzone'
+import Modal from '../../components/UI/Modal'
 import api from '../../services/api'
-import Modal from '../../components/Modal'
-import Login from '../../components/Login'
-import Dropzone from '../../components/Dropzone'
+import Login from '../../components/UI/Login'
 import { Context } from '../../context/AuthContext'
-import { useLoggedUser } from '../../context/LoggedUserContext'
-import Logged from '../../components/Logged'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -49,7 +40,7 @@ interface SecondFormData {
 }
 const CreateProject: React.FC = () => {
   const { isAuthenticated } = useContext(Context)
-  const id_pessoa = useLoggedUser().id
+  const id_pessoa = useContext(Context).user.id
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
   const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
@@ -158,8 +149,6 @@ const CreateProject: React.FC = () => {
 
   return (
     <BodyCreateProject>
-      <Logged />
-
       <main>
         {(shownStep === 1 || shownStep === 2) && <h1>Criar Projeto</h1>}
         {(shownStep === 1 && (
@@ -221,7 +210,10 @@ const CreateProject: React.FC = () => {
           (shownStep === 3 && (
             <aside className="terceira-etapa">
               <Vacancy project={project} />
-              <Button theme="primary" onClick={() => history.push('/')}>
+              <Button
+                theme="primary"
+                onClick={() => history.push(`/projeto/${idProject}`)}
+              >
                 Concluir
               </Button>
             </aside>

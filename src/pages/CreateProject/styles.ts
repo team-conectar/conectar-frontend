@@ -1,5 +1,6 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { BodyVacancy } from '../../components/Vacancy/styles'
+import background from '../../assets/image/background.svg'
 
 export const BodyCreateProject = styled.div`
   display: flex;
@@ -7,9 +8,14 @@ export const BodyCreateProject = styled.div`
   align-items: center;
   height: 100vh;
   width: 100%;
-
+  background-color: #d9d9d9;
+  background-image: url(${background});
+  background-position: center;
+  background-attachment: fixed;
+  background-size: 50%;
+  background-repeat: repeat-x;
   > main {
-    background: white;
+    background: var(--background);
     box-shadow: var(--boxShadow);
     padding: 2.4rem;
     border-radius: 0.8rem;

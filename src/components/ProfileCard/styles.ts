@@ -1,47 +1,66 @@
 import styled from 'styled-components'
-
+import { BodyButton } from '../UI/Button/styles'
 export const BodyCard = styled.div`
-  border-radius: var(--borderRadius);
-  background: white;
-  padding-top: 2rem;
-  width: 100%;
-  height: fit-content;
-  box-shadow: var(--boxShadow);
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
+  display: grid;
+  width: 22rem;
+  --gridColumn1: 35%;
+  gap: 0.6rem;
+  --gridColumn2: calc(65% - 0.6rem);
+  grid-template-columns: var(--gridColumn1) var(--gridColumn2);
+  grid-template-rows: 2fr 1fr;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
+  background: white;
+  box-shadow: var(--boxShadow);
+  border-radius: 0.8rem;
   > img {
+    background: var(--borderDivision);
+    grid-column: 1;
+    grid-row: 1 / -1;
     border-radius: 50%;
-    width: 4.4rem;
-    height: 4.4rem;
+    border: solid 1px var(--borderDivision);
+    width: 80%;
     object-fit: cover;
     object-position: center;
+    z-index: 2;
+    margin: 10%;
   }
-  > p {
-    text-align: center;
-    color: var(--gray);
-    h2 {
-      color: var(--textGreen);
-    }
+  > section {
+    grid-column: 2;
+    grid-row: 1;
   }
   > aside {
-    display: flex;
-    gap: 1rem;
-    > img {
-      width: 2rem;
+    border-top: solid 2px var(--borderDivision);
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: var(--gridColumn1) calc(var(--gridColumn2) / 2) calc(
+        var(--gridColumn2) / 2
+      );
+    > ${BodyButton} {
+      width: 90%;
+      grid-column: 2;
+      margin: 0.5rem 5%;
+      grid-row: 1;
     }
-  }
-  > a {
-    font-size: 1rem;
-    text-align: center;
-    width: 100%;
-    align-self: flex-end;
-    padding: 0.6rem;
-    border-top: solid 1px var(--borderDivision);
-    font-weight: 700;
-    border-radius: 0 0 0.8rem 0.8rem;
+    > span:empty ~ ${BodyButton} {
+      grid-column: 2 / -1;
+      width: 50%;
+      margin: 0.5rem 25%;
+    }
+    > span {
+      &:not(:empty) {
+        grid-column: 3;
+        border-left: solid 2px var(--borderDivision);
+      }
+      grid-row: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.4rem;
+      img {
+        width: 1.4rem;
+      }
+    }
   }
 `

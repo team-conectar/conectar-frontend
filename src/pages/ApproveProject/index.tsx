@@ -1,23 +1,17 @@
-import React, { useState, ChangeEvent, FormEvent, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { BodyApproveProject } from './styles'
-import Input from '../../components/Input'
-import Textarea from '../../components/Textarea'
-import Button from '../../components/Button'
-import ToggleSwitch from '../../components/ToggleSwitch'
-import { useHistory } from 'react-router'
-import { useDropzone } from 'react-dropzone'
-import SelectArea from '../../components/SelectArea'
-import SelectTool from '../../components/SelectTools'
-import axios, { AxiosError } from 'axios'
-import NavBar from '../../components/NavBar'
+import Button from '../../components/UI/Button'
+import { AxiosError } from 'axios'
+import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
 import api from '../../services/api'
-import ProfileCard from '../../components/ProfileCard'
+import ProfileLink from '../../components/ProfileLink'
 import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import VacancieCard from '../../components/VacancieCard'
 import { useParams } from 'react-router-dom'
 import { VacanciesType } from '../../components/Vacancy'
+import hero from '../../assets/image/temos_um_time_para_seu_projeto.svg'
 interface routeParms {
   id: string
 }
@@ -45,19 +39,22 @@ const ApproveProject: React.FC = () => {
           console.log(err?.response?.data.detail)
         }),
     ]
+    console.log(res)
   }, [project_id])
   return (
     <>
       <NavBar />
       <BodyApproveProject>
-        <ProfileCard />
+        <ProfileLink />
         <main>
+          <figure>
+            <img src={hero} alt="Confira as vagas" />
+            <figcaption>
+              Confira o resumo da conexão do seu projeto com os candidatos
+            </figcaption>
+          </figure>
           <section>
-            <img src="" alt="" />
-            <h1>Confira as respostas dos candidatos aos convites enviados</h1>
-          </section>
-          <section>
-            <ProjectCard project={project} />
+            <ProjectCard project={project} hiddeOwner />
           </section>
           <section>
             <ul>
