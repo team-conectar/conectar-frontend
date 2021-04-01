@@ -1,8 +1,8 @@
 import React, { useRef, useCallback } from 'react'
 import { BodyExperienceAreas } from './styles'
-import Button from '../../components/Button'
+import Button from '../../components/UI/Button'
 import { useHistory } from 'react-router-dom'
-import SelectArea from '../../components/SelectArea'
+import SelectArea from '../../components/UI/SelectArea'
 import Logged from '../../components/Logged'
 
 import { AxiosError } from 'axios'
@@ -58,7 +58,6 @@ const ExperienceAreas: React.FC = () => {
 
   return (
     <BodyExperienceAreas onSubmit={handleSubmit} ref={formRef}>
-      <Logged />
       <div className="area-central container">
         <h1>Selecione até 5 áreas de atuação de seu conhecimento</h1>
         <SelectArea name="areas" />

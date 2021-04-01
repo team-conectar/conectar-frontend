@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   Page,
   ButtonList,
@@ -21,17 +21,15 @@ import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
 import co from '../../assets/icon/co.svg'
 import { useHistory, useParams } from 'react-router'
-import Button from '../../components/Button'
+import Button from '../../components/UI/Button'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
-import SelectArea, { AreaType } from '../../components/SelectArea'
-import SelectTool, { ToolType } from '../../components/SelectTools'
-import Modal from '../../components/Modal'
+import SelectArea, { AreaType } from '../../components/UI/SelectArea'
+import SelectTool, { ToolType } from '../../components/UI/SelectTools'
+import Modal from '../../components/UI/Modal'
 import { Context } from '../../context/AuthContext'
-import NavBar from '../../components/NavBar'
+import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
-import { useLoggedUser } from '../../context/LoggedUserContext'
-import Logged from '../../components/Logged'
 import { AcademicType } from '../ProfileFeatures/experiences/AcademicExperiences'
 import { ProfessionalType } from '../ProfileFeatures/experiences/ProfessionalExperiences'
 import { IExperienceProject } from '../ProfileFeatures/experiences/ProjectExperiences'
@@ -89,7 +87,7 @@ const Profiles: React.FC = () => {
   }
   const [loadingPage, setLoadingPage] = useState(true)
   const history = useHistory()
-  const loggedUser = useLoggedUser()
+  const { user } = useContext(Context)
   const [showFavoritesList, setShowFavoritesList] = useState<boolean>(false)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
@@ -183,7 +181,7 @@ const Profiles: React.FC = () => {
               <section>
                 {profile.id ? (
                   <Button theme="primary">
-                    {loggedUser.id === profile.id ? 'EDITAR' : 'SEGUIR'}
+                    {user.id === profile.id ? 'EDITAR' : 'SEGUIR'}
                   </Button>
                 ) : (
                   <Skeleton width="150px" height="30px" />

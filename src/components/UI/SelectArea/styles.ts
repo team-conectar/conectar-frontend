@@ -16,6 +16,7 @@ export const BodySelectArea = styled.div<Props>`
     font: 400 0.9rem Raleway;
   }
   > div {
+    background: var(--backgroundElevation);
     margin-top: 0.2rem;
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -1,20 +1,30 @@
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
-export default function useAuth() {
+import { IUserContext } from '../AuthContext'
+export default function useAuth(): {
+  isAuthenticated: boolean
+  loading: boolean
+  handleLogin(didAuthenticate: boolean): void
+  handleLogout(): void
+  user: IUserContext
+} {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true)
-
+  const [user, setUser] = useState({} as IUserContext)
   useEffect(() => {
-    api
-      .post('/api/refresh_token')
-      .then(async req => {
+    try {
+      api.post('/api/refresh_token').then(async req => {
         const accessToken = await req.data.access_token
         api.defaults.headers.Authorization = `Bearer ${accessToken}`
         setIsAuthenticated(true)
       })
-      .finally(() => {
-        setLoading(false)
+      api.get('/api/v1/pessoas/me').then(response => {
+        setUser(response.data)
       })
+    } catch (error) {
+    } finally {
+      setLoading(false)
+    }
   }, [isAuthenticated])
 
   function handleLogin(didAuthenticate: boolean) {
@@ -26,5 +36,5 @@ export default function useAuth() {
     setIsAuthenticated(false)
   }
 
-  return { isAuthenticated, loading, handleLogin, handleLogout }
+  return { isAuthenticated, loading, handleLogin, handleLogout, user }
 }

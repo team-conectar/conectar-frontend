@@ -1,12 +1,13 @@
-import React, { useState, useCallback, useRef } from 'react'
-import { BodySignUp } from './styles'
+import React, { useState, useCallback, useRef, ChangeEvent } from 'react'
+import { BodySignUp, Error } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
 import cadastro_banner from '../../assets/image/cadastro_banner.svg'
-import Input from '../../components/Input'
-import Select from '../../components/Select'
+import Input from '../../components/UI/Input'
+import Select from '../../components/UI/Select'
+import ToggleSwitch from '../../components/UI/ToggleSwitch'
+import InputMask from '../../components/UI/InputMask'
 import { Link } from 'react-router-dom'
-import Button from '../../components/Button'
-import ToggleSwitch from '../../components/ToggleSwitch'
+import Button from '../../components/UI/Button'
 import { ReactFacebookLoginInfo } from 'react-facebook-login'
 import FacebookLogin from 'react-facebook-login'
 import GoogleLogin, { GoogleLoginResponse } from 'react-google-login'
@@ -16,11 +17,11 @@ import { useHistory, useParams } from 'react-router'
 import { daysOptions, monthOptions, yearOptions } from '../../utils/dates'
 import { AxiosError } from 'axios'
 import api from '../../services/api'
-import InputMask from '../../components/InputMask'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
+import { IoMdAlert } from 'react-icons/io'
 
 interface routeParms {
   parte: string
@@ -42,7 +43,7 @@ const SignUp: React.FC = () => {
   const history = useHistory()
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
-
+  const [profileTypeError, setProfyleTypeError] = useState(false)
   const [showNextStep, setShowNextStep] = useState<boolean>(
     params.parte === '2',
   )
@@ -71,6 +72,7 @@ const SignUp: React.FC = () => {
           .matches(/(?=.*[ ])/g, 'Informe o nome completo')
           .required('Usuário é obrigatório'),
       })
+
       await schema.validate(formData, {
         abortEarly: false,
       })
@@ -106,6 +108,15 @@ const SignUp: React.FC = () => {
           month: Yup.string().required('Mês é obrigatório'),
           day: Yup.string().required('Dia é obrigatório'),
         })
+
+        setProfyleTypeError(
+          !(
+            formData.aliado[0] === 'aliado' ||
+            formData.colaborador[0] === 'colaborador' ||
+            formData.idealizador[0] === 'idealizador'
+          ),
+        )
+
         await schema.validate(formData, {
           abortEarly: false,
         })
@@ -126,11 +137,16 @@ const SignUp: React.FC = () => {
           telefone,
         }
         console.log(data)
-
-        await api.put('/api/v1/pessoas', data, {
-          withCredentials: true,
-        })
-        history.push('/experiencias-do-usuario')
+        if (
+          formData.aliado[0] === 'aliado' ||
+          formData.colaborador[0] === 'colaborador' ||
+          formData.idealizador[0] === 'idealizador'
+        ) {
+          await api.put('/api/v1/pessoas', data, {
+            withCredentials: true,
+          })
+          history.push('/experiencias-do-usuario')
+        }
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -288,7 +304,14 @@ const SignUp: React.FC = () => {
             </section>
             <section className="tipo-perfil">
               <section>
-                <legend>Tipo de Perfil</legend>
+                <legend>
+                  Tipo de Perfil{' '}
+                  {profileTypeError && (
+                    <Error message="Deve selecionar ao menos um tipo de perfil abaixo">
+                      <IoMdAlert />
+                    </Error>
+                  )}
+                </legend>
                 <span>Selecione um ou mais tipos</span>
               </section>
               <fieldset>
@@ -326,9 +349,9 @@ const SignUp: React.FC = () => {
               <Button
                 theme="secondary"
                 type="submit"
-                onClick={() => setShowNextStep(false)}
+                onClick={() => history.push('/experiencias-do-usuario')}
               >
-                Continuar
+                Pular
               </Button>
               <Button theme="primary" type="submit">
                 Continuar

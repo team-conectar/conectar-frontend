@@ -24,28 +24,29 @@ import co from '../../assets/icon/co.svg'
 import vagas from '../../assets/icon/vagas.svg'
 import like from '../../assets/icon/like.svg'
 import { useHistory, useParams } from 'react-router'
-import Button from '../../components/Button'
+import Button from '../../components/UI/Button'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
-import SelectArea, { AreaType } from '../../components/SelectArea'
-import SelectTool, { ToolType } from '../../components/SelectTools'
-import Modal from '../../components/Modal'
+import SelectArea, { AreaType } from '../../components/UI/SelectArea'
+import SelectTool, { ToolType } from '../../components/UI/SelectTools'
+import Modal from '../../components/UI/Modal'
+import Textarea from '../../components/UI/Textarea'
+import Input from '../../components/UI/Input'
+import Dropzone from '../../components/UI/Dropzone'
 import { Context } from '../../context/AuthContext'
-import Login from '../../components/Login'
-import NavBar from '../../components/NavBar'
+import Login from '../../components/UI/Login'
+import NavBar from '../../components/UI/NavBar'
 import Vacancy, { VacanciesType } from '../../components/Vacancy'
-import Textarea from '../../components/Textarea'
-import Input from '../../components/Input'
-import Dropzone from '../../components/Dropzone'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import { ButtonList } from '../Profiles/styles'
-import ContainerScroll from '../../components/ContainerScroll'
+import ContainerScroll from '../../components/UI/ContainerScroll'
 import VacancieListItem from '../../components/VacancieListItem'
 import Skeleton from 'react-loading-skeleton'
 import { IconEdit } from '../../assets/icon'
+import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
 interface routeParms {
   id: string
 }
@@ -58,6 +59,12 @@ interface ProjectType {
   areas: AreaType[]
   habilidades: ToolType[]
   id: number
+  pessoa_id: number
+}
+interface IProjectOwner {
+  usuario: string
+  foto_perfil: string
+  nome: string
 }
 /**
  * @constructor
@@ -65,7 +72,8 @@ interface ProjectType {
  */
 
 const Projects: React.FC = () => {
-  const { loading, isAuthenticated } = useContext(Context)
+  const { loading, isAuthenticated, user } = useContext(Context)
+
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
   const initialModalContent = {
     nome: false,
@@ -80,7 +88,9 @@ const Projects: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(
     loading && isAuthenticated,
   )
+
   const projeto_id = useParams<routeParms>().id
+  const [projectOwner, setProjectOwner] = useState({} as IProjectOwner)
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
@@ -99,9 +109,14 @@ const Projects: React.FC = () => {
           setProject(response.data)
           setStoredTools(response.data.habilidades)
           setStoredAreas(response.data.areas)
+          api
+            .get(`/api/v1/pessoas/${response.data.pessoa_id}`)
+            .then(response => {
+              setProjectOwner(response.data)
+            })
         })
-        .catch((err: AxiosError) => {
-          console.log(err?.response?.data.detail)
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
         }),
       api
         .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
@@ -109,13 +124,24 @@ const Projects: React.FC = () => {
           setVacancies(response.data)
           setVacancyDetail(response.data[0])
         })
-        .catch((err: AxiosError) => {
-          console.log(err?.response?.data.detail)
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
         }),
     ]
     console.log(res)
   }, [projeto_id])
-
+  useEffect(() => {
+    const res = api
+      .get(`/api/v1/pessoas/${project.pessoa_id}`)
+      .then(response => {
+        setProjectOwner(response.data)
+        console.log(response.data)
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+    console.log(res)
+  }, [project.pessoa_id, openModal])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -148,6 +174,7 @@ const Projects: React.FC = () => {
         })
         // Validation passed
         await api.put(`/api/v1/projeto/${projeto_id}`, formData)
+        setOpenModal(false)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -158,6 +185,11 @@ const Projects: React.FC = () => {
     },
     [modalContent, projeto_id],
   )
+  function isOwner() {
+    if (project.pessoa_id && user.id) {
+      return !!(project.pessoa_id === user.id)
+    } else return false
+  }
   function areaTypeToString() {
     const defo: Array<string> = []
 
@@ -246,23 +278,43 @@ const Projects: React.FC = () => {
       <header>
         {/* <img src={no_couver} alt="imagem de capa do projeto" /> */}
         <Skeleton height={180} />
-
-        <IconEdit
-          onClick={() => {
-            setModalContent({ ...initialModalContent, nome: true })
-            setOpenModal(true)
-          }}
-        />
-
+        {isOwner() ? (
+          <IconEdit
+            onClick={() => {
+              setModalContent({ ...initialModalContent, nome: true })
+              setOpenModal(true)
+            }}
+          />
+        ) : (
+          <ProfileLink to="">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+              alt=""
+            />
+            <aside>
+              <h2>{projectOwner.nome}</h2>
+              <p>@{projectOwner.usuario}</p>
+            </aside>
+          </ProfileLink>
+        )}
         <div>
           <section>
             <h1>{project.nome || <Skeleton width="200px" />} </h1>
           </section>
 
           <section>
-            <Button theme="secondary">
-              <img src={like} alt="curtidas" /> Favoritar
-            </Button>
+            {isOwner() ? (
+              <Button
+                theme="primary"
+                onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
+              >
+                Buscar Time
+              </Button>
+            ) : (
+              <Button theme="secondary" className="fav-button">
+                <img src={like} alt="curtidas" /> Favoritar
+              </Button>
+            )}
             <a>
               <span>
                 <img src={like} alt="curtidas" />
@@ -298,12 +350,14 @@ const Projects: React.FC = () => {
             <legend>
               <img className="icon-objetivo" src={objetivo} alt="objetivo" />
               Objetivo
-              <IconEdit
-                onClick={() => {
-                  setModalContent({ ...initialModalContent, objetivo: true })
-                  setOpenModal(true)
-                }}
-              />
+              {isOwner() && (
+                <IconEdit
+                  onClick={() => {
+                    setModalContent({ ...initialModalContent, objetivo: true })
+                    setOpenModal(true)
+                  }}
+                />
+              )}
             </legend>
 
             <p>{project.objetivo || <Skeleton width={350} />}</p>
@@ -311,12 +365,14 @@ const Projects: React.FC = () => {
           <section>
             <legend>
               Descrição
-              <IconEdit
-                onClick={() => {
-                  setModalContent({ ...initialModalContent, descricao: true })
-                  setOpenModal(true)
-                }}
-              />
+              {isOwner() && (
+                <IconEdit
+                  onClick={() => {
+                    setModalContent({ ...initialModalContent, descricao: true })
+                    setOpenModal(true)
+                  }}
+                />
+              )}
             </legend>
 
             <p>
@@ -333,12 +389,14 @@ const Projects: React.FC = () => {
         <DivTags>
           <legend>
             Áreas de desenvolvimento
-            <IconEdit
-              onClick={() => {
-                setModalContent({ ...initialModalContent, areas: true })
-                setOpenModal(true)
-              }}
-            />
+            {isOwner() && (
+              <IconEdit
+                onClick={() => {
+                  setModalContent({ ...initialModalContent, areas: true })
+                  setOpenModal(true)
+                }}
+              />
+            )}
           </legend>
           {project.areas?.length ? (
             <aside>
@@ -351,12 +409,14 @@ const Projects: React.FC = () => {
           )}
           <legend>
             Habilidades e ferramentas
-            <IconEdit
-              onClick={() => {
-                setModalContent({ ...initialModalContent, habilidades: true })
-                setOpenModal(true)
-              }}
-            />
+            {isOwner() && (
+              <IconEdit
+                onClick={() => {
+                  setModalContent({ ...initialModalContent, habilidades: true })
+                  setOpenModal(true)
+                }}
+              />
+            )}
           </legend>
           {project.habilidades?.length ? (
             <aside>
@@ -375,12 +435,14 @@ const Projects: React.FC = () => {
           <legend>
             <img src={vagas} alt="vagas" />
             Vagas
-            <IconEdit
-              onClick={() => {
-                setModalContent({ ...initialModalContent, vaga: true })
-                setOpenModal(true)
-              }}
-            />
+            {isOwner() && (
+              <IconEdit
+                onClick={() => {
+                  setModalContent({ ...initialModalContent, vaga: true })
+                  setOpenModal(true)
+                }}
+              />
+            )}
           </legend>
 
           <ContainerScroll>
@@ -392,7 +454,7 @@ const Projects: React.FC = () => {
                 onClick={() => setVacancyDetail(vacancy)}
                 style={
                   vacancyDetail === vacancy
-                    ? { background: 'var(--backgroudElevation)' }
+                    ? { background: 'var(--backgroundElevation)' }
                     : { background: 'transparent' }
                 }
               />
@@ -406,12 +468,14 @@ const Projects: React.FC = () => {
             <DivTags>
               <legend>
                 Áreas de desenvolvimento
-                <IconEdit
-                  onClick={() => {
-                    setModalContent({ ...initialModalContent, areas: true })
-                    setOpenModal(true)
-                  }}
-                />
+                {isOwner() && (
+                  <IconEdit
+                    onClick={() => {
+                      setModalContent({ ...initialModalContent, areas: true })
+                      setOpenModal(true)
+                    }}
+                  />
+                )}
               </legend>
               <aside>
                 {vacancyDetail?.areas?.map(area => (
@@ -420,15 +484,17 @@ const Projects: React.FC = () => {
               </aside>
               <legend>
                 Habilidades e ferramentas
-                <IconEdit
-                  onClick={() => {
-                    setModalContent({
-                      ...initialModalContent,
-                      habilidades: true,
-                    })
-                    setOpenModal(true)
-                  }}
-                />
+                {isOwner() && (
+                  <IconEdit
+                    onClick={() => {
+                      setModalContent({
+                        ...initialModalContent,
+                        habilidades: true,
+                      })
+                      setOpenModal(true)
+                    }}
+                  />
+                )}
               </legend>
               <aside>
                 {vacancyDetail?.habilidades?.map(habilidade => (

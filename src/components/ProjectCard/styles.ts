@@ -22,7 +22,7 @@ export const ProjectInfo = styled.main`
   flex-direction: column;
   gap: var(--gap);
   padding: var(--gap);
-
+  text-align: center;
   > aside {
     display: flex;
     width: 100%;
@@ -73,9 +73,6 @@ export const ProjectInfo = styled.main`
   p {
     font-size: 0.8rem;
     line-height: 1.2rem;
-    :first-letter {
-      text-transform: uppercase;
-    }
   }
 `
 export const BodyCard = styled.li`
@@ -99,8 +96,8 @@ export const BodyCard = styled.li`
     }
   }
   > div {
-    grid-column: 2;
-    grid-row: 2;
+    grid-column: 1 / -1;
+    grid-row: 1 / -1;
     border-radius: var(--borderRadius);
     box-shadow: 0 0 1px 1px var(--borderDivision);
     background: white;
@@ -123,6 +120,10 @@ export const BodyCard = styled.li`
         background: transparent;
       }
     }
+  }
+  ${UserInfo} ~ div {
+    grid-column: 2;
+    grid-row: 2;
   }
   > aside {
     width: 100%;

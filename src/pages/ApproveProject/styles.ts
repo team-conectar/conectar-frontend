@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { BodyCard as LinksCard } from '../../components/LinksCard/styles'
-import { BodyCard as ProfileCard } from '../../components/ProfileCard/styles'
+import { BodyCard as ProfileCard } from '../../components/ProfileLink/styles'
 import { BodyCard as SuccessfulCreatorsCard } from '../../components/SuccessfulCreatorsCard/styles'
 
 export const BodyApproveProject = styled.div`
@@ -12,7 +12,6 @@ export const BodyApproveProject = styled.div`
   grid-template-rows: max-content auto;
   grid-column-gap: 0.6rem;
   position: relative;
-  
 
   > ${ProfileCard} {
     grid-column: 1;
@@ -33,6 +32,16 @@ export const BodyApproveProject = styled.div`
     background: white;
     box-shadow: var(--boxShadow);
     height: fit-content;
+    > figure {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 2rem;
+      > figcaption {
+        text-align: center;
+        font: 600 1.8rem Raleway;
+      }
+    }
     > section {
       padding: 1.2rem;
       display: flex;

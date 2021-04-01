@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { Link, useHistory } from 'react-router-dom'
-import NavBar from '../../components/NavBar'
+import NavBar from '../../components/UI/NavBar'
 import { BodyHome } from './styles'
 
-import Login from '../../components/Login'
+import Login from '../../components/UI/Login'
 import hero from '../../assets/image/landing_page.svg'
 import lamp from '../../assets/image/lampada.svg'
 import card_colaborador from '../../assets/image/card_colaborador.svg'
@@ -16,15 +16,15 @@ import aliado from '../../assets/image/aliado.svg'
 import curtiu from '../../assets/image/curtiu.svg'
 import aspasDestaque from '../../assets/image/aspasDestaque.svg'
 import logo from '../../assets/image/logo.svg'
-import Modal from '../../components/Modal'
+import Modal from '../../components/UI/Modal'
 import { IoIosArrowDown } from 'react-icons/io'
 import { FaLinkedinIn } from 'react-icons/fa'
 import { AiFillFacebook, AiOutlineInstagram } from 'react-icons/ai'
 
 import { Context } from '../../context/AuthContext'
 
-import Button from '../../components/Button'
-import ContainerScroll from '../../components/ContainerScroll'
+import Button from '../../components/UI/Button'
+import ContainerScroll from '../../components/UI/ContainerScroll'
 import { isAuthenticated } from '../../utils/auth'
 const Home: React.FC = () => {
   const { handleLogin } = useContext(Context)
