@@ -212,7 +212,7 @@ export const BodyProjects = styled.div`
   align-items: center;
   gap: 2rem;
   padding-bottom: 2rem;
-  ${DivSobre},${DivVagas},header {
+  ${DivSobre},${DivVagas} {
     width: var(--container);
   }
 

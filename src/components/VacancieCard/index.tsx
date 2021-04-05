@@ -30,6 +30,7 @@ interface Props extends HTMLAttributes<HTMLLIElement> {
       | 'PENDENTE_IDEALIZADOR'
       | 'PENDENTE_COLABORADOR'
       | 'ACEITE_COLABORADOR'
+      | 'NEGADO_COLABORADOR'
       | 'FINALIZADO'
     id: number
   }
@@ -84,9 +85,18 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         }),
     ]
     console.log(res)
-  }, [vacancy.pessoa_id, vacancy.tipo_acordo_id])
+  }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
   return (
-    <BodyCard isAvailable status="refused" {...rest}>
+    <BodyCard
+      isAvailable
+      status={
+        (vacancy.situacao === 'PENDENTE_COLABORADOR' && 'pending') ||
+        (vacancy.situacao === 'ACEITE_COLABORADOR' && 'accepted') ||
+        (vacancy.situacao === 'ACEITE_COLABORADOR' && 'refused') ||
+        undefined
+      }
+      {...rest}
+    >
       <label>
         <DropdownList IconButton={<GiHamburgerMenu />}>
           <li>Clonar vaga</li>
@@ -112,7 +122,16 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         <li>Perfis interessados</li>
       </DropdownList>
       <aside>
-        <h4>Convite enviado</h4>
+        <h4>
+          {!vacancy.situacao
+            ? 'Sem convite'
+            : (vacancy.situacao === 'PENDENTE_COLABORADOR' &&
+                'Convite enviado') ||
+              (vacancy.situacao === 'PENDENTE_IDEALIZADOR' &&
+                'Convite enviado') ||
+              (vacancy.situacao === 'FINALIZADO' && 'Acordo finalizado') ||
+              (vacancy.situacao === 'ACEITE_COLABORADOR' && 'Convite enviado')}
+        </h4>
         <span>Recusado</span>
       </aside>
       <legend>Vaga disponível</legend>
