@@ -217,12 +217,12 @@ export const BodyProjects = styled.div`
   }
 
   ${DivModalWindow} {
-    form {
+    > form {
       display: flex;
       flex-direction: column;
       gap: 2rem;
       width: 100%;
-      button {
+      > button {
         align-self: flex-end;
       }
     }

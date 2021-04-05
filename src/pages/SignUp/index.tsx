@@ -22,6 +22,8 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import { IoMdAlert } from 'react-icons/io'
+import { useContext } from 'react'
+import { Context } from '../../context/AuthContext'
 
 interface routeParms {
   parte: string
@@ -41,6 +43,7 @@ interface PessoaType {
 }
 const SignUp: React.FC = () => {
   const history = useHistory()
+  const { handleLogin } = useContext(Context)
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
   const [profileTypeError, setProfyleTypeError] = useState(false)
@@ -85,7 +88,7 @@ const SignUp: React.FC = () => {
       data.append('password', formData.password)
       await api.post('/api/signup', data)
       setShowNextStep(true)
-      console.log(formData)
+      handleLogin(true)
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         // Validation failed

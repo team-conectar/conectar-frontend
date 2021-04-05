@@ -31,6 +31,7 @@ export const BodyCard = styled.li<CardProps>`
   text-align: center;
   position: relative;
   ${DropdownStyle} {
+    width: 100%;
     aside {
       li {
         text-align: start;
@@ -102,7 +103,7 @@ export const BodyCard = styled.li<CardProps>`
   }
   button {
     width: 100%;
-    font-size: 1rem;
+    font-size: 0.8rem;
     height: 2rem;
   }
 `

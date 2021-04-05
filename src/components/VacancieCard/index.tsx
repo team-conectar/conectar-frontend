@@ -67,17 +67,17 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           return err?.response?.data.detail
         }),
       api
-        .get(`/api/v1/tipoAcordo?id=${vacancy.tipo_acordo_id}`)
+        .get(`/api/v1/tipoAcordo?tipo_acordo_id=${vacancy.tipo_acordo_id}`)
         .then(response => {
-          setAgreement(response.data)
+          setAgreement(response.data.descricao)
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         }),
       api
-        .get(`/api/v1/papel?id=${vacancy.tipo_acordo_id}`)
+        .get(`/api/v1/papel/${vacancy.papel_id}`)
         .then(response => {
-          setOffice(response.data)
+          setOffice(response.data.descricao)
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
@@ -99,9 +99,9 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       />
       <h2>{profile.nome}</h2>
       <h3>
-        Colaborador
-        <br />
         {office}
+        <br />
+        {agreement}
       </h3>
 
       <Button theme="primary">Ver currículo</Button>

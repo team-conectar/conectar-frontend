@@ -90,6 +90,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         await schema.validate(formData, {
           abortEarly: false,
         })
+        // validation passed
 
         const data = new FormData()
         data.append('username', formData.email)
@@ -107,7 +108,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
 
           return
         }
-        alert('Lgoin ou senha incorreto')
+        alert('Login ou senha incorreto')
       }
     },
     [onSuccessLogin],
