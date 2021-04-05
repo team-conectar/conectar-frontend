@@ -10,7 +10,7 @@ import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import VacancieCard from '../../components/VacancieCard'
 import { useParams } from 'react-router-dom'
-import { VacanciesType } from '../../components/Vacancy'
+import Vacancy, { VacanciesType } from '../../components/Vacancy'
 import hero from '../../assets/image/temos_um_time_para_seu_projeto.svg'
 import { IProfile } from '../../components/ProfileCard'
 interface routeParms {
@@ -21,6 +21,7 @@ const ApproveProject: React.FC = () => {
   const [project, setProject] = useState<IProject>({} as IProject)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [peoples, setPeoples] = useState<Array<IProfile>>([])
+
   const handleInvite = useCallback(() => {
     api
       .put(`/api/v1/pessoa_projeto/projeto/${project_id}`)
@@ -92,12 +93,15 @@ const ApproveProject: React.FC = () => {
                 tipo_acordo_id: 2,
                 descricao: 'string',
                 id: 0,
+                situacao: 'PENDENTE_COLABORADOR',
               }}
             />
           </section>
           <aside>
             <Button theme="secondary">Finalizar acordos</Button>
-            <Button theme="primary">Enviar convite</Button>
+            <Button theme="primary" onClick={handleInvite}>
+              Enviar convite
+            </Button>
           </aside>
         </main>
         <LinksCard />

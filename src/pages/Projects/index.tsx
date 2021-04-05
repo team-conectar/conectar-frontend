@@ -85,7 +85,9 @@ const Projects: React.FC = () => {
   }
   const [modalContent, setModalContent] = useState(initialModalContent)
   const history = useHistory()
-  const [openModal, setOpenModal] = useState<boolean>(true)
+  const [openModal, setOpenModal] = useState<boolean>(
+    loading && isAuthenticated,
+  )
 
   const projeto_id = useParams<routeParms>().id
   const [projectOwner, setProjectOwner] = useState({} as IProjectOwner)
@@ -216,54 +218,61 @@ const Projects: React.FC = () => {
           setOpenModal(!isAuthenticated)
         }}
       >
-        <>
-          {!modalContent.vaga && (
-            <Form ref={formRef} onSubmit={handleSubmit}>
-              {modalContent.nome && (
-                <>
-                  <Input
-                    name="nome"
-                    label="Nome do projeto"
-                    defaultValue={project.nome}
+        {!loading && !isAuthenticated ? (
+          <>
+            <h1>Para prosseguir, você precisa estar logado</h1>
+            <Login onSuccessLogin={() => setOpenModal(isAuthenticated)} />
+          </>
+        ) : (
+          <>
+            {!modalContent.vaga && (
+              <Form ref={formRef} onSubmit={handleSubmit}>
+                {modalContent.nome && (
+                  <>
+                    <Input
+                      name="nome"
+                      label="Nome do projeto"
+                      defaultValue={project.nome}
+                    />
+                    <Dropzone name="capa" />
+                  </>
+                )}
+                {modalContent.objetivo && (
+                  <Textarea
+                    name="objetivo"
+                    label="Objetivo breve do projeto"
+                    defaultValue={project.objetivo}
                   />
-                  <Dropzone name="capa" />
-                </>
-              )}
-              {modalContent.objetivo && (
-                <Textarea
-                  name="objetivo"
-                  label="Objetivo breve do projeto"
-                  defaultValue={project.objetivo}
-                />
-              )}
-              {modalContent.descricao && (
-                <Textarea
-                  name="descricao"
-                  label="Descrição sobre o projeto"
-                  defaultValue={project.descricao}
-                />
-              )}
-              {modalContent.areas && (
-                <SelectArea
-                  name="area"
-                  label="Selecione as àreas de atuação"
-                  defaultValue={areaTypeToString()}
-                />
-              )}
-              {modalContent.habilidades && (
-                <SelectTool
-                  name="habilidades"
-                  label="Selecione as ferramentas ou habilidades"
-                  defaultValue={toolTypeToString()}
-                />
-              )}
-              <Button theme="primary" type="submit">
-                Salvar
-              </Button>
-            </Form>
-          )}
-          {modalContent.vaga && <Vacancy project={project} />}
-        </>
+                )}
+                {modalContent.descricao && (
+                  <Textarea
+                    name="descricao"
+                    label="Descrição sobre o projeto"
+                    defaultValue={project.descricao}
+                  />
+                )}
+                {modalContent.areas && (
+                  <SelectArea
+                    name="area"
+                    label="Selecione as àreas de atuação"
+                    defaultValue={areaTypeToString()}
+                  />
+                )}
+                {modalContent.habilidades && (
+                  <SelectTool
+                    name="habilidades"
+                    label="Selecione as ferramentas ou habilidades"
+                    defaultValue={toolTypeToString()}
+                  />
+                )}
+                <Button theme="primary" type="submit">
+                  Salvar
+                </Button>
+              </Form>
+            )}
+            {modalContent.vaga && <Vacancy project={project} />}
+          </>
+        )}
       </Modal>
 
       <header>
