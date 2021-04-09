@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
 import { IUserContext } from '../AuthContext'
+import { useHistory } from 'react-router-dom'
 export default function useAuth(): {
   isAuthenticated: boolean
   loading: boolean
@@ -11,6 +12,7 @@ export default function useAuth(): {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState({} as IUserContext)
+  const history = useHistory()
   useEffect(() => {
     try {
       api.post('/api/refresh_token').then(async req => {
@@ -34,6 +36,7 @@ export default function useAuth(): {
   async function handleLogout() {
     await api.post('/api/logout')
     setIsAuthenticated(false)
+    history.push('/')
   }
 
   return { isAuthenticated, loading, handleLogin, handleLogout, user }

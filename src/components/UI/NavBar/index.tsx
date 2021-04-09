@@ -55,7 +55,7 @@ const NavBar: React.FC = () => {
               <section>
                 <img
                   src={user.foto_perfil ? user.foto_perfil : userDefault}
-                  alt={user.nome}
+                  alt={user.nome.split(' ')[0]}
                 />
                 <legend>{user.nome}</legend>
                 <p>{user.usuario}</p>
