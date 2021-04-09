@@ -180,7 +180,13 @@ const Profiles: React.FC = () => {
               </figure>
               <section>
                 {profile.id ? (
-                  <Button theme="primary">
+                  <Button
+                    theme="primary"
+                    onClick={() => {
+                      user.id === profile.id &&
+                        history.push(`/editar-perfil/${user.id}`)
+                    }}
+                  >
                     {user.id === profile.id ? 'EDITAR' : 'SEGUIR'}
                   </Button>
                 ) : (

@@ -22,6 +22,9 @@ export const BodyProfileFeatures = styled.div`
   .area-central {
     border-radius: 0.8rem;
     margin: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
   footer {
     display: flex;
