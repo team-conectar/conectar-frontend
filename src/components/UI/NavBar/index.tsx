@@ -55,9 +55,9 @@ const NavBar: React.FC = () => {
               <section>
                 <img
                   src={user.foto_perfil ? user.foto_perfil : userDefault}
-                  alt={user.nome.split(' ')[0]}
+                  alt={user.nome}
                 />
-                <legend>{user.nome}</legend>
+                <legend>{user.nome?.split(' ')[0]}</legend>
                 <p>{user.usuario}</p>
                 <p>{user.email}</p>
               </section>
@@ -68,7 +68,7 @@ const NavBar: React.FC = () => {
             </Dropdown>
           </>
         )}
-      </aside>
+      </aside >
     </BodyNavBar>
   )
 }

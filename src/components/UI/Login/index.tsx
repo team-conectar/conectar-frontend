@@ -105,10 +105,8 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
 
           formRef.current?.setErrors(errors)
           console.log(error)
-
-          return
+        } else if (error.detail) {
         }
-        alert('Login ou senha incorreto')
       }
     },
     [onSuccessLogin],
