@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
 import { Page, ButtonList } from './styles'
-import trabalho from '../../assets/icon/trabalho.svg'
 import educação from '../../assets/icon/educação.svg'
 // import clone from '../../assets/icon/clone.svg'
 import projeto from '../../assets/icon/projeto.svg'
