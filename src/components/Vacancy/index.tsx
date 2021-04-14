@@ -23,7 +23,12 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import VacancieListItem from '../VacancieListItem'
 import { ProjectType } from '../../pages/CreateProject'
-
+export type TypeSituationVacancy =
+  | 'PENDENTE_IDEALIZADOR'
+  | 'PENDENTE_COLABORADOR'
+  | 'ACEITE_COLABORADOR'
+  | 'NEGADO_COLABORADOR'
+  | 'FINALIZADO'
 export interface VacanciesType {
   projeto_id: number
   remunerado: boolean
@@ -32,11 +37,7 @@ export interface VacanciesType {
   papel_id: number
   tipo_acordo_id: number
   descricao: string
-  situacao?:
-    | 'PENDENTE_IDEALIZADOR'
-    | 'PENDENTE_COLABORADOR'
-    | 'ACEITE_COLABORADOR'
-    | 'FINALIZADO'
+  situacao?: TypeSituationVacancy
   habilidades: Array<ToolType>
   areas: Array<AreaType>
   id: number

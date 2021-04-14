@@ -18,6 +18,7 @@ import Dropdown from '../UI/Dropdown'
 import api from '../../services/api'
 import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
+import { TypeSituationVacancy } from '../Vacancy'
 
 interface Props extends HTMLAttributes<HTMLLIElement> {
   vacancy: {
@@ -26,12 +27,7 @@ interface Props extends HTMLAttributes<HTMLLIElement> {
     papel_id: number
     tipo_acordo_id: number
     descricao: string
-    situacao?:
-      | 'PENDENTE_IDEALIZADOR'
-      | 'PENDENTE_COLABORADOR'
-      | 'ACEITE_COLABORADOR'
-      | 'NEGADO_COLABORADOR'
-      | 'FINALIZADO'
+    situacao?: TypeSituationVacancy
     id: number
   }
 }

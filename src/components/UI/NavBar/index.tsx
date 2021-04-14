@@ -15,6 +15,13 @@ const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const { user } = useContext(Context)
   const location = useLocation()
+  const notificationsDescription = {
+    CONVITE_NEGADO: `Finalize o cadastro do projeto ${user.email} e encontre o time ideal!`,
+    CONVITE_EXPIRADO: '',
+    CONVITE_ACEITO: '',
+    CONVITE_RECEBIDO: '',
+    PROJETO_PENDENTE: '',
+  }
   return (
     <BodyNavBar>
       <aside>
@@ -68,7 +75,7 @@ const NavBar: React.FC = () => {
             </Dropdown>
           </>
         )}
-      </aside >
+      </aside>
     </BodyNavBar>
   )
 }

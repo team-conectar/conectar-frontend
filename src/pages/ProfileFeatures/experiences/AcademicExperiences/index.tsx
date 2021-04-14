@@ -248,7 +248,10 @@ const AcademicExperiences: React.FC = () => {
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: AcademicType) => (
-            <div key={experience.id} className="experiencia-cadastrada">
+            <div
+              key={experience.id}
+              className="experiencia-cadastrada educacao-cadastrada"
+            >
               <section className="icones">
                 <IconEdit
                   onClick={() => {
