@@ -63,7 +63,8 @@ export const BodySwitch = styled.div`
       border-top: 0;
       padding-bottom: 0.8rem;
       p {
-        margin-bottom: 0.8rem;
+        padding: 0.8rem;
+        text-align: center;
       }
       .switch {
         box-shadow: none;

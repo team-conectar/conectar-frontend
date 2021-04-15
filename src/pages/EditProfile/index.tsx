@@ -6,28 +6,15 @@ import React, {
   useCallback,
 } from 'react'
 import { Page, ButtonList } from './styles'
-import educação from '../../assets/icon/educação.svg'
-// import clone from '../../assets/icon/clone.svg'
-import projeto from '../../assets/icon/projeto.svg'
-import no_couver from '../../assets/image/no_couver.svg'
-import view from '../../assets/icon/view.svg'
-import like from '../../assets/icon/like.svg'
-import capa_id from '../../assets/image/capa_id.svg'
-import capa_al from '../../assets/image/capa_al.svg'
-import capa_co from '../../assets/image/capa_co.svg'
-import id from '../../assets/icon/id.svg'
-import al from '../../assets/icon/al.svg'
-import co from '../../assets/icon/co.svg'
+
 import { Redirect, useHistory, useParams } from 'react-router'
 import Button from '../../components/UI/Button'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
 import SelectArea, { AreaType } from '../../components/UI/SelectArea'
 import SelectTool, { ToolType } from '../../components/UI/SelectTools'
-import Modal from '../../components/UI/Modal'
 import { Context } from '../../context/AuthContext'
 import NavBar from '../../components/UI/NavBar'
-import ProjectCard, { IProject } from '../../components/ProjectCard'
 import AcademicExperiences, {
   AcademicType,
 } from '../ProfileFeatures/experiences/AcademicExperiences'
@@ -37,27 +24,15 @@ import ProfessionalExperiences, {
 import ProjectExperiences, {
   IExperienceProject,
 } from '../ProfileFeatures/experiences/ProjectExperiences'
-import { toMonth } from '../../utils/dates'
-import Skeleton from 'react-loading-skeleton'
-import { Type } from 'typescript'
 import { Form } from '@unform/web'
 import { FormHandles } from '@unform/core'
 import Input from '../../components/UI/Input'
 import getValidationErrors from '../../utils/getValidationErrors'
 import * as Yup from 'yup'
+import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
 
 interface routeParms {
   id: string
-}
-interface ProjectType {
-  nome: string
-  descricao: string
-  visibilidade: true
-  objetivo: string
-  foto_capa: string
-  areas: AreaType[]
-  habilidades: ToolType[]
-  id: number
 }
 interface ProfileType {
   data_nascimento: string
@@ -91,6 +66,7 @@ interface IFormDataBasicInformations {
   idealizador: string
   colaborador: string
   aliado: string
+  profileType: string[]
 }
 /**
  * @constructor
@@ -276,6 +252,10 @@ const EditProfile: React.FC = () => {
             .min(4, 'Deve conter no mínimo 4 caracteres')
             .max(20, 'Deve conter no máximo 20 caracteres')
             .required('Usuário é obrigatório'),
+          profileType: Yup.array().min(
+            1,
+            'Deve ser selecionado ao menos um tipo de perfil abaixo!',
+          ),
         })
 
         await schema.validate(formData, {
@@ -286,20 +266,19 @@ const EditProfile: React.FC = () => {
 
         // const data_nascimento = `${year}-${month}-${day}`
 
-        // const aliado = !!(formData.aliado[0] === 'aliado')
-        // const colaborador = !!(formData.colaborador[0] === 'colaborador')
-        // const idealizador = !!(formData.idealizador[0] === 'idealizador')
+        const aliado = formData.profileType.includes('aliado')
+        const colaborador = formData.profileType.includes('colaborador')
+        const idealizador = formData.profileType.includes('idealizador')
 
-        // const data = {
-        //   data_nascimento,
-        //   aliado,
-        //   colaborador,
-        //   idealizador,
-        //   telefone,
-        // }
+        const data = {
+          ...formData,
+          aliado,
+          colaborador,
+          idealizador,
+        }
 
         await api
-          .put('/api/v1/pessoas', formData, {
+          .put('/api/v1/pessoas', data, {
             withCredentials: true,
           })
           .then(updateProfile)
@@ -317,6 +296,7 @@ const EditProfile: React.FC = () => {
   )
   useEffect(() => {
     updateProfile()
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profile_id])
   return user.id !== profile_id ? (
@@ -357,6 +337,32 @@ const EditProfile: React.FC = () => {
                 label="Nome de usuário"
                 name="usuario"
                 defaultValue={profile.usuario}
+              />
+              <ProfileTypeToogleSwitch
+                name="profileType"
+                options={[
+                  {
+                    id: 'idealizador',
+                    value: 'idealizador',
+                    label: 'Idealizador',
+                    message: 'Interessado em criar projetos',
+                    defaultChecked: profile.idealizador,
+                  },
+                  {
+                    id: 'colaborador',
+                    value: 'colaborador',
+                    label: 'Colaborador',
+                    message: 'Interessado em participar de projetos',
+                    defaultChecked: profile.colaborador,
+                  },
+                  {
+                    id: 'aliado',
+                    value: 'aliado',
+                    label: 'Aliado',
+                    message: 'Interessado em apoiar projetos',
+                    defaultChecked: profile.aliado,
+                  },
+                ]}
               />
               <section>
                 <Button theme="secondary">Cancelar</Button>

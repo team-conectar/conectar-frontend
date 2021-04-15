@@ -8,19 +8,17 @@ interface IOptionsCheckbox {
   value: string
   label?: string
   message: string
+  defaultChecked?: boolean
 }
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+
+interface InputProps {
   name: string
   options: Array<IOptionsCheckbox>
 }
 
-const ProfileTypeToogleSwitch: React.FC<InputProps> = ({
-  name,
-  options,
-  ...rest
-}) => {
+const ProfileTypeToogleSwitch: React.FC<InputProps> = ({ name, options }) => {
   const inputRefs = useRef<HTMLInputElement[]>([])
-  const { fieldName, registerField, defaultValue = [], error } = useField(name)
+  const { fieldName, registerField, error } = useField(name)
   useEffect(() => {
     registerField({
       name: fieldName,
@@ -41,7 +39,8 @@ const ProfileTypeToogleSwitch: React.FC<InputProps> = ({
         })
       },
     })
-  }, [defaultValue, fieldName, registerField, rest.type])
+  }, [fieldName, registerField])
+
   return (
     <BodySwitch>
       <section>
@@ -64,9 +63,7 @@ const ProfileTypeToogleSwitch: React.FC<InputProps> = ({
               <label htmlFor={option.id}>
                 <input
                   className="checkbox"
-                  defaultChecked={defaultValue.find(
-                    (dv: string) => dv === option.id,
-                  )}
+                  defaultChecked={option.defaultChecked}
                   ref={ref => {
                     inputRefs.current[index] = ref as HTMLInputElement
                   }}
@@ -74,7 +71,6 @@ const ProfileTypeToogleSwitch: React.FC<InputProps> = ({
                   value={option.value}
                   type="checkbox"
                   id={option.id}
-                  {...rest}
                 />
                 <label htmlFor={option.id} className="switch" />
               </label>

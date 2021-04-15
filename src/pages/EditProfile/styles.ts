@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 import { BodyField } from '../../components/UI/FieldText/styles'
 import background from '../../assets/image/background.svg'
-
+import { BodySwitch } from '../../components/UI/ProfileTypeToggleSwitch/styles'
 export const ButtonList = styled.button<{ isSelected: boolean }>`
   width: 100%;
   display: flex;
@@ -101,8 +101,12 @@ export const Page = styled.div`
                 grid-row: 2;
               }
             }
-            > section {
+            ${BodySwitch} {
+              grid-column: 1 / -1;
               grid-row: 3;
+            }
+            > section {
+              grid-row: 4;
               grid-column: 1 / -1;
             }
           }
