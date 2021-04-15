@@ -157,9 +157,12 @@ const FormAreas: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           return area.descricao
         })}
       />
-      <Button theme="primary" type="submit">
-        Salvar
-      </Button>
+      <section>
+        <Button theme="secondary">Cancelar</Button>
+        <Button theme="primary" type="submit">
+          Salvar
+        </Button>
+      </section>
     </Form>
   )
 }
@@ -216,9 +219,12 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
         })}
       />
 
-      <Button theme="primary" type="submit">
-        Salvar
-      </Button>
+      <section>
+        <Button theme="secondary">Cancelar</Button>
+        <Button theme="primary" type="submit">
+          Salvar
+        </Button>
+      </section>
     </Form>
   )
 }
@@ -352,17 +358,12 @@ const EditProfile: React.FC = () => {
                 name="usuario"
                 defaultValue={profile.usuario}
               />
-              <Button
-                theme="secondary"
-                onClick={() => {
-                  setMenuOptionSelected('Educação')
-                }}
-              >
-                Cancelar
-              </Button>
-              <Button theme="primary" type="submit">
-                Salvar
-              </Button>
+              <section>
+                <Button theme="secondary">Cancelar</Button>
+                <Button theme="primary" type="submit">
+                  Salvar
+                </Button>
+              </section>
             </Form>
           )) ||
             (menuOptionSelected === 'Educação' && <AcademicExperiences />) ||

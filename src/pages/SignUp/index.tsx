@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, ChangeEvent } from 'react'
-import { BodySignUp, Error } from './styles'
+import { BodySignUp } from './styles'
 import logo from '../../assets/image/logo_fundoClaro.svg'
 import cadastro_banner from '../../assets/image/cadastro_banner.svg'
 import Input from '../../components/UI/Input'
@@ -25,6 +25,7 @@ import { IoMdAlert } from 'react-icons/io'
 import { useContext } from 'react'
 
 import { Context } from '../../context/AuthContext'
+import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
 
 interface routeParms {
   parte: string
@@ -41,13 +42,13 @@ interface PessoaType {
   idealizador: string
   colaborador: string
   aliado: string
+  profileType: string[]
 }
 const SignUp: React.FC = () => {
   const history = useHistory()
   const { handleLogin } = useContext(Context)
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
-  const [profileTypeError, setProfyleTypeError] = useState(false)
   const [showNextStep, setShowNextStep] = useState<boolean>(
     params.parte === '2',
   )
@@ -110,19 +111,15 @@ const SignUp: React.FC = () => {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
-          telefone: Yup.string().required('Telefone é obrigatório'),
-          year: Yup.string().required('Ano é obrigatório'),
-          month: Yup.string().required('Mês é obrigatório'),
-          day: Yup.string().required('Dia é obrigatório'),
-        })
-
-        setProfyleTypeError(
-          !(
-            formData.aliado[0] === 'aliado' ||
-            formData.colaborador[0] === 'colaborador' ||
-            formData.idealizador[0] === 'idealizador'
+          telefone: Yup.string().required('Telefone é obrigatório!'),
+          year: Yup.string().required('Ano é obrigatório!'),
+          month: Yup.string().required('Mês é obrigatório!'),
+          day: Yup.string().required('Dia é obrigatório!'),
+          profileType: Yup.array().min(
+            1,
+            'Deve ser selecionado ao menos um tipo de perfil abaixo!',
           ),
-        )
+        })
 
         await schema.validate(formData, {
           abortEarly: false,
@@ -132,9 +129,9 @@ const SignUp: React.FC = () => {
 
         const data_nascimento = `${year}-${month}-${day}`
 
-        const aliado = !!(formData.aliado[0] === 'aliado')
-        const colaborador = !!(formData.colaborador[0] === 'colaborador')
-        const idealizador = !!(formData.idealizador[0] === 'idealizador')
+        const aliado = formData.profileType.includes('aliado')
+        const colaborador = formData.profileType.includes('colaborador')
+        const idealizador = formData.profileType.includes('idealizador')
 
         const data = {
           data_nascimento,
@@ -144,16 +141,11 @@ const SignUp: React.FC = () => {
           telefone,
         }
         console.log(data)
-        if (
-          formData.aliado[0] === 'aliado' ||
-          formData.colaborador[0] === 'colaborador' ||
-          formData.idealizador[0] === 'idealizador'
-        ) {
-          await api.put('/api/v1/pessoas', data, {
-            withCredentials: true,
-          })
-          history.push('/experiencias-do-usuario')
-        }
+
+        await api.put('/api/v1/pessoas', data, {
+          withCredentials: true,
+        })
+        history.push('/experiencias-do-usuario')
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -309,49 +301,29 @@ const SignUp: React.FC = () => {
                 options={daysOptions(4, 2000)}
               />
             </section>
-            <section className="tipo-perfil">
-              <section>
-                <legend>
-                  Tipo de Perfil{' '}
-                  {profileTypeError && (
-                    <Error message="Deve selecionar ao menos um tipo de perfil abaixo">
-                      <IoMdAlert />
-                    </Error>
-                  )}
-                </legend>
-                <span>Selecione um ou mais tipos</span>
-              </section>
-              <fieldset>
-                <legend>Idealizador</legend>
-                <aside>
-                  <p>Interessado em criar projetos</p>
-                  <ToggleSwitch
-                    name="idealizador"
-                    options={[{ id: 'idealizador', value: 'idealizador' }]}
-                  />
-                </aside>
-              </fieldset>
-              <fieldset>
-                <legend>Colaborador</legend>
-                <aside>
-                  <p>Interessado em participar de projetos</p>
-                  <ToggleSwitch
-                    name="colaborador"
-                    options={[{ id: 'colaborador', value: 'colaborador' }]}
-                  />
-                </aside>
-              </fieldset>
-              <fieldset>
-                <legend>Aliado</legend>
-                <aside>
-                  <p>Interessado em ajudar projetos</p>
-                  <ToggleSwitch
-                    name="aliado"
-                    options={[{ id: 'aliado', value: 'aliado' }]}
-                  />
-                </aside>
-              </fieldset>
-            </section>
+            <ProfileTypeToogleSwitch
+              name="profileType"
+              options={[
+                {
+                  id: 'idealizador',
+                  value: 'idealizador',
+                  label: 'Idealizador',
+                  message: 'Interessado em criar projetos',
+                },
+                {
+                  id: 'colaborador',
+                  value: 'colaborador',
+                  label: 'Colaborador',
+                  message: 'Interessado em participar de projetos',
+                },
+                {
+                  id: 'aliado',
+                  value: 'aliado',
+                  label: 'Aliado',
+                  message: 'Interessado em apoiar projetos',
+                },
+              ]}
+            />
             <section>
               <Button
                 theme="secondary"

@@ -20,13 +20,13 @@ export const ButtonList = styled.button<{ isSelected: boolean }>`
     css`
       :after {
         width: 3px;
-        height: calc(100% - 0.6rem);
+        height: calc(100% - 1rem);
         content: '';
         background: var(--textGreen);
         position: absolute;
         right: 3px;
-        bottom: 0.3rem;
-        top: 0.3rem;
+        bottom: 0.5rem;
+        top: 0.5rem;
       }
     `}
 `
@@ -69,6 +69,9 @@ export const Page = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+        background: var(--backgroundElevation);
+        border-radius: 0.8rem;
+        padding: 2rem 0;
       }
       > aside {
         grid-column: 1;
@@ -98,9 +101,18 @@ export const Page = styled.div`
                 grid-row: 2;
               }
             }
+            > section {
+              grid-row: 3;
+              grid-column: 1 / -1;
+            }
           }
           > aside {
             grid-column: 2;
+          }
+          > section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
           }
         }
       }
