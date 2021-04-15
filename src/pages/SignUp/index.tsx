@@ -73,6 +73,7 @@ const SignUp: React.FC = () => {
         nome: Yup.string()
           .max(80)
           .matches(/(?=.*[ ])/g, 'Informe o nome completo')
+          .matches(/^[A-Za-z ]*$/, 'Informe um nome válido')
           .required('Usuário é obrigatório'),
       })
 
@@ -106,11 +107,14 @@ const SignUp: React.FC = () => {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
-          telefone: Yup.string().required('Telefone é obrigatório'),
+          telefone: Yup.string()
+            .required('Telefone é obrigatório')
+            .min(15, 'Telefone inválido'),
           year: Yup.string().required('Ano é obrigatório'),
           month: Yup.string().required('Mês é obrigatório'),
           day: Yup.string().required('Dia é obrigatório'),
         })
+        console.log(schema)
 
         setProfyleTypeError(
           !(
