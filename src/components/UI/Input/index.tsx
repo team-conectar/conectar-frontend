@@ -38,7 +38,7 @@ const Input: React.FC<InputProps> = ({
   pathSubLabel,
   ...rest
 }) => {
-  const inputRef = useRef(null)
+  const inputRef = useRef<any>(null)
   const { fieldName, defaultValue, registerField, error } = useField(name)
   useEffect(() => {
     registerField({
@@ -47,9 +47,8 @@ const Input: React.FC<InputProps> = ({
       path: 'value',
     })
   }, [fieldName, registerField])
-  const [inputIsEmpty, setInputIsEmpty] = useState(
-    !rest.defaultValue && rest.defaultValue !== '',
-  )
+
+  const [inputIsEmpty, setInputIsEmpty] = useState(true)
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value !== '') {
       setInputIsEmpty(false)
@@ -57,6 +56,9 @@ const Input: React.FC<InputProps> = ({
       setInputIsEmpty(true)
     }
   }, [])
+  useEffect(() => {
+    setInputIsEmpty(!rest.defaultValue && rest.defaultValue !== '')
+  }, [rest])
 
   return (
     <BodyInput>

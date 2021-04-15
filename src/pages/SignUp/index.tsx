@@ -52,53 +52,56 @@ const SignUp: React.FC = () => {
     params.parte === '2',
   )
 
-  const handleSubmit = useCallback(async (formData: PessoaType) => {
-    try {
-      // Remove all previous errors
-      formRef.current?.setErrors({})
-      const schema = Yup.object().shape({
-        email: Yup.string()
-          .email('Não corresponde ao formato exemple@ex.com')
-          .required('Email é obrigatório'),
-        password: Yup.string()
-          .matches(/(?=.*[!@#$%^&*])/g, 'Deve conter caracteres especiais')
-          .matches(/(?=.*[A-Z])/g, 'Deve conter caracteres maiúsculas')
-          .matches(/(?=.*[0-9])/g, 'Deve conter caracteres numéricos')
-          .matches(/(?=.*[a-z])/g, 'Deve conter caracteres minúsculas')
-          .min(8, 'Deve conter no mínimo 8 caracteres')
-          .required('Senha é obritória'),
-        username: Yup.string()
-          .min(4, 'Deve conter no mínimo 4 caracteres')
-          .max(20, 'Deve conter no máximo 20 caracteres')
-          .required('Usuário é obrigatório'),
-        nome: Yup.string()
-          .max(80)
-          .matches(/(?=.*[ ])/g, 'Informe o nome completo')
-          .required('Usuário é obrigatório'),
-      })
+  const handleSubmit = useCallback(
+    async (formData: PessoaType) => {
+      try {
+        // Remove all previous errors
+        formRef.current?.setErrors({})
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .email('Não corresponde ao formato exemple@ex.com')
+            .required('Email é obrigatório'),
+          password: Yup.string()
+            .matches(/(?=.*[!@#$%^&*])/g, 'Deve conter caracteres especiais')
+            .matches(/(?=.*[A-Z])/g, 'Deve conter caracteres maiúsculas')
+            .matches(/(?=.*[0-9])/g, 'Deve conter caracteres numéricos')
+            .matches(/(?=.*[a-z])/g, 'Deve conter caracteres minúsculas')
+            .min(8, 'Deve conter no mínimo 8 caracteres')
+            .required('Senha é obritória'),
+          username: Yup.string()
+            .min(4, 'Deve conter no mínimo 4 caracteres')
+            .max(20, 'Deve conter no máximo 20 caracteres')
+            .required('Usuário é obrigatório'),
+          nome: Yup.string()
+            .max(80)
+            .matches(/(?=.*[ ])/g, 'Informe o nome completo')
+            .required('Usuário é obrigatório'),
+        })
 
-      await schema.validate(formData, {
-        abortEarly: false,
-      })
-      // Validation passed
-      const data = new FormData()
+        await schema.validate(formData, {
+          abortEarly: false,
+        })
+        // Validation passed
+        const data = new FormData()
 
-      data.append('email', formData.email)
-      data.append('nome', formData.nome)
-      data.append('username', formData.username)
-      data.append('password', formData.password)
-      await api.post('/api/signup', data)
-      setShowNextStep(true)
-      handleLogin(true)
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        // Validation failed
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
-        // alert(errors);
+        data.append('email', formData.email)
+        data.append('nome', formData.nome)
+        data.append('usuario', formData.username)
+        data.append('password', formData.password)
+        await api.post('/api/signup', data)
+        setShowNextStep(true)
+        handleLogin(true)
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          // Validation failed
+          const errors = getValidationErrors(err)
+          formRef.current?.setErrors(errors)
+          // alert(errors);
+        }
       }
-    }
-  }, [])
+    },
+    [handleLogin],
+  )
   const handleSecondSubmit = useCallback(
     async (formData: PessoaType) => {
       console.log(formData)

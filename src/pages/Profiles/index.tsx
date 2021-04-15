@@ -131,7 +131,6 @@ const Profiles: React.FC = () => {
         return err?.response?.data.detail
       })
   }, [history, profile_id])
-  console.log(profile.experiencia_academica)
 
   return (
     <Page>
