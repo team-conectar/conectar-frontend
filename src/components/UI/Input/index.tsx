@@ -48,7 +48,9 @@ const Input: React.FC<InputProps> = ({
     })
   }, [fieldName, registerField])
 
-  const [inputIsEmpty, setInputIsEmpty] = useState(true)
+  const [inputIsEmpty, setInputIsEmpty] = useState(
+    !!rest.defaultValue && rest.defaultValue !== '',
+  )
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.value !== '') {
       setInputIsEmpty(false)
@@ -57,8 +59,12 @@ const Input: React.FC<InputProps> = ({
     }
   }, [])
   useEffect(() => {
-    setInputIsEmpty(!rest.defaultValue && rest.defaultValue !== '')
-  }, [rest])
+    if (!!rest.defaultValue && rest.defaultValue !== ' ') {
+      setInputIsEmpty(false)
+    } else {
+      setInputIsEmpty(true)
+    }
+  }, [rest.defaultValue])
 
   return (
     <BodyInput>
