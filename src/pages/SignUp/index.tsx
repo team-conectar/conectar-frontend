@@ -76,7 +76,7 @@ const SignUp: React.FC = () => {
           nome: Yup.string()
             .max(80)
             .matches(/(?=.*[ ])/g, 'Informe o nome completo')
-            .required('Usuário é obrigatório'),
+            .required('Nome é obrigatório'),
         })
 
         await schema.validate(formData, {
@@ -87,7 +87,7 @@ const SignUp: React.FC = () => {
 
         data.append('email', formData.email)
         data.append('nome', formData.nome)
-        data.append('usuario', formData.username)
+        data.append('username', formData.username)
         data.append('password', formData.password)
         await api.post('/api/signup', data)
         setShowNextStep(true)
