@@ -139,6 +139,7 @@ export const PerfilMain = styled.main`
     > figcaption {
       display: flex;
       flex-direction: column;
+      text-align: center;
     }
   }
   > section {

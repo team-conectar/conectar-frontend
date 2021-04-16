@@ -34,19 +34,6 @@ const ApproveProject: React.FC = () => {
         .get(`/api/v1/pessoa_projeto/projeto/${project_id}`)
         .then(resDisponiveis => {
           setVacancies(resDisponiveis.data)
-          api
-            .get(`/api/v1/pessoa_projeto/similaridade/${project_id}`)
-            .then(resSimilaridade => {
-              setVacancies(
-                resDisponiveis.data.map((vacancy: IVacancyCard) => {
-                  return {
-                    ...vacancy,
-                    pessoa_id: resSimilaridade.data[`${vacancy.id}`].id,
-                    pessoa_foto_url: resSimilaridade.data[`${vacancy.id}`].foto,
-                  }
-                }),
-              )
-            })
         })
         .catch((err: AxiosError) => {
           console.log(err?.response?.data.detail)
@@ -57,13 +44,14 @@ const ApproveProject: React.FC = () => {
   const handleInvite = useCallback(() => {
     setVacancies(
       vacancies.map(vacancy => {
-        api
-          .put(`/api/v1/pessoa_projeto/${vacancy.id}`, {
-            situacao: 'PENDENTE_COLABORADOR',
-          })
-          .catch((err: AxiosError) => {
-            console.log(err?.response?.data.detail)
-          })
+        vacancy.situacao === 'PENDENTE_IDEALIZADOR' &&
+          api
+            .put(`/api/v1/pessoa_projeto/${vacancy.id}`, {
+              situacao: 'PENDENTE_COLABORADOR',
+            })
+            .catch((err: AxiosError) => {
+              console.log(err?.response?.data.detail)
+            })
         return { ...vacancy, situacao: 'PENDENTE_COLABORADOR' }
       }),
     )
