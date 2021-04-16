@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { BodyNavBar } from './styles'
+import React, { useContext, useEffect, useState } from 'react'
+import { BodyNavBar, LiNotification } from './styles'
 import logo from '../../../assets/image/logo_fundoClaro.svg'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import explorar from '../../../assets/icon/explorar.svg'
@@ -10,18 +10,38 @@ import { IconBell, IconUser } from '../../../assets/icon'
 import Dropdown from '../Dropdown'
 import SearchInput from '../SearchInput'
 import useAuth from '../../../context/hooks/useAuth'
-
+import api from '../../../services/api'
+import { AxiosError } from 'axios'
+import Button from '../Button'
+interface INotification {
+  remetente_id: number
+  destinatario_id: number
+  projeto_id: number
+  pessoa_projeto_id: number
+  situacao: string
+  lido: boolean
+  id: number
+  data_criacao: string
+  data_atualizacao: string
+}
 const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const { user } = useContext(Context)
   const location = useLocation()
-  const notificationsDescription = {
-    CONVITE_NEGADO: `Finalize o cadastro do projeto ${user.email} e encontre o time ideal!`,
-    CONVITE_EXPIRADO: '',
-    CONVITE_ACEITO: '',
-    CONVITE_RECEBIDO: '',
-    PROJETO_PENDENTE: '',
-  }
+  const [notifications, setNotifications] = useState<Array<INotification>>([])
+  useEffect(() => {
+    const res = api
+      .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
+      .then(response => {
+        setNotifications(response.data)
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
+
+    console.log(res)
+  }, [])
+
   return (
     <BodyNavBar>
       <aside>
@@ -45,8 +65,17 @@ const NavBar: React.FC = () => {
         {!loading && isAuthenticated && (
           <>
             <Dropdown IconButton={<IconBell />}>
-              <li>Voce tem novo convite</li>
-              <li>Que tal aproveitar</li>
+              <h4>Notificações</h4>
+              {notifications?.map(notification => (
+                <LiNotification key={notification.id}>
+                  <img src={``} alt={``} />
+                  <p>{notification.situacao}</p>
+                </LiNotification>
+              ))}
+              <aside>
+                <strong>Marcar como lida</strong>
+                <Button theme="secondary">Ver todas</Button>
+              </aside>
             </Dropdown>
             <Dropdown
               IconButton={

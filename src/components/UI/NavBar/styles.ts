@@ -1,5 +1,9 @@
 import styled from 'styled-components'
+import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
+export const LiNotification = styled.li`
+  list-style: none;
+`
 
 export const BodyNavBar = styled.nav`
   width: 100%;
@@ -53,6 +57,23 @@ export const BodyNavBar = styled.nav`
     height: 100%;
     gap: 1.2rem;
     ${DropdownContent} {
+      > h4 {
+        padding: 0 1rem;
+        align-self: flex-start;
+        font-weight: 600;
+      }
+      > aside {
+        padding: 0.4rem 1rem;
+        border-top: solid 1px var(--borderDivision);
+        font-size: 0.9rem;
+        > strong {
+          cursor: pointer;
+        }
+        > ${BodyButton} {
+          font-size: 0.8rem;
+          height: 1.6rem;
+        }
+      }
       section {
         position: relative;
         padding: 1rem;
@@ -92,7 +113,7 @@ export const BodyNavBar = styled.nav`
         margin: 0;
         align-self: flex-start;
       }
-      button {
+      > button {
         color: var(--textGreen);
         border: 0;
         border-top: solid 1px var(--borderDivision);
