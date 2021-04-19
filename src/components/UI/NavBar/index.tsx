@@ -72,6 +72,10 @@ const NavBar: React.FC = () => {
                   <p>{notification.situacao}</p>
                 </LiNotification>
               ))}
+              <LiNotification>
+                JEFERSON ROSA DE SOUZAasdasdasdasd te fez um convite para o
+                projeto asdasdasd. Confira!
+              </LiNotification>
               <aside>
                 <strong>Marcar como lida</strong>
                 <Button theme="secondary">Ver todas</Button>

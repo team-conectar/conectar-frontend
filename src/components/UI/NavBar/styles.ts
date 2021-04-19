@@ -3,6 +3,9 @@ import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
 export const LiNotification = styled.li`
   list-style: none;
+  padding: 0.4rem 1rem;
+  border-bottom: solid 1px var(--borderDivision);
+  border-top: solid 1px var(--borderDivision);
 `
 
 export const BodyNavBar = styled.nav`
@@ -66,6 +69,8 @@ export const BodyNavBar = styled.nav`
         padding: 0.4rem 1rem;
         border-top: solid 1px var(--borderDivision);
         font-size: 0.9rem;
+        width: 100%;
+        justify-content: space-between;
         > strong {
           cursor: pointer;
         }
