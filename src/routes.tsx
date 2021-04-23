@@ -15,6 +15,7 @@ import Explorer from './pages/Explorer'
 import Search from './pages/Search'
 import NavBar from './components/UI/NavBar'
 import EditProfile from './pages/EditProfile'
+import ForgotPassword from './pages/ForgotPassword'
 
 const Routes: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const Routes: React.FC = () => {
       <BrowserRouter>
         <Route exact path="/" component={Home} />
         <Route path="/cadastrar/:parte" component={SignUp} />
+        <Route path="/esqueceu-senha" component={ForgotPassword} />
         <Route path="/experiencias-do-usuario" component={ProfileFeatures} />
         <Route path="/areas-de-atuacao" component={ExperienceAreas} />
         <Route path="/habilidades-e-ferramentas" component={MasteryTools} />
