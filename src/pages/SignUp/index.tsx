@@ -76,7 +76,8 @@ const SignUp: React.FC = () => {
           nome: Yup.string()
             .max(80)
             .matches(/(?=.*[ ])/g, 'Informe o nome completo')
-            .required('Nome é obrigatório'),
+            .matches(/^[A-Za-z ]*$/, 'Informe um nome válido')
+            .required('Usuário é obrigatório'),
         })
 
         await schema.validate(formData, {
@@ -111,7 +112,9 @@ const SignUp: React.FC = () => {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
-          telefone: Yup.string().required('Telefone é obrigatório!'),
+          telefone: Yup.string()
+            .required('Telefone é obrigatório!')
+            .min(15, 'Telefone inválido'),
           year: Yup.string().required('Ano é obrigatório!'),
           month: Yup.string().required('Mês é obrigatório!'),
           day: Yup.string().required('Dia é obrigatório!'),
@@ -215,7 +218,7 @@ const SignUp: React.FC = () => {
             <div className="area-form">
               <h1>Criar sua conta</h1>
               <Input name="nome" label="Nome Completo" />
-              <Input type="email" name="email" label="E-mail" />
+              <Input name="email" label="E-mail" />
               <section>
                 <Input name="username" label="Nome de usuário" />
                 <Input type="password" name="password" label="Senha" />

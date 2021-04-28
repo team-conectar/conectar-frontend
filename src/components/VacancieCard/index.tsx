@@ -124,7 +124,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       <label>
         <DropdownList IconButton={<GiHamburgerMenu />}>
           <li>Clonar vaga</li>
-          <li>Exluir vaga</li>
+          <li>Excluir vaga</li>
         </DropdownList>
       </label>
       <img
