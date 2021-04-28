@@ -24,12 +24,12 @@ export const BodyExperiences = styled.section`
   }
   background: var(--background);
   padding: 2rem 4rem;
-  margin: 0.8rem 0;
+
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: flex-start;
-  border-radius: 0.4rem;
+  border-radius: 0.8rem;
   box-shadow: var(--boxShadow);
   .experiencias {
     width: 100%;

@@ -14,6 +14,7 @@ import { AuthProvider } from './context/AuthContext'
 import Explorer from './pages/Explorer'
 import Search from './pages/Search'
 import NavBar from './components/UI/NavBar'
+import EditProfile from './pages/EditProfile'
 
 const Routes: React.FC = () => {
   return (
@@ -28,6 +29,7 @@ const Routes: React.FC = () => {
         <Route path="/criar-um-projeto" component={CreateProject} />
         <Route path="/projeto-conectado/:id" component={ApproveProject} />
         <Route path="/projeto/:id" component={Projects} />
+        <Route path="/editar-perfil/:id" component={EditProfile} />
         <Route path="/perfil/:id" component={Profiles} />
         <Route path="/explorar" component={Explorer} />
         <Route path="/pesquisar/:for?/:attribute?/:key?" component={Search} />
