@@ -157,9 +157,9 @@ const ProfessionalExperiences: React.FC = () => {
           finalMonth,
         }: ProfessionalDataType = formData
         // setting to null because if there a update an experience with an existing data_fim it will not send
-        let data_fim = null
         const data_inicio = `${initialYear}-${initialMonth}-01`
 
+        let data_fim = null
         if (!currentWorking) {
           data_fim = `${finalYear}-${finalMonth}-01`
         }
