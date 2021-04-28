@@ -6,7 +6,6 @@ import AcademicExperiences from './experiences/AcademicExperiences'
 import ProfessionalExperiences from './experiences/ProfessionalExperiences'
 import ProjectExperiences from './experiences/ProjectExperiences'
 
-import Logged from '../../components/Logged'
 
 const ProfileFeatures: React.FC = () => {
   const history = useHistory()
