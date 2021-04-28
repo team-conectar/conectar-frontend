@@ -82,10 +82,11 @@ const SelectTool: React.FC<SelectToolProps> = ({
       console.log(newTool)
       if (!tools.includes(tool)) {
         const res = await api
-          .post('/api/v1/habilidade/pessoa', tool, {
+          .post('/api/v1/habilidades', tool, {
             withCredentials: true,
           })
           .then(() => {
+            newTool && setSelectedTools(selectedTools.concat([newTool.nome]))
             setNewTool({ nome: '' })
           })
           .catch((err: AxiosError) => {
@@ -94,7 +95,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
         console.log(res)
       }
     },
-    [newTool, tools],
+    [newTool, selectedTools, tools],
   )
   useEffect(() => {
     api
@@ -116,7 +117,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
         setNewTool({ nome: value })
       }
     },
-    [],
+    [newTool],
   )
   return (
     <BodySelectTool>
@@ -174,10 +175,13 @@ const SelectTool: React.FC<SelectToolProps> = ({
               ))}
           </ul>
           <fieldset className="area-insercao">
-            <legend>ou insira abaixo</legend>
+            <legend>
+              <label htmlFor="newTool">ou insira abaixo</label>
+            </legend>
             <input
               placeholder="Habilidade, ferramenta ou matéria..."
               name="newTool"
+              id="newTool"
               onChange={handleInputChange}
             />
             <button
