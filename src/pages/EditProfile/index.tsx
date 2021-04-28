@@ -134,7 +134,9 @@ const FormAreas: React.FC<IEditForm> = ({ profile, updateProfile }) => {
         })}
       />
       <section>
-        <Button theme="secondary">Cancelar</Button>
+        <Button theme="secondary" type="reset">
+          Cancelar
+        </Button>
         <Button theme="primary" type="submit">
           Salvar
         </Button>
@@ -196,7 +198,9 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
       />
 
       <section>
-        <Button theme="secondary">Cancelar</Button>
+        <Button theme="secondary" type="reset">
+          Cancelar
+        </Button>
         <Button theme="primary" type="submit">
           Salvar
         </Button>
@@ -365,7 +369,9 @@ const EditProfile: React.FC = () => {
                 ]}
               />
               <section>
-                <Button theme="secondary">Cancelar</Button>
+                <Button theme="secondary" type="reset">
+                  Cancelar
+                </Button>
                 <Button theme="primary" type="submit">
                   Salvar
                 </Button>
