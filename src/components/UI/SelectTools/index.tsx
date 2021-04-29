@@ -109,7 +109,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
         // Returns error message from backend
         return err?.response?.data.detail
       })
-  }, [handleAddNewTool])
+  }, [newTool])
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       const { name, value } = event.target
@@ -117,7 +117,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
         setNewTool({ nome: value })
       }
     },
-    [newTool],
+    [],
   )
   return (
     <BodySelectTool>
