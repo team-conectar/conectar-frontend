@@ -141,10 +141,10 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           papel_id: formData.perfil,
           tipo_acordo_id: formData.tipoContrato,
           remunerado: !!(formData.remunerado[0] === 'remunerado'),
-          situacao: 'CRIADO',
+          situacao: 'PENDENTE_IDEALIZADOR',
         }
         console.log(data)
-        for (let index = 1; index < formData.quantidade; index++) {
+        for (let index = 1; index <= formData.quantidade; index++) {
           await api
             .post('/api/v1/pessoa_projeto', data, {
               withCredentials: true,
