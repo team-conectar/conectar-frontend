@@ -16,14 +16,18 @@ import { AxiosError } from 'axios'
 import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
-import { createOptionAreas, createOptionTools } from '../../utils/projects'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import VacancieListItem from '../VacancieListItem'
 import { ProjectType } from '../../pages/CreateProject'
-
+export type TypeSituationVacancy =
+  | 'PENDENTE_IDEALIZADOR'
+  | 'PENDENTE_COLABORADOR'
+  | 'ACEITE_COLABORADOR'
+  | 'NEGADO_COLABORADOR'
+  | 'FINALIZADO'
 export interface VacanciesType {
   projeto_id: number
   remunerado: boolean
@@ -32,11 +36,7 @@ export interface VacanciesType {
   papel_id: number
   tipo_acordo_id: number
   descricao: string
-  situacao?:
-    | 'PENDENTE_IDEALIZADOR'
-    | 'PENDENTE_COLABORADOR'
-    | 'ACEITE_COLABORADOR'
-    | 'FINALIZADO'
+  situacao?: TypeSituationVacancy
   habilidades: Array<ToolType>
   areas: Array<AreaType>
   id: number
@@ -79,12 +79,6 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
     { value: '3', label: 'Idealizador' },
   ]
 
-  const optionsAreas: Array<
-    OptionHTMLAttributes<HTMLOptionElement>
-  > = createOptionAreas(project.areas)
-  const optionsTools: Array<
-    OptionHTMLAttributes<HTMLOptionElement>
-  > = createOptionTools(project.habilidades)
   useEffect(() => {
     api
       .get('/api/v1/experiencias/academica/me', {
@@ -127,7 +121,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           papel_id: formData.perfil,
           tipo_acordo_id: formData.tipoContrato,
           remunerado: !!(formData.remunerado[0] === 'remunerado'),
-          situacao: 'Não enviado',
+          situacao: 'CRIADO',
         }
         console.log(data)
 
@@ -210,11 +204,20 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           <Select
             label="Habilidade ou Ferramentas"
             name="habilidades"
-            options={optionsTools}
+            options={project.habilidades.map(tool => {
+              return { value: tool.nome, label: tool.nome }
+            })}
             multi
           />
           <div className="bloco-area">
-            <Select label="Áreas" name="areas" options={optionsAreas} multi />
+            <Select
+              label="Áreas"
+              name="areas"
+              options={project.areas.map(area => {
+                return { value: area.descricao, label: area.descricao }
+              })}
+              multi
+            />
           </div>
 
           <Textarea name="descricao" label="Descrição" />

@@ -1,7 +1,7 @@
-import React, { useContext } from 'react'
-import { BodyNavBar } from './styles'
+import React, { useContext, useEffect, useState } from 'react'
+import { BodyNavBar, LiNotification } from './styles'
 import logo from '../../../assets/image/logo_fundoClaro.svg'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useHistory, useLocation } from 'react-router-dom'
 import explorar from '../../../assets/icon/explorar.svg'
 import explorar_secondary from '../../../assets/icon/explorer_secondary.svg'
 import userDefault from '../../../assets/icon/user.svg'
@@ -10,11 +10,39 @@ import { IconBell, IconUser } from '../../../assets/icon'
 import Dropdown from '../Dropdown'
 import SearchInput from '../SearchInput'
 import useAuth from '../../../context/hooks/useAuth'
-
+import api from '../../../services/api'
+import { AxiosError } from 'axios'
+import Button from '../Button'
+interface INotification {
+  remetente_id: number
+  destinatario_id: number
+  projeto_id: number
+  pessoa_projeto_id: number
+  situacao: string
+  lido: boolean
+  id: number
+  data_criacao: string
+  data_atualizacao: string
+}
 const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const { user } = useContext(Context)
   const location = useLocation()
+  const history = useHistory()
+  const [notifications, setNotifications] = useState<Array<INotification>>([])
+  useEffect(() => {
+    const res = api
+      .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
+      .then(response => {
+        setNotifications(response.data)
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
+
+    console.log(res)
+  }, [])
+
   return (
     <BodyNavBar>
       <aside>
@@ -38,8 +66,21 @@ const NavBar: React.FC = () => {
         {!loading && isAuthenticated && (
           <>
             <Dropdown IconButton={<IconBell />}>
-              <li>Voce tem novo convite</li>
-              <li>Que tal aproveitar</li>
+              <h4>Notificações</h4>
+              {notifications?.map(notification => (
+                <LiNotification key={notification.id}>
+                  <img src={``} alt={``} />
+                  <p>{notification.situacao}</p>
+                </LiNotification>
+              ))}
+              <LiNotification>
+                JEFERSON ROSA DE SOUZAasdasdasdasd te fez um convite para o
+                projeto asdasdasd. Confira!
+              </LiNotification>
+              <aside>
+                <strong>Marcar como lida</strong>
+                <Button theme="secondary">Ver todas</Button>
+              </aside>
             </Dropdown>
             <Dropdown
               IconButton={
@@ -55,16 +96,23 @@ const NavBar: React.FC = () => {
               <section>
                 <img
                   src={user.foto_perfil ? user.foto_perfil : userDefault}
-                  alt={user.nome.split(' ')[0]}
+                  alt={user.nome}
                 />
-                <legend>{user.nome}</legend>
+                <legend>{user.nome?.split(' ')[0]}</legend>
                 <p>{user.usuario}</p>
                 <p>{user.email}</p>
               </section>
               <Link to={`/perfil/${user.id}`}>Perfil no Conectar</Link>
               <Link to="/explore">Configurações</Link>
               <Link to="/explore">Ajuda</Link>
-              <button onClick={handleLogout}>Sair</button>
+              <button
+                onClick={() => {
+                  handleLogout()
+                  history.push('/')
+                }}
+              >
+                Sair
+              </button>
             </Dropdown>
           </>
         )}

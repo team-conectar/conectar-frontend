@@ -23,10 +23,13 @@ export const BodyCard = styled.div`
   > p {
     text-align: center;
     color: var(--gray);
-    h2 {
-      color: var(--textGreen);
-    }
   }
+  h2 {
+    color: var(--textGreen);
+    padding: 1rem;
+    text-align: center;
+  }
+
   > aside {
     display: flex;
     gap: 1rem;
@@ -43,5 +46,11 @@ export const BodyCard = styled.div`
     border-top: solid 1px var(--borderDivision);
     font-weight: 700;
     border-radius: 0 0 0.8rem 0.8rem;
+  }
+  strong {
+    padding: 0 0.2rem 1.4rem;
+    a {
+      font-weight: 500;
+    }
   }
 `

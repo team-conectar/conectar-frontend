@@ -1,21 +1,6 @@
 import styled from 'styled-components'
 import background from '../../assets/image/background.svg'
-import Tooltip from '../../components/UI/Tooltip'
 
-export const Error = styled(Tooltip)`
-  svg {
-    margin: 0;
-    color: var(--red);
-    cursor: pointer;
-  }
-  span {
-    background: var(--red);
-    color: white;
-    &::before {
-      border-color: var(--red) transparent;
-    }
-  }
-`
 export const BodySignUp = styled.div`
   display: flex;
   justify-content: center;
@@ -129,68 +114,6 @@ export const BodySignUp = styled.div`
         > div + div {
           margin-left: 0.8rem;
           width: auto;
-        }
-      }
-      .tipo-perfil {
-        justify-content: space-around;
-        flex-wrap: wrap;
-        > section {
-          width: 100%;
-          display: flex;
-          justify-content: space-between;
-          > legend {
-            font: 400 0.9rem Raleway;
-            height: 0.9rem;
-            color: var(--orange);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            svg {
-              font-size: 1.2rem;
-            }
-          }
-          > span {
-            font: 400 0.8rem Raleway;
-            color: var(--gray);
-          }
-        }
-        > fieldset {
-          background: white;
-          margin-top: 0.4rem;
-          width: max(30%, 150px);
-          legend {
-            border-radius: 0.3rem 0.3rem 0 0;
-            width: 100%;
-            background: var(--textGreen);
-            padding: 0.2rem;
-            color: white;
-            text-align: center;
-            margin-bottom: 0;
-          }
-          > aside {
-            border-radius: 0 0 0.3rem 0.3rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            align-items: center;
-            height: 200px;
-            box-shadow: var(--boxShadow);
-            border-top: 0;
-            padding-bottom: 0.8rem;
-            p {
-              margin-bottom: 0.8rem;
-            }
-          }
-        }
-      }
-      button.voltar {
-        border: 0;
-        cursor: pointer;
-        background: none;
-        font: 500 1rem Raleway;
-        color: var(--yellow);
-        :hover {
-          color: var(--yellow-dark);
         }
       }
     }

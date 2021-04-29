@@ -8,9 +8,8 @@ import api from '../../services/api'
 import ProfileLink from '../../components/ProfileLink'
 import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
-import VacancieCard from '../../components/VacancieCard'
+import VacancieCard, { IVacancyCard } from '../../components/VacancieCard'
 import { useParams } from 'react-router-dom'
-import Vacancy, { VacanciesType } from '../../components/Vacancy'
 import hero from '../../assets/image/temos_um_time_para_seu_projeto.svg'
 import { IProfile } from '../../components/ProfileCard'
 interface routeParms {
@@ -19,19 +18,8 @@ interface routeParms {
 const ApproveProject: React.FC = () => {
   const project_id = useParams<routeParms>().id
   const [project, setProject] = useState<IProject>({} as IProject)
-  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
-  const [peoples, setPeoples] = useState<Array<IProfile>>([])
+  const [vacancies, setVacancies] = useState<Array<IVacancyCard>>([])
 
-  const handleInvite = useCallback(() => {
-    api
-      .put(`/api/v1/pessoa_projeto/projeto/${project_id}`)
-      .then(response => {
-        setVacancies(response.data)
-      })
-      .catch((err: AxiosError) => {
-        console.log(err?.response?.data.detail)
-      })
-  }, [project_id])
   useEffect(() => {
     const res = [
       api
@@ -44,19 +32,8 @@ const ApproveProject: React.FC = () => {
         }),
       api
         .get(`/api/v1/pessoa_projeto/projeto/${project_id}`)
-        .then(response => {
-          setVacancies(response.data)
-        })
-        .catch((err: AxiosError) => {
-          console.log(err?.response?.data.detail)
-        }),
-      api
-        .post(`/api/v1/pessoa/random/${project_id}`, {
-          colaborador: 0,
-          aliado: 0,
-        })
-        .then(response => {
-          setVacancies(response.data)
+        .then(resDisponiveis => {
+          setVacancies(resDisponiveis.data)
         })
         .catch((err: AxiosError) => {
           console.log(err?.response?.data.detail)
@@ -64,6 +41,22 @@ const ApproveProject: React.FC = () => {
     ]
     console.log(res)
   }, [project_id])
+  const handleInvite = useCallback(() => {
+    setVacancies(
+      vacancies.map(vacancy => {
+        vacancy.situacao === 'PENDENTE_IDEALIZADOR' &&
+          api
+            .put(`/api/v1/pessoa_projeto/${vacancy.id}`, {
+              situacao: 'PENDENTE_COLABORADOR',
+            })
+            .catch((err: AxiosError) => {
+              console.log(err?.response?.data.detail)
+            })
+        return { ...vacancy, situacao: 'PENDENTE_COLABORADOR' }
+      }),
+    )
+  }, [vacancies])
+
   return (
     <>
       <NavBar />
@@ -85,22 +78,11 @@ const ApproveProject: React.FC = () => {
                 <VacancieCard key={vacancy.id} vacancy={vacancy} />
               ))}
             </ul>
-            <VacancieCard
-              vacancy={{
-                projeto_id: 0,
-                pessoa_id: 1,
-                papel_id: 1,
-                tipo_acordo_id: 2,
-                descricao: 'string',
-                id: 0,
-                situacao: 'PENDENTE_COLABORADOR',
-              }}
-            />
           </section>
           <aside>
             <Button theme="secondary">Finalizar acordos</Button>
             <Button theme="primary" onClick={handleInvite}>
-              Enviar convite
+              Enviar convites
             </Button>
           </aside>
         </main>

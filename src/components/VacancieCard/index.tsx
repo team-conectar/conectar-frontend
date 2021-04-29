@@ -18,22 +18,18 @@ import Dropdown from '../UI/Dropdown'
 import api from '../../services/api'
 import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
-
+import { TypeSituationVacancy } from '../Vacancy'
+export interface IVacancyCard {
+  projeto_id: number
+  pessoa_id: number
+  papel_id: number
+  tipo_acordo_id: number
+  descricao: string
+  situacao?: TypeSituationVacancy
+  id: number
+}
 interface Props extends HTMLAttributes<HTMLLIElement> {
-  vacancy: {
-    projeto_id: number
-    pessoa_id: number
-    papel_id: number
-    tipo_acordo_id: number
-    descricao: string
-    situacao?:
-      | 'PENDENTE_IDEALIZADOR'
-      | 'PENDENTE_COLABORADOR'
-      | 'ACEITE_COLABORADOR'
-      | 'NEGADO_COLABORADOR'
-      | 'FINALIZADO'
-    id: number
-  }
+  vacancy: IVacancyCard
 }
 interface ProfileType {
   data_nascimento: string
@@ -52,11 +48,44 @@ interface ProfileType {
   data_criacao: string
   data_atualizacao: string
 }
+export type TypeStatusVacancy = 'Aceito' | 'Pendente' | 'Recusado'
+interface ISituationVacancy {
+  [key: string]: {
+    status?: TypeStatusVacancy
+    invite: string
+    isAvaliable: boolean
+  }
+}
 const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [agreement, setAgreement] = useState<string>('')
   const [office, setOffice] = useState<string>('')
-
+  const situation: ISituationVacancy = {
+    FINALIZADO: {
+      invite: 'Acordo Finalizado',
+      isAvaliable: false,
+    },
+    PENDENTE_IDEALIZADOR: {
+      status: 'Pendente',
+      invite: 'Sem convite',
+      isAvaliable: true,
+    },
+    PENDENTE_COLABORADOR: {
+      status: 'Pendente',
+      invite: 'Convite enviado',
+      isAvaliable: true,
+    },
+    ACEITE_COLABORADOR: {
+      status: 'Aceito',
+      invite: 'Convite enviado',
+      isAvaliable: true,
+    },
+    NEGADO: {
+      status: 'Recusado',
+      invite: 'Convite enviado',
+      isAvaliable: true,
+    },
+  }
   useEffect(() => {
     const res = [
       api
@@ -88,13 +117,8 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
   return (
     <BodyCard
-      isAvailable
-      status={
-        (vacancy.situacao === 'PENDENTE_COLABORADOR' && 'pending') ||
-        (vacancy.situacao === 'ACEITE_COLABORADOR' && 'accepted') ||
-        (vacancy.situacao === 'ACEITE_COLABORADOR' && 'refused') ||
-        undefined
-      }
+      isAvailable={situation[`${vacancy.situacao}`].isAvaliable}
+      status={situation[`${vacancy.situacao}`].status}
       {...rest}
     >
       <label>
@@ -107,7 +131,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
         alt=""
       />
-      <h2>{profile.nome}</h2>
+      <h2>{profile.nome?.split(` `)[0]}</h2>
       <h3>
         {office}
         <br />
@@ -122,19 +146,15 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         <li>Perfis interessados</li>
       </DropdownList>
       <aside>
-        <h4>
-          {!vacancy.situacao
-            ? 'Sem convite'
-            : (vacancy.situacao === 'PENDENTE_COLABORADOR' &&
-                'Convite enviado') ||
-              (vacancy.situacao === 'PENDENTE_IDEALIZADOR' &&
-                'Convite enviado') ||
-              (vacancy.situacao === 'FINALIZADO' && 'Acordo finalizado') ||
-              (vacancy.situacao === 'ACEITE_COLABORADOR' && 'Convite enviado')}
-        </h4>
-        <span>Recusado</span>
+        <h4>{situation[`${vacancy.situacao}`].invite}</h4>
+        <span>{situation[`${vacancy.situacao}`].status}</span>
       </aside>
-      <legend>Vaga disponível</legend>
+      <legend>
+        Vaga{' '}
+        {situation[`${vacancy.situacao}`].isAvaliable
+          ? 'disponível'
+          : 'preenchida'}
+      </legend>
     </BodyCard>
   )
 }

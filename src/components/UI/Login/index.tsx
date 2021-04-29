@@ -53,8 +53,8 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       })
       .then(() => {
         checkProfileType()
-        onSuccessLogin()
         handleLogin(true)
+        onSuccessLogin()
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -105,10 +105,8 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
 
           formRef.current?.setErrors(errors)
           console.log(error)
-
-          return
+        } else if (error.detail) {
         }
-        alert('Login ou senha incorreto')
       }
     },
     [onSuccessLogin],
@@ -122,7 +120,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         type="password"
         label="Senha"
         subLabel="Esqueceu a senha?"
-        pathSubLabel="#"
+        pathSubLabel="/esqueceu-senha"
       />
       <Button type="submit" theme="primary">
         Entrar

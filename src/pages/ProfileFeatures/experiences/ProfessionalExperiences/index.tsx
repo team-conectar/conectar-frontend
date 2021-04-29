@@ -157,9 +157,9 @@ const ProfessionalExperiences: React.FC = () => {
           finalMonth,
         }: ProfessionalDataType = formData
         // setting to null because if there a update an experience with an existing data_fim it will not send
-        let data_fim = null
         const data_inicio = `${initialYear}-${initialMonth}-01`
 
+        let data_fim = null
         if (!currentWorking) {
           data_fim = `${finalYear}-${finalMonth}-01`
         }
@@ -279,7 +279,10 @@ const ProfessionalExperiences: React.FC = () => {
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: ProfessionalType) => (
-            <div key={experience.id} className="experiencia-cadastrada">
+            <div
+              key={experience.id}
+              className="experiencia-cadastrada atuacao-profissional-cadastrada"
+            >
               <section className="icones">
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash

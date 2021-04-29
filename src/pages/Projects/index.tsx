@@ -142,6 +142,17 @@ const Projects: React.FC = () => {
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
+  const handleFindTeam = useCallback(() => {
+    const res = api
+      .get(`/api/v1/pessoa_projeto/similaridade/${projeto_id}`)
+      .finally(() => {
+        history.push(`/projeto-conectado/${projeto_id}`)
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+    console.log(res)
+  }, [history, projeto_id])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -304,10 +315,7 @@ const Projects: React.FC = () => {
 
           <section>
             {isOwner() ? (
-              <Button
-                theme="primary"
-                onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
-              >
+              <Button theme="primary" onClick={handleFindTeam}>
                 Buscar Time
               </Button>
             ) : (

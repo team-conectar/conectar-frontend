@@ -142,7 +142,6 @@ const ProjectExperiences: React.FC = () => {
         })
         // Validation passed
         const {
-          currentProject,
           nome,
           cargo,
           descricao,
@@ -156,7 +155,7 @@ const ProjectExperiences: React.FC = () => {
         let data_fim = null
         const data_inicio = `${initialYear}-${initialMonth}-01`
 
-        if (!currentProject) {
+        if (!currentilyProject) {
           data_fim = `${finalYear}-${finalMonth}-01`
         }
 
@@ -273,7 +272,10 @@ const ProjectExperiences: React.FC = () => {
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: IExperienceProject) => (
-            <div key={experience.id} className="experiencia-cadastrada">
+            <div
+              key={experience.id}
+              className="experiencia-cadastrada projeto-cadastrado"
+            >
               <section className="icones">
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash

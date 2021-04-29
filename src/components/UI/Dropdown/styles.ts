@@ -10,7 +10,8 @@ export const DropdownContent = styled.div`
   position: absolute;
   background-color: var(--backgroundElevation);
   min-width: 10rem;
-  width: fit-content;
+  width: max-content;
+  max-width: 500px;
   min-height: 2rem;
   height: fit-content;
   right: calc(50% - var(--arrowRight) - var(--arrowWidth));

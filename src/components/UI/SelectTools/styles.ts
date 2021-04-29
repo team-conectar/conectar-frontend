@@ -80,6 +80,8 @@ export const BodySelectTool = styled.div`
       }
       .area-insercao {
         border-top: 2px solid var(--borderDivision);
+        
+        
         height: 10%;
         > button {
           background: none;
@@ -91,6 +93,7 @@ export const BodySelectTool = styled.div`
           text-align: center;
         }
         > input {
+          background:transparent;
           width: 90%;
           border: 0;
           margin-left: 0.2rem;
