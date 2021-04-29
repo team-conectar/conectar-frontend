@@ -80,7 +80,7 @@ const Projects: React.FC = () => {
     descricao: false,
     objetivo: false,
     vaga: false,
-    areas: true,
+    areas: false,
     habilidades: false,
   }
   const [modalContent, setModalContent] = useState(initialModalContent)
