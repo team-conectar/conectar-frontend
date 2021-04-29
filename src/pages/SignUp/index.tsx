@@ -76,7 +76,10 @@ const SignUp: React.FC = () => {
           nome: Yup.string()
             .max(80)
             .matches(/(?=.*[ ])/g, 'Informe o nome completo')
-            .matches(/^[A-Za-z ]*$/, 'Informe um nome válido')
+            .matches(
+              /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+              'Informe um nome válido',
+            )
             .required('Usuário é obrigatório'),
         })
 
