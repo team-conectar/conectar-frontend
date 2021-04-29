@@ -12,7 +12,7 @@ import ToggleSwitch from '../UI/ToggleSwitch'
 import Button from '../UI/Button'
 import { BodyVacancy } from './styles'
 import { finalYearOptions, yearOptions } from '../../utils/dates'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
@@ -41,6 +41,10 @@ export interface VacanciesType {
   areas: Array<AreaType>
   id: number
 }
+interface ITipoAcordo {
+  id: number
+  descricao: string
+}
 
 interface IFormData {
   cargo: string
@@ -55,29 +59,45 @@ interface IFormData {
 interface VacancyProps {
   project: ProjectType
 }
-
 const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+  const [optionsAcordo, setOptionsAcordo] = useState<
+    Array<OptionHTMLAttributes<HTMLOptionElement>>
+  >([])
+  const [optionsPeapel, setOptionsPeapel] = useState<
+    Array<OptionHTMLAttributes<HTMLOptionElement>>
+  >([])
   const [editingId, setEditingId] = useState<number>(0)
   const formRef = useRef<FormHandles>(null)
-  const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
-    { value: '1', label: 'Trainee' },
-    { value: '2', label: 'Terceirizado' },
-    { value: '3', label: 'Intermitente' },
-    { value: '4', label: 'Aprendiz' },
-    { value: '5', label: 'Estágio' },
-    { value: '6', label: 'Temporário' },
-    { value: '7', label: 'Freelance' },
-    { value: '8', label: 'Autônomo' },
-    { value: '9', label: 'Meio Período' },
-    { value: '10', label: ' Tempo Integral' },
-  ]
-  const optionsPerfil: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
-    { value: '1', label: 'Aliado' },
-    { value: '2', label: 'Colaborador' },
-    { value: '3', label: 'Idealizador' },
-  ]
+  useEffect(() => {
+    api
+      .get('/api/v1/papel')
+      .then((response: AxiosResponse<ITipoAcordo[]>) => {
+        setOptionsPeapel(
+          response.data.map(item => {
+            return { value: item.id, label: item.descricao }
+          }),
+        )
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail
+      })
+    api
+      .get('/api/v1/tipoAcordo/all')
+      .then((response: AxiosResponse<ITipoAcordo[]>) => {
+        setOptionsAcordo(
+          response.data.map(item => {
+            return { value: item.id, label: item.descricao }
+          }),
+        )
+      })
+      .catch((err: AxiosError) => {
+        // Returns error message from backend
+        return err?.response?.data.detail
+      })
+  }, [])
 
   useEffect(() => {
     api
@@ -193,7 +213,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             name="cargo"
             // defaultValue={academicFormData?.instituicao}
           />
-          <Select label="Perfil" options={optionsPerfil} name="perfil" />
+          <Select label="Perfil" options={optionsPeapel} name="perfil" />
           <Input
             label="Quantidade"
             name="quantidade"
@@ -224,7 +244,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           <section className="bloco-contrato">
             <Select
               label="Tipo de contrato"
-              options={optionsContrato}
+              options={optionsAcordo}
               name="tipoContrato"
             />
             <ToggleSwitch
