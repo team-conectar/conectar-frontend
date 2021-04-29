@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { BodyNavBar, LiNotification } from './styles'
 import logo from '../../../assets/image/logo_fundoClaro.svg'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useHistory, useLocation } from 'react-router-dom'
 import explorar from '../../../assets/icon/explorar.svg'
 import explorar_secondary from '../../../assets/icon/explorer_secondary.svg'
 import userDefault from '../../../assets/icon/user.svg'
@@ -28,6 +28,7 @@ const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const { user } = useContext(Context)
   const location = useLocation()
+  const history = useHistory()
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   useEffect(() => {
     const res = api
@@ -104,7 +105,14 @@ const NavBar: React.FC = () => {
               <Link to={`/perfil/${user.id}`}>Perfil no Conectar</Link>
               <Link to="/explore">Configurações</Link>
               <Link to="/explore">Ajuda</Link>
-              <button onClick={handleLogout}>Sair</button>
+              <button
+                onClick={() => {
+                  handleLogout()
+                  history.push('/')
+                }}
+              >
+                Sair
+              </button>
             </Dropdown>
           </>
         )}
