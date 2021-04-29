@@ -144,35 +144,36 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           situacao: 'CRIADO',
         }
         console.log(data)
-
-        await api
-          .post('/api/v1/pessoa_projeto', data, {
-            withCredentials: true,
-          })
-          .then(async response => {
-            const res = await api
-              .put(
-                `/api/v1/pessoa_projeto/${response.data.id}`,
-                {
-                  areas: formData.areas.map(area => {
-                    return { descricao: area }
-                  }),
-                  habilidades: formData.habilidades.map(habilidade => {
-                    return { nome: habilidade }
-                  }),
-                },
-                {
-                  withCredentials: true,
-                },
-              )
-              .catch((err: AxiosError) => {
-                return err?.response?.data.detail
-              })
-            console.log(res)
-          })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
+        for (let index = 1; index < formData.quantidade; index++) {
+          await api
+            .post('/api/v1/pessoa_projeto', data, {
+              withCredentials: true,
+            })
+            .then(async response => {
+              const res = await api
+                .put(
+                  `/api/v1/pessoa_projeto/${response.data.id}`,
+                  {
+                    areas: formData.areas.map(area => {
+                      return { descricao: area }
+                    }),
+                    habilidades: formData.habilidades.map(habilidade => {
+                      return { nome: habilidade }
+                    }),
+                  },
+                  {
+                    withCredentials: true,
+                  },
+                )
+                .catch((err: AxiosError) => {
+                  return err?.response?.data.detail
+                })
+              console.log(res)
+            })
+            .catch((err: AxiosError) => {
+              return err?.response?.data.detail
+            })
+        }
         setShowRegister(false)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
