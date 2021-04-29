@@ -29,7 +29,7 @@ const ProfileLink: React.FC = () => {
         {user.aliado && <img src={al} alt="Ele é um aliado" />}
         {user.colaborador && <img src={co} alt="Ele é um colaborador" />}
       </aside>
-      <Link to={`perfil/${user.id}`}>Ver Perfil</Link>
+      <Link to={`/perfil/${user.id}`}>Ver Perfil</Link>
     </BodyCard>
   ) : (
     <BodyCard>
