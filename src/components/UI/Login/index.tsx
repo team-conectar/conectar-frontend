@@ -53,8 +53,8 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       })
       .then(() => {
         checkProfileType()
-        onSuccessLogin()
         handleLogin(true)
+        onSuccessLogin()
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend

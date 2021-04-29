@@ -1,5 +1,11 @@
-import React from 'react'
-import { Route, BrowserRouter, useLocation, Switch } from 'react-router-dom'
+import React, { Children, useContext, useState } from 'react'
+import {
+  Route,
+  BrowserRouter,
+  useLocation,
+  Switch,
+  RouteProps,
+} from 'react-router-dom'
 import Home from './pages/Home'
 import SignUp from './pages/SignUp'
 import ProfileFeatures from './pages/ProfileFeatures'
@@ -10,13 +16,35 @@ import ApproveProject from './pages/ApproveProject'
 import Projects from './pages/Projects'
 import Profiles from './pages/Profiles'
 import { GlobalStyle } from './assets/style/global'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider, Context } from './context/AuthContext'
 import Explorer from './pages/Explorer'
 import Search from './pages/Search'
 import NavBar from './components/UI/NavBar'
 import EditProfile from './pages/EditProfile'
 import ForgotPassword from './pages/ForgotPassword'
+import Modal from './components/UI/Modal'
+import Login from './components/UI/Login'
+const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
+  const { isAuthenticated } = useContext(Context)
+  const [modalOpen, setModalOpen] = useState(!isAuthenticated)
+  console.log(isAuthenticated)
 
+  return (
+    <Route
+      {...rest}
+      render={() => (
+        <>
+          {!isAuthenticated && (
+            <Modal open={modalOpen} setOpen={setModalOpen}>
+              <Login onSuccessLogin={() => setModalOpen(false)} />
+            </Modal>
+          )}
+          {children}
+        </>
+      )}
+    />
+  )
+}
 const Routes: React.FC = () => {
   return (
     <AuthProvider>
@@ -28,7 +56,9 @@ const Routes: React.FC = () => {
         <Route path="/areas-de-atuacao" component={ExperienceAreas} />
         <Route path="/habilidades-e-ferramentas" component={MasteryTools} />
         <Route path="/main" component={NavBar} />
-        <Route path="/criar-um-projeto" component={CreateProject} />
+        <PrivateRoute path="/criar-um-projeto">
+          <CreateProject />
+        </PrivateRoute>
         <Route path="/projeto-conectado/:id" component={ApproveProject} />
         <Route path="/projeto/:id" component={Projects} />
         <Route path="/editar-perfil/:id" component={EditProfile} />
