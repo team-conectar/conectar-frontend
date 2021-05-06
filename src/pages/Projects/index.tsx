@@ -9,11 +9,11 @@ import React, {
   useCallback,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { BodyProjects, DivSobre, DivTags, DivVagas } from './styles'
+import { BodyProjects, DivConvite, DivSobre, DivTags, DivVagas } from './styles'
 import edit from '../../assets/icon/editar.svg'
 import TrashIcon from '../../assets/icon/lixeira.svg'
 import { Scrollbars } from 'react-custom-scrollbars'
-
+import urlConvite from '../../assets/image/convite_dias.svg'
 // import clone from '../../assets/icon/clone.svg'
 import config from '../../assets/icon/config.svg'
 import no_couver from '../../assets/image/no_couver.svg'
@@ -100,6 +100,16 @@ const Projects: React.FC = () => {
   const [vacancyDetail, setVacancyDetail] = useState<VacanciesType>(
     vacancies[0],
   )
+  function handleDeclineInvitation(pessoa_projeto_id: number) {
+    api.put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+      situacao: 'RECUSADO_COLABORADOR',
+    })
+  }
+  function handleAcceptInvitation(pessoa_projeto_id: number) {
+    api.put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+      situacao: 'ACEITO_COLABORADOR',
+    })
+  }
   const formRef = useRef<FormHandles>(null)
   useEffect(() => {
     const res = [
@@ -513,6 +523,33 @@ const Projects: React.FC = () => {
           </aside>
         </section>
       </DivVagas>
+      {vacanciesList && vacancyDetail.pessoa_id === user.id && (
+        <DivConvite>
+          <figure>
+            <img
+              src={urlConvite}
+              alt="Mulher apertando a mão de um homem simbolizando um acordo"
+            />
+            <figcaption>
+              Você tem apenas {3} dias para responder este covnite
+            </figcaption>
+          </figure>
+          <aside>
+            <Button
+              theme="secondary"
+              onClick={() => handleDeclineInvitation(vacancyDetail.id)}
+            >
+              Recusar
+            </Button>
+            <Button
+              theme="primary"
+              onClick={() => handleAcceptInvitation(vacancyDetail.id)}
+            >
+              Aceitar
+            </Button>
+          </aside>
+        </DivConvite>
+      )}
     </BodyProjects>
   )
 }

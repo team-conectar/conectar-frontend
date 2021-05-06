@@ -36,6 +36,32 @@ export const DivTags = styled.div`
     }
   }
 `
+
+export const DivConvite = styled.div`
+  background: white;
+  border-radius: 0.6rem;
+  box-shadow: var(--boxShadow);
+  padding: 1rem;
+  figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 20rem;
+    }
+    figcaption {
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+  aside {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-left: 0.4rem;
+  }
+`
 interface IPropsSobre {
   showSobre: boolean
 }
@@ -88,7 +114,7 @@ export const DivSobre = styled.div<IPropsSobre>`
 
   @media (min-width: 1024px) {
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: repeat(3, auto);
+
     column-gap: var(--gap);
     > header {
       border-radius: 0.4rem;
@@ -212,7 +238,7 @@ export const BodyProjects = styled.div`
   align-items: center;
   gap: 2rem;
   padding-bottom: 2rem;
-  ${DivSobre},${DivVagas} {
+  ${DivSobre},${DivVagas},${DivConvite} {
     width: var(--container);
   }
 
