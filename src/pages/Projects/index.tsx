@@ -449,7 +449,7 @@ const Projects: React.FC = () => {
           )}
         </DivTags>
       </DivSobre>
-      {vacanciesList && (
+      {vacanciesList && vacancyDetail.pessoa_id === user.id && (
         <DivConvite>
           <figure>
             <img
