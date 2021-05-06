@@ -229,6 +229,8 @@ const Projects: React.FC = () => {
 
     return defo
   }
+  console.table({ vacancyDetail })
+
   return (
     <BodyProjects>
       <NavBar />

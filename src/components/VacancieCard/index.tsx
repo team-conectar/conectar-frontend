@@ -127,11 +127,13 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           <li>Excluir vaga</li>
         </DropdownList>
       </label>
-      <img
-        src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-        alt=""
-      />
-      <h2>{profile.nome?.split(` `)[0]}</h2>
+      <Link to={`/perfil/${profile.id}`}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          alt=""
+        />
+        <h2>{profile.nome?.split(` `)[0]}</h2>
+      </Link>
       <h3>
         {office}
         <br />
