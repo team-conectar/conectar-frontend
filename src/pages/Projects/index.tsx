@@ -449,7 +449,33 @@ const Projects: React.FC = () => {
           )}
         </DivTags>
       </DivSobre>
-
+      {vacanciesList && (
+        <DivConvite>
+          <figure>
+            <img
+              src={urlConvite}
+              alt="Mulher apertando a mão de um homem simbolizando um acordo"
+            />
+            <figcaption>
+              Você tem apenas {3} dias para responder este covnite
+            </figcaption>
+          </figure>
+          <aside>
+            <Button
+              theme="secondary"
+              onClick={() => handleDeclineInvitation(vacancyDetail.id)}
+            >
+              Recusar
+            </Button>
+            <Button
+              theme="primary"
+              onClick={() => handleAcceptInvitation(vacancyDetail.id)}
+            >
+              Aceitar
+            </Button>
+          </aside>
+        </DivConvite>
+      )}
       <DivVagas showVagas={vacanciesList}>
         <section>
           <legend>
@@ -525,33 +551,6 @@ const Projects: React.FC = () => {
           </aside>
         </section>
       </DivVagas>
-      {vacanciesList && vacancyDetail.pessoa_id === user.id && (
-        <DivConvite>
-          <figure>
-            <img
-              src={urlConvite}
-              alt="Mulher apertando a mão de um homem simbolizando um acordo"
-            />
-            <figcaption>
-              Você tem apenas {3} dias para responder este covnite
-            </figcaption>
-          </figure>
-          <aside>
-            <Button
-              theme="secondary"
-              onClick={() => handleDeclineInvitation(vacancyDetail.id)}
-            >
-              Recusar
-            </Button>
-            <Button
-              theme="primary"
-              onClick={() => handleAcceptInvitation(vacancyDetail.id)}
-            >
-              Aceitar
-            </Button>
-          </aside>
-        </DivConvite>
-      )}
     </BodyProjects>
   )
 }
