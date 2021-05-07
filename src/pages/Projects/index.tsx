@@ -449,7 +449,7 @@ const Projects: React.FC = () => {
           )}
         </DivTags>
       </DivSobre>
-      {vacanciesList && vacancyDetail.pessoa_id === user.id && (
+      {vacanciesList && vacancyDetail?.pessoa_id === user.id && (
         <DivConvite>
           <figure>
             <img
@@ -463,13 +463,13 @@ const Projects: React.FC = () => {
           <aside>
             <Button
               theme="secondary"
-              onClick={() => handleDeclineInvitation(vacancyDetail.id)}
+              onClick={() => handleDeclineInvitation(vacancyDetail?.id)}
             >
               Recusar
             </Button>
             <Button
               theme="primary"
-              onClick={() => handleAcceptInvitation(vacancyDetail.id)}
+              onClick={() => handleAcceptInvitation(vacancyDetail?.id)}
             >
               Aceitar
             </Button>
