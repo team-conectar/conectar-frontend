@@ -60,9 +60,7 @@ const CreateProject: React.FC = () => {
       // Remove all previogeus errors
       formRef.current?.setErrors({})
       const schema = Yup.object().shape({
-        nome: Yup.string()
-          .required('Nome é obrigatório')
-          .matches(/^[A-Za-z ]*$/, 'Insira um nome válido'),
+        nome: Yup.string().required('Nome é obrigatório'),
         areas: Yup.array()
           .min(1, 'Seleciono pelo menos 1 item')
           .max(5, 'Seleciono no máximo 5'),
