@@ -16,9 +16,8 @@ export const LiNotification = styled(Link)`
     object-fit: cover;
     border-radius: 50%;
   }
-  span {
+  > span {
     display: flex;
-    flex-wrap: wrap;
     gap: 0.3rem;
   }
 `
