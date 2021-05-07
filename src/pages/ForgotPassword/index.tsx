@@ -98,7 +98,7 @@ const ForgotPassword: React.FC = () => {
           .matches(/(?=.*[0-9])/g, 'Deve conter caracteres numéricos')
           .matches(/(?=.*[a-z])/g, 'Deve conter caracteres minúsculas')
           .min(8, 'Deve conter no mínimo 8 caracteres')
-          .required('Senha é obritória'),
+          .required('Senha é obrigatória'),
       })
       await schema.validate(formData, {
         abortEarly: false,
