@@ -152,7 +152,7 @@ const Projects: React.FC = () => {
         }),
     ]
     console.log(res)
-  }, [projeto_id])
+  }, [projeto_id, vacancyDetail])
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
