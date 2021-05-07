@@ -85,19 +85,18 @@ const NotificationsButton = () => {
   return (
     <Dropdown IconButton={<IconBell />}>
       <h4>Notificações</h4>
-      {notifications?.map(notification => (
-        <LiNotification
-          key={notification.id}
-          to={notification.link ? notification.link : '#'}
-        >
-          <img src={notification.foto} alt="imagem da notificação" />
-          <span>{ReactHtmlParser(notification.situacao)}</span>
-        </LiNotification>
-      ))}
-      <LiNotification to={'#'}>
-        <img src="" alt="imagem da notificação" />
-        <p>{ReactHtmlParser(text)}</p>
-      </LiNotification>
+      <ul>
+        {notifications?.map(notification => (
+          <LiNotification
+            key={notification.id}
+            to={notification.link ? notification.link : '#'}
+          >
+            <img src={notification.foto} alt="imagem da notificação" />
+            <p>{ReactHtmlParser(notification.situacao)}</p>
+          </LiNotification>
+        ))}
+      </ul>
+
       <aside>
         <strong>Marcar como lida</strong>
         <Button theme="secondary">Ver todas</Button>

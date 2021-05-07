@@ -75,6 +75,10 @@ export const BodyNavBar = styled.nav`
     height: 100%;
     gap: 1.2rem;
     ${DropdownContent} {
+      max-height: 800px;
+      > ul {
+        overflow-y: auto;
+      }
       > h4 {
         padding: 0 1rem;
         align-self: flex-start;
