@@ -66,6 +66,8 @@ const UserButton = () => {
   )
 }
 const NotificationsButton = () => {
+  const text =
+    '<strong>asudhuasduasd</strong> <span>texte asuhd asuida sduihas daouisd asuiod asdiuoa sdoiasbd</span>'
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   const { user } = useContext(Context)
   useEffect(() => {
@@ -92,6 +94,10 @@ const NotificationsButton = () => {
           <span>{ReactHtmlParser(notification.situacao)}</span>
         </LiNotification>
       ))}
+      <LiNotification to={'#'}>
+        <img src="" alt="imagem da notificação" />
+        <p>{ReactHtmlParser(text)}</p>
+      </LiNotification>
       <aside>
         <strong>Marcar como lida</strong>
         <Button theme="secondary">Ver todas</Button>
