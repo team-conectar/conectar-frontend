@@ -22,7 +22,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import { IoMdAlert } from 'react-icons/io'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 
 import { Context } from '../../context/AuthContext'
 import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
@@ -49,6 +49,9 @@ const SignUp: React.FC = () => {
   const { handleLogin } = useContext(Context)
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
+  const [yearInitial, setInitialYear] = useState(2001)
+  const [monthInitial, setInitialMonth] = useState(2)
+  const [dayInitial, setInitialDay] = useState<any>()
   const [showNextStep, setShowNextStep] = useState<boolean>(
     params.parte === '2',
   )
@@ -164,6 +167,24 @@ const SignUp: React.FC = () => {
     },
     [history],
   )
+
+  useEffect(()=>{
+    const finalDay = [31, yearInitial%4 == 0 ? 29: 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+    const days = [
+      {
+        label: '01',
+        value: 1,
+      },
+    ]
+    for (let index = 2; index <= finalDay[monthInitial-1]; index++) {
+      days.push({
+        value: index,
+        label: index < 10 ? `0${index}` : `${index}`,
+      })
+    }
+    setInitialDay(days)
+  }, [yearInitial, monthInitial])
 
   /** This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {
@@ -292,19 +313,25 @@ const SignUp: React.FC = () => {
                 name="year"
                 defaultOption="Ano"
                 options={yearOptions}
+                onChange={(option: any) => {
+                  setInitialYear(Number(option.value))
+                }}
               />
               <Select
                 label="Mês de Nascimento"
                 name="month"
                 defaultOption="Mês"
                 options={monthOptions}
+                onChange={(option: any) => {
+                  setInitialMonth(Number(option.value))
+                }}
               />
 
               <Select
                 label="Dia de Nascimento"
                 name="day"
                 defaultOption="Dia"
-                options={daysOptions(4, 2000)}
+                options={dayInitial}
               />
             </section>
             <ProfileTypeToogleSwitch
