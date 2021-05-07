@@ -25,8 +25,8 @@ import { ProjectType } from '../../pages/CreateProject'
 export type TypeSituationVacancy =
   | 'PENDENTE_IDEALIZADOR'
   | 'PENDENTE_COLABORADOR'
-  | 'ACEITE_COLABORADOR'
-  | 'NEGADO_COLABORADOR'
+  | 'ACEITO'
+  | 'RECUSADO'
   | 'FINALIZADO'
 export interface VacanciesType {
   projeto_id: number

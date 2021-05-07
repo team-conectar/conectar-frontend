@@ -75,7 +75,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       invite: 'Convite enviado',
       isAvaliable: true,
     },
-    ACEITE_COLABORADOR: {
+    ACEITO: {
       status: 'Aceito',
       invite: 'Convite enviado',
       isAvaliable: true,
