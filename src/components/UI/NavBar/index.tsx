@@ -66,8 +66,6 @@ const UserButton = () => {
   )
 }
 const NotificationsButton = () => {
-  const text =
-    '<strong>asudhuasduasd</strong> <span>texte asuhd asuida sduihas daouisd asuiod asdiuoa sdoiasbd</span>'
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   const { user } = useContext(Context)
   useEffect(() => {
