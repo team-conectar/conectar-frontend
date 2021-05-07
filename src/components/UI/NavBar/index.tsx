@@ -9,10 +9,11 @@ import { Context } from '../../../context/AuthContext'
 import { IconBell, IconUser } from '../../../assets/icon'
 import Dropdown from '../Dropdown'
 import SearchInput from '../SearchInput'
-import useAuth from '../../../context/hooks/useAuth'
 import api from '../../../services/api'
 import { AxiosError } from 'axios'
 import Button from '../Button'
+import ReactHtmlParser from 'react-html-parser'
+
 interface INotification {
   remetente_id: number
   destinatario_id: number
@@ -20,16 +21,55 @@ interface INotification {
   pessoa_projeto_id: number
   situacao: string
   lido: boolean
+  foto: string
+  link?: string
   id: number
   data_criacao: string
   data_atualizacao: string
 }
-const NavBar: React.FC = () => {
-  const { loading, isAuthenticated, handleLogout } = useContext(Context)
-  const { user } = useContext(Context)
-  const location = useLocation()
+const UserButton = () => {
+  const { user, handleLogout } = useContext(Context)
   const history = useHistory()
+  return (
+    <Dropdown
+      IconButton={
+        <figure>
+          {user.foto_perfil ? (
+            <img src={user.foto_perfil} alt="sua conta" />
+          ) : (
+            <IconUser id="user" />
+          )}
+        </figure>
+      }
+    >
+      <section>
+        <img
+          src={user.foto_perfil ? user.foto_perfil : userDefault}
+          alt={user.nome}
+        />
+        <legend>{user.nome?.split(' ')[0]}</legend>
+        <p>{user.usuario}</p>
+        <p>{user.email}</p>
+      </section>
+      <Link to={`/perfil/${user.id}`}>Perfil no Conectar</Link>
+      <Link to="/explore">Configurações</Link>
+      <Link to="/explore">Ajuda</Link>
+      <button
+        onClick={() => {
+          handleLogout()
+          history.push('/')
+        }}
+      >
+        Sair
+      </button>
+    </Dropdown>
+  )
+}
+const NotificationsButton = () => {
+  const text =
+    '<strong>asudhuasduasd</strong> <span>texte asuhd asuida sduihas daouisd asuiod asdiuoa sdoiasbd</span>'
   const [notifications, setNotifications] = useState<Array<INotification>>([])
+  const { user } = useContext(Context)
   useEffect(() => {
     const res = api
       .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
@@ -41,7 +81,33 @@ const NavBar: React.FC = () => {
       })
 
     console.log(res)
-  }, [])
+  }, [user.id])
+  return (
+    <Dropdown IconButton={<IconBell />}>
+      <h4>Notificações</h4>
+      {notifications?.map(notification => (
+        <LiNotification
+          key={notification.id}
+          to={notification.link ? notification.link : '#'}
+        >
+          <img src={notification.foto} alt="imagem da notificação" />
+          <span>{ReactHtmlParser(notification.situacao)}</span>
+        </LiNotification>
+      ))}
+      <LiNotification to={'#'}>
+        <img src="" alt="imagem da notificação" />
+        <p>{ReactHtmlParser(text)}</p>
+      </LiNotification>
+      <aside>
+        <strong>Marcar como lida</strong>
+        <Button theme="secondary">Ver todas</Button>
+      </aside>
+    </Dropdown>
+  )
+}
+const NavBar: React.FC = () => {
+  const { loading, isAuthenticated, handleLogout } = useContext(Context)
+  const location = useLocation()
 
   return (
     <BodyNavBar>
@@ -65,55 +131,8 @@ const NavBar: React.FC = () => {
         </NavLink>
         {!loading && isAuthenticated && (
           <>
-            <Dropdown IconButton={<IconBell />}>
-              <h4>Notificações</h4>
-              {notifications?.map(notification => (
-                <LiNotification key={notification.id}>
-                  <img src={``} alt={``} />
-                  <p>{notification.situacao}</p>
-                </LiNotification>
-              ))}
-              <LiNotification>
-                JEFERSON ROSA DE SOUZAasdasdasdasd te fez um convite para o
-                projeto asdasdasd. Confira!
-              </LiNotification>
-              <aside>
-                <strong>Marcar como lida</strong>
-                <Button theme="secondary">Ver todas</Button>
-              </aside>
-            </Dropdown>
-            <Dropdown
-              IconButton={
-                <figure>
-                  {user.foto_perfil ? (
-                    <img src={user.foto_perfil} alt="sua conta" />
-                  ) : (
-                    <IconUser id="user" />
-                  )}
-                </figure>
-              }
-            >
-              <section>
-                <img
-                  src={user.foto_perfil ? user.foto_perfil : userDefault}
-                  alt={user.nome}
-                />
-                <legend>{user.nome?.split(' ')[0]}</legend>
-                <p>{user.usuario}</p>
-                <p>{user.email}</p>
-              </section>
-              <Link to={`/perfil/${user.id}`}>Perfil no Conectar</Link>
-              <Link to="/explore">Configurações</Link>
-              <Link to="/explore">Ajuda</Link>
-              <button
-                onClick={() => {
-                  handleLogout()
-                  history.push('/')
-                }}
-              >
-                Sair
-              </button>
-            </Dropdown>
+            <NotificationsButton />
+            <UserButton />
           </>
         )}
       </aside>

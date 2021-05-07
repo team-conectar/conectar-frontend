@@ -40,8 +40,8 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
       <img
         src={
           (profile?.toLowerCase() === 'colaborador' && co) ||
-          (profile?.toLowerCase() === 'idealizador' && al) ||
-          (profile?.toLowerCase() === 'aliado' && id) ||
+          (profile?.toLowerCase() === 'idealizador' && id) ||
+          (profile?.toLowerCase() === 'aliado' && al) ||
           ''
         }
         alt={profile}

@@ -1,11 +1,26 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
-export const LiNotification = styled.li`
+export const LiNotification = styled(Link)`
   list-style: none;
-  padding: 0.4rem 1rem;
+  padding: 0.8rem 1rem;
   border-bottom: solid 1px var(--borderDivision);
   border-top: solid 1px var(--borderDivision);
+  gap: 0.6rem;
+  align-items: center;
+  img {
+    display: initial;
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  > p {
+    text-align: start;
+    word-break: break-all;
+    gap: 0.3rem;
+  }
 `
 
 export const BodyNavBar = styled.nav`
@@ -20,9 +35,6 @@ export const BodyNavBar = styled.nav`
   position: sticky;
   top: 0;
   z-index: 2;
-  img {
-    width: 12rem;
-  }
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
   .searchBlock {
     background: white;
@@ -55,6 +67,9 @@ export const BodyNavBar = styled.nav`
     }
   }
   aside {
+    > a img {
+      width: 12rem;
+    }
     display: flex;
     align-items: center;
     height: 100%;
@@ -87,7 +102,7 @@ export const BodyNavBar = styled.nav`
         grid-template-rows: repeat(3, 1rem);
         gap: 0.5rem;
         border-bottom: solid 1px var(--borderDivision);
-        img {
+        > img {
           grid-column: 1;
           grid-row: 1 / 3;
           border-radius: 50%;
@@ -111,7 +126,7 @@ export const BodyNavBar = styled.nav`
           grid-row: 3;
         }
       }
-      a {
+      > a {
         text-decoration: none;
         display: flex;
         padding: 0.6rem 1.2rem;
@@ -129,7 +144,7 @@ export const BodyNavBar = styled.nav`
       }
     }
 
-    a {
+    > a {
       text-decoration: none;
       font: 500 0.9rem Raleway;
 

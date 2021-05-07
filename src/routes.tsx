@@ -35,7 +35,11 @@ const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
       render={() => (
         <>
           {!isAuthenticated && (
-            <Modal open={modalOpen} setOpen={setModalOpen}>
+            <Modal
+              open={modalOpen}
+              setOpen={setModalOpen}
+              onAfterClose={() => setModalOpen(!isAuthenticated)}
+            >
               <Login onSuccessLogin={() => setModalOpen(false)} />
             </Modal>
           )}
