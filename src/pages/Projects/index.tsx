@@ -101,15 +101,28 @@ const Projects: React.FC = () => {
     vacancies[0],
   )
   function handleDeclineInvitation(pessoa_projeto_id: number) {
-    api.put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-      situacao: 'RECUSADO',
-    })
+    api
+      .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+        situacao: 'RECUSADO',
+      })
+      .then(() => {
+        vacancyDetail &&
+          setVacancyDetail({ ...vacancyDetail, situacao: 'RECUSADO' })
+      })
   }
-  function handleAcceptInvitation(pessoa_projeto_id: number) {
-    api.put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-      situacao: 'ACEITO',
-    })
-  }
+  const handleAcceptInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'ACEITO',
+        })
+        .then(() => {
+          vacancyDetail &&
+            setVacancyDetail({ ...vacancyDetail, situacao: 'ACEITO' })
+        })
+    },
+    [vacancyDetail],
+  )
   const formRef = useRef<FormHandles>(null)
   useEffect(() => {
     const res = [
@@ -449,33 +462,35 @@ const Projects: React.FC = () => {
           )}
         </DivTags>
       </DivSobre>
-      {vacanciesList && vacancyDetail?.pessoa_id === user.id && (
-        <DivConvite>
-          <figure>
-            <img
-              src={urlConvite}
-              alt="Mulher apertando a mão de um homem simbolizando um acordo"
-            />
-            <figcaption>
-              Você tem apenas {3} dias para responder este covnite
-            </figcaption>
-          </figure>
-          <aside>
-            <Button
-              theme="secondary"
-              onClick={() => handleDeclineInvitation(vacancyDetail?.id)}
-            >
-              Recusar
-            </Button>
-            <Button
-              theme="primary"
-              onClick={() => handleAcceptInvitation(vacancyDetail?.id)}
-            >
-              Aceitar
-            </Button>
-          </aside>
-        </DivConvite>
-      )}
+      {vacanciesList &&
+        vacancyDetail?.situacao === 'PENDENTE_COLABORADOR' &&
+        vacancyDetail?.pessoa_id === user.id && (
+          <DivConvite>
+            <figure>
+              <img
+                src={urlConvite}
+                alt="Mulher apertando a mão de um homem simbolizando um acordo"
+              />
+              <figcaption>
+                Você tem apenas {3} dias para responder este covnite
+              </figcaption>
+            </figure>
+            <aside>
+              <Button
+                theme="secondary"
+                onClick={() => handleDeclineInvitation(vacancyDetail?.id)}
+              >
+                Recusar
+              </Button>
+              <Button
+                theme="primary"
+                onClick={() => handleAcceptInvitation(vacancyDetail?.id)}
+              >
+                Aceitar
+              </Button>
+            </aside>
+          </DivConvite>
+        )}
       <DivVagas showVagas={vacanciesList}>
         <section>
           <legend>
