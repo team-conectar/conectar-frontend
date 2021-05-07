@@ -80,7 +80,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       invite: 'Convite enviado',
       isAvaliable: true,
     },
-    NEGADO: {
+    RECUSADO: {
       status: 'Recusado',
       invite: 'Convite enviado',
       isAvaliable: true,

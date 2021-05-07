@@ -20,7 +20,7 @@ export const LiNotification = styled(Link)`
   }
   p {
     text-align: start;
-    word-break: break-all;
+    word-break: normal;
     gap: 0.3rem;
     width: calc(100%-4rem);
   }

@@ -102,7 +102,7 @@ const Projects: React.FC = () => {
   )
   function handleDeclineInvitation(pessoa_projeto_id: number) {
     api.put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-      situacao: 'NEGADO',
+      situacao: 'RECUSADO',
     })
   }
   function handleAcceptInvitation(pessoa_projeto_id: number) {
