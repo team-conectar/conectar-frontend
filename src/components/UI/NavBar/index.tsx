@@ -73,7 +73,6 @@ const NotificationsButton = () => {
       .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
       .then((response: AxiosResponse<INotification[]>) => {
         const res = response.data
-        res.reverse()
         setNotifications(res)
       })
       .catch((err: AxiosError) => {
@@ -86,11 +85,8 @@ const NotificationsButton = () => {
     <Dropdown IconButton={<IconBell />}>
       <h4>Notificações</h4>
       <ul>
-        {notifications?.map(notification => (
-          <LiNotification
-            key={notification.id}
-            to={notification.link ? notification.link : ''}
-          >
+        {notifications?.reverse()?.map(notification => (
+          <LiNotification key={notification.id}>
             <img src={notification.foto} alt="imagem da notificação" />
             <p>{ReactHtmlParser(notification.situacao)}</p>
           </LiNotification>
