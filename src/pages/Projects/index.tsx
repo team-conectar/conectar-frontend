@@ -117,7 +117,10 @@ const Projects: React.FC = () => {
         })
         .then(() => {
           vacancyDetail &&
-            setVacancyDetail({ ...vacancyDetail, situacao: 'RECUSADO' })
+            setVacancyDetail({
+              ...vacancyDetail,
+              situacao: 'RECUSADO',
+            })
         })
     },
     [vacancyDetail],
