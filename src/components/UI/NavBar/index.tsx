@@ -10,7 +10,7 @@ import { IconBell, IconUser } from '../../../assets/icon'
 import Dropdown from '../Dropdown'
 import SearchInput from '../SearchInput'
 import api from '../../../services/api'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import Button from '../Button'
 import ReactHtmlParser from 'react-html-parser'
 
@@ -71,8 +71,9 @@ const NotificationsButton = () => {
   useEffect(() => {
     const res = api
       .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
-      .then(response => {
-        setNotifications(response.data)
+      .then((response: AxiosResponse<INotification[]>) => {
+        const res = response.data
+        setNotifications(res.reverse())
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail
@@ -84,6 +85,8 @@ const NotificationsButton = () => {
     <Dropdown IconButton={<IconBell />}>
       <h4>Notificações</h4>
       <ul>
+        {console.log(notifications.reverse())}
+
         {notifications?.map(notification => (
           <LiNotification
             key={notification.id}
