@@ -40,6 +40,7 @@ export interface VacanciesType {
   habilidades: Array<ToolType>
   areas: Array<AreaType>
   id: number
+  quantidade?: number
 }
 interface ITipoAcordo {
   id: number
@@ -62,6 +63,9 @@ interface VacancyProps {
 const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+  const [groupedVacancies, setGroupedVacancies] = useState<
+    Array<VacanciesType[]>
+  >([])
   const [optionsAcordo, setOptionsAcordo] = useState<
     Array<OptionHTMLAttributes<HTMLOptionElement>>
   >([])
@@ -186,9 +190,32 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
     [project.id],
   )
   useEffect(() => {
-    api.get(`/api/v1/pessoa_projeto/projeto/${project.id}`).then(response => {
-      setVacancies(response.data)
-    })
+    api
+      .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
+      .then((response: AxiosResponse<VacanciesType[]>) => {
+        const GroupResponse = response.data.map(vacancy => {
+          return response.data.filter(data => {
+            return (
+              JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
+              JSON.stringify(data.habilidades) ===
+                JSON.stringify(vacancy.habilidades) &&
+              data.remunerado === vacancy.remunerado &&
+              data.tipo_acordo_id === vacancy.tipo_acordo_id &&
+              data.papel_id === vacancy.papel_id &&
+              data.titulo === vacancy.titulo
+            )
+          })
+        })
+        setGroupedVacancies(
+          GroupResponse.filter((vacancies, index) => {
+            return (
+              JSON.stringify(vacancies) !==
+              JSON.stringify(GroupResponse[index + 1])
+            )
+          }),
+        )
+        setVacancies(response.data)
+      })
   }, [project.id, showRegister])
   return (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
@@ -203,8 +230,11 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
       </h1>
       {!showRegister ? (
         <ul>
-          {vacancies.map(vacancy => (
-            <VacancieListItem key={vacancy.id} vacancy={vacancy} />
+          {groupedVacancies.map(vacancies => (
+            <VacancieListItem
+              key={vacancies[0].id}
+              vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
+            />
           ))}
         </ul>
       ) : (

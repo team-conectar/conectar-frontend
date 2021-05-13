@@ -26,7 +26,7 @@ import like from '../../assets/icon/like.svg'
 import { useHistory, useParams } from 'react-router'
 import Button from '../../components/UI/Button'
 import api from '../../services/api'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import SelectArea, { AreaType } from '../../components/UI/SelectArea'
 import SelectTool, { ToolType } from '../../components/UI/SelectTools'
 import Modal from '../../components/UI/Modal'
@@ -66,11 +66,16 @@ interface IProjectOwner {
   foto_perfil: string
   nome: string
 }
+interface IGroupedVacancy {
+  [index: number]: VacanciesType[][]
+}
 /**
  * @constructor
  * @content is the iten of the modal
  */
-
+interface IVacancyDetail extends VacanciesType {
+  pessoa_projeto_ids: number[]
+}
 const Projects: React.FC = () => {
   const { loading, isAuthenticated, user } = useContext(Context)
 
@@ -97,19 +102,26 @@ const Projects: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
-  const [vacancyDetail, setVacancyDetail] = useState<VacanciesType>(
-    vacancies[0],
+  const [groupedVacancies, setGroupedVacancies] = useState<
+    Array<VacanciesType[]>
+  >([])
+  const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>({
+    ...vacancies[0],
+    pessoa_projeto_ids: [],
+  })
+  const handleDeclineInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'RECUSADO',
+        })
+        .then(() => {
+          vacancyDetail &&
+            setVacancyDetail({ ...vacancyDetail, situacao: 'RECUSADO' })
+        })
+    },
+    [vacancyDetail],
   )
-  function handleDeclineInvitation(pessoa_projeto_id: number) {
-    api
-      .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-        situacao: 'RECUSADO',
-      })
-      .then(() => {
-        vacancyDetail &&
-          setVacancyDetail({ ...vacancyDetail, situacao: 'RECUSADO' })
-      })
-  }
   const handleAcceptInvitation = useCallback(
     (pessoa_projeto_id: number) => {
       api
@@ -124,6 +136,12 @@ const Projects: React.FC = () => {
     [vacancyDetail],
   )
   const formRef = useRef<FormHandles>(null)
+  function indeOfTitleEquals(array: VacanciesType[], vacancy: VacanciesType) {
+    array.forEach((item, index) => {
+      if (item.titulo === vacancy.titulo) return index
+    })
+    return -1
+  }
   useEffect(() => {
     const res = [
       api
@@ -143,28 +161,57 @@ const Projects: React.FC = () => {
         }),
       api
         .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
-        .then(response => {
+        .then((response: AxiosResponse<VacanciesType[]>) => {
           setVacancies(response.data)
-          setVacancyDetail(response.data[0])
+
+          const GroupResponse = response.data.map(vacancy => {
+            return response.data.filter(data => {
+              return (
+                JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
+                JSON.stringify(data.habilidades) ===
+                  JSON.stringify(vacancy.habilidades) &&
+                data.remunerado === vacancy.remunerado &&
+                data.tipo_acordo_id === vacancy.tipo_acordo_id &&
+                data.papel_id === vacancy.papel_id &&
+                data.titulo === vacancy.titulo
+              )
+            })
+          })
+
+          setGroupedVacancies(
+            GroupResponse.filter((vacancies, index) => {
+              return (
+                JSON.stringify(vacancies) !==
+                JSON.stringify(GroupResponse[index + 1])
+              )
+            }),
+          )
+          setVacancyDetail({
+            ...GroupResponse[0][0],
+            pessoa_projeto_ids: GroupResponse[0].map(vacancy => {
+              return vacancy.pessoa_id
+            }),
+          })
         })
         .catch((error: AxiosError) => {
           return error?.response?.data.detail
         }),
     ]
     console.log(res)
-  }, [projeto_id, vacancyDetail])
+  }, [projeto_id])
+  console.log(groupedVacancies)
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
       .then(response => {
         setProjectOwner(response.data)
-        console.log(response.data)
       })
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
+
   const handleFindTeam = useCallback(() => {
     const res = api
       .get(`/api/v1/pessoa_projeto/similaridade/${projeto_id}`)
@@ -242,7 +289,6 @@ const Projects: React.FC = () => {
 
     return defo
   }
-  console.table({ vacancyDetail })
 
   return (
     <BodyProjects>
@@ -507,14 +553,23 @@ const Projects: React.FC = () => {
           </legend>
 
           <ContainerScroll>
-            {console.log(vacancies)}
-            {vacancies.map(vacancy => (
+            {groupedVacancies.map(vacancies => (
               <VacancieListItem
-                key={vacancy.id}
-                vacancy={vacancy}
-                onClick={() => setVacancyDetail(vacancy)}
+                key={vacancies[0].id}
+                vacancy={{
+                  ...vacancies[0],
+                  quantidade: vacancies.length,
+                }}
+                onClick={() =>
+                  setVacancyDetail({
+                    ...vacancies[0],
+                    pessoa_projeto_ids: groupedVacancies[0].map(vacancy => {
+                      return vacancy.pessoa_id
+                    }),
+                  })
+                }
                 style={
-                  vacancyDetail === vacancy
+                  vacancyDetail === vacancies[0]
                     ? { background: 'var(--backgroundElevation)' }
                     : { background: 'transparent' }
                 }
