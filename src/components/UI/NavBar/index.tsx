@@ -86,12 +86,10 @@ const NotificationsButton = () => {
     <Dropdown IconButton={<IconBell />}>
       <h4>Notificações</h4>
       <ul>
-        {console.log(notifications.reverse())}
-
         {notifications?.map(notification => (
           <LiNotification
             key={notification.id}
-            to={notification.link ? notification.link : '#'}
+            to={notification.link ? notification.link : ''}
           >
             <img src={notification.foto} alt="imagem da notificação" />
             <p>{ReactHtmlParser(notification.situacao)}</p>
