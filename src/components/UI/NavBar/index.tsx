@@ -72,7 +72,8 @@ const NotificationsButton = () => {
     const res = api
       .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
       .then((response: AxiosResponse<INotification[]>) => {
-        const res = response.data.reverse()
+        const res = response.data
+        res.reverse()
         setNotifications(res)
       })
       .catch((err: AxiosError) => {
