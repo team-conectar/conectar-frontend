@@ -200,6 +200,13 @@ const Projects: React.FC = () => {
     console.log(res)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projeto_id])
+  console.log(
+    ` aqui ta o id: ${
+      vacancyDetail?.pessoas_projeto_ids[
+        vacancyDetail.pessoas_ids.indexOf(user.id)
+      ]
+    }`,
+  )
   console.log(groupedVacancies)
   useEffect(() => {
     const res = api
@@ -226,7 +233,6 @@ const Projects: React.FC = () => {
   }, [history, projeto_id])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
-      console.log(formData)
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
