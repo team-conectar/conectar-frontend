@@ -513,7 +513,7 @@ const Projects: React.FC = () => {
       </DivSobre>
       {vacanciesList &&
         vacancyDetail?.situacao === 'PENDENTE_COLABORADOR' &&
-        vacancyDetail?.pessoa_id === user.id && (
+        vacancyDetail?.pessoa_projeto_ids?.includes(user.id) && (
           <DivConvite>
             <figure>
               <img
@@ -566,13 +566,13 @@ const Projects: React.FC = () => {
                 onClick={() =>
                   setVacancyDetail({
                     ...vacancies[0],
-                    pessoa_projeto_ids: groupedVacancies[0].map(vacancy => {
+                    pessoa_projeto_ids: vacancies.map(vacancy => {
                       return vacancy.pessoa_id
                     }),
                   })
                 }
                 style={
-                  vacancyDetail === vacancies[0]
+                  vacancyDetail.titulo === vacancies[0].titulo
                     ? { background: 'var(--backgroundElevation)' }
                     : { background: 'transparent' }
                 }
