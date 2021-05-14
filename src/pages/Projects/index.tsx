@@ -109,35 +109,59 @@ const Projects: React.FC = () => {
     ...vacancies[0],
     pessoa_projeto_ids: [],
   })
-  const handleDeclineInvitation = useCallback(
-    (pessoa_projeto_id: number) => {
-      api
-        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-          situacao: 'RECUSADO',
+  function getset_pessoa_projeto() {
+    api
+      .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
+      .then((response: AxiosResponse<VacanciesType[]>) => {
+        setVacancies(response.data)
+
+        const GroupResponse = response.data.map(vacancy => {
+          return response.data.filter(data => {
+            return (
+              JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
+              JSON.stringify(data.habilidades) ===
+                JSON.stringify(vacancy.habilidades) &&
+              data.remunerado === vacancy.remunerado &&
+              data.tipo_acordo_id === vacancy.tipo_acordo_id &&
+              data.papel_id === vacancy.papel_id &&
+              data.titulo === vacancy.titulo
+            )
+          })
         })
-        .then(() => {
-          vacancyDetail &&
-            setVacancyDetail({
-              ...vacancyDetail,
-              situacao: 'RECUSADO',
-            })
+
+        setGroupedVacancies(
+          GroupResponse.filter((vacancies, index) => {
+            return (
+              JSON.stringify(vacancies) !==
+              JSON.stringify(GroupResponse[index + 1])
+            )
+          }),
+        )
+        setVacancyDetail({
+          ...GroupResponse[0][0],
+          pessoa_projeto_ids: GroupResponse[0].map(vacancy => {
+            return vacancy.pessoa_id
+          }),
         })
-    },
-    [vacancyDetail],
-  )
-  const handleAcceptInvitation = useCallback(
-    (pessoa_projeto_id: number) => {
-      api
-        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-          situacao: 'ACEITO',
-        })
-        .then(() => {
-          vacancyDetail &&
-            setVacancyDetail({ ...vacancyDetail, situacao: 'ACEITO' })
-        })
-    },
-    [vacancyDetail],
-  )
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+  }
+  const handleDeclineInvitation = useCallback((pessoa_projeto_id: number) => {
+    api
+      .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+        situacao: 'RECUSADO',
+      })
+      .then(() => () => getset_pessoa_projeto())
+  }, [])
+  const handleAcceptInvitation = useCallback((pessoa_projeto_id: number) => {
+    api
+      .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+        situacao: 'ACEITO',
+      })
+      .then(() => getset_pessoa_projeto())
+  }, [])
   const formRef = useRef<FormHandles>(null)
   function indeOfTitleEquals(array: VacanciesType[], vacancy: VacanciesType) {
     array.forEach((item, index) => {
@@ -162,43 +186,7 @@ const Projects: React.FC = () => {
         .catch((error: AxiosError) => {
           return error?.response?.data.detail
         }),
-      api
-        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
-        .then((response: AxiosResponse<VacanciesType[]>) => {
-          setVacancies(response.data)
-
-          const GroupResponse = response.data.map(vacancy => {
-            return response.data.filter(data => {
-              return (
-                JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
-                JSON.stringify(data.habilidades) ===
-                  JSON.stringify(vacancy.habilidades) &&
-                data.remunerado === vacancy.remunerado &&
-                data.tipo_acordo_id === vacancy.tipo_acordo_id &&
-                data.papel_id === vacancy.papel_id &&
-                data.titulo === vacancy.titulo
-              )
-            })
-          })
-
-          setGroupedVacancies(
-            GroupResponse.filter((vacancies, index) => {
-              return (
-                JSON.stringify(vacancies) !==
-                JSON.stringify(GroupResponse[index + 1])
-              )
-            }),
-          )
-          setVacancyDetail({
-            ...GroupResponse[0][0],
-            pessoa_projeto_ids: GroupResponse[0].map(vacancy => {
-              return vacancy.pessoa_id
-            }),
-          })
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        }),
+      getset_pessoa_projeto(),
     ]
     console.log(res)
   }, [projeto_id])
