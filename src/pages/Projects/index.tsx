@@ -155,7 +155,7 @@ const Projects: React.FC = () => {
         .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
           situacao: 'RECUSADO',
         })
-        .then(() => () => getset_pessoa_projeto())
+        .then(() => getset_pessoa_projeto())
     },
     [getset_pessoa_projeto],
   )
@@ -517,13 +517,13 @@ const Projects: React.FC = () => {
             <aside>
               <Button
                 theme="secondary"
-                onClick={() => handleDeclineInvitation(vacancyDetail?.id)}
+                onClick={() => handleDeclineInvitation(user.id)}
               >
                 Recusar
               </Button>
               <Button
                 theme="primary"
-                onClick={() => handleAcceptInvitation(vacancyDetail?.id)}
+                onClick={() => handleAcceptInvitation(user.id)}
               >
                 Aceitar
               </Button>
