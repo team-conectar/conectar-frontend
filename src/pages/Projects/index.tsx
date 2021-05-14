@@ -75,7 +75,8 @@ interface IGroupedVacancy {
  * @content is the iten of the modal
  */
 interface IVacancyDetail extends VacanciesType {
-  pessoa_projeto_ids: number[]
+  pessoas_ids: number[]
+  pessoas_projeto_ids: number[]
 }
 const Projects: React.FC = () => {
   const { loading, isAuthenticated, user } = useContext(Context)
@@ -108,7 +109,8 @@ const Projects: React.FC = () => {
   >([])
   const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>({
     ...vacancies[0],
-    pessoa_projeto_ids: [],
+    pessoas_ids: [],
+    pessoas_projeto_ids: [],
   })
   const getset_pessoa_projeto = useCallback(() => {
     api
@@ -140,8 +142,11 @@ const Projects: React.FC = () => {
         )
         setVacancyDetail({
           ...GroupResponse[0][0],
-          pessoa_projeto_ids: GroupResponse[0].map(vacancy => {
+          pessoas_ids: GroupResponse[0].map(vacancy => {
             return vacancy.pessoa_id
+          }),
+          pessoas_projeto_ids: GroupResponse[0].map(vacancy => {
+            return vacancy.id
           }),
         })
       })
@@ -503,7 +508,7 @@ const Projects: React.FC = () => {
       </DivSobre>
       {vacanciesList &&
         vacancyDetail?.situacao === 'PENDENTE_COLABORADOR' &&
-        vacancyDetail?.pessoa_projeto_ids?.includes(user.id) && (
+        vacancyDetail?.pessoas_ids?.includes(user.id) && (
           <DivConvite>
             <figure>
               <img
@@ -517,13 +522,25 @@ const Projects: React.FC = () => {
             <aside>
               <Button
                 theme="secondary"
-                onClick={() => handleDeclineInvitation(user.id)}
+                onClick={() =>
+                  handleDeclineInvitation(
+                    vacancyDetail?.pessoas_projeto_ids[
+                      vacancyDetail.pessoas_ids.indexOf(user.id)
+                    ],
+                  )
+                }
               >
                 Recusar
               </Button>
               <Button
                 theme="primary"
-                onClick={() => handleAcceptInvitation(user.id)}
+                onClick={() =>
+                  handleAcceptInvitation(
+                    vacancyDetail?.pessoas_projeto_ids[
+                      vacancyDetail.pessoas_ids.indexOf(user.id)
+                    ],
+                  )
+                }
               >
                 Aceitar
               </Button>
@@ -556,8 +573,11 @@ const Projects: React.FC = () => {
                 onClick={() =>
                   setVacancyDetail({
                     ...vacancies[0],
-                    pessoa_projeto_ids: vacancies.map(vacancy => {
+                    pessoas_ids: vacancies.map(vacancy => {
                       return vacancy.pessoa_id
+                    }),
+                    pessoas_projeto_ids: vacancies.map(vacancy => {
+                      return vacancy.id
                     }),
                   })
                 }
