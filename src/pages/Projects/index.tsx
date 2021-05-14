@@ -140,15 +140,6 @@ const Projects: React.FC = () => {
             )
           }),
         )
-        setVacancyDetail({
-          ...GroupResponse[0][0],
-          pessoas_ids: GroupResponse[0].map(vacancy => {
-            return vacancy.pessoa_id
-          }),
-          pessoas_projeto_ids: GroupResponse[0].map(vacancy => {
-            return vacancy.id
-          }),
-        })
       })
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
@@ -195,7 +186,19 @@ const Projects: React.FC = () => {
         }),
       getset_pessoa_projeto(),
     ]
+    if (groupedVacancies.length > 0) {
+      setVacancyDetail({
+        ...groupedVacancies[0][0],
+        pessoas_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.pessoa_id
+        }),
+        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.id
+        }),
+      })
+    }
     console.log(res)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projeto_id])
   console.log(groupedVacancies)
   useEffect(() => {
