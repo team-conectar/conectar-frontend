@@ -42,8 +42,8 @@ const ApproveProject: React.FC = () => {
     console.log(res)
   }, [project_id])
   const handleInvite = useCallback(() => {
-    setVacancies(
-      vacancies.map(vacancy => {
+    setVacancies(currentVacancy =>
+      vacancies.map((vacancy, index) => {
         vacancy.situacao === 'PENDENTE_IDEALIZADOR' &&
           api
             .put(`/api/v1/pessoa_projeto/${vacancy.id}`, {
@@ -52,7 +52,13 @@ const ApproveProject: React.FC = () => {
             .catch((err: AxiosError) => {
               console.log(err?.response?.data.detail)
             })
-        return { ...vacancy, situacao: 'PENDENTE_COLABORADOR' }
+        return {
+          ...vacancy,
+          situacao:
+            vacancy.situacao === 'PENDENTE_IDEALIZADOR'
+              ? 'PENDENTE_COLABORADOR'
+              : currentVacancy[index].situacao,
+        }
       }),
     )
   }, [vacancies])

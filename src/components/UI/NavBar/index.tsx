@@ -10,7 +10,7 @@ import { IconBell, IconUser } from '../../../assets/icon'
 import Dropdown from '../Dropdown'
 import SearchInput from '../SearchInput'
 import api from '../../../services/api'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import Button from '../Button'
 import ReactHtmlParser from 'react-html-parser'
 
@@ -66,15 +66,17 @@ const UserButton = () => {
   )
 }
 const NotificationsButton = () => {
-  const text =
-    '<strong>asudhuasduasd</strong> <span>texte asuhd asuida sduihas daouisd asuiod asdiuoa sdoiasbd</span>'
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   const { user } = useContext(Context)
   useEffect(() => {
     const res = api
       .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
-      .then(response => {
-        setNotifications(response.data)
+      .then((response: AxiosResponse<INotification[]>) => {
+        setNotifications(
+          response.data.filter(notification => {
+            return !notification.lido
+          }),
+        )
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail
@@ -85,19 +87,15 @@ const NotificationsButton = () => {
   return (
     <Dropdown IconButton={<IconBell />}>
       <h4>Notificações</h4>
-      {notifications?.map(notification => (
-        <LiNotification
-          key={notification.id}
-          to={notification.link ? notification.link : '#'}
-        >
-          <img src={notification.foto} alt="imagem da notificação" />
-          <span>{ReactHtmlParser(notification.situacao)}</span>
-        </LiNotification>
-      ))}
-      <LiNotification to={'#'}>
-        <img src="" alt="imagem da notificação" />
-        <p>{ReactHtmlParser(text)}</p>
-      </LiNotification>
+      <ul>
+        {notifications?.reverse()?.map(notification => (
+          <LiNotification key={notification.id}>
+            <img src={notification.foto} alt="imagem da notificação" />
+            <p>{ReactHtmlParser(notification.situacao)}</p>
+          </LiNotification>
+        ))}
+      </ul>
+
       <aside>
         <strong>Marcar como lida</strong>
         <Button theme="secondary">Ver todas</Button>

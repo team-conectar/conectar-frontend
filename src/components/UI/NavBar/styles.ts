@@ -2,11 +2,13 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
-export const LiNotification = styled(Link)`
+export const LiNotification = styled.span`
   list-style: none;
   padding: 0.8rem 1rem;
   border-bottom: solid 1px var(--borderDivision);
   border-top: solid 1px var(--borderDivision);
+  display: flex;
+  flex-direction: row;
   gap: 0.6rem;
   align-items: center;
   img {
@@ -16,10 +18,11 @@ export const LiNotification = styled(Link)`
     object-fit: cover;
     border-radius: 50%;
   }
-  > p {
+  p {
     text-align: start;
-    word-break: break-all;
+    word-break: normal;
     gap: 0.3rem;
+    width: calc(100%-4rem);
   }
 `
 
@@ -69,12 +72,21 @@ export const BodyNavBar = styled.nav`
   aside {
     > a img {
       width: 12rem;
+      display: flex;
+      flex-direction: row;
     }
     display: flex;
     align-items: center;
     height: 100%;
     gap: 1.2rem;
     ${DropdownContent} {
+      max-height: 800px;
+      > ul {
+        overflow-y: auto;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
       > h4 {
         padding: 0 1rem;
         align-self: flex-start;

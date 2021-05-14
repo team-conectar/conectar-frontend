@@ -54,7 +54,10 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
         <span>{agreement} </span>
         <strong>{vacancy.remunerado ? 'Remunerado' : 'Não remunerado'}</strong>
         <br />
-        <span>2 vagas</span>
+        <span>
+          {vacancy.quantidade} vaga
+          {vacancy.quantidade && vacancy.quantidade > 1 ? 's' : ' '}
+        </span>
       </p>
 
       <DropdownList IconButton={<GiHamburgerMenu />}>

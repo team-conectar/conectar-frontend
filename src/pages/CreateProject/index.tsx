@@ -63,7 +63,7 @@ const CreateProject: React.FC = () => {
         nome: Yup.string().required('Nome é obrigatório'),
         areas: Yup.array()
           .min(1, 'Seleciono pelo menos 1 item')
-          .max(5, 'Seleciono no máximo 5'),
+          .max(15, 'Seleciono no máximo 15'),
       })
       await schema.validate(formData, {
         abortEarly: false,
@@ -106,7 +106,7 @@ const CreateProject: React.FC = () => {
           objetivo: Yup.string().required('Objetivo é obrigatório'),
           habilidades: Yup.array()
             .min(1, 'Seleciono pelo menos 1 área')
-            .max(5, 'Seleciono no máximo 5'),
+            .max(15, 'Seleciono no máximo 15'),
         })
         await schema.validate(formData, {
           abortEarly: false,

@@ -26,7 +26,7 @@ import like from '../../assets/icon/like.svg'
 import { useHistory, useParams } from 'react-router'
 import Button from '../../components/UI/Button'
 import api from '../../services/api'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import SelectArea, { AreaType } from '../../components/UI/SelectArea'
 import SelectTool, { ToolType } from '../../components/UI/SelectTools'
 import Modal from '../../components/UI/Modal'
@@ -65,12 +65,18 @@ interface IProjectOwner {
   usuario: string
   foto_perfil: string
   nome: string
+  id: number
+}
+interface IGroupedVacancy {
+  [index: number]: VacanciesType[][]
 }
 /**
  * @constructor
  * @content is the iten of the modal
  */
-
+interface IVacancyDetail extends VacanciesType {
+  pessoa_projeto_ids: number[]
+}
 const Projects: React.FC = () => {
   const { loading, isAuthenticated, user } = useContext(Context)
 
@@ -97,20 +103,74 @@ const Projects: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
-  const [vacancyDetail, setVacancyDetail] = useState<VacanciesType>(
-    vacancies[0],
+  const [groupedVacancies, setGroupedVacancies] = useState<
+    Array<VacanciesType[]>
+  >([])
+  const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>({
+    ...vacancies[0],
+    pessoa_projeto_ids: [],
+  })
+  const getset_pessoa_projeto = useCallback(() => {
+    api
+      .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
+      .then((response: AxiosResponse<VacanciesType[]>) => {
+        setVacancies(response.data)
+
+        const GroupResponse = response.data.map(vacancy => {
+          return response.data.filter(data => {
+            return (
+              JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
+              JSON.stringify(data.habilidades) ===
+                JSON.stringify(vacancy.habilidades) &&
+              data.remunerado === vacancy.remunerado &&
+              data.tipo_acordo_id === vacancy.tipo_acordo_id &&
+              data.papel_id === vacancy.papel_id &&
+              data.titulo === vacancy.titulo
+            )
+          })
+        })
+
+        setGroupedVacancies(
+          GroupResponse.filter((vacancies, index) => {
+            return (
+              JSON.stringify(vacancies) !==
+              JSON.stringify(GroupResponse[index + 1])
+            )
+          }),
+        )
+        setVacancyDetail({
+          ...GroupResponse[0][0],
+          pessoa_projeto_ids: GroupResponse[0].map(vacancy => {
+            return vacancy.pessoa_id
+          }),
+        })
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+  }, [projeto_id])
+  const handleDeclineInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'RECUSADO',
+        })
+        .then(() => () => getset_pessoa_projeto())
+    },
+    [getset_pessoa_projeto],
   )
-  function handleDeclineInvitation(pessoa_projeto_id: number) {
-    api.put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-      situacao: 'RECUSADO_COLABORADOR',
-    })
-  }
-  function handleAcceptInvitation(pessoa_projeto_id: number) {
-    api.put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-      situacao: 'ACEITO_COLABORADOR',
-    })
-  }
+  const handleAcceptInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'ACEITO',
+        })
+        .then(() => getset_pessoa_projeto())
+    },
+    [getset_pessoa_projeto],
+  )
   const formRef = useRef<FormHandles>(null)
+
   useEffect(() => {
     const res = [
       api
@@ -128,30 +188,23 @@ const Projects: React.FC = () => {
         .catch((error: AxiosError) => {
           return error?.response?.data.detail
         }),
-      api
-        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
-        .then(response => {
-          setVacancies(response.data)
-          setVacancyDetail(response.data[0])
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        }),
+      getset_pessoa_projeto(),
     ]
     console.log(res)
   }, [projeto_id])
+  console.log(groupedVacancies)
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
       .then(response => {
         setProjectOwner(response.data)
-        console.log(response.data)
       })
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
+
   const handleFindTeam = useCallback(() => {
     const res = api
       .get(`/api/v1/pessoa_projeto/similaridade/${projeto_id}`)
@@ -229,7 +282,6 @@ const Projects: React.FC = () => {
 
     return defo
   }
-  console.table({ vacancyDetail })
 
   return (
     <BodyProjects>
@@ -309,7 +361,7 @@ const Projects: React.FC = () => {
             }}
           />
         ) : (
-          <ProfileLink to="">
+          <ProfileLink to={`/perfil/${projectOwner.id}`}>
             <img
               src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
               alt=""
@@ -449,33 +501,35 @@ const Projects: React.FC = () => {
           )}
         </DivTags>
       </DivSobre>
-      {vacanciesList && vacancyDetail?.pessoa_id === user.id && (
-        <DivConvite>
-          <figure>
-            <img
-              src={urlConvite}
-              alt="Mulher apertando a mão de um homem simbolizando um acordo"
-            />
-            <figcaption>
-              Você tem apenas {3} dias para responder este covnite
-            </figcaption>
-          </figure>
-          <aside>
-            <Button
-              theme="secondary"
-              onClick={() => handleDeclineInvitation(vacancyDetail?.id)}
-            >
-              Recusar
-            </Button>
-            <Button
-              theme="primary"
-              onClick={() => handleAcceptInvitation(vacancyDetail?.id)}
-            >
-              Aceitar
-            </Button>
-          </aside>
-        </DivConvite>
-      )}
+      {vacanciesList &&
+        vacancyDetail?.situacao === 'PENDENTE_COLABORADOR' &&
+        vacancyDetail?.pessoa_projeto_ids?.includes(user.id) && (
+          <DivConvite>
+            <figure>
+              <img
+                src={urlConvite}
+                alt="Mulher apertando a mão de um homem simbolizando um acordo"
+              />
+              <figcaption>
+                Você tem apenas {3} dias para responder este covnite
+              </figcaption>
+            </figure>
+            <aside>
+              <Button
+                theme="secondary"
+                onClick={() => handleDeclineInvitation(vacancyDetail?.id)}
+              >
+                Recusar
+              </Button>
+              <Button
+                theme="primary"
+                onClick={() => handleAcceptInvitation(vacancyDetail?.id)}
+              >
+                Aceitar
+              </Button>
+            </aside>
+          </DivConvite>
+        )}
       <DivVagas showVagas={vacanciesList}>
         <section>
           <legend>
@@ -492,14 +546,23 @@ const Projects: React.FC = () => {
           </legend>
 
           <ContainerScroll>
-            {console.log(vacancies)}
-            {vacancies.map(vacancy => (
+            {groupedVacancies.map(vacancies => (
               <VacancieListItem
-                key={vacancy.id}
-                vacancy={vacancy}
-                onClick={() => setVacancyDetail(vacancy)}
+                key={vacancies[0].id}
+                vacancy={{
+                  ...vacancies[0],
+                  quantidade: vacancies.length,
+                }}
+                onClick={() =>
+                  setVacancyDetail({
+                    ...vacancies[0],
+                    pessoa_projeto_ids: vacancies.map(vacancy => {
+                      return vacancy.pessoa_id
+                    }),
+                  })
+                }
                 style={
-                  vacancyDetail === vacancy
+                  vacancyDetail.titulo === vacancies[0].titulo
                     ? { background: 'var(--backgroundElevation)' }
                     : { background: 'transparent' }
                 }
