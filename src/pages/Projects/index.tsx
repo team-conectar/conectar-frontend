@@ -65,6 +65,7 @@ interface IProjectOwner {
   usuario: string
   foto_perfil: string
   nome: string
+  id: number
 }
 interface IGroupedVacancy {
   [index: number]: VacanciesType[][]
@@ -109,7 +110,7 @@ const Projects: React.FC = () => {
     ...vacancies[0],
     pessoa_projeto_ids: [],
   })
-  function getset_pessoa_projeto() {
+  const getset_pessoa_projeto = useCallback(() => {
     api
       .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
       .then((response: AxiosResponse<VacanciesType[]>) => {
@@ -147,28 +148,29 @@ const Projects: React.FC = () => {
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
       })
-  }
-  const handleDeclineInvitation = useCallback((pessoa_projeto_id: number) => {
-    api
-      .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-        situacao: 'RECUSADO',
-      })
-      .then(() => () => getset_pessoa_projeto())
-  }, [])
-  const handleAcceptInvitation = useCallback((pessoa_projeto_id: number) => {
-    api
-      .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
-        situacao: 'ACEITO',
-      })
-      .then(() => getset_pessoa_projeto())
-  }, [])
+  }, [projeto_id])
+  const handleDeclineInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'RECUSADO',
+        })
+        .then(() => () => getset_pessoa_projeto())
+    },
+    [getset_pessoa_projeto],
+  )
+  const handleAcceptInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'ACEITO',
+        })
+        .then(() => getset_pessoa_projeto())
+    },
+    [getset_pessoa_projeto],
+  )
   const formRef = useRef<FormHandles>(null)
-  function indeOfTitleEquals(array: VacanciesType[], vacancy: VacanciesType) {
-    array.forEach((item, index) => {
-      if (item.titulo === vacancy.titulo) return index
-    })
-    return -1
-  }
+
   useEffect(() => {
     const res = [
       api
@@ -359,7 +361,7 @@ const Projects: React.FC = () => {
             }}
           />
         ) : (
-          <ProfileLink to="">
+          <ProfileLink to={`/perfil/${projectOwner.id}`}>
             <img
               src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
               alt=""
