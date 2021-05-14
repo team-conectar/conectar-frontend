@@ -72,8 +72,11 @@ const NotificationsButton = () => {
     const res = api
       .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
       .then((response: AxiosResponse<INotification[]>) => {
-        const res = response.data
-        setNotifications(res)
+        setNotifications(
+          response.data.filter(notification => {
+            return !notification.lido
+          }),
+        )
       })
       .catch((err: AxiosError) => {
         return err?.response?.data.detail
