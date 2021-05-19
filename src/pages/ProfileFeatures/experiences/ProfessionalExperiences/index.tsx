@@ -160,7 +160,7 @@ const ProfessionalExperiences: React.FC = () => {
         const data_inicio = `${initialYear}-${initialMonth}-01`
 
         let data_fim = null
-        if (!currentWorking) {
+        if (!currentilyWork) {
           data_fim = `${finalYear}-${finalMonth}-01`
         }
 
@@ -247,7 +247,9 @@ const ProfessionalExperiences: React.FC = () => {
     setShowRegister(true)
     setEditStored(data)
   }
-
+  useEffect(() => {
+    setCurrentilyWork(editStored.currentWorking)
+  }, [editStored])
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
