@@ -221,6 +221,9 @@ const AcademicExperiences: React.FC = () => {
     setShowRegister(true)
     setEditStored(data)
   }
+  useEffect(() => {
+    setIsIncomplete(editStored.situacao === 'Incompleto')
+  }, [editStored])
 
   return (
     <BodyExperiences>
@@ -279,7 +282,7 @@ const AcademicExperiences: React.FC = () => {
                   {experience.situacao} <br />
                   {experience?.data_inicio?.split('-')[0]}
                   {experience?.data_fim &&
-                    `até ${experience?.data_fim?.split('-')[0]}`}
+                    ` até ${experience?.data_fim?.split('-')[0]}`}
                 </p>
               </fieldset>
             </div>
