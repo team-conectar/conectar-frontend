@@ -57,7 +57,7 @@ const ToogleSwitch: React.FC<InputProps> = ({ name, options, ...rest }) => {
           {option.label}
           <input
             className="checkbox"
-            defaultChecked={rest.defaultValue === option.id}
+            defaultChecked={rest.defaultValue === option.value}
             ref={ref => {
               inputRefs.current[index] = ref as HTMLInputElement
             }}

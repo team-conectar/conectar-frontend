@@ -240,6 +240,9 @@ const ProjectExperiences: React.FC = () => {
     setShowRegister(true)
     setEditStored(data)
   }
+  useEffect(() => {
+    setCurrentilyProject(editStored.situacao === 'Em andamento')
+  }, [editStored])
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
@@ -385,8 +388,8 @@ const ProjectExperiences: React.FC = () => {
                       editStored.id &&
                       Number(editStored?.finalYear) > initialYear
                         ? {
-                            label: editStored?.finalMonth,
-                            value: editStored?.finalMonth,
+                            label: editStored?.finalYear,
+                            value: editStored?.finalYear,
                           }
                         : null
                     }
@@ -401,6 +404,7 @@ const ProjectExperiences: React.FC = () => {
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   setCurrentilyProject(event.target.value === 'Em andamento')
                 }
+                defaultValue={editStored?.situacao}
                 options={[
                   {
                     label: 'Incompleto',
