@@ -199,7 +199,7 @@ const Projects: React.FC = () => {
     }
     console.log(res)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projeto_id])
+  }, [projeto_id, openModal])
   console.log(
     ` aqui ta o id: ${
       vacancyDetail?.pessoas_projeto_ids[
@@ -233,6 +233,8 @@ const Projects: React.FC = () => {
   }, [history, projeto_id])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
+      console.log(formData)
+
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
@@ -261,8 +263,37 @@ const Projects: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
-        await api.put(`/api/v1/projeto/${projeto_id}`, formData)
-        setOpenModal(false)
+        if (modalContent.areas) {
+          const data = {
+            areas: formData.areas.map(area => {
+              return { descricao: area }
+            }),
+          }
+          await api
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setOpenModal(false)
+            })
+        } else if (modalContent.habilidades) {
+          const data = {
+            habilidades: formData.habilidades.map(tool => {
+              return { nome: tool }
+            }),
+          }
+          await api
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setOpenModal(false)
+            })
+        } else {
+          await api.put(`/api/v1/projeto/${projeto_id}`, formData).then(() => {
+            setOpenModal(false)
+          })
+        }
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -277,24 +308,6 @@ const Projects: React.FC = () => {
     if (project.pessoa_id && user.id) {
       return !!(project.pessoa_id === user.id)
     } else return false
-  }
-  function areaTypeToString() {
-    const defo: Array<string> = []
-
-    storedAreas.forEach(area => {
-      defo.push(area.descricao)
-    })
-
-    return defo
-  }
-  function toolTypeToString() {
-    const defo: Array<string> = []
-
-    storedTools.forEach(tool => {
-      defo.push(tool.nome)
-    })
-
-    return defo
   }
 
   return (
@@ -342,16 +355,20 @@ const Projects: React.FC = () => {
                 )}
                 {modalContent.areas && (
                   <SelectArea
-                    name="area"
+                    name="areas"
                     label="Selecione as àreas de atuação"
-                    defaultValue={areaTypeToString()}
+                    defaultValue={storedAreas.map(area => {
+                      return area.descricao
+                    })}
                   />
                 )}
                 {modalContent.habilidades && (
                   <SelectTool
                     name="habilidades"
                     label="Selecione as ferramentas ou habilidades"
-                    defaultValue={toolTypeToString()}
+                    defaultValue={storedTools.map(tool => {
+                      return tool.nome
+                    })}
                   />
                 )}
                 <Button theme="primary" type="submit">
