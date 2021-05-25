@@ -12,11 +12,13 @@ const moveDownUp = keyframes`
 `
 export const BodyHome = styled.div`
   background: var(--background);
+  width: 100% !important;
   area {
     background: black;
   }
   > main {
     height: 100vh;
+    width: 100%;
     scroll-snap-type: y mandatory;
     overflow-y: scroll;
     scroll-behavior: smooth;
@@ -24,6 +26,7 @@ export const BodyHome = styled.div`
     > div {
       scroll-snap-align: start;
       height: 100%;
+      width: 100%;
       position: relative;
       display: flex;
       flex-direction: column;
