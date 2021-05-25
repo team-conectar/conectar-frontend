@@ -129,8 +129,8 @@ const Projects: React.FC = () => {
     }
     return newArr
   }
-  const getset_pessoa_projeto = useCallback(() => {
-    api
+  const getset_pessoa_projeto = useCallback(async () => {
+    await api
       .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
       .then((response: AxiosResponse<VacanciesType[]>) => {
         setVacancies(response.data)
@@ -164,6 +164,7 @@ const Projects: React.FC = () => {
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
       })
+    return true
   }, [projeto_id])
   const handleDeclineInvitation = useCallback(
     (pessoa_projeto_id: number) => {
@@ -188,46 +189,36 @@ const Projects: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
 
   useEffect(() => {
-    const res = [
-      api
-        .get(`/api/v1/projeto/${projeto_id}`)
-        .then(response => {
-          setProject(response.data)
-          setStoredTools(response.data.habilidades)
-          setStoredAreas(response.data.areas)
-          api
-            .get(`/api/v1/pessoas/${response.data.pessoa_id}`)
-            .then(response => {
-              setProjectOwner(response.data)
-            })
+    const res = api
+      .get(`/api/v1/projeto/${projeto_id}`)
+      .then(response => {
+        setProject(response.data)
+        setStoredTools(response.data.habilidades)
+        setStoredAreas(response.data.areas)
+        api.get(`/api/v1/pessoas/${response.data.pessoa_id}`).then(response => {
+          setProjectOwner(response.data)
         })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        }),
-      getset_pessoa_projeto(),
-    ]
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+
+    getset_pessoa_projeto()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projeto_id, openModal])
+  useEffect(() => {
     if (groupedVacancies.length > 0) {
       setVacancyDetail({
         ...groupedVacancies[0][0],
-        pessoas_ids: groupedVacancies[0].map(vacancy => {
+        pessoas_ids: vacancies.map(vacancy => {
           return vacancy.pessoa_id
         }),
-        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
+        pessoas_projeto_ids: vacancies.map(vacancy => {
           return vacancy.id
         }),
       })
     }
-    console.log(res)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projeto_id, openModal])
-  console.log(
-    ` aqui ta o id: ${
-      vacancyDetail?.pessoas_projeto_ids[
-        vacancyDetail.pessoas_ids.indexOf(user.id)
-      ]
-    }`,
-  )
-  console.log(groupedVacancies)
+  }, [groupedVacancies])
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
