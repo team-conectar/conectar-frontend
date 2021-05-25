@@ -112,6 +112,23 @@ const Projects: React.FC = () => {
     pessoas_ids: [],
     pessoas_projeto_ids: [],
   })
+  function a(arr: any) {
+    // eslint-disable-next-line no-var
+    var newArr: Array<any> = []
+    for (let index = 0; index < arr.length; index++) {
+      for (let jndex = 0; jndex < index; jndex++) {
+        if (
+          !(
+            JSON.stringify(arr[index]) === JSON.stringify(arr[jndex]) &&
+            jndex !== index
+          )
+        ) {
+          newArr[index] = arr[index]
+        }
+      }
+    }
+    return newArr
+  }
   const getset_pessoa_projeto = useCallback(() => {
     api
       .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
@@ -133,11 +150,14 @@ const Projects: React.FC = () => {
         })
 
         setGroupedVacancies(
-          GroupResponse.filter((vacancies, index) => {
-            return (
-              JSON.stringify(vacancies) !==
-              JSON.stringify(GroupResponse[index + 1])
-            )
+          GroupResponse.filter((vacancies, index, self) => {
+            let indexOfDuplicated = -1
+            for (let i = 0; i < self.length; i++) {
+              if (JSON.stringify(self[i]) === JSON.stringify(vacancies)) {
+                indexOfDuplicated = i
+              }
+            }
+            return index === indexOfDuplicated
           }),
         )
       })
