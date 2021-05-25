@@ -210,10 +210,10 @@ const Projects: React.FC = () => {
     if (groupedVacancies.length > 0) {
       setVacancyDetail({
         ...groupedVacancies[0][0],
-        pessoas_ids: vacancies.map(vacancy => {
+        pessoas_ids: groupedVacancies[0].map(vacancy => {
           return vacancy.pessoa_id
         }),
-        pessoas_projeto_ids: vacancies.map(vacancy => {
+        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
           return vacancy.id
         }),
       })
