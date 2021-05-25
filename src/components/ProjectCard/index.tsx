@@ -1,9 +1,11 @@
 import React, { InputHTMLAttributes, useEffect, useState } from 'react'
-import { BodyCard, ProjectInfo, UserInfo } from './styles'
+import { BodyCard, ButtonFavorite, ButtonInterest, ProjectInfo, UserInfo } from './styles'
 import { Link } from 'react-router-dom'
 import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
+import { BsStar, BsFillStarFill } from 'react-icons/bs'
+import { FaRegHandPointer, FaHandPointer } from 'react-icons/fa'
 interface IPessoa {
   foto_perfil: string
   usuario: string
@@ -24,13 +26,42 @@ interface IProjectCardProps {
   project: IProject
   hiddeOwner?: true
 }
+
+
 const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
+  const [favorite, setFavorite] = useState<boolean>(false)
+  const [interesse, setInteresse] = useState<boolean>(false)
   const [user, setUser] = useState<IPessoa>()
+
+  const SelectFavorite: any = () => {
+    if(favorite){
+      return( <BsFillStarFill/>)
+    }
+    return(<BsStar/>)
+  }
+  const SelectInteresse: any = () => {
+    if(interesse){
+      return( <FaHandPointer/>)
+    }
+    return(<FaRegHandPointer/>)
+  }
+
   useEffect(() => {
     api.get(`/api/v1/pessoas/${project.pessoa_id}`).then(response => {
       setUser(response.data)
     })
   }, [project.pessoa_id])
+  
+  function ToogleFavorite(){
+    setFavorite(!favorite)
+    console.log(favorite)
+  }
+
+  function ToogleInteresse(){
+    setInteresse(!interesse)
+    console.log(interesse)
+  }
+  
   return (
     <BodyCard>
       {!hiddeOwner && (
@@ -71,11 +102,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
               <p>publicado em </p>
             </section>
           </aside>
-          <p>{project.descricao}</p>
         </ProjectInfo>
+        <p>{project.descricao}</p>
         <aside>
-          <button>Favoritar</button>
-          <button>Tenho interesse</button>
+          <ButtonFavorite checked={favorite} onClick={ToogleFavorite}> <SelectFavorite /> Favoritar</ButtonFavorite>
+          <ButtonInterest checked={interesse} onClick={ToogleInteresse}> <SelectInteresse />Tenho interesse</ButtonInterest>
         </aside>
       </div>
     </BodyCard>
