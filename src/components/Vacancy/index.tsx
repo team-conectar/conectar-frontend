@@ -22,6 +22,7 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import VacancieListItem from '../VacancieListItem'
 import { ProjectType } from '../../pages/CreateProject'
+import ContainerScroll from '../UI/ContainerScroll'
 export type TypeSituationVacancy =
   | 'PENDENTE_IDEALIZADOR'
   | 'PENDENTE_COLABORADOR'
@@ -229,14 +230,14 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         )}
       </h1>
       {!showRegister ? (
-        <ul>
+        <ContainerScroll autoHeight autoHeightMax="50vh">
           {groupedVacancies.map(vacancies => (
             <VacancieListItem
               key={vacancies[0].id}
               vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
             />
           ))}
-        </ul>
+        </ContainerScroll>
       ) : (
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Input

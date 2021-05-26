@@ -28,7 +28,7 @@ export const VacancieLi = styled.li`
   grid-template-columns: 2rem 1fr 2rem;
   align-items: center;
   gap: 1rem;
-  margin: var(--gap) 0;
+  margin: var(--gap) 0.4rem;
   > p {
     line-height: 1.6rem;
     font-size: 0.8rem;
