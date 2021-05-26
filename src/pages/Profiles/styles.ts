@@ -1,11 +1,16 @@
 import styled, { css } from 'styled-components'
 export const ButtonList = styled.button<{ borderBottom: boolean }>`
+  --buttonHeight: 55px;
   width: 50%;
+  height: var(--buttonHeight);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0.6rem 0;
   border: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--textGreen);
   border-top: solid 1px var(--borderDivision);
   border-left: solid 1px var(--borderDivision);
   background: transparent;
@@ -180,7 +185,6 @@ export const PerfilDiv = styled.div`
   align-items: center;
   justify-content: space-evenly;
   width: 90vw;
-
   > ul {
     display: flex;
     flex-flow: row wrap;
@@ -248,21 +252,21 @@ export const Page = styled.div`
     padding-bottom: 2rem;
     width: 100%;
     position: relative;
+    ${PerfilDiv} {
+      order: 2;
+    }
     > header {
       position: sticky;
-      top: calc(2rem + 45px);
+      top: calc(-250px + 55px);
       background: white;
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
 
-      ${PerfilDiv} {
-        order: 2;
-      }
       > aside {
         width: 100%;
-
+        height: 250px;
         display: flex;
         justify-content: flex-end;
         padding-right: 1rem;
@@ -285,19 +289,26 @@ export const Page = styled.div`
   @media (min-width: 1024px) {
     > main {
       width: min(1100px, 90vw);
+      display: grid;
+      grid-template-columns: var(--PerfilWidth) 1.4fr;
+      grid-template-rows: auto auto;
+      align-items: flex-start;
+      ${PerfilDiv} {
+        grid-column: 1;
+        position: sticky;
+        top: 45px;
+        width: calc(var(--PerfilWidth) - 2rem);
+        margin-left: 2rem;
+        margin-top: -185px;
+      }
       > header {
+        grid-column: 1 / -1;
+        grid-row: 1;
         border-radius: 0.8rem;
         box-shadow: var(--boxShadow);
         display: grid;
         grid-template-columns: var(--PerfilWidth) 1.4fr;
         grid-template-rows: repeat(2, auto);
-        ${PerfilDiv} {
-          grid-column: 1;
-          position: absolute;
-          top: 4rem;
-          width: calc(var(--PerfilWidth) - 2rem);
-          margin-left: 2rem;
-        }
         > aside {
           grid-column: 2;
           grid-row: 1;
@@ -313,12 +324,9 @@ export const Page = styled.div`
           grid-row: 2;
         }
       }
-      > div {
-        display: grid;
-        grid-template-columns: var(--PerfilWidth) 1.4fr;
-        width: 100%;
-
-        gap: 1rem;
+      > ul {
+        grid-column: 2;
+        grid-row: 2;
       }
     }
   }

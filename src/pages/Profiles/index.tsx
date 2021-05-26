@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
 import {
   Page,
   ButtonList,
@@ -160,134 +160,131 @@ const Profiles: React.FC = () => {
               Favoritos
             </ButtonList>
           </section>
-          <PerfilDiv>
-            <PerfilMain>
-              <figure>
-                {/* <img
+        </header>
+        <PerfilDiv>
+          <PerfilMain>
+            <figure>
+              {/* <img
                       src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
                       alt=""
                     /> */}
-                <Skeleton circle height="100px" width="100px" />
-                <figcaption>
-                  <h2>{profile.nome || <Skeleton width="150px" />}</h2>
-                  <p>
-                    {(profile.usuario && '@' + profile.usuario) || (
-                      <Skeleton width="100px" />
-                    )}
-                  </p>
-                </figcaption>
-              </figure>
-              <section>
-                {profile.id ? (
-                  <Button
-                    theme="primary"
-                    onClick={() => {
-                      user.id === profile.id &&
-                        history.push(`/editar-perfil/${user.id}`)
-                    }}
-                  >
-                    {user.id === profile.id ? 'EDITAR' : 'SEGUIR'}
-                  </Button>
-                ) : (
-                  <Skeleton width="150px" height="30px" />
-                )}
-                <aside>
-                  {profile.idealizador && <img src={id} alt="" />}
-                  {profile.aliado && <img src={al} alt="" />}
-                  {profile.colaborador && <img src={co} alt="" />}
-                </aside>
-              </section>
-            </PerfilMain>
+              <Skeleton circle height="100px" width="100px" />
+              <figcaption>
+                <h2>{profile.nome || <Skeleton width="150px" />}</h2>
+                <p>
+                  {(profile.usuario && '@' + profile.usuario) || (
+                    <Skeleton width="100px" />
+                  )}
+                </p>
+              </figcaption>
+            </figure>
+            <section>
+              {profile.id ? (
+                <Button
+                  theme="primary"
+                  onClick={() => {
+                    user.id === profile.id &&
+                      history.push(`/editar-perfil/${user.id}`)
+                  }}
+                >
+                  {user.id === profile.id ? 'EDITAR' : 'SEGUIR'}
+                </Button>
+              ) : (
+                <Skeleton width="150px" height="30px" />
+              )}
+              <aside>
+                {profile.idealizador && <img src={id} alt="" />}
+                {profile.aliado && <img src={al} alt="" />}
+                {profile.colaborador && <img src={co} alt="" />}
+              </aside>
+            </section>
+          </PerfilMain>
 
-            <ul>
-              {profile.areas?.length && <h3>Áreas de atuação</h3>}
-              {profile.areas?.map(area => (
-                <li key={area.id}>{area.descricao}</li>
-              ))}
-              {profile.habilidades?.length && (
-                <h3>Habilidades e ferramentas de domínio</h3>
-              )}
-              {profile.habilidades?.map(habilidade => (
-                <li key={habilidade.id}>{habilidade.nome}</li>
-              ))}
-            </ul>
-            <ExperienciasDiv>
-              {profile.experiencia_academica?.length > 0 && (
-                <button>
-                  <img
-                    src={educação}
-                    alt={profile.experiencia_academica[0].curso}
-                  />
-                  <aside>
-                    <legend>
-                      {profile.experiencia_academica[0].instituicao}
-                    </legend>
-                    <p>
-                      {profile.experiencia_academica[0].curso} <br />
-                      {profile.experiencia_academica[0].situacao}
-                    </p>
-                  </aside>
-                </button>
-              )}
-              {profile?.experiencia_profissional?.length > 0 && (
-                <button>
-                  <img
-                    src={trabalho}
-                    alt={profile.experiencia_profissional[0].cargo}
-                  />
-                  <aside>
-                    <legend>
-                      {profile.experiencia_profissional[0].organizacao}
-                    </legend>
-                    <p>
-                      {`
+          <ul>
+            {profile.areas?.length && <h3>Áreas de atuação</h3>}
+            {profile.areas?.map(area => (
+              <li key={area.id}>{area.descricao}</li>
+            ))}
+            {profile.habilidades?.length && (
+              <h3>Habilidades e ferramentas de domínio</h3>
+            )}
+            {profile.habilidades?.map(habilidade => (
+              <li key={habilidade.id}>{habilidade.nome}</li>
+            ))}
+          </ul>
+          <ExperienciasDiv>
+            {profile.experiencia_academica?.length > 0 && (
+              <button>
+                <img
+                  src={educação}
+                  alt={profile.experiencia_academica[0].curso}
+                />
+                <aside>
+                  <legend>
+                    {profile.experiencia_academica[0].instituicao}
+                  </legend>
+                  <p>
+                    {profile.experiencia_academica[0].curso} <br />
+                    {profile.experiencia_academica[0].situacao}
+                  </p>
+                </aside>
+              </button>
+            )}
+            {profile?.experiencia_profissional?.length > 0 && (
+              <button>
+                <img
+                  src={trabalho}
+                  alt={profile.experiencia_profissional[0].cargo}
+                />
+                <aside>
+                  <legend>
+                    {profile.experiencia_profissional[0].organizacao}
+                  </legend>
+                  <p>
+                    {`
                       ${profile.experiencia_profissional[0].cargo} | 
                       ${profile.experiencia_profissional[0].vinculo} 
                       `}
-                      <br />
-                      {`${toMonth(
-                        profile.experiencia_profissional[0].data_inicio.split(
-                          '-',
-                        )[1],
-                      )} de  ${
-                        profile.experiencia_profissional[0].data_inicio.split(
-                          '-',
-                        )[0]
-                      } até o momento`}
-                    </p>
-                  </aside>
-                </button>
-              )}
-              {profile.experiencia_projetos?.length > 0 && (
-                <button>
-                  <img
-                    src={projeto}
-                    alt={profile.experiencia_projetos[0].cargo}
-                  />
-                  <aside>
-                    <legend>{profile.experiencia_projetos[0].nome}</legend>
-                    <p>
-                      {profile.experiencia_projetos[0].cargo}
-                      <br />
-                      {`${toMonth(
-                        profile.experiencia_projetos[0].data_inicio.split(
-                          '-',
-                        )[1],
-                      )} de  ${
-                        profile.experiencia_projetos[0].data_inicio.split(
-                          '-',
-                        )[0]
-                      } até o momento`}
-                    </p>
-                  </aside>
-                </button>
-              )}
-            </ExperienciasDiv>
+                    <br />
+                    {`${toMonth(
+                      profile.experiencia_profissional[0].data_inicio.split(
+                        '-',
+                      )[1],
+                    )} de  ${
+                      profile.experiencia_profissional[0].data_inicio.split(
+                        '-',
+                      )[0]
+                    } até o momento`}
+                  </p>
+                </aside>
+              </button>
+            )}
+            {profile.experiencia_projetos?.length > 0 && (
+              <button>
+                <img
+                  src={projeto}
+                  alt={profile.experiencia_projetos[0].cargo}
+                />
+                <aside>
+                  <legend>{profile.experiencia_projetos[0].nome}</legend>
+                  <p>
+                    {profile.experiencia_projetos[0].cargo}
+                    <br />
+                    {`${toMonth(
+                      profile.experiencia_projetos[0].data_inicio.split('-')[1],
+                    )} de  ${
+                      profile.experiencia_projetos[0].data_inicio.split('-')[0]
+                    } até o momento`}
+                  </p>
+                </aside>
+              </button>
+            )}
+          </ExperienciasDiv>
 
-            {profile.id && <h4>Exibir currículo completo</h4>}
-          </PerfilDiv>
-        </header>
-        <div>
+          {profile.id && <h4>Exibir currículo completo</h4>}
+        </PerfilDiv>
+
+        <ul>
           <ProjetosSection>
             {profile.id ? (
               !showFavoritesList ? (
@@ -303,7 +300,7 @@ const Profiles: React.FC = () => {
               <Skeleton width="100%" height="200px" />
             )}
           </ProjetosSection>
-        </div>
+        </ul>
       </main>
     </Page>
   )
