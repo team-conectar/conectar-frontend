@@ -216,7 +216,7 @@ const Home: React.FC = () => {
                 </section>
               </aside>
             </div>
-            <Button theme="primary">Criar sua conta</Button>
+            <Button onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Criar sua conta</Button>
           </section>
 
           <a className="arrow-bottom" href="#colaborador">
@@ -261,7 +261,7 @@ const Home: React.FC = () => {
               </aside>
             </div>
 
-            <Button theme="primary">Criar sua conta</Button>
+            <Button  onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Criar sua conta</Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
 
@@ -305,7 +305,7 @@ const Home: React.FC = () => {
                 </section>
               </aside>
             </div>
-            <Button theme="primary">Criar sua conta</Button>
+            <Button  onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Criar sua conta</Button>
           </section>
 
           <a className="arrow-bottom" href="#rodape">
@@ -325,7 +325,7 @@ const Home: React.FC = () => {
           <aside>
             <img src={curtiu} alt="e aí curtiu? vem pra cá!" />
 
-            <Button theme="primary">Crie sua conta</Button>
+            <Button  onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Crie sua conta</Button>
           </aside>
           <footer>
             <h3>

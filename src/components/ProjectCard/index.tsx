@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { InputHTMLAttributes, useEffect, useState } from 'react'
 import {
   BodyCard,
@@ -6,12 +7,17 @@ import {
   ProjectInfo,
   UserInfo,
 } from './styles'
+=======
+import React, { InputHTMLAttributes, useContext, useEffect, useState } from 'react'
+import { BodyCard, ButtonFavorite, ButtonInterest, ProjectInfo, UserInfo } from './styles'
+>>>>>>> 2b6ab35eb151bf4ad30efcaf3d98acea8918bcde
 import { Link } from 'react-router-dom'
 import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import { BsStar, BsFillStarFill } from 'react-icons/bs'
 import { FaRegHandPointer, FaHandPointer } from 'react-icons/fa'
+import { Context } from '../../context/AuthContext'
 interface IPessoa {
   foto_perfil: string
   usuario: string
@@ -37,7 +43,9 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   const [favorite, setFavorite] = useState<boolean>(false)
   const [interesse, setInteresse] = useState<boolean>(false)
   const [user, setUser] = useState<IPessoa>()
-
+  const loggedUser = useContext(Context).user
+  console.log(loggedUser == null);
+  console.log(loggedUser);
   const SelectFavorite: any = () => {
     if (favorite) {
       return <BsFillStarFill />
@@ -109,17 +117,13 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
           </aside>
         </ProjectInfo>
         <p>{project.descricao}</p>
-        <aside>
-          <ButtonFavorite checked={favorite} onClick={ToogleFavorite}>
-            {' '}
-            <SelectFavorite /> Favoritar
-          </ButtonFavorite>
-          <ButtonInterest checked={interesse} onClick={ToogleInteresse}>
-            {' '}
-            <SelectInteresse />
-            Tenho interesse
-          </ButtonInterest>
-        </aside>
+
+        {loggedUser.id != user?.id && 
+          <aside>
+            <ButtonFavorite checked={favorite} onClick={ToogleFavorite}> <SelectFavorite /> Favoritar</ButtonFavorite>
+            <ButtonInterest checked={interesse} onClick={ToogleInteresse}> <SelectInteresse />Tenho interesse</ButtonInterest>
+          </aside>
+        }
       </div>
     </BodyCard>
   )
