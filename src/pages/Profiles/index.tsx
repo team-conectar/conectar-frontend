@@ -35,6 +35,7 @@ import { ProfessionalType } from '../ProfileFeatures/experiences/ProfessionalExp
 import { IExperienceProject } from '../ProfileFeatures/experiences/ProjectExperiences'
 import { toMonth } from '../../utils/dates'
 import Skeleton from 'react-loading-skeleton'
+import ContainerScroll from '../../components/UI/ContainerScroll'
 
 interface routeParms {
   id: string
@@ -200,17 +201,19 @@ const Profiles: React.FC = () => {
             </section>
           </PerfilMain>
 
-          <ul>
-            {profile.areas?.length && <h3>Áreas de atuação</h3>}
-            {profile.areas?.map(area => (
-              <li key={area.id}>{area.descricao}</li>
-            ))}
-            {profile.habilidades?.length && (
-              <h3>Habilidades e ferramentas de domínio</h3>
-            )}
-            {profile.habilidades?.map(habilidade => (
-              <li key={habilidade.id}>{habilidade.nome}</li>
-            ))}
+          <ContainerScroll autoHeight autoHeightMax="50vh">
+            <ul>
+              {profile.areas?.length && <h3>Áreas de atuação</h3>}
+              {profile.areas?.map(area => (
+                <li key={area.id}>{area.descricao}</li>
+              ))}
+              {profile.habilidades?.length && (
+                <h3>Habilidades e ferramentas de domínio</h3>
+              )}
+              {profile.habilidades?.map(habilidade => (
+                <li key={habilidade.id}>{habilidade.nome}</li>
+              ))}
+            </ul>
             <ExperienciasDiv>
               {profile.experiencia_academica?.length > 0 && (
                 <button>
@@ -283,7 +286,7 @@ const Profiles: React.FC = () => {
                 </button>
               )}
             </ExperienciasDiv>
-          </ul>
+          </ContainerScroll>
 
           {profile.id && <h4>Exibir currículo completo</h4>}
         </PerfilDiv>

@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components'
+import { DivScroll } from '../../components/UI/ContainerScroll/styles'
+
 export const ButtonList = styled.button<{ borderBottom: boolean }>`
   --buttonHeight: 55px;
   width: 50%;
@@ -188,22 +190,28 @@ export const PerfilDiv = styled.div`
   justify-content: space-evenly;
   max-height: 90vh;
   width: 90vw;
-  > ul {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 0.4rem;
-    padding: 0.4rem 0;
-    width: 100%;
-    > h3 {
-      display: none;
+  ${DivScroll} {
+    .view {
+      display: flex;
+      flex-direction: column;
     }
+    ul {
+      display: flex;
+      flex-flow: row wrap;
+      gap: 0.4rem;
+      padding: 0.4rem 0;
+      width: 100%;
+      h3 {
+        display: none;
+      }
 
-    li {
-      list-style: none;
-      border: solid 1px var(--textGreen);
-      border-radius: 0.8rem;
-      padding: 0.2rem 0.4rem;
-      font-size: 0.8rem;
+      li {
+        list-style: none;
+        border: solid 1px var(--textGreen);
+        border-radius: 0.8rem;
+        padding: 0.2rem 0.4rem;
+        font-size: 0.8rem;
+      }
     }
   }
   > h4 {
@@ -216,24 +224,18 @@ export const PerfilDiv = styled.div`
     padding: 2rem 0.8rem;
     box-shadow: var(--boxShadow);
     width: auto;
-    > ul {
-      overflow-y: auto;
-
-      > li,
-      > h3 {
+    ${DivScroll} {
+      ul {
         order: 3;
-      }
-      ${PerfilMain} {
-        order: 1;
+        h3 {
+          display: initial;
+          align-self: flex-start;
+          width: 100%;
+          margin: 0.5rem 0;
+        }
       }
       ${ExperienciasDiv} {
         order: 2;
-      }
-      > h3 {
-        display: initial;
-        align-self: flex-start;
-        width: 100%;
-        margin: 0.5rem 0;
       }
     }
 
