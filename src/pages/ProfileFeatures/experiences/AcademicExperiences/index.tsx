@@ -101,6 +101,8 @@ const AcademicExperiences: React.FC = () => {
         return err?.response?.data.detail
       })
   }
+  console.log(editStored)
+
   const handleSubmit = useCallback(
     async (formData: AcademicType) => {
       console.log(formData)
@@ -142,7 +144,7 @@ const AcademicExperiences: React.FC = () => {
             situacao !== 'Incompleto' && data_fim ? `${data_fim}-02-01` : null,
           escolaridade,
           curso,
-          situacao: situacao[0],
+          situacao: situacao,
         }
         console.log(data)
 
@@ -219,6 +221,9 @@ const AcademicExperiences: React.FC = () => {
     setShowRegister(true)
     setEditStored(data)
   }
+  useEffect(() => {
+    setIsIncomplete(editStored.situacao === 'Incompleto')
+  }, [editStored])
 
   return (
     <BodyExperiences>
@@ -275,9 +280,9 @@ const AcademicExperiences: React.FC = () => {
                 <p>
                   {experience.instituicao} <br />
                   {experience.situacao} <br />
-                  {`${experience?.data_inicio?.split('-')[0]} até ${
-                    experience?.data_fim?.split('-')[0]
-                  }`}
+                  {experience?.data_inicio?.split('-')[0]}
+                  {experience?.data_fim &&
+                    ` até ${experience?.data_fim?.split('-')[0]}`}
                 </p>
               </fieldset>
             </div>
@@ -357,10 +362,11 @@ const AcademicExperiences: React.FC = () => {
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   setIsIncomplete(event.target.value === 'Incompleto')
                 }
+                defaultValue={editStored?.situacao}
                 options={[
                   {
                     label: 'Incompleto',
-                    id: 'incompleto',
+                    id: 'Incompleto',
                     value: 'Incompleto',
                   },
                   {

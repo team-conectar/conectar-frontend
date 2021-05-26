@@ -48,6 +48,8 @@ const ToogleSwitch: React.FC<InputProps> = ({ name, options, ...rest }) => {
       },
     })
   }, [defaultValue, fieldName, registerField, rest.type])
+  console.log(rest.defaultValue)
+
   return (
     <BodySwitch>
       {options.map((option, index) => (
@@ -55,11 +57,7 @@ const ToogleSwitch: React.FC<InputProps> = ({ name, options, ...rest }) => {
           {option.label}
           <input
             className="checkbox"
-            defaultChecked={
-              rest.type === 'radio'
-                ? defaultValue === option.id
-                : defaultValue.find((dv: string) => dv === option.id)
-            }
+            defaultChecked={rest.defaultValue === option.value}
             ref={ref => {
               inputRefs.current[index] = ref as HTMLInputElement
             }}

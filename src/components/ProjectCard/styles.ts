@@ -1,4 +1,57 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+
+
+export const ButtonFavorite = styled.button<{ checked: boolean }>`
+  >svg {
+    height: 1.2rem;
+    width: 1.2rem;
+    margin-right: 8px;
+  }
+  font-weight: 600;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 8px;
+  border: 0;
+  align-self: flex-end;
+  border-top: 1px solid var(--borderDivision);
+  background: transparent;
+  color: var(--textGreen);
+  
+  ${props =>
+    props.checked &&
+    css`
+      color: var(--yellow);
+    `}
+`
+
+export const ButtonInterest = styled.button<{ checked: boolean }>`
+  >svg {
+      height: 1.2rem;
+      width: 1.2rem;
+      margin-right: 8px;
+    }
+  font-weight: 600;
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  padding: 16px 8px;
+  align-self: flex-end;
+  border-left: 1px solid var(--borderDivision);
+  border-top: 1px solid var(--borderDivision);
+  background: transparent;
+  color: var(--textGreen);
+    
+    ${props =>
+      props.checked &&
+      css`
+        color: var(--red);
+      `}
+`
+
 export const UserInfo = styled.main`
   display: flex;
 
@@ -18,20 +71,23 @@ export const UserInfo = styled.main`
   }
 `
 export const ProjectInfo = styled.main`
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   gap: var(--gap);
   padding: var(--gap);
   text-align: center;
   > aside {
     display: flex;
     width: 100%;
-    border-bottom: 1px solid var(--borderDivision);
     padding-bottom: var(--gap);
     > a {
+      display: flex;
       width: 50%;
-
+      align-items: center;
       img {
+        
         width: 100%;
         height: 180px;
         object-fit: cover;
@@ -47,7 +103,7 @@ export const ProjectInfo = styled.main`
       justify-content: center;
       align-items: center;
       > a {
-        font: 600 1.8rem Raleway;
+        font: 600 1.5rem Raleway;
 
         :first-letter {
           text-transform: uppercase;
@@ -76,6 +132,7 @@ export const ProjectInfo = styled.main`
   }
 `
 export const BodyCard = styled.li`
+  width: 100%;
   list-style: none;
   --gap: 1rem;
   display: grid;
@@ -96,29 +153,30 @@ export const BodyCard = styled.li`
     }
   }
   > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     grid-column: 1 / -1;
     grid-row: 1 / -1;
+    grid-row-end: -1;
     border-radius: var(--borderRadius);
     box-shadow: 0 0 1px 1px var(--borderDivision);
     background: white;
-
+    height: 100%;
+    
+    > p {
+      padding: 16px 0 24px 0;
+      width: 95%;
+      align-self: center;
+      text-align: center;
+      font-size: 0.8rem;
+      line-height: 1.2rem;
+      border-top: 1px solid var(--borderDivision);
+    }
     > aside {
       display: flex;
       width: 100%;
-      > button {
-        width: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0.4rem 0;
-        border: 0;
-        align-self: flex-end;
-        border-top: 1px solid var(--borderDivision);
-        & + button {
-          border-left: 1px solid var(--borderDivision);
-        }
-        background: transparent;
-      }
+      align-self: flex-end;
     }
   }
   ${UserInfo} ~ div {

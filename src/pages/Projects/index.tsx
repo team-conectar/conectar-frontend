@@ -75,7 +75,8 @@ interface IGroupedVacancy {
  * @content is the iten of the modal
  */
 interface IVacancyDetail extends VacanciesType {
-  pessoa_projeto_ids: number[]
+  pessoas_ids: number[]
+  pessoas_projeto_ids: number[]
 }
 const Projects: React.FC = () => {
   const { loading, isAuthenticated, user } = useContext(Context)
@@ -108,10 +109,28 @@ const Projects: React.FC = () => {
   >([])
   const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>({
     ...vacancies[0],
-    pessoa_projeto_ids: [],
+    pessoas_ids: [],
+    pessoas_projeto_ids: [],
   })
-  const getset_pessoa_projeto = useCallback(() => {
-    api
+  function a(arr: any) {
+    // eslint-disable-next-line no-var
+    var newArr: Array<any> = []
+    for (let index = 0; index < arr.length; index++) {
+      for (let jndex = 0; jndex < index; jndex++) {
+        if (
+          !(
+            JSON.stringify(arr[index]) === JSON.stringify(arr[jndex]) &&
+            jndex !== index
+          )
+        ) {
+          newArr[index] = arr[index]
+        }
+      }
+    }
+    return newArr
+  }
+  const getset_pessoa_projeto = useCallback(async () => {
+    await api
       .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
       .then((response: AxiosResponse<VacanciesType[]>) => {
         setVacancies(response.data)
@@ -131,23 +150,21 @@ const Projects: React.FC = () => {
         })
 
         setGroupedVacancies(
-          GroupResponse.filter((vacancies, index) => {
-            return (
-              JSON.stringify(vacancies) !==
-              JSON.stringify(GroupResponse[index + 1])
-            )
+          GroupResponse.filter((vacancies, index, self) => {
+            let indexOfDuplicated = -1
+            for (let i = 0; i < self.length; i++) {
+              if (JSON.stringify(self[i]) === JSON.stringify(vacancies)) {
+                indexOfDuplicated = i
+              }
+            }
+            return index === indexOfDuplicated
           }),
         )
-        setVacancyDetail({
-          ...GroupResponse[0][0],
-          pessoa_projeto_ids: GroupResponse[0].map(vacancy => {
-            return vacancy.pessoa_id
-          }),
-        })
       })
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
       })
+    return true
   }, [projeto_id])
   const handleDeclineInvitation = useCallback(
     (pessoa_projeto_id: number) => {
@@ -155,7 +172,7 @@ const Projects: React.FC = () => {
         .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
           situacao: 'RECUSADO',
         })
-        .then(() => () => getset_pessoa_projeto())
+        .then(() => getset_pessoa_projeto())
     },
     [getset_pessoa_projeto],
   )
@@ -172,27 +189,36 @@ const Projects: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
 
   useEffect(() => {
-    const res = [
-      api
-        .get(`/api/v1/projeto/${projeto_id}`)
-        .then(response => {
-          setProject(response.data)
-          setStoredTools(response.data.habilidades)
-          setStoredAreas(response.data.areas)
-          api
-            .get(`/api/v1/pessoas/${response.data.pessoa_id}`)
-            .then(response => {
-              setProjectOwner(response.data)
-            })
+    const res = api
+      .get(`/api/v1/projeto/${projeto_id}`)
+      .then(response => {
+        setProject(response.data)
+        setStoredTools(response.data.habilidades)
+        setStoredAreas(response.data.areas)
+        api.get(`/api/v1/pessoas/${response.data.pessoa_id}`).then(response => {
+          setProjectOwner(response.data)
         })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+
+    getset_pessoa_projeto()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projeto_id, openModal])
+  useEffect(() => {
+    if (groupedVacancies.length > 0) {
+      setVacancyDetail({
+        ...groupedVacancies[0][0],
+        pessoas_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.pessoa_id
         }),
-      getset_pessoa_projeto(),
-    ]
-    console.log(res)
-  }, [projeto_id])
-  console.log(groupedVacancies)
+        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.id
+        }),
+      })
+    }
+  }, [groupedVacancies])
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
@@ -219,6 +245,7 @@ const Projects: React.FC = () => {
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
+
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
@@ -247,8 +274,37 @@ const Projects: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
-        await api.put(`/api/v1/projeto/${projeto_id}`, formData)
-        setOpenModal(false)
+        if (modalContent.areas) {
+          const data = {
+            areas: formData.areas.map(area => {
+              return { descricao: area }
+            }),
+          }
+          await api
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setOpenModal(false)
+            })
+        } else if (modalContent.habilidades) {
+          const data = {
+            habilidades: formData.habilidades.map(tool => {
+              return { nome: tool }
+            }),
+          }
+          await api
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setOpenModal(false)
+            })
+        } else {
+          await api.put(`/api/v1/projeto/${projeto_id}`, formData).then(() => {
+            setOpenModal(false)
+          })
+        }
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -263,24 +319,6 @@ const Projects: React.FC = () => {
     if (project.pessoa_id && user.id) {
       return !!(project.pessoa_id === user.id)
     } else return false
-  }
-  function areaTypeToString() {
-    const defo: Array<string> = []
-
-    storedAreas.forEach(area => {
-      defo.push(area.descricao)
-    })
-
-    return defo
-  }
-  function toolTypeToString() {
-    const defo: Array<string> = []
-
-    storedTools.forEach(tool => {
-      defo.push(tool.nome)
-    })
-
-    return defo
   }
 
   return (
@@ -328,16 +366,20 @@ const Projects: React.FC = () => {
                 )}
                 {modalContent.areas && (
                   <SelectArea
-                    name="area"
+                    name="areas"
                     label="Selecione as àreas de atuação"
-                    defaultValue={areaTypeToString()}
+                    defaultValue={storedAreas.map(area => {
+                      return area.descricao
+                    })}
                   />
                 )}
                 {modalContent.habilidades && (
                   <SelectTool
                     name="habilidades"
                     label="Selecione as ferramentas ou habilidades"
-                    defaultValue={toolTypeToString()}
+                    defaultValue={storedTools.map(tool => {
+                      return tool.nome
+                    })}
                   />
                 )}
                 <Button theme="primary" type="submit">
@@ -503,7 +545,7 @@ const Projects: React.FC = () => {
       </DivSobre>
       {vacanciesList &&
         vacancyDetail?.situacao === 'PENDENTE_COLABORADOR' &&
-        vacancyDetail?.pessoa_projeto_ids?.includes(user.id) && (
+        vacancyDetail?.pessoas_ids?.includes(user.id) && (
           <DivConvite>
             <figure>
               <img
@@ -517,13 +559,25 @@ const Projects: React.FC = () => {
             <aside>
               <Button
                 theme="secondary"
-                onClick={() => handleDeclineInvitation(vacancyDetail?.id)}
+                onClick={() =>
+                  handleDeclineInvitation(
+                    vacancyDetail?.pessoas_projeto_ids[
+                      vacancyDetail.pessoas_ids.indexOf(user.id)
+                    ],
+                  )
+                }
               >
                 Recusar
               </Button>
               <Button
                 theme="primary"
-                onClick={() => handleAcceptInvitation(vacancyDetail?.id)}
+                onClick={() =>
+                  handleAcceptInvitation(
+                    vacancyDetail?.pessoas_projeto_ids[
+                      vacancyDetail.pessoas_ids.indexOf(user.id)
+                    ],
+                  )
+                }
               >
                 Aceitar
               </Button>
@@ -556,8 +610,11 @@ const Projects: React.FC = () => {
                 onClick={() =>
                   setVacancyDetail({
                     ...vacancies[0],
-                    pessoa_projeto_ids: vacancies.map(vacancy => {
+                    pessoas_ids: vacancies.map(vacancy => {
                       return vacancy.pessoa_id
+                    }),
+                    pessoas_projeto_ids: vacancies.map(vacancy => {
+                      return vacancy.id
                     }),
                   })
                 }
