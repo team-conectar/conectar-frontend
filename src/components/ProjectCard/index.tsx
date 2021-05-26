@@ -1,5 +1,9 @@
-<<<<<<< HEAD
-import React, { InputHTMLAttributes, useEffect, useState } from 'react'
+import React, {
+  InputHTMLAttributes,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import {
   BodyCard,
   ButtonFavorite,
@@ -7,10 +11,6 @@ import {
   ProjectInfo,
   UserInfo,
 } from './styles'
-=======
-import React, { InputHTMLAttributes, useContext, useEffect, useState } from 'react'
-import { BodyCard, ButtonFavorite, ButtonInterest, ProjectInfo, UserInfo } from './styles'
->>>>>>> 2b6ab35eb151bf4ad30efcaf3d98acea8918bcde
 import { Link } from 'react-router-dom'
 import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
@@ -44,8 +44,8 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   const [interesse, setInteresse] = useState<boolean>(false)
   const [user, setUser] = useState<IPessoa>()
   const loggedUser = useContext(Context).user
-  console.log(loggedUser == null);
-  console.log(loggedUser);
+  console.log(loggedUser == null)
+  console.log(loggedUser)
   const SelectFavorite: any = () => {
     if (favorite) {
       return <BsFillStarFill />
@@ -118,12 +118,19 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         </ProjectInfo>
         <p>{project.descricao}</p>
 
-        {loggedUser.id != user?.id && 
+        {loggedUser.id != user?.id && (
           <aside>
-            <ButtonFavorite checked={favorite} onClick={ToogleFavorite}> <SelectFavorite /> Favoritar</ButtonFavorite>
-            <ButtonInterest checked={interesse} onClick={ToogleInteresse}> <SelectInteresse />Tenho interesse</ButtonInterest>
+            <ButtonFavorite checked={favorite} onClick={ToogleFavorite}>
+              {' '}
+              <SelectFavorite /> Favoritar
+            </ButtonFavorite>
+            <ButtonInterest checked={interesse} onClick={ToogleInteresse}>
+              {' '}
+              <SelectInteresse />
+              Tenho interesse
+            </ButtonInterest>
           </aside>
-        }
+        )}
       </div>
     </BodyCard>
   )

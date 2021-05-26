@@ -97,9 +97,11 @@ export const ExperienciasDiv = styled.div`
     padding: 1.4rem 0;
     width: 100%;
     > button {
+      width: 100%;
       cursor: initial;
       justify-content: flex-start;
       flex-flow: row nowrap;
+      word-break: break-all;
       border-radius: 0;
       aside {
         position: initial;
@@ -184,6 +186,7 @@ export const PerfilDiv = styled.div`
   gap: 1rem;
   align-items: center;
   justify-content: space-evenly;
+  max-height: 90vh;
   width: 90vw;
   > ul {
     display: flex;
@@ -213,14 +216,19 @@ export const PerfilDiv = styled.div`
     padding: 2rem 0.8rem;
     box-shadow: var(--boxShadow);
     width: auto;
-    ${PerfilMain} {
-      order: 1;
-    }
-    ${ExperienciasDiv} {
-      order: 2;
-    }
     > ul {
-      order: 3;
+      overflow-y: auto;
+
+      > li,
+      > h3 {
+        order: 3;
+      }
+      ${PerfilMain} {
+        order: 1;
+      }
+      ${ExperienciasDiv} {
+        order: 2;
+      }
       > h3 {
         display: initial;
         align-self: flex-start;
@@ -299,7 +307,7 @@ export const Page = styled.div`
         top: 45px;
         width: calc(var(--PerfilWidth) - 2rem);
         margin-left: 2rem;
-        margin-top: -185px;
+        margin-top: -256px;
       }
       > header {
         grid-column: 1 / -1;

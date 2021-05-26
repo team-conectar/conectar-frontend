@@ -211,75 +211,79 @@ const Profiles: React.FC = () => {
             {profile.habilidades?.map(habilidade => (
               <li key={habilidade.id}>{habilidade.nome}</li>
             ))}
-          </ul>
-          <ExperienciasDiv>
-            {profile.experiencia_academica?.length > 0 && (
-              <button>
-                <img
-                  src={educação}
-                  alt={profile.experiencia_academica[0].curso}
-                />
-                <aside>
-                  <legend>
-                    {profile.experiencia_academica[0].instituicao}
-                  </legend>
-                  <p>
-                    {profile.experiencia_academica[0].curso} <br />
-                    {profile.experiencia_academica[0].situacao}
-                  </p>
-                </aside>
-              </button>
-            )}
-            {profile?.experiencia_profissional?.length > 0 && (
-              <button>
-                <img
-                  src={trabalho}
-                  alt={profile.experiencia_profissional[0].cargo}
-                />
-                <aside>
-                  <legend>
-                    {profile.experiencia_profissional[0].organizacao}
-                  </legend>
-                  <p>
-                    {`
+            <ExperienciasDiv>
+              {profile.experiencia_academica?.length > 0 && (
+                <button>
+                  <img
+                    src={educação}
+                    alt={profile.experiencia_academica[0].curso}
+                  />
+                  <aside>
+                    <legend>
+                      {profile.experiencia_academica[0].instituicao}
+                    </legend>
+                    <p>
+                      {profile.experiencia_academica[0].curso} <br />
+                      {profile.experiencia_academica[0].situacao}
+                    </p>
+                  </aside>
+                </button>
+              )}
+              {profile?.experiencia_profissional?.length > 0 && (
+                <button>
+                  <img
+                    src={trabalho}
+                    alt={profile.experiencia_profissional[0].cargo}
+                  />
+                  <aside>
+                    <legend>
+                      {profile.experiencia_profissional[0].organizacao}
+                    </legend>
+                    <p>
+                      {`
                       ${profile.experiencia_profissional[0].cargo} | 
                       ${profile.experiencia_profissional[0].vinculo} 
                       `}
-                    <br />
-                    {`${toMonth(
-                      profile.experiencia_profissional[0].data_inicio.split(
-                        '-',
-                      )[1],
-                    )} de  ${
-                      profile.experiencia_profissional[0].data_inicio.split(
-                        '-',
-                      )[0]
-                    } até o momento`}
-                  </p>
-                </aside>
-              </button>
-            )}
-            {profile.experiencia_projetos?.length > 0 && (
-              <button>
-                <img
-                  src={projeto}
-                  alt={profile.experiencia_projetos[0].cargo}
-                />
-                <aside>
-                  <legend>{profile.experiencia_projetos[0].nome}</legend>
-                  <p>
-                    {profile.experiencia_projetos[0].cargo}
-                    <br />
-                    {`${toMonth(
-                      profile.experiencia_projetos[0].data_inicio.split('-')[1],
-                    )} de  ${
-                      profile.experiencia_projetos[0].data_inicio.split('-')[0]
-                    } até o momento`}
-                  </p>
-                </aside>
-              </button>
-            )}
-          </ExperienciasDiv>
+                      <br />
+                      {`${toMonth(
+                        profile.experiencia_profissional[0].data_inicio.split(
+                          '-',
+                        )[1],
+                      )} de  ${
+                        profile.experiencia_profissional[0].data_inicio.split(
+                          '-',
+                        )[0]
+                      } até o momento`}
+                    </p>
+                  </aside>
+                </button>
+              )}
+              {profile.experiencia_projetos?.length > 0 && (
+                <button>
+                  <img
+                    src={projeto}
+                    alt={profile.experiencia_projetos[0].cargo}
+                  />
+                  <aside>
+                    <legend>{profile.experiencia_projetos[0].nome}</legend>
+                    <p>
+                      {profile.experiencia_projetos[0].cargo}
+                      <br />
+                      {`${toMonth(
+                        profile.experiencia_projetos[0].data_inicio.split(
+                          '-',
+                        )[1],
+                      )} de  ${
+                        profile.experiencia_projetos[0].data_inicio.split(
+                          '-',
+                        )[0]
+                      } até o momento`}
+                    </p>
+                  </aside>
+                </button>
+              )}
+            </ExperienciasDiv>
+          </ul>
 
           {profile.id && <h4>Exibir currículo completo</h4>}
         </PerfilDiv>
