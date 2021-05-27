@@ -141,12 +141,13 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       </h3>
 
       {/* <Button theme="primary">Ver currículo</Button> */}
-      <DropdownList IconButton={<Button theme="secondary">Nova busca</Button>}>
+      {/* <DropdownList IconButton={*/}
+        <Button theme="secondary">Nova busca</Button> 
         {/* <li>Perfis similares</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li> */}
-      </DropdownList>
+      {/*</DropdownList>*/}
       <aside>
         <h4>{situation[`${vacancy.situacao}`].invite}</h4>
         <span>{situation[`${vacancy.situacao}`].status}</span>
