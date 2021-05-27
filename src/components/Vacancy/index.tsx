@@ -104,16 +104,6 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
       })
   }, [])
 
-  useEffect(() => {
-    api
-      .get('/api/v1/experiencias/academica/me', {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail
-      })
-  }, [editingId, showRegister])
   const handleSubmit = useCallback(
     async (formData: IFormData) => {
       console.log(formData)
@@ -190,7 +180,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
     },
     [project.id],
   )
-  useEffect(() => {
+  const get_pessoa_projeto = useCallback(() => {
     api
       .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
       .then((response: AxiosResponse<VacanciesType[]>) => {
@@ -215,9 +205,17 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             )
           }),
         )
-        setVacancies(response.data)
       })
-  }, [project.id, showRegister])
+  }, [project.id])
+  const handleDeleteVacancy = useCallback(() => {
+    vacancies.forEach(vacancy => {
+      api
+        .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+        .then(get_pessoa_projeto)
+    })
+  }, [get_pessoa_projeto, vacancies])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(get_pessoa_projeto, [project.id, showRegister])
   return (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
       <h1>
@@ -235,13 +233,7 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             <VacancieListItem
               key={vacancies[0].id}
               vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
-              onDelete={() => {
-                vacancies.forEach(vacancy => {
-                  api
-                    .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
-                    .finally(() => console.log('sdf'))
-                })
-              }}
+              onDelete={handleDeleteVacancy}
             />
           ))}
         </ContainerScroll>
