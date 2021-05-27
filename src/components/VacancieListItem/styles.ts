@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Dropdown from '../UI/Dropdown'
 import {
   BodyButton as DropdownStyle,
@@ -12,7 +12,6 @@ export const DropdownList = styled(Dropdown)`
   li {
     list-style: none;
     width: 100%;
-    cursor: pointer;
     :hover {
       background: var(--borderDivision);
     }

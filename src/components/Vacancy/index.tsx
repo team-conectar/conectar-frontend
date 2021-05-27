@@ -235,6 +235,13 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             <VacancieListItem
               key={vacancies[0].id}
               vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
+              onDelete={() => {
+                vacancies.forEach(vacancy => {
+                  api
+                    .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+                    .finally(() => console.log('sdf'))
+                })
+              }}
             />
           ))}
         </ContainerScroll>
