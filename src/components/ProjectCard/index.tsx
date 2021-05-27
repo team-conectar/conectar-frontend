@@ -44,8 +44,6 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   const [interesse, setInteresse] = useState<boolean>(false)
   const [user, setUser] = useState<IPessoa>()
   const loggedUser = useContext(Context).user
-  console.log(loggedUser == null)
-  console.log(loggedUser)
   const SelectFavorite: any = () => {
     if (favorite) {
       return <BsFillStarFill />
