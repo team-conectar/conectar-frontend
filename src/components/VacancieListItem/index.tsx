@@ -10,8 +10,8 @@ import { VacanciesType } from '../Vacancy'
 
 interface Props extends HTMLAttributes<HTMLLIElement> {
   vacancy: VacanciesType
-  onEdit?(): void
-  onDelete?(): void
+  onEdit(): void
+  onDelete(): void
 }
 const VacancieListItem: React.FC<Props> = ({
   vacancy,

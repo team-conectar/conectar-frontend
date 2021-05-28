@@ -63,7 +63,6 @@ interface VacancyProps {
 }
 const Vacancy: React.FC<VacancyProps> = ({ project }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
-  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [groupedVacancies, setGroupedVacancies] = useState<
     Array<VacanciesType[]>
   >([])
@@ -207,13 +206,20 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         )
       })
   }, [project.id])
-  const handleDeleteVacancy = useCallback(() => {
-    vacancies.forEach(vacancy => {
-      api
-        .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
-        .then(get_pessoa_projeto)
-    })
-  }, [get_pessoa_projeto, vacancies])
+  const handleDeleteVacancy = useCallback(
+    (vacancies: VacanciesType[]) => {
+      vacancies.forEach(vacancy => {
+        const res = api
+          .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+          .then(get_pessoa_projeto)
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        console.log(res)
+      })
+    },
+    [get_pessoa_projeto],
+  )
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(get_pessoa_projeto, [project.id, showRegister])
   return (
@@ -233,7 +239,8 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             <VacancieListItem
               key={vacancies[0].id}
               vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
-              onDelete={handleDeleteVacancy}
+              onDelete={() => handleDeleteVacancy(vacancies)}
+              onEdit={() => console.log('sas')}
             />
           ))}
         </ContainerScroll>
