@@ -60,25 +60,29 @@ interface IFormData {
 }
 interface VacancyProps {
   project: ProjectType
+  vacanciesToEdit?: VacanciesType[]
 }
-const Vacancy: React.FC<VacancyProps> = ({ project }) => {
+const Vacancy: React.FC<VacancyProps> = ({ project, vacanciesToEdit }) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [groupedVacancies, setGroupedVacancies] = useState<
     Array<VacanciesType[]>
   >([])
+  const [editVacancies, setEditVacancies] = useState<VacanciesType[]>(
+    vacanciesToEdit || [],
+  )
   const [optionsAcordo, setOptionsAcordo] = useState<
     Array<OptionHTMLAttributes<HTMLOptionElement>>
   >([])
-  const [optionsPeapel, setOptionsPeapel] = useState<
+  const [optionsPapel, setOptionsPapel] = useState<
     Array<OptionHTMLAttributes<HTMLOptionElement>>
   >([])
-  const [editingId, setEditingId] = useState<number>(0)
   const formRef = useRef<FormHandles>(null)
+  useEffect(() => setShowRegister(!!vacanciesToEdit), [vacanciesToEdit])
   useEffect(() => {
     api
       .get('/api/v1/papel')
       .then((response: AxiosResponse<ITipoAcordo[]>) => {
-        setOptionsPeapel(
+        setOptionsPapel(
           response.data.map(item => {
             return { value: item.id, label: item.descricao }
           }),
@@ -206,6 +210,20 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         )
       })
   }, [project.id])
+  const handleEditVacancy = useCallback(
+    (vacancies: VacanciesType[]) => {
+      vacancies.forEach(vacancy => {
+        const res = api
+          .put(`/api/v1/pessoa_projeto/${vacancy.id}`)
+          .then(get_pessoa_projeto)
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        console.log(res)
+      })
+    },
+    [get_pessoa_projeto],
+  )
   const handleDeleteVacancy = useCallback(
     (vacancies: VacanciesType[]) => {
       vacancies.forEach(vacancy => {
@@ -240,7 +258,10 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
               key={vacancies[0].id}
               vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
               onDelete={() => handleDeleteVacancy(vacancies)}
-              onEdit={() => console.log('sas')}
+              onEdit={() => {
+                setShowRegister(true)
+                setEditVacancies(vacancies)
+              }}
             />
           ))}
         </ContainerScroll>
@@ -249,58 +270,88 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           <Input
             label="Cargo"
             name="cargo"
-            // defaultValue={academicFormData?.instituicao}
+            defaultValue={editVacancies[0]?.titulo}
           />
-          <Select label="Perfil" options={optionsPeapel} name="perfil" />
+          <Select
+            label="Perfil"
+            options={optionsPapel}
+            name="perfil"
+            defaultValue={optionsPapel.find(
+              option => Number(option.value) === editVacancies[0]?.papel_id,
+            )}
+          />
           <Input
             label="Quantidade"
             name="quantidade"
             type="number"
-            // defaultValue={academicFormData?.instituicao}
+            defaultValue={editVacancies.length > 0 ? editVacancies.length : ' '}
           />
 
           <Select
             label="Habilidade ou Ferramentas"
             name="habilidades"
+            multi
             options={project.habilidades.map(tool => {
               return { value: tool.nome, label: tool.nome }
             })}
-            multi
+            defaultValue={editVacancies[0]?.habilidades.map(tool => {
+              return { value: tool.nome, label: tool.nome }
+            })}
           />
           <div className="bloco-area">
             <Select
               label="Áreas"
               name="areas"
+              multi
               options={project.areas.map(area => {
                 return { value: area.descricao, label: area.descricao }
               })}
-              multi
+              defaultValue={editVacancies[0]?.areas.map(area => {
+                return { value: area.descricao, label: area.descricao }
+              })}
             />
           </div>
 
-          <Textarea name="descricao" label="Descrição" />
+          <Textarea
+            name="descricao"
+            label="Descrição"
+            defaultValue={editVacancies[0]?.descricao}
+          />
           <section className="bloco-contrato">
             <Select
               label="Tipo de contrato"
               options={optionsAcordo}
               name="tipoContrato"
+              defaultValue={optionsAcordo.find(
+                option =>
+                  Number(option.value) === editVacancies[0]?.tipo_acordo_id,
+              )}
             />
             <ToggleSwitch
+              name="remunerado"
               options={[
                 { label: 'Remunerado', id: 'remunerado', value: 'remunerado' },
               ]}
-              name="remunerado"
+              defaultChecked={editVacancies[0]?.remunerado}
             />
           </section>
           <section className="area-botoes">
             <Button type="submit" theme="primary">
               Salvar
             </Button>
-            <Button theme="secondary">Excluir</Button>
+            <Button
+              theme="secondary"
+              onClick={() => {
+                handleDeleteVacancy(editVacancies)
+                setShowRegister(false)
+              }}
+            >
+              Excluir
+            </Button>
             <Button
               onClick={() => {
                 setShowRegister(false)
-                setEditingId(0)
+                setEditVacancies([])
               }}
               theme="secondary"
             >

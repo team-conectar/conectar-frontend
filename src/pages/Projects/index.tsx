@@ -104,6 +104,7 @@ const Projects: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+  const [editVacancies, setEditVacancies] = useState<VacanciesType[]>([])
   const [groupedVacancies, setGroupedVacancies] = useState<
     Array<VacanciesType[]>
   >([])
@@ -112,23 +113,7 @@ const Projects: React.FC = () => {
     pessoas_ids: [],
     pessoas_projeto_ids: [],
   })
-  function a(arr: any) {
-    // eslint-disable-next-line no-var
-    var newArr: Array<any> = []
-    for (let index = 0; index < arr.length; index++) {
-      for (let jndex = 0; jndex < index; jndex++) {
-        if (
-          !(
-            JSON.stringify(arr[index]) === JSON.stringify(arr[jndex]) &&
-            jndex !== index
-          )
-        ) {
-          newArr[index] = arr[index]
-        }
-      }
-    }
-    return newArr
-  }
+
   const getset_pessoa_projeto = useCallback(async () => {
     await api
       .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
@@ -148,7 +133,6 @@ const Projects: React.FC = () => {
             )
           })
         })
-
         setGroupedVacancies(
           GroupResponse.filter((vacancies, index, self) => {
             let indexOfDuplicated = -1
@@ -343,6 +327,7 @@ const Projects: React.FC = () => {
         setOpen={setOpenModal}
         onAfterClose={() => {
           setOpenModal(!isAuthenticated)
+          setEditVacancies([])
         }}
       >
         {!loading && !isAuthenticated ? (
@@ -401,7 +386,9 @@ const Projects: React.FC = () => {
                 </Button>
               </Form>
             )}
-            {modalContent.vaga && <Vacancy project={project} />}
+            {modalContent.vaga && (
+              <Vacancy project={project} vacanciesToEdit={editVacancies} />
+            )}
           </>
         )}
       </Modal>
@@ -445,10 +432,10 @@ const Projects: React.FC = () => {
             )}
             <a>
               <span>
-                <img src={like} alt="curtidas" />
-                194
+                {/* <img src={like} alt="curtidas" /> */}
+                {/* 194 */}
               </span>
-              <p>Publicado em:</p>
+              {/* <p>Publicado em:</p> */}
             </a>
           </section>
           <aside>
@@ -622,7 +609,11 @@ const Projects: React.FC = () => {
                   quantidade: vacancies.length,
                 }}
                 onDelete={() => handleDeleteVacancy(vacancies)}
-                onEdit={() => console.log('sas')}
+                onEdit={() => {
+                  setEditVacancies(vacancies)
+                  setModalContent({ ...initialModalContent, vaga: true })
+                  setOpenModal(true)
+                }}
                 onClick={() =>
                   setVacancyDetail({
                     ...vacancies[0],
