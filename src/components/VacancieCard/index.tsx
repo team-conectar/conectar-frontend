@@ -86,6 +86,9 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       isAvaliable: true,
     },
   }
+
+
+
   useEffect(() => {
     const res = [
       api
@@ -141,8 +144,9 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       </h3>
 
       {/* <Button theme="primary">Ver currículo</Button> */}
-      {/* <DropdownList IconButton={*/}
-        <Button theme="secondary">Nova busca</Button> 
+      {/* <DropdownList IconButton={*
+        /}
+        <Button onClick={FindPeople} theme="secondary">Nova busca</Button> 
         {/* <li>Perfis similares</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li>
