@@ -20,6 +20,7 @@ const ApproveProject: React.FC = () => {
   const [project, setProject] = useState<IProject>({} as IProject)
   const [vacancies, setVacancies] = useState<Array<IVacancyCard>>([])
 
+
   useEffect(() => {
     const res = [
       api
