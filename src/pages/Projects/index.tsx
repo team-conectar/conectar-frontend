@@ -603,6 +603,7 @@ const Projects: React.FC = () => {
           <ContainerScroll>
             {groupedVacancies.map(vacancies => (
               <VacancieListItem
+                dontShowOption={isOwner() ? undefined : true}
                 key={vacancies[0].id}
                 vacancy={{
                   ...vacancies[0],
