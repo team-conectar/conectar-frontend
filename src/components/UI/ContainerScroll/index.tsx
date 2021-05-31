@@ -1,8 +1,8 @@
 import React from 'react'
 import { DivScroll } from './styles'
-import { Scrollbars } from 'react-custom-scrollbars'
+import { Scrollbars, ScrollbarProps } from 'react-custom-scrollbars'
 
-const ContainerScroll: React.FC = ({ children }) => {
+const ContainerScroll: React.FC<ScrollbarProps> = ({ children, ...rest }) => {
   return (
     <DivScroll>
       <Scrollbars
@@ -14,6 +14,8 @@ const ContainerScroll: React.FC = ({ children }) => {
         renderThumbVertical={props => (
           <div {...props} className="thumb-vertical" />
         )}
+        renderView={props => <div {...props} className="view" />}
+        {...rest}
       >
         {children}
       </Scrollbars>

@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import Dropdown from '../UI/Dropdown'
 import {
   BodyButton as DropdownStyle,
@@ -12,7 +12,6 @@ export const DropdownList = styled(Dropdown)`
   li {
     list-style: none;
     width: 100%;
-    cursor: pointer;
     :hover {
       background: var(--borderDivision);
     }
@@ -28,7 +27,7 @@ export const VacancieLi = styled.li`
   grid-template-columns: 2rem 1fr 2rem;
   align-items: center;
   gap: 1rem;
-  margin: var(--gap) 0;
+  margin: var(--gap) 0.4rem;
   > p {
     line-height: 1.6rem;
     font-size: 0.8rem;

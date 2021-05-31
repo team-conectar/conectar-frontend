@@ -219,6 +219,20 @@ const Projects: React.FC = () => {
       })
     }
   }, [groupedVacancies])
+  const handleDeleteVacancy = useCallback(
+    (vacancies: VacanciesType[]) => {
+      vacancies.forEach(vacancy => {
+        const res = api
+          .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+          .then(getset_pessoa_projeto)
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        console.log(res)
+      })
+    },
+    [getset_pessoa_projeto],
+  )
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
@@ -607,6 +621,8 @@ const Projects: React.FC = () => {
                   ...vacancies[0],
                   quantidade: vacancies.length,
                 }}
+                onDelete={() => handleDeleteVacancy(vacancies)}
+                onEdit={() => console.log('sas')}
                 onClick={() =>
                   setVacancyDetail({
                     ...vacancies[0],

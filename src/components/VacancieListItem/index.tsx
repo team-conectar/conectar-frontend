@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useEffect, useState } from 'react'
+import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react'
 import { VacancieLi, DropdownList } from './styles'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
@@ -10,8 +10,15 @@ import { VacanciesType } from '../Vacancy'
 
 interface Props extends HTMLAttributes<HTMLLIElement> {
   vacancy: VacanciesType
+  onEdit(): void
+  onDelete(): void
 }
-const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
+const VacancieListItem: React.FC<Props> = ({
+  vacancy,
+  onEdit,
+  onDelete,
+  ...rest
+}) => {
   const [profile, setProfile] = useState<string>('')
   const [agreement, setAgreement] = useState<string>('')
   useEffect(() => {
@@ -35,6 +42,7 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
     ]
     console.log(res)
   }, [vacancy.papel_id, vacancy.tipo_acordo_id])
+
   return (
     <VacancieLi {...rest}>
       <img
@@ -61,8 +69,8 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
       </p>
 
       <DropdownList IconButton={<GiHamburgerMenu />}>
-        <li>Clonar vaga</li>
-        <li>Excluir vaga</li>
+        <li onClick={() => onEdit && onEdit()}>Editar vaga</li>
+        <li onClick={() => onDelete && onDelete()}>Excluir vaga</li>
       </DropdownList>
     </VacancieLi>
   )
