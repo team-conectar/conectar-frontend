@@ -231,7 +231,7 @@ const Projects: React.FC = () => {
 
   const handleFindTeam = useCallback(() => {
     const res = api
-      .get(`/api/v1/pessoa_projeto/similaridade/${projeto_id}`)
+      .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
       .finally(() => {
         history.push(`/projeto-conectado/${projeto_id}`)
       })
