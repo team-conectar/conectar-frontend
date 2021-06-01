@@ -7,6 +7,10 @@ import React, {
   useContext,
   Fragment,
   useCallback,
+  Ref,
+  MutableRefObject,
+  ForwardRefExoticComponent,
+  RefAttributes,
 } from 'react'
 import { Link } from 'react-router-dom'
 import { BodyProjects, DivConvite, DivSobre, DivTags, DivVagas } from './styles'
@@ -36,7 +40,7 @@ import Dropzone from '../../components/UI/Dropzone'
 import { Context } from '../../context/AuthContext'
 import Login from '../../components/UI/Login'
 import NavBar from '../../components/UI/NavBar'
-import Vacancy, { VacanciesType } from '../../components/Vacancy'
+import Vacancy, { handleVacancy, VacanciesType } from '../../components/Vacancy'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -67,9 +71,7 @@ interface IProjectOwner {
   nome: string
   id: number
 }
-interface IGroupedVacancy {
-  [index: number]: VacanciesType[][]
-}
+
 /**
  * @constructor
  * @content is the iten of the modal
@@ -78,6 +80,7 @@ interface IVacancyDetail extends VacanciesType {
   pessoas_ids: number[]
   pessoas_projeto_ids: number[]
 }
+
 const Projects: React.FC = () => {
   const { loading, isAuthenticated, user } = useContext(Context)
 
@@ -95,7 +98,6 @@ const Projects: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(
     loading && isAuthenticated,
   )
-
   const projeto_id = useParams<routeParms>().id
   const [projectOwner, setProjectOwner] = useState({} as IProjectOwner)
   const [project, setProject] = useState({} as ProjectType)
@@ -104,7 +106,7 @@ const Projects: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
-  const [editVacancies, setEditVacancies] = useState<VacanciesType[]>([])
+  const vacancyComponentRef = useRef<handleVacancy>(null)
   const [groupedVacancies, setGroupedVacancies] = useState<
     Array<VacanciesType[]>
   >([])
@@ -217,6 +219,7 @@ const Projects: React.FC = () => {
     },
     [getset_pessoa_projeto],
   )
+
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
@@ -327,7 +330,8 @@ const Projects: React.FC = () => {
         setOpen={setOpenModal}
         onAfterClose={() => {
           setOpenModal(!isAuthenticated)
-          setEditVacancies([])
+          vacancyComponentRef.current?.setShowRegister(false)
+          vacancyComponentRef.current?.setEditVacancies([])
         }}
       >
         {!loading && !isAuthenticated ? (
@@ -386,9 +390,13 @@ const Projects: React.FC = () => {
                 </Button>
               </Form>
             )}
-            {modalContent.vaga && (
-              <Vacancy project={project} vacanciesToEdit={editVacancies} />
-            )}
+            {
+              <Vacancy
+                project={project}
+                ref={vacancyComponentRef}
+                dontRender={!modalContent.vaga}
+              />
+            }
           </>
         )}
       </Modal>
@@ -611,9 +619,11 @@ const Projects: React.FC = () => {
                 }}
                 onDelete={() => handleDeleteVacancy(vacancies)}
                 onEdit={() => {
-                  setEditVacancies(vacancies)
-                  setModalContent({ ...initialModalContent, vaga: true })
                   setOpenModal(true)
+                  setModalContent({ ...initialModalContent, vaga: true })
+                  vacancyComponentRef.current?.setShowRegister(true)
+                  vacancyComponentRef.current?.setEditVacancies(vacancies)
+                  console.log(vacancies)
                 }}
                 onClick={() =>
                   setVacancyDetail({

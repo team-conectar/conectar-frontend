@@ -281,7 +281,7 @@ export const BodyProjects = styled.div`
       gap: 1rem;
       h1 {
         font-size: 2rem;
-
+        width: 60%;
         display: flex;
         align-items: center;
         justify-content: space-between;
