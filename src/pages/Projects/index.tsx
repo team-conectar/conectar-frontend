@@ -418,7 +418,7 @@ const Projects: React.FC = () => {
               alt=""
             />
             <aside>
-              <h2>{projectOwner.nome}</h2>
+              <h2>{projectOwner.nome?.split(' ')[0]}</h2>
               <p>@{projectOwner.usuario}</p>
             </aside>
           </ProfileLink>
