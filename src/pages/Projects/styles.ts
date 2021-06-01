@@ -13,7 +13,6 @@ export const DivTags = styled.div`
   legend {
     font: 600 1.2rem Raleway;
     margin: 0.4rem 0;
-    padding-left: 0.4rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -36,7 +35,28 @@ export const DivTags = styled.div`
     }
   }
 `
-
+export const DivParticipants = styled.div`
+  legend {
+    font: 600 1rem Raleway;
+    margin: 0.4rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-left: 0.4rem;
+    ${ProfileLink} {
+      flex-direction: column;
+      gap: 0;
+      h2 {
+        font-size: 1rem;
+      }
+    }
+  }
+`
 export const DivConvite = styled.div`
   background: white;
   border-radius: 0.6rem;

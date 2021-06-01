@@ -13,7 +13,14 @@ import React, {
   RefAttributes,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { BodyProjects, DivConvite, DivSobre, DivTags, DivVagas } from './styles'
+import {
+  BodyProjects,
+  DivConvite,
+  DivParticipants,
+  DivSobre,
+  DivTags,
+  DivVagas,
+} from './styles'
 import edit from '../../assets/icon/editar.svg'
 import TrashIcon from '../../assets/icon/lixeira.svg'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -51,6 +58,7 @@ import VacancieListItem from '../../components/VacancieListItem'
 import Skeleton from 'react-loading-skeleton'
 import { IconEdit } from '../../assets/icon'
 import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
+import VacancieCard from '../../components/VacancieCard'
 interface routeParms {
   id: string
 }
@@ -65,7 +73,7 @@ interface ProjectType {
   id: number
   pessoa_id: number
 }
-interface IProjectOwner {
+interface IPeopleLink {
   usuario: string
   foto_perfil: string
   nome: string
@@ -99,7 +107,10 @@ const Projects: React.FC = () => {
     loading && isAuthenticated,
   )
   const projeto_id = useParams<routeParms>().id
-  const [projectOwner, setProjectOwner] = useState({} as IProjectOwner)
+  const [projectOwner, setProjectOwner] = useState({} as IPeopleLink)
+  const [participantsDetail, setParticipantsDetail] = useState<IPeopleLink[]>(
+    [],
+  )
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
@@ -173,38 +184,6 @@ const Projects: React.FC = () => {
     [getset_pessoa_projeto],
   )
   const formRef = useRef<FormHandles>(null)
-
-  useEffect(() => {
-    const res = api
-      .get(`/api/v1/projeto/${projeto_id}`)
-      .then(response => {
-        setProject(response.data)
-        setStoredTools(response.data.habilidades)
-        setStoredAreas(response.data.areas)
-        api.get(`/api/v1/pessoas/${response.data.pessoa_id}`).then(response => {
-          setProjectOwner(response.data)
-        })
-      })
-      .catch((error: AxiosError) => {
-        return error?.response?.data.detail
-      })
-
-    getset_pessoa_projeto()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projeto_id, openModal])
-  useEffect(() => {
-    if (groupedVacancies.length > 0) {
-      setVacancyDetail({
-        ...groupedVacancies[0][0],
-        pessoas_ids: groupedVacancies[0].map(vacancy => {
-          return vacancy.pessoa_id
-        }),
-        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
-          return vacancy.id
-        }),
-      })
-    }
-  }, [groupedVacancies])
   const handleDeleteVacancy = useCallback(
     (vacancies: VacanciesType[]) => {
       vacancies.forEach(vacancy => {
@@ -219,19 +198,6 @@ const Projects: React.FC = () => {
     },
     [getset_pessoa_projeto],
   )
-
-  useEffect(() => {
-    const res = api
-      .get(`/api/v1/pessoas/${project.pessoa_id}`)
-      .then(response => {
-        setProjectOwner(response.data)
-      })
-      .catch((error: AxiosError) => {
-        return error?.response?.data.detail
-      })
-    console.log(res)
-  }, [project.pessoa_id, openModal])
-
   const handleFindTeam = useCallback(() => {
     const res = api
       .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
@@ -321,6 +287,64 @@ const Projects: React.FC = () => {
       return !!(project.pessoa_id === user.id)
     } else return false
   }
+  useEffect(() => {
+    const res = api
+      .get(`/api/v1/projeto/${projeto_id}`)
+      .then(response => {
+        setProject(response.data)
+        setStoredTools(response.data.habilidades)
+        setStoredAreas(response.data.areas)
+        api.get(`/api/v1/pessoas/${response.data.pessoa_id}`).then(response => {
+          setProjectOwner(response.data)
+        })
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+
+    getset_pessoa_projeto()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projeto_id, openModal])
+  useEffect(() => {
+    if (groupedVacancies.length > 0) {
+      setVacancyDetail({
+        ...groupedVacancies[0][0],
+        pessoas_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.pessoa_id
+        }),
+        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.id
+        }),
+      })
+    }
+  }, [groupedVacancies])
+
+  useEffect(() => {
+    const res = api
+      .get(`/api/v1/pessoas/${project.pessoa_id}`)
+      .then(response => {
+        setProjectOwner(response.data)
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+    console.log(res)
+  }, [project.pessoa_id, openModal])
+  useEffect(() => {
+    vacancyDetail.pessoas_ids?.map(id => {
+      api
+        .get(`/api/v1/pessoas/${id}`)
+        .then((response: AxiosResponse<IPeopleLink>) => {
+          setParticipantsDetail(participants =>
+            participants.concat([response.data]),
+          )
+        })
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
+        })
+    })
+  }, [vacancyDetail])
+  console.log(participantsDetail)
 
   return (
     <BodyProjects>
@@ -686,6 +710,25 @@ const Projects: React.FC = () => {
                 ))}
               </aside>
             </DivTags>
+            {participantsDetail.length > 0 && (
+              <DivParticipants>
+                <legend>Pessoas participando dessa vaga</legend>
+                <aside>
+                  {participantsDetail?.map(participant => (
+                    <ProfileLink
+                      key={participant.id}
+                      to={`/perfil/${participant.id}`}
+                    >
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+                        alt=""
+                      />
+                      <h2>{participant.nome?.split(' ')[0]}</h2>
+                    </ProfileLink>
+                  ))}
+                </aside>
+              </DivParticipants>
+            )}
           </aside>
         </section>
       </DivVagas>
