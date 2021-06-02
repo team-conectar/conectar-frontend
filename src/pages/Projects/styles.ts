@@ -50,7 +50,7 @@ export const DivParticipants = styled.div`
     padding-left: 0.4rem;
     ${ProfileLink} {
       flex-direction: column;
-      gap: 0;
+      column-gap: 0.2rem;
       h2 {
         font-size: 1rem;
       }

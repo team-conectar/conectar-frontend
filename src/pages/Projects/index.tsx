@@ -331,18 +331,27 @@ const Projects: React.FC = () => {
     console.log(res)
   }, [project.pessoa_id, openModal])
   useEffect(() => {
-    vacancyDetail.pessoas_ids?.map(id => {
-      api
-        .get(`/api/v1/pessoas/${id}`)
-        .then((response: AxiosResponse<IPeopleLink>) => {
-          setParticipantsDetail(participants =>
-            participants.concat([response.data]),
-          )
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        })
-    })
+    groupedVacancies
+      ?.find(vacancies => {
+        return vacancies[0]?.id === vacancyDetail?.pessoas_projeto_ids[0]
+      })
+      ?.map(vacancy => {
+        if (
+          vacancy.situacao === 'ACEITO' ||
+          vacancy.situacao === 'FINALIZADO'
+        ) {
+          api
+            .get(`/api/v1/pessoas/${vacancy.id}`)
+            .then((response: AxiosResponse<IPeopleLink>) => {
+              setParticipantsDetail(participants =>
+                participants.concat([response.data]),
+              )
+            })
+            .catch((error: AxiosError) => {
+              return error?.response?.data.detail
+            })
+        }
+      })
   }, [vacancyDetail])
   console.log(participantsDetail)
 
@@ -712,7 +721,7 @@ const Projects: React.FC = () => {
             </DivTags>
             {participantsDetail.length > 0 && (
               <DivParticipants>
-                <legend>Pessoas participando dessa vaga</legend>
+                <legend>Pessoas participando dessa vaga:</legend>
                 <aside>
                   {participantsDetail?.map(participant => (
                     <ProfileLink
