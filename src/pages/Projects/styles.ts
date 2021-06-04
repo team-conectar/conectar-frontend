@@ -13,7 +13,6 @@ export const DivTags = styled.div`
   legend {
     font: 600 1.2rem Raleway;
     margin: 0.4rem 0;
-    padding-left: 0.4rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -36,7 +35,28 @@ export const DivTags = styled.div`
     }
   }
 `
-
+export const DivParticipants = styled.div`
+  legend {
+    font: 600 1rem Raleway;
+    margin: 0.4rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-left: 0.4rem;
+    ${ProfileLink} {
+      flex-direction: column;
+      column-gap: 0.2rem;
+      h2 {
+        font-size: 1rem;
+      }
+    }
+  }
+`
 export const DivConvite = styled.div`
   background: white;
   border-radius: 0.6rem;
@@ -281,7 +301,7 @@ export const BodyProjects = styled.div`
       gap: 1rem;
       h1 {
         font-size: 2rem;
-
+        width: 60%;
         display: flex;
         align-items: center;
         justify-content: space-between;

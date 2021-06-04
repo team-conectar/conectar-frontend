@@ -12,11 +12,13 @@ interface Props extends HTMLAttributes<HTMLLIElement> {
   vacancy: VacanciesType
   onEdit(): void
   onDelete(): void
+  dontShowOption?: true
 }
 const VacancieListItem: React.FC<Props> = ({
   vacancy,
   onEdit,
   onDelete,
+  dontShowOption,
   ...rest
 }) => {
   const [profile, setProfile] = useState<string>('')
@@ -68,10 +70,12 @@ const VacancieListItem: React.FC<Props> = ({
         </span>
       </p>
 
-      <DropdownList IconButton={<GiHamburgerMenu />}>
-        <li onClick={() => onEdit && onEdit()}>Editar vaga</li>
-        <li onClick={() => onDelete && onDelete()}>Excluir vaga</li>
-      </DropdownList>
+      {!dontShowOption && (
+        <DropdownList IconButton={<GiHamburgerMenu />}>
+          <li onClick={() => onEdit && onEdit()}>Editar vaga</li>
+          <li onClick={() => onDelete && onDelete()}>Excluir vaga</li>
+        </DropdownList>
+      )}
     </VacancieLi>
   )
 }

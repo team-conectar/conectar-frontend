@@ -16,7 +16,7 @@ export const DropdownContent = styled.div`
   height: fit-content;
   right: calc(50% - var(--arrowRight) - var(--arrowWidth));
   margin-top: 0.8rem;
-  z-index: 100;
+  z-index: 10;
   border-radius: 0.4rem;
   box-shadow: var(--boxShadow);
   display: flex;
