@@ -18,6 +18,7 @@ import { ToolType } from '../UI/SelectTools'
 import { BsStar, BsFillStarFill } from 'react-icons/bs'
 import { FaRegHandPointer, FaHandPointer } from 'react-icons/fa'
 import { Context } from '../../context/AuthContext'
+import { toMonth } from '../../utils/dates'
 interface IPessoa {
   foto_perfil: string
   usuario: string
@@ -33,6 +34,7 @@ export interface IProject {
   id: string
   areas: AreaType[]
   habilidades: ToolType[]
+  data_criacao: string
 }
 interface IProjectCardProps {
   project: IProject
@@ -110,7 +112,13 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
                   <li key={area.id}>{area.descricao}</li>
                 ))}
               </ul>
-              <p>publicado em </p>
+              <p>publicado em {`${
+                project.data_criacao.split("T")[0].split("-")[2]
+                +'/'+
+                project.data_criacao.split("T")[0].split("-")[1]
+                +'/'+  
+                project.data_criacao.split("T")[0].split("-")[0]
+                }`}</p>
             </section>
           </aside>
         </ProjectInfo>
