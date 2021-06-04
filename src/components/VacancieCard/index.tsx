@@ -87,13 +87,13 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
     },
   }
 
-  function FindPeople(){
-    console.log(profile);
-    console.log(vacancy);
-    
+  function FindPeople() {
+    console.log(profile)
+    console.log(vacancy)
+
     api
       .get(`/api/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
-      .then(()=> {
+      .then(() => {
         api
           .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
           .then(response => {
@@ -102,7 +102,8 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })
-      }).catch((err: AxiosError) => {
+      })
+      .catch((err: AxiosError) => {
         return err?.response?.data.detail
       })
   }
@@ -148,7 +149,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           <li>Excluir vaga</li>
         </DropdownList>
       </label>
-      <Link to={`/perfil/${profile.id}`}>
+      <Link to={`/perfil/${profile.usuario}`}>
         <img
           src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
           alt=""
@@ -162,13 +163,15 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       </h3>
 
       {/* <Button theme="primary">Ver currículo</Button> */}
-      {/* <DropdownList IconButton={*/}
-        <Button onClick={FindPeople} theme="secondary">Nova busca</Button> 
-        {/* <li>Perfis similares</li>
+      {/* <DropdownList IconButton={ */}
+      <Button onClick={FindPeople} theme="secondary">
+        Nova busca
+      </Button>
+      {/* <li>Perfis similares</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li> */}
-      {/*</DropdownList>*/}
+      {/* </DropdownList> */}
       <aside>
         <h4>{situation[`${vacancy.situacao}`].invite}</h4>
         <span>{situation[`${vacancy.situacao}`].status}</span>

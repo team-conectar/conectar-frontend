@@ -445,7 +445,7 @@ const Projects: React.FC = () => {
             }}
           />
         ) : (
-          <ProfileLink to={`/perfil/${projectOwner.id}`}>
+          <ProfileLink to={`/perfil/${projectOwner.usuario}`}>
             <img
               src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
               alt=""

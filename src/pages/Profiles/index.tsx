@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 import React, { useState, useEffect, useContext } from 'react'
 import {
   Page,
@@ -90,7 +91,7 @@ const Profiles: React.FC = () => {
     const found = array.filter(element => element.data_fim == null)
     if (!found.length) {
       const filter = array.filter((element, index) => {
-        if (index == 0) return true
+        if (index === 0) return true
         const limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1')
         return element.data_fim.replace(/\-([^>])/g, '$1') > limpa
       })
@@ -106,7 +107,7 @@ const Profiles: React.FC = () => {
 
     if (!found) {
       const filter = array.filter((element, index) => {
-        if (index == 0) return true
+        if (index === 0) return true
         const limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1')
         return element.data_fim.replace(/\-([^>])/g, '$1') > limpa
       })
@@ -122,7 +123,7 @@ const Profiles: React.FC = () => {
 
     if (!found) {
       const filter = array.filter((element, index) => {
-        if (index == 0) return true
+        if (index === 0) return true
         const limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1')
         return element.data_fim.replace(/\-([^>])/g, '$1') > limpa
       })
