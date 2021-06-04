@@ -87,7 +87,25 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
     },
   }
 
-
+  function FindPeople(){
+    console.log(profile);
+    console.log(vacancy);
+    
+    api
+      .get(`/api/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
+      .then(()=> {
+        api
+          .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
+          .then(response => {
+            setProfile(response.data)
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          })
+      }).catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
+  }
 
   useEffect(() => {
     const res = [
@@ -144,8 +162,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       </h3>
 
       {/* <Button theme="primary">Ver currículo</Button> */}
-      {/* <DropdownList IconButton={*
-        /}
+      {/* <DropdownList IconButton={*/}
         <Button onClick={FindPeople} theme="secondary">Nova busca</Button> 
         {/* <li>Perfis similares</li>
         <li>Perfis interessados</li>

@@ -24,6 +24,7 @@ import EditProfile from './pages/EditProfile'
 import ForgotPassword from './pages/ForgotPassword'
 import Modal from './components/UI/Modal'
 import Login from './components/UI/Login'
+import ToastAnimated from './components/Toast/Toast'
 const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const { isAuthenticated } = useContext(Context)
   const [modalOpen, setModalOpen] = useState(!isAuthenticated)
@@ -53,6 +54,7 @@ const Routes: React.FC = () => {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <ToastAnimated />
         <Route exact path="/" component={Home} />
         <Route path="/cadastrar/:parte" component={SignUp} />
         <Route path="/esqueceu-senha" component={ForgotPassword} />

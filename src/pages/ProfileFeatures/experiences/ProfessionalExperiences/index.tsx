@@ -26,6 +26,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
+import { showToast } from '../../../../components/Toast/Toast'
 export interface ProfessionalType {
   id: number
   organizacao: string
@@ -184,6 +185,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
+              showToast( "success" ,"Editado com sucesso!")
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
@@ -197,6 +199,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
+              showToast( "success" ,"Cadastrado com sucesso!")
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
