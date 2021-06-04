@@ -39,7 +39,7 @@ interface IProfileCardProps {
 const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
   return (
     <BodyCard>
-      <Link to={`/perfil/${profile.id}`}>
+      <Link to={`/perfil/${profile.usuario}`}>
         <img
           src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
           alt=""
@@ -48,7 +48,7 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
 
       <section>
         <p>
-          <Link to={`/perfil/${profile.id}`}>
+          <Link to={`/perfil/${profile.usuario}`}>
             <h2>{profile.nome}</h2>
             {(profile.usuario && '@' + profile.usuario) || (
               <Skeleton width="100px" />

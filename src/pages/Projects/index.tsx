@@ -445,7 +445,7 @@ const Projects: React.FC = () => {
             }}
           />
         ) : (
-          <ProfileLink to={`/perfil/${projectOwner.id}`}>
+          <ProfileLink to={`/perfil/${projectOwner.usuario}`}>
             <img
               src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
               alt=""
@@ -463,9 +463,20 @@ const Projects: React.FC = () => {
 
           <section>
             {isOwner() ? (
-              <Button theme="primary" onClick={handleFindTeam}>
-                Buscar Time
-              </Button>
+              (groupedVacancies[0][0]?.situacao === 'PENDENTE_IDEALIZADOR' && (
+                <Button theme="primary" onClick={handleFindTeam}>
+                  Buscar Time
+                </Button>
+              )) ||
+              (groupedVacancies[0][0]?.situacao === 'FINALIZADO' && (
+                <Button theme="primary" onClick={handleFindTeam}>
+                  Relatório do Time
+                </Button>
+              )) || (
+                <Button theme="primary" onClick={handleFindTeam}>
+                  Status do time
+                </Button>
+              )
             ) : (
               <Button theme="secondary" className="fav-button">
                 <img src={like} alt="curtidas" /> Favoritar

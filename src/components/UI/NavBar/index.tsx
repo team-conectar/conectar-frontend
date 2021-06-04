@@ -51,7 +51,7 @@ const UserButton = () => {
         <p>{user.usuario}</p>
         <p>{user.email}</p>
       </section>
-      <Link to={`/perfil/${user.id}`}>Perfil no Conectar</Link>
+      <Link to={`/perfil/${user.usuario}`}>Perfil no Conectar</Link>
       <Link to="/explore">Configurações</Link>
       <Link to="/explore">Ajuda</Link>
       <button

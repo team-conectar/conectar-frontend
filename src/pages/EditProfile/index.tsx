@@ -30,7 +30,7 @@ import Input from '../../components/UI/Input'
 import getValidationErrors from '../../utils/getValidationErrors'
 import * as Yup from 'yup'
 import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
-import ToastAnimated, { showToast } from "../../components/Toast/Toast"
+import ToastAnimated, { showToast } from '../../components/Toast/Toast'
 import { type } from 'os'
 
 interface routeParms {
@@ -114,7 +114,7 @@ const FormAreas: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           })
           .then(() => {
             updateProfile()
-            showToast( "success" ,"Editado com Sucesso!")
+            showToast('success', 'Editado com Sucesso!')
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
@@ -179,10 +179,9 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
             withCredentials: true,
           })
           .then(() => {
-            showToast( "success" ,"Editado com Sucesso!")
+            showToast('success', 'Editado com Sucesso!')
             updateProfile()
-          }
-          )
+          })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })
@@ -194,8 +193,7 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           formRef.current?.setErrors(errors)
         }
       }
-      console.log("Salvou");
-
+      console.log('Salvou')
     },
     [updateProfile],
   )
@@ -297,10 +295,10 @@ const EditProfile: React.FC = () => {
           .put('/api/v1/pessoas', data, {
             withCredentials: true,
           })
-          .then(()=>{
+          .then(() => {
             updateProfile()
-            showToast( "success" ,"Editado com Sucesso!")}
-          )
+            showToast('success', 'Editado com Sucesso!')
+          })
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -327,7 +325,7 @@ const EditProfile: React.FC = () => {
         <header>
           <Button
             theme="primary"
-            onClick={() => history.push(`/perfil/${user.id}`)}
+            onClick={() => history.push(`/perfil/${user.usuario}`)}
           >
             voltar ao perfil
           </Button>

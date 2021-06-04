@@ -77,14 +77,14 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
     <BodyCard>
       {!hiddeOwner && (
         <>
-          <Link to={`/perfil/${user?.id}`}>
+          <Link to={`/perfil/${user?.usuario}`}>
             <img
               src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
               alt={user?.nome}
             />
           </Link>
           <UserInfo>
-            <Link to={`/perfil/${user?.id}`}>
+            <Link to={`/perfil/${user?.usuario}`}>
               <h2>{user?.nome}</h2>
               <p>@{user?.usuario}</p>
             </Link>
@@ -116,7 +116,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         </ProjectInfo>
         <p>{project.descricao}</p>
 
-        {loggedUser.id != user?.id && (
+        {loggedUser.id !== user?.id && (
           <aside>
             <ButtonFavorite checked={favorite} onClick={ToogleFavorite}>
               {' '}
