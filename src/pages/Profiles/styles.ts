@@ -1,7 +1,9 @@
 import styled, { css } from 'styled-components'
 import { DivScroll } from '../../components/UI/ContainerScroll/styles'
-
-export const ButtonList = styled.button<{ borderBottom: boolean }>`
+interface IButtonList {
+  borderBottom: boolean
+}
+export const ButtonList = styled.button<IButtonList>`
   --buttonHeight: 55px;
   width: 50%;
   height: var(--buttonHeight);
@@ -17,6 +19,7 @@ export const ButtonList = styled.button<{ borderBottom: boolean }>`
   border-left: solid 1px var(--borderDivision);
   background: transparent;
   position: relative;
+
   ${props =>
     props.borderBottom &&
     css`

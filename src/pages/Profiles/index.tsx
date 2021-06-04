@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   Page,
   ButtonList,
@@ -87,54 +87,49 @@ const Profiles: React.FC = () => {
   const profile_id = useParams<routeParms>().id
 
   function experiencia_profissional(array: ProfessionalType[]) {
-    const found = array.filter(element => element.data_fim == null);
+    const found = array.filter(element => element.data_fim == null)
     if (!found.length) {
       const filter = array.filter((element, index) => {
-        if (index == 0)
-          return true
-        var limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1');
+        if (index == 0) return true
+        const limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1')
         return element.data_fim.replace(/\-([^>])/g, '$1') > limpa
       })
       console.log(filter[filter.length - 1]) // maior elemento se nao tiver nenhum em andamento
       return filter[filter.length - 1]
     }
-    console.log(found[found.length - 1]); // se tiver um em andamento
+    console.log(found[found.length - 1]) // se tiver um em andamento
     return found[found.length - 1]
   }
 
   function experiencia_projetos(array: IExperienceProject[]) {
-    const found = array.find(element => element.data_fim == null);
-    
-    
+    const found = array.find(element => element.data_fim == null)
+
     if (!found) {
       const filter = array.filter((element, index) => {
-        if (index == 0)
-          return true
-        var limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1');
+        if (index == 0) return true
+        const limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1')
         return element.data_fim.replace(/\-([^>])/g, '$1') > limpa
       })
       console.log(filter[filter.length - 1]) // maior elemento se nao tiver nenhum em andamento
       return filter[filter.length - 1]
     }
-    console.log(found); // se tiver um em andamento
+    console.log(found) // se tiver um em andamento
     return found
   }
 
   function experiencia_academica(array: AcademicType[]) {
-    const found = array.find(element => element.data_fim == null);
-    
-    
+    const found = array.find(element => element.data_fim == null)
+
     if (!found) {
       const filter = array.filter((element, index) => {
-        if (index == 0)
-          return true
-        var limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1');
+        if (index == 0) return true
+        const limpa = array[index - 1].data_fim.replace(/\-([^>])/g, '$1')
         return element.data_fim.replace(/\-([^>])/g, '$1') > limpa
       })
       console.log(filter[filter.length - 1]) // maior elemento se nao tiver nenhum em andamento
       return filter[filter.length - 1]
     }
-    console.log(found); // se tiver um em andamento
+    console.log(found) // se tiver um em andamento
     return found
   }
 
@@ -146,9 +141,15 @@ const Profiles: React.FC = () => {
         setProfile(response.data)
         setProfile({
           ...response.data,
-          experiencia_profissional: experiencia_profissional(response.data.experiencia_profissional),
-          experiencia_projetos:  experiencia_projetos(response.data.experiencia_projetos),
-          experiencia_academica: experiencia_academica(response.data.experiencia_academica)
+          experiencia_profissional: experiencia_profissional(
+            response.data.experiencia_profissional,
+          ),
+          experiencia_projetos: experiencia_projetos(
+            response.data.experiencia_projetos,
+          ),
+          experiencia_academica: experiencia_academica(
+            response.data.experiencia_academica,
+          ),
         })
       })
       .catch((err: AxiosError) => {
@@ -172,9 +173,9 @@ const Profiles: React.FC = () => {
       <main>
         <header>
           <aside>
-            {profile.idealizador && <img src={capa_id} alt="Idealizador" />}
-            {profile.aliado && <img src={capa_al} alt="Aliado" />}
-            {profile.colaborador && <img src={capa_co} alt="Colaborador" />}
+            {profile?.idealizador && <img src={capa_id} alt="Idealizador" />}
+            {profile?.aliado && <img src={capa_al} alt="Aliado" />}
+            {profile?.colaborador && <img src={capa_co} alt="Colaborador" />}
           </aside>
           <section>
             <ButtonList
@@ -204,63 +205,63 @@ const Profiles: React.FC = () => {
                     /> */}
               <Skeleton circle height="100px" width="100px" />
               <figcaption>
-                <h2>{profile.nome || <Skeleton width="150px" />}</h2>
+                <h2>{profile?.nome || <Skeleton width="150px" />}</h2>
                 <p>
-                  {(profile.usuario && '@' + profile.usuario) || (
+                  {(profile?.usuario && '@' + profile?.usuario) || (
                     <Skeleton width="100px" />
                   )}
                 </p>
               </figcaption>
             </figure>
             <section>
-              {profile.id ? (
+              {profile?.id ? (
                 <Button
                   theme="primary"
                   onClick={() => {
-                    user.id === profile.id &&
+                    user.id === profile?.id &&
                       history.push(`/editar-perfil/${user.id}`)
                   }}
                 >
-                  {user.id === profile.id ? 'EDITAR' : 'SEGUIR'}
+                  {user.id === profile?.id ? 'EDITAR' : 'SEGUIR'}
                 </Button>
               ) : (
                 <Skeleton width="150px" height="30px" />
               )}
               <aside>
-                {profile.idealizador && <img src={id} alt="" />}
-                {profile.aliado && <img src={al} alt="" />}
-                {profile.colaborador && <img src={co} alt="" />}
+                {profile?.idealizador && <img src={id} alt="" />}
+                {profile?.aliado && <img src={al} alt="" />}
+                {profile?.colaborador && <img src={co} alt="" />}
               </aside>
             </section>
           </PerfilMain>
 
           <ContainerScroll autoHeight autoHeightMax="50vh">
             <ul>
-              {profile.areas?.length && <h3>Áreas de atuação</h3>}
-              {profile.areas?.map(area => (
+              {profile?.areas?.length && <h3>Áreas de atuação</h3>}
+              {profile?.areas?.map(area => (
                 <li key={area.id}>{area.descricao}</li>
               ))}
-              {profile.habilidades?.length && (
+              {profile?.habilidades?.length && (
                 <h3>Habilidades e ferramentas de domínio</h3>
               )}
-              {profile.habilidades?.map(habilidade => (
+              {profile?.habilidades?.map(habilidade => (
                 <li key={habilidade.id}>{habilidade.nome}</li>
               ))}
             </ul>
             <ExperienciasDiv>
-              {profile.experiencia_academica && (
+              {profile?.experiencia_academica && (
                 <button>
                   <img
                     src={educação}
-                    alt={profile.experiencia_academica.curso}
+                    alt={profile?.experiencia_academica.curso}
                   />
                   <aside>
                     <legend>
-                      {profile.experiencia_academica.instituicao}
+                      {profile?.experiencia_academica.instituicao}
                     </legend>
                     <p>
-                      {profile.experiencia_academica.curso} <br />
-                      {profile.experiencia_academica.situacao}
+                      {profile?.experiencia_academica.curso} <br />
+                      {profile?.experiencia_academica.situacao}
                     </p>
                   </aside>
                 </button>
@@ -269,67 +270,74 @@ const Profiles: React.FC = () => {
                 <button>
                   <img
                     src={trabalho}
-                    alt={profile.experiencia_profissional.cargo}
+                    alt={profile?.experiencia_profissional.cargo}
                   />
                   <aside>
                     <legend>
-                      {profile.experiencia_profissional.organizacao}
+                      {profile?.experiencia_profissional.organizacao}
                     </legend>
                     <p>
                       {`
-                      ${profile.experiencia_profissional.cargo} | 
-                      ${profile.experiencia_profissional.vinculo} 
+                      ${profile?.experiencia_profissional.cargo} | 
+                      ${profile?.experiencia_profissional.vinculo} 
                       `}
                       <br />
                       {`${toMonth(
-                        profile.experiencia_profissional.data_inicio?.split(
+                        profile?.experiencia_profissional.data_inicio?.split(
                           '-',
                         )[1],
                       )} de  ${
-                        profile.experiencia_profissional.data_inicio?.split(
+                        profile?.experiencia_profissional.data_inicio?.split(
                           '-',
                         )[0]
-                      } até ${ 
-                        profile.experiencia_profissional.data_fim ==  null ? 'o momento': 
-                        toMonth(profile.experiencia_profissional.data_fim?.split(
-                          '-',
-                        )[1]) + ' de ' + profile.experiencia_profissional.data_fim?.split(
-                        '-',
-                      )[0]
-                        
+                      } até ${
+                        profile?.experiencia_profissional.data_fim == null
+                          ? 'o momento'
+                          : toMonth(
+                              profile?.experiencia_profissional.data_fim?.split(
+                                '-',
+                              )[1],
+                            ) +
+                            ' de ' +
+                            profile?.experiencia_profissional.data_fim?.split(
+                              '-',
+                            )[0]
                       }`}
                     </p>
                   </aside>
                 </button>
               )}
-              {(profile.experiencia_projetos?.nome) && (
+              {profile?.experiencia_projetos?.nome && (
                 <button>
                   <img
                     src={projeto}
-                    alt={profile.experiencia_projetos.cargo}
+                    alt={profile?.experiencia_projetos.cargo}
                   />
                   <aside>
-                    <legend>{profile.experiencia_projetos.nome}</legend>
+                    <legend>{profile?.experiencia_projetos.nome}</legend>
                     <p>
-                      {profile.experiencia_projetos.cargo}
+                      {profile?.experiencia_projetos.cargo}
                       <br />
                       {`${toMonth(
-                        profile.experiencia_projetos.data_inicio?.split(
+                        profile?.experiencia_projetos.data_inicio?.split(
                           '-',
                         )[1],
                       )} de  ${
-                        profile.experiencia_projetos.data_inicio?.split(
-                          '-',
-                        )[0]
+                        profile?.experiencia_projetos.data_inicio?.split('-')[0]
                       } até 
-                      ${ 
-                        profile.experiencia_projetos.situacao ===  'Em andamento' ? 'o momento': 
-                        toMonth(profile.experiencia_projetos.data_fim?.split(
-                          '-',
-                        )[1]) + ' de ' + profile.experiencia_projetos.data_fim?.split(
-                        '-',
-                      )[0]
-                        
+                      ${
+                        profile?.experiencia_projetos.situacao ===
+                        'Em andamento'
+                          ? 'o momento'
+                          : toMonth(
+                              profile?.experiencia_projetos.data_fim?.split(
+                                '-',
+                              )[1],
+                            ) +
+                            ' de ' +
+                            profile?.experiencia_projetos.data_fim?.split(
+                              '-',
+                            )[0]
                       }
                       `}
                     </p>
@@ -339,12 +347,12 @@ const Profiles: React.FC = () => {
             </ExperienciasDiv>
           </ContainerScroll>
 
-          {profile.id && <h4>Exibir currículo completo</h4>}
+          {profile?.id && <h4>Exibir currículo completo</h4>}
         </PerfilDiv>
 
         <ul>
           <ProjetosSection>
-            {profile.id ? (
+            {profile?.id ? (
               !showFavoritesList ? (
                 <ul>
                   {projects.map(project => (

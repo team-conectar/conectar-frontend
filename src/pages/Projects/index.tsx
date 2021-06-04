@@ -463,9 +463,20 @@ const Projects: React.FC = () => {
 
           <section>
             {isOwner() ? (
-              <Button theme="primary" onClick={handleFindTeam}>
-                Buscar Time
-              </Button>
+              (groupedVacancies[0][0]?.situacao === 'PENDENTE_IDEALIZADOR' && (
+                <Button theme="primary" onClick={handleFindTeam}>
+                  Buscar Time
+                </Button>
+              )) ||
+              (groupedVacancies[0][0]?.situacao === 'FINALIZADO' && (
+                <Button theme="primary" onClick={handleFindTeam}>
+                  Relatório do Time
+                </Button>
+              )) || (
+                <Button theme="primary" onClick={handleFindTeam}>
+                  Status do time
+                </Button>
+              )
             ) : (
               <Button theme="secondary" className="fav-button">
                 <img src={like} alt="curtidas" /> Favoritar
