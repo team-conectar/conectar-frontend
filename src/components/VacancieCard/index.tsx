@@ -89,6 +89,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
 
   function FindPeople(){
     console.log(profile);
+    console.log(vacancy);
     
     api
       .get(`/api/pessoa_projeto/similaridade_vaga/${vacancy.id}`)

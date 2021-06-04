@@ -27,6 +27,7 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { OptionTypeBase, Props as SelectProps } from 'react-select'
+import { showToast } from '../../../../components/Toast/Toast'
 export interface IExperienceProject {
   id: number
   nome: string
@@ -179,6 +180,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
+                showToast( "success" ,"Editado com sucesso!")
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })
@@ -191,6 +193,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
+                showToast( "success" ,"Cadastrado com sucesso!")
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })

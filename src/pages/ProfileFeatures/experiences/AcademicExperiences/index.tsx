@@ -21,6 +21,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
+import { showToast } from '../../../../components/Toast/Toast'
 /**
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
@@ -161,6 +162,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
+                showToast( "success" ,"Editado com sucesso!")
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -173,6 +175,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
+                showToast( "success" ,"Cadastrado com sucesso!")
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -187,7 +190,6 @@ const AcademicExperiences: React.FC = () => {
           formRef.current?.setErrors(errors)
           return
         }
-        alert('Lgoin ou senha incorreto')
       }
 
       // Do something
