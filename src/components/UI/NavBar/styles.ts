@@ -26,6 +26,27 @@ export const LiNotification = styled.span`
   }
 `
 
+export const NotificationBall = styled.a`
+      position: relative;
+      display: inline-block;
+      #notification{
+        text-align: center;
+        line-height: 17px;
+        z-index: 14;
+        font-weight: 600;
+        font-size: 12px;
+        position: absolute;
+        top: 0px;
+        right: 2px;
+        height: 20px;
+        width: 20px;
+        border: 1px var(--borderDivision) solid;
+        border-radius: 50%;
+        color: var(--borderDivision);
+        background: var(--green);
+      }
+`
+
 export const BodyNavBar = styled.nav`
   width: 100%;
   padding: 0 1.8rem;

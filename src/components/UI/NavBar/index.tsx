@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { BodyNavBar, LiNotification } from './styles'
+import { BodyNavBar, LiNotification, NotificationBall } from './styles'
 import logo from '../../../assets/image/logo_fundoClaro.svg'
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom'
 import explorar from '../../../assets/icon/explorar.svg'
@@ -84,8 +84,14 @@ const NotificationsButton = () => {
 
     console.log(res)
   }, [user.id])
+  const notificao = 10;
   return (
-    <Dropdown IconButton={<IconBell />}>
+    <Dropdown IconButton={
+      <NotificationBall>
+        <IconBell />
+        <span id="notification"> {`${notificao > 9? "9+" : notificao}`} </span>
+      </NotificationBall>
+    }>
       <h4>Notificações</h4>
       <ul>
         {notifications?.reverse()?.map(notification => (
@@ -103,6 +109,7 @@ const NotificationsButton = () => {
     </Dropdown>
   )
 }
+
 const NavBar: React.FC = () => {
   const { loading, isAuthenticated, handleLogout } = useContext(Context)
   const location = useLocation()
