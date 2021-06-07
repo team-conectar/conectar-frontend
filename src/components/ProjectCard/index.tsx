@@ -112,13 +112,16 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
                   <li key={area.id}>{area.descricao}</li>
                 ))}
               </ul>
-              <p>publicado em {`${
-                project.data_criacao.split("T")[0].split("-")[2]
-                +'/'+
-                project.data_criacao.split("T")[0].split("-")[1]
-                +'/'+  
-                project.data_criacao.split("T")[0].split("-")[0]
-                }`}</p>
+              <p>
+                publicado em{' '}
+                {`${
+                  project.data_criacao.split('T')[0].split('-')[2] +
+                  '/' +
+                  project.data_criacao.split('T')[0].split('-')[1] +
+                  '/' +
+                  project.data_criacao.split('T')[0].split('-')[0]
+                }`}
+              </p>
             </section>
           </aside>
         </ProjectInfo>

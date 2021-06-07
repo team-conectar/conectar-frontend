@@ -128,39 +128,40 @@ const Projects: React.FC = () => {
   })
 
   const getset_pessoa_projeto = useCallback(async () => {
-    await api
-      .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
-      .then((response: AxiosResponse<VacanciesType[]>) => {
-        setVacancies(response.data)
+    if (projeto_id)
+      await api
+        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
+        .then((response: AxiosResponse<VacanciesType[]>) => {
+          setVacancies(response.data)
 
-        const GroupResponse = response.data.map(vacancy => {
-          return response.data.filter(data => {
-            return (
-              JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
-              JSON.stringify(data.habilidades) ===
-                JSON.stringify(vacancy.habilidades) &&
-              data.remunerado === vacancy.remunerado &&
-              data.tipo_acordo_id === vacancy.tipo_acordo_id &&
-              data.papel_id === vacancy.papel_id &&
-              data.titulo === vacancy.titulo
-            )
+          const GroupResponse = response.data.map(vacancy => {
+            return response.data.filter(data => {
+              return (
+                JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
+                JSON.stringify(data.habilidades) ===
+                  JSON.stringify(vacancy.habilidades) &&
+                data.remunerado === vacancy.remunerado &&
+                data.tipo_acordo_id === vacancy.tipo_acordo_id &&
+                data.papel_id === vacancy.papel_id &&
+                data.titulo === vacancy.titulo
+              )
+            })
           })
-        })
-        setGroupedVacancies(
-          GroupResponse.filter((vacancies, index, self) => {
-            let indexOfDuplicated = -1
-            for (let i = 0; i < self.length; i++) {
-              if (JSON.stringify(self[i]) === JSON.stringify(vacancies)) {
-                indexOfDuplicated = i
+          setGroupedVacancies(
+            GroupResponse.filter((vacancies, index, self) => {
+              let indexOfDuplicated = -1
+              for (let i = 0; i < self.length; i++) {
+                if (JSON.stringify(self[i]) === JSON.stringify(vacancies)) {
+                  indexOfDuplicated = i
+                }
               }
-            }
-            return index === indexOfDuplicated
-          }),
-        )
-      })
-      .catch((error: AxiosError) => {
-        return error?.response?.data.detail
-      })
+              return index === indexOfDuplicated
+            }),
+          )
+        })
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
+        })
     return true
   }, [projeto_id])
   const handleDeclineInvitation = useCallback(
@@ -445,14 +446,14 @@ const Projects: React.FC = () => {
             }}
           />
         ) : (
-          <ProfileLink to={`/perfil/${projectOwner.usuario}`}>
+          <ProfileLink to={`/perfil/${projectOwner?.usuario}`}>
             <img
               src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
               alt=""
             />
             <aside>
-              <h2>{projectOwner.nome?.split(' ')[0]}</h2>
-              <p>@{projectOwner.usuario}</p>
+              <h2>{projectOwner?.nome?.split(' ')[0]}</h2>
+              <p>@{projectOwner?.usuario}</p>
             </aside>
           </ProfileLink>
         )}
@@ -463,20 +464,9 @@ const Projects: React.FC = () => {
 
           <section>
             {isOwner() ? (
-              (groupedVacancies[0][0]?.situacao === 'PENDENTE_IDEALIZADOR' && (
-                <Button theme="primary" onClick={handleFindTeam}>
-                  Buscar Time
-                </Button>
-              )) ||
-              (groupedVacancies[0][0]?.situacao === 'FINALIZADO' && (
-                <Button theme="primary" onClick={handleFindTeam}>
-                  Relatório do Time
-                </Button>
-              )) || (
-                <Button theme="primary" onClick={handleFindTeam}>
-                  Status do time
-                </Button>
-              )
+              <Button theme="primary" onClick={handleFindTeam}>
+                Buscar Time
+              </Button>
             ) : (
               <Button theme="secondary" className="fav-button">
                 <img src={like} alt="curtidas" /> Favoritar

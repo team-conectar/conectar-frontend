@@ -85,7 +85,7 @@ const Profiles: React.FC = () => {
   const [showFavoritesList, setShowFavoritesList] = useState<boolean>(false)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
-  const profile_id = useParams<routeParms>().id
+  const profile_username = useParams<routeParms>().id
 
   function experiencia_profissional(array: ProfessionalType[]) {
     const found = array.filter(element => element.data_fim == null)
@@ -136,7 +136,7 @@ const Profiles: React.FC = () => {
 
   useEffect(() => {
     api
-      .get(`/api/v1/pessoas/${profile_id}`)
+      .get(`/api/v1/pessoas/${profile_username}`)
       .then((response: { data: any }) => {
         console.log(response.data)
         setProfile(response.data)
@@ -157,16 +157,20 @@ const Profiles: React.FC = () => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
-    api
-      .get(`/api/v1/projetos?pessoa_id=${profile_id}&visibilidade=true`)
-      .then(response => {
-        setProjects(response.data)
-        setLoadingPage(false)
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-  }, [history, profile_id])
+  }, [history, profile_username])
+  useEffect(() => {
+    if (profile.id) {
+      api
+        .get(`/api/v1/projetos?pessoa_id=${profile.id}&visibilidade=true`)
+        .then(response => {
+          setProjects(response.data)
+          setLoadingPage(false)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+    }
+  }, [profile.id])
 
   return (
     <Page>
