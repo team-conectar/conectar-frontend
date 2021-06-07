@@ -41,7 +41,7 @@ export interface VacanciesType {
   papel_id: number
   tipo_acordo_id: number
   descricao: string
-  situacao?: TypeSituationVacancy
+  situacao: TypeSituationVacancy
   habilidades: Array<ToolType>
   areas: Array<AreaType>
   id: number

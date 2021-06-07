@@ -19,7 +19,8 @@ const ApproveProject: React.FC = () => {
   const project_id = useParams<routeParms>().id
   const [project, setProject] = useState<IProject>({} as IProject)
   const [vacancies, setVacancies] = useState<Array<IVacancyCard>>([])
-
+  const [possibleDeal, setPossibleDeal] = useState(false)
+  const [finalizedDeal, setFinalizedDeal] = useState(false)
 
   useEffect(() => {
     const res = [
@@ -42,6 +43,12 @@ const ApproveProject: React.FC = () => {
     ]
     console.log(res)
   }, [project_id])
+  useEffect(() => {
+    setPossibleDeal(!vacancies.find(vacancy => vacancy.situacao !== 'ACEITO'))
+    setFinalizedDeal(
+      !vacancies.find(vacancy => vacancy.situacao !== 'FINALIZADO'),
+    )
+  }, [vacancies])
   const handleInvite = useCallback(() => {
     setVacancies(currentVacancy =>
       vacancies.map((vacancy, index) => {
@@ -64,6 +71,28 @@ const ApproveProject: React.FC = () => {
     )
   }, [vacancies])
 
+  const handleFinalizeDeal = useCallback(() => {
+    if (possibleDeal) {
+      setVacancies(
+        vacancies.map(vacancy => {
+          api
+            .put(`/api/v1/pessoa_projeto/${vacancy.id}`, {
+              situacao: 'FINALIZADO',
+            })
+            .catch((err: AxiosError) => {
+              console.log(err?.response?.data.detail)
+            })
+          return {
+            ...vacancy,
+            situacao: 'FINALIZADO',
+          }
+        }),
+      )
+    }
+  }, [possibleDeal, vacancies])
+  const handleDealPDF = useCallback(() => {
+    console.log('pdf')
+  }, [vacancies])
   return (
     <>
       <NavBar />
@@ -87,7 +116,13 @@ const ApproveProject: React.FC = () => {
             </ul>
           </section>
           <aside>
-            <Button theme="secondary">Finalizar acordos</Button>
+            <Button
+              theme="secondary"
+              disabled={!possibleDeal}
+              onClick={finalizedDeal ? handleDealPDF : handleFinalizeDeal}
+            >
+              {finalizedDeal ? 'Ver acordos' : 'Finalizar acordos'}
+            </Button>
             <Button theme="primary" onClick={handleInvite}>
               Enviar convites
             </Button>

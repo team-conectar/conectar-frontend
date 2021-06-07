@@ -115,11 +115,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
               <p>
                 publicado em{' '}
                 {`${
-                  project.data_criacao.split('T')[0].split('-')[2] +
+                  project.data_criacao?.split('T')[0]?.split('-')[2] +
                   '/' +
-                  project.data_criacao.split('T')[0].split('-')[1] +
+                  project.data_criacao?.split('T')[0]?.split('-')[1] +
                   '/' +
-                  project.data_criacao.split('T')[0].split('-')[0]
+                  project.data_criacao?.split('T')[0]?.split('-')[0]
                 }`}
               </p>
             </section>

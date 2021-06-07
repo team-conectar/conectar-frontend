@@ -47,7 +47,11 @@ import Dropzone from '../../components/UI/Dropzone'
 import { Context } from '../../context/AuthContext'
 import Login from '../../components/UI/Login'
 import NavBar from '../../components/UI/NavBar'
-import Vacancy, { handleVacancy, VacanciesType } from '../../components/Vacancy'
+import Vacancy, {
+  handleVacancy,
+  TypeSituationVacancy,
+  VacanciesType,
+} from '../../components/Vacancy'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -355,7 +359,34 @@ const Projects: React.FC = () => {
       })
   }, [vacancyDetail])
   console.log(participantsDetail)
-
+  function buttonMatchContent(option?: TypeSituationVacancy) {
+    switch (option) {
+      case 'FINALIZADO':
+        return (
+          <Button
+            theme="primary"
+            onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
+          >
+            Relatório do Time
+          </Button>
+        )
+      case 'PENDENTE_IDEALIZADOR':
+        return (
+          <Button theme="primary" onClick={handleFindTeam}>
+            Buscar Time
+          </Button>
+        )
+      default:
+        return (
+          <Button
+            theme="primary"
+            onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
+          >
+            Status do time
+          </Button>
+        )
+    }
+  }
   return (
     <BodyProjects>
       <NavBar />
@@ -463,10 +494,8 @@ const Projects: React.FC = () => {
           </section>
 
           <section>
-            {isOwner() ? (
-              <Button theme="primary" onClick={handleFindTeam}>
-                Buscar Time
-              </Button>
+            {isOwner() && groupedVacancies.length > 0 ? (
+              buttonMatchContent(groupedVacancies[0][0].situacao)
             ) : (
               <Button theme="secondary" className="fav-button">
                 <img src={like} alt="curtidas" /> Favoritar
