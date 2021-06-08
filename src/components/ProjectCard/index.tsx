@@ -16,7 +16,11 @@ import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import { BsStar, BsFillStarFill } from 'react-icons/bs'
-import { FaRegHandPointer, FaHandPointer } from 'react-icons/fa'
+import {
+  FaRegHandPointer,
+  FaHandPointer,
+  FaGalacticSenate,
+} from 'react-icons/fa'
 import { Context } from '../../context/AuthContext'
 import { toMonth } from '../../utils/dates'
 interface IPessoa {
@@ -42,18 +46,18 @@ interface IProjectCardProps {
 }
 
 const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
-  const [favorite, setFavorite] = useState<boolean>(false)
-  const [interesse, setInteresse] = useState<boolean>(false)
+  const [favoriteId, setFavoriteId] = useState<number>(0)
+  const [interesseId, setInteresseId] = useState<number>(0)
   const [user, setUser] = useState<IPessoa>()
   const loggedUser = useContext(Context).user
   const SelectFavorite: any = () => {
-    if (favorite) {
+    if (favoriteId) {
       return <BsFillStarFill />
     }
     return <BsStar />
   }
   const SelectInteresse: any = () => {
-    if (interesse) {
+    if (interesseId) {
       return <FaHandPointer />
     }
     return <FaRegHandPointer />
@@ -64,15 +68,48 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
       setUser(response.data)
     })
   }, [project.pessoa_id])
-
+  useEffect(() => {
+    if (project.id && user?.id)
+      api
+        .get(`/api/v1/reacoes?pessoa_id=${user?.id}&projeto_id=${project.id}`)
+        .then(response => {
+          setFavoriteId(response.data.id)
+        })
+  }, [project.id, user?.id])
   function ToogleFavorite() {
-    setFavorite(!favorite)
-    console.log(favorite)
+    if (interesseId) {
+      api.delete(`/api/v1/reacoes${interesseId}`).then(response => {
+        setFavoriteId(0)
+      })
+    } else {
+      api
+        .post('/api/v1/reacoes', {
+          reacao: 'FAVORITO',
+          pessoa_id: user?.id,
+          projeto_id: project.id,
+        })
+        .then(response => {
+          setFavoriteId(response.data.id)
+        })
+    }
   }
 
   function ToogleInteresse() {
-    setInteresse(!interesse)
-    console.log(interesse)
+    if (interesseId) {
+      api.delete(`/api/v1/reacoes${interesseId}`).then(response => {
+        setInteresseId(0)
+      })
+    } else {
+      api
+        .post('/api/v1/reacoes', {
+          reacao: 'INTERESSE',
+          pessoa_id: user?.id,
+          projeto_id: project.id,
+        })
+        .then(response => {
+          setInteresseId(response.data.id)
+        })
+    }
   }
 
   return (
@@ -129,11 +166,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
 
         {loggedUser.id !== user?.id && (
           <aside>
-            <ButtonFavorite checked={favorite} onClick={ToogleFavorite}>
+            <ButtonFavorite checked={!!favoriteId} onClick={ToogleFavorite}>
               {' '}
               <SelectFavorite /> Favoritar
             </ButtonFavorite>
-            <ButtonInterest checked={interesse} onClick={ToogleInteresse}>
+            <ButtonInterest checked={!!interesseId} onClick={ToogleInteresse}>
               {' '}
               <SelectInteresse />
               Tenho interesse
