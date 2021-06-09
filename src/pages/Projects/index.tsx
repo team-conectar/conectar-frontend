@@ -336,6 +336,7 @@ const Projects: React.FC = () => {
     console.log(res)
   }, [project.pessoa_id, openModal])
   useEffect(() => {
+    let data: IPeopleLink[] = []
     groupedVacancies
       ?.find(vacancies => {
         return vacancies[0]?.id === vacancyDetail?.pessoas_projeto_ids[0]
@@ -345,7 +346,6 @@ const Projects: React.FC = () => {
           vacancy.situacao === 'ACEITO' ||
           vacancy.situacao === 'FINALIZADO'
         ) {
-          let data: IPeopleLink[] = []
           api
             .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
             .then((response: AxiosResponse<IPeopleLink>) => {
@@ -354,8 +354,8 @@ const Projects: React.FC = () => {
             .catch((error: AxiosError) => {
               return error?.response?.data.detail
             })
-          setParticipantsDetail(data)
         }
+        setParticipantsDetail(data)
       })
   }, [groupedVacancies, vacancyDetail?.pessoas_projeto_ids])
   console.log(participantsDetail)
