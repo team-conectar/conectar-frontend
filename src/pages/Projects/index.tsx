@@ -345,16 +345,16 @@ const Projects: React.FC = () => {
           vacancy.situacao === 'ACEITO' ||
           vacancy.situacao === 'FINALIZADO'
         ) {
+          let data: IPeopleLink[] = []
           api
             .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
             .then((response: AxiosResponse<IPeopleLink>) => {
-              setParticipantsDetail(participants =>
-                participants.concat([response.data]),
-              )
+              data = [response.data]
             })
             .catch((error: AxiosError) => {
               return error?.response?.data.detail
             })
+          setParticipantsDetail(data)
         }
       })
   }, [groupedVacancies, vacancyDetail?.pessoas_projeto_ids])
