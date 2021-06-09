@@ -91,6 +91,7 @@ interface IPeopleLink {
 interface IVacancyDetail extends VacanciesType {
   pessoas_ids: number[]
   pessoas_projeto_ids: number[]
+  aceito_ids: number[]
 }
 
 const Projects: React.FC = () => {
@@ -129,6 +130,7 @@ const Projects: React.FC = () => {
     ...vacancies[0],
     pessoas_ids: [],
     pessoas_projeto_ids: [],
+    aceito_ids: [],
   })
 
   const getset_pessoa_projeto = useCallback(async () => {
@@ -320,6 +322,13 @@ const Projects: React.FC = () => {
         pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
           return vacancy.id
         }),
+        aceito_ids: groupedVacancies[0]
+          .filter(vacancy => {
+            return (
+              vacancy.situacao === 'ACEITO' || vacancy.situacao === 'FINALIZADO'
+            )
+          })
+          .map(vacancy => vacancy.pessoa_id),
       })
     }
   }, [groupedVacancies])
@@ -336,28 +345,22 @@ const Projects: React.FC = () => {
     console.log(res)
   }, [project.pessoa_id, openModal])
   useEffect(() => {
-    let data: IPeopleLink[] = []
-    groupedVacancies
-      ?.find(vacancies => {
-        return vacancies[0]?.id === vacancyDetail?.pessoas_projeto_ids[0]
-      })
-      ?.map(vacancy => {
-        if (
-          vacancy.situacao === 'ACEITO' ||
-          vacancy.situacao === 'FINALIZADO'
-        ) {
-          api
-            .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
-            .then((response: AxiosResponse<IPeopleLink>) => {
-              data = [response.data]
-            })
-            .catch((error: AxiosError) => {
-              return error?.response?.data.detail
-            })
-        }
-        setParticipantsDetail(data)
-      })
-  }, [groupedVacancies, vacancyDetail?.pessoas_projeto_ids])
+    setParticipantsDetail([])
+    vacancyDetail.aceito_ids?.map(id => {
+      api
+        .get(`/api/v1/pessoas/${id}`)
+        .then((response: AxiosResponse<IPeopleLink>) => {
+          setParticipantsDetail(participant =>
+            participant.length > 5
+              ? participant
+              : participant.concat([response.data]),
+          )
+        })
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
+        })
+    })
+  }, [vacancyDetail.aceito_ids])
   console.log(participantsDetail)
   function buttonMatchContent(option?: TypeSituationVacancy) {
     switch (option) {
@@ -697,6 +700,14 @@ const Projects: React.FC = () => {
                     pessoas_projeto_ids: vacancies.map(vacancy => {
                       return vacancy.id
                     }),
+                    aceito_ids: vacancies
+                      .filter(vacancy => {
+                        return (
+                          vacancy.situacao === 'ACEITO' ||
+                          vacancy.situacao === 'FINALIZADO'
+                        )
+                      })
+                      .map(vacancy => vacancy.pessoa_id),
                   })
                 }
                 style={
