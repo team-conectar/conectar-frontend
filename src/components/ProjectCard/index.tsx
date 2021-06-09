@@ -86,7 +86,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
       api
         .post('/api/v1/reacoes', {
           reacao: 'FAVORITO',
-          pessoa_id: user?.id,
+          pessoa_id: loggedUser?.id,
           projeto_id: project.id,
         })
         .then(response => {
@@ -94,7 +94,6 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         })
     }
   }
-
   function ToogleInteresse() {
     if (interesseId) {
       api.delete(`/api/v1/reacoes${interesseId}`).then(response => {
@@ -104,7 +103,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
       api
         .post('/api/v1/reacoes', {
           reacao: 'INTERESSE',
-          pessoa_id: user?.id,
+          pessoa_id: loggedUser?.id,
           projeto_id: project.id,
         })
         .then(response => {
