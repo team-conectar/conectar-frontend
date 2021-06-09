@@ -345,20 +345,20 @@ const Projects: React.FC = () => {
     console.log(res)
   }, [project.pessoa_id, openModal])
   useEffect(() => {
-    const participantsArray: IPeopleLink[] = []
-    vacancyDetail.aceito_ids?.map(id => {
-      api
-        .get(`/api/v1/pessoas/${id}`)
-        .then((response: AxiosResponse<IPeopleLink>) => {
-          if (participantsArray.length > 5) {
-            participantsArray.push(response.data)
-          }
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        })
-    })
-    setParticipantsDetail(participantsArray)
+    let participantsArray: IPeopleLink
+    setParticipantsDetail(
+      vacancyDetail.aceito_ids?.map(id => {
+        api
+          .get(`/api/v1/pessoas/${id}`)
+          .then((response: AxiosResponse<IPeopleLink>) => {
+            participantsArray = response.data
+          })
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        return participantsArray
+      }),
+    )
   }, [vacancyDetail.aceito_ids])
   console.log(participantsDetail)
   function buttonMatchContent(option?: TypeSituationVacancy) {
