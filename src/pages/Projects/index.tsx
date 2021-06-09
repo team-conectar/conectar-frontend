@@ -345,20 +345,18 @@ const Projects: React.FC = () => {
     console.log(res)
   }, [project.pessoa_id, openModal])
   useEffect(() => {
-    let participantsArray: IPeopleLink
-    setParticipantsDetail(
-      vacancyDetail.aceito_ids?.map(id => {
-        api
-          .get(`/api/v1/pessoas/${id}`)
-          .then((response: AxiosResponse<IPeopleLink>) => {
-            participantsArray = response.data
-          })
-          .catch((error: AxiosError) => {
-            return error?.response?.data.detail
-          })
-        return participantsArray
-      }),
-    )
+    const participantsArray: IPeopleLink[] = []
+    vacancyDetail.aceito_ids?.map(id => {
+      api
+        .get(`/api/v1/pessoas/${id}`)
+        .then((response: AxiosResponse<IPeopleLink>) => {
+          participantsArray.push(response.data)
+        })
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
+        })
+    })
+    setParticipantsDetail(participantsArray)
   }, [vacancyDetail.aceito_ids])
   console.log(participantsDetail)
   function buttonMatchContent(option?: TypeSituationVacancy) {
@@ -765,14 +763,14 @@ const Projects: React.FC = () => {
                 <aside>
                   {participantsDetail?.map(participant => (
                     <ProfileLink
-                      key={participant.id}
-                      to={`/perfil/${participant.id}`}
+                      key={participant?.usuario}
+                      to={`/perfil/${participant?.usuario}`}
                     >
                       <img
                         src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
                         alt=""
                       />
-                      <h2>{participant.nome?.split(' ')[0]}</h2>
+                      <h2>{participant?.nome?.split(' ')[0]}</h2>
                     </ProfileLink>
                   ))}
                 </aside>
