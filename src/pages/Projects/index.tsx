@@ -345,21 +345,20 @@ const Projects: React.FC = () => {
     console.log(res)
   }, [project.pessoa_id, openModal])
   useEffect(() => {
-    setParticipantsDetail([])
+    const participantsArray: IPeopleLink[] = []
     vacancyDetail.aceito_ids?.map(id => {
       api
         .get(`/api/v1/pessoas/${id}`)
         .then((response: AxiosResponse<IPeopleLink>) => {
-          setParticipantsDetail(participant =>
-            participant.length > 5
-              ? participant
-              : participant.concat([response.data]),
-          )
+          if (participantsArray.length > 5) {
+            participantsArray.push(response.data)
+          }
         })
         .catch((error: AxiosError) => {
           return error?.response?.data.detail
         })
     })
+    setParticipantsDetail(participantsArray)
   }, [vacancyDetail.aceito_ids])
   console.log(participantsDetail)
   function buttonMatchContent(option?: TypeSituationVacancy) {
