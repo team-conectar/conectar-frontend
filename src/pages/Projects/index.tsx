@@ -346,7 +346,7 @@ const Projects: React.FC = () => {
           vacancy.situacao === 'FINALIZADO'
         ) {
           api
-            .get(`/api/v1/pessoas/${vacancy.id}`)
+            .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
             .then((response: AxiosResponse<IPeopleLink>) => {
               setParticipantsDetail(participants =>
                 participants.concat([response.data]),
@@ -357,7 +357,7 @@ const Projects: React.FC = () => {
             })
         }
       })
-  }, [vacancyDetail])
+  }, [groupedVacancies, vacancyDetail?.pessoas_projeto_ids])
   console.log(participantsDetail)
   function buttonMatchContent(option?: TypeSituationVacancy) {
     switch (option) {

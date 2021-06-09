@@ -16,6 +16,7 @@ import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import { BsStar, BsFillStarFill } from 'react-icons/bs'
+import { IconType } from 'react-icons'
 import {
   FaRegHandPointer,
   FaHandPointer,
@@ -56,11 +57,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
     }
     return <BsStar />
   }
-  const SelectInteresse: any = () => {
+  const SelectInteresse: IconType = ({ ...rest }) => {
     if (interesseId) {
-      return <FaHandPointer />
+      return <FaHandPointer {...rest} />
     }
-    return <FaRegHandPointer />
+    return <FaRegHandPointer {...rest} />
   }
 
   useEffect(() => {
