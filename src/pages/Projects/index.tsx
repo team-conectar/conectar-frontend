@@ -344,21 +344,22 @@ const Projects: React.FC = () => {
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
+
   useEffect(() => {
-    const participantsArray: IPeopleLink[] = []
     vacancyDetail.aceito_ids?.map(id => {
       api
         .get(`/api/v1/pessoas/${id}`)
         .then((response: AxiosResponse<IPeopleLink>) => {
-          participantsArray.push(response.data)
+          setParticipantsDetail(participant =>
+            participant.concat(response.data),
+          )
         })
         .catch((error: AxiosError) => {
           return error?.response?.data.detail
         })
     })
-    setParticipantsDetail(participantsArray)
-  }, [vacancyDetail.aceito_ids])
-  console.log(participantsDetail)
+  }, [vacancyDetail])
+  console.log(vacancyDetail.aceito_ids)
   function buttonMatchContent(option?: TypeSituationVacancy) {
     switch (option) {
       case 'FINALIZADO':
@@ -688,7 +689,8 @@ const Projects: React.FC = () => {
                   vacancyComponentRef.current?.setEditVacancies(vacancies)
                   console.log(vacancies)
                 }}
-                onClick={() =>
+                onClick={() => {
+                  setParticipantsDetail([])
                   setVacancyDetail({
                     ...vacancies[0],
                     pessoas_ids: vacancies.map(vacancy => {
@@ -706,7 +708,7 @@ const Projects: React.FC = () => {
                       })
                       .map(vacancy => vacancy.pessoa_id),
                   })
-                }
+                }}
                 style={
                   vacancyDetail.titulo === vacancies[0].titulo
                     ? { background: 'var(--backgroundElevation)' }
