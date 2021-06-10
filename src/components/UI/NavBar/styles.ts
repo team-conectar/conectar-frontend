@@ -126,8 +126,13 @@ export const BodyNavBar = styled.nav`
         font-size: 0.9rem;
         width: 100%;
         justify-content: space-between;
-        > strong {
-          cursor: pointer;
+        .checkNotification {
+          background: transparent;
+          border: 0;
+          font-weight: 800;
+          color: var(--textGreen);
+          font-size: 15px;
+
         }
         > ${BodyButton} {
           font-size: 0.8rem;

@@ -68,9 +68,10 @@ const UserButton = () => {
 const NotificationsButton = () => {
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   const { user } = useContext(Context)
-  useEffect(() => {
+
+  function getNotification(){
     const res = api
-      .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}`)
+      .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}&lido=false`)
       .then((response: AxiosResponse<INotification[]>) => {
         setNotifications(
           response.data.filter(notification => {
@@ -83,18 +84,37 @@ const NotificationsButton = () => {
       })
 
     console.log(res)
+
+  }
+
+  function handleCheckNotification(){
+      notifications.forEach(notification => {
+        api
+          .put(`/api/v1/notificacao?notificacao_id=${notification.id}`, 
+          {
+            lido: true
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          })
+      });
+      getNotification()
+
+  }
+
+  useEffect(() => {
+    getNotification()
   }, [user.id])
-  var notificao = notifications.length;
   return (
     <Dropdown IconButton={
-      <NotificationBall checked={notificao==0} >
+      <NotificationBall checked={notifications.length==0} >
         <IconBell />
-        <span id="notification"> {`${notificao > 9? "9+" : notificao}`} </span>
+        <span id="notification"> {`${notifications.length > 9? "9+" : notifications.length}`} </span>
       </NotificationBall>
     }>
       <h4>Notificações</h4>
       <ul>
-        {notifications?.reverse()?.map(notification => (
+        {notifications?.map(notification => (
           <LiNotification key={notification.id}>
             <img src={notification.foto} alt="imagem da notificação" />
             <p>{ReactHtmlParser(notification.situacao)}</p>
@@ -103,7 +123,7 @@ const NotificationsButton = () => {
       </ul>
 
       <aside>
-        <strong>Marcar como lida</strong>
+        <button className="checkNotification" onClick={handleCheckNotification}>Marcar como lida</button>
         <Button theme="secondary">Ver todas</Button>
       </aside>
     </Dropdown>
