@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
 export const LiNotification = styled.span`
@@ -26,25 +26,32 @@ export const LiNotification = styled.span`
   }
 `
 
-export const NotificationBall = styled.a`
-      position: relative;
-      display: inline-block;
-      #notification{
-        text-align: center;
-        line-height: 17px;
-        z-index: 14;
-        font-weight: 600;
-        font-size: 12px;
-        position: absolute;
-        top: 0px;
-        right: 2px;
-        height: 20px;
-        width: 20px;
-        border: 1px var(--borderDivision) solid;
-        border-radius: 50%;
-        color: var(--borderDivision);
-        background: var(--green);
-      }
+export const NotificationBall = styled.a<{ checked: boolean}>`
+    position: relative;
+    display: inline-block;
+    #notification{
+      text-align: center;
+      line-height: 17px;
+      z-index: 14;
+      font-weight: 600;
+      font-size: 12px;
+      position: absolute;
+      top: 0px;
+      right: 2px;
+      height: 20px;
+      width: 20px;
+      border: 1px var(--borderDivision) solid;
+      border-radius: 50%;
+      color: var(--borderDivision);
+      background: var(--green);
+    }
+      ${props =>
+      props.checked &&
+      css`
+        #notification{
+          display: none;
+        }
+    `}
 `
 
 export const BodyNavBar = styled.nav`
