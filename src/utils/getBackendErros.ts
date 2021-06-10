@@ -14,11 +14,11 @@ interface IData {
 }
 export default function getBackendErrors(err: AxiosError<IData>): Errors {
   if (err.response) {
-    showToast('error', err.response.data.detail.message)
+    showToast('error', err.response.data.detail?.message)
 
     return {
-      fieldName: err.response.data.detail.fieldName,
-      error: err.response.data.detail.message,
+      fieldName: err.response.data.detail?.fieldName,
+      error: err.response.data.detail?.message,
     }
   } else return { fieldName: 'aa', error: 'aa' }
 }

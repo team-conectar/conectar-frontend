@@ -69,9 +69,11 @@ const NotificationsButton = () => {
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   const { user } = useContext(Context)
 
-  function getNotification(){
+  function getNotification() {
     const res = api
-      .get(`api/v1/notificacao/destinatario?destinatario_id=${user.id}&lido=false`)
+      .get(
+        `api/v1/notificacao/destinatario?destinatario_id=${user.id}&lido=false`,
+      )
       .then((response: AxiosResponse<INotification[]>) => {
         setNotifications(
           response.data.filter(notification => {
@@ -84,38 +86,43 @@ const NotificationsButton = () => {
       })
 
     console.log(res)
-
   }
 
-  function handleCheckNotification(){
-      notifications.forEach(notification => {
-        api
-          .put(`/api/v1/notificacao?notificacao_id=${notification.id}`, 
-          {
-            lido: true
-          })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
-      });
-      getNotification()
-
+  function handleCheckNotification() {
+    notifications.forEach(notification => {
+      api
+        .put(`/api/v1/notificacao?notificacao_id=${notification.id}`, {
+          lido: true,
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+    })
+    getNotification()
   }
 
   useEffect(() => {
     getNotification()
   }, [user.id])
   return (
-    <Dropdown IconButton={
-      <NotificationBall checked={notifications.length==0} >
-        <IconBell />
-        <span id="notification"> {`${notifications.length > 9? "9+" : notifications.length}`} </span>
-      </NotificationBall>
-    }>
+    <Dropdown
+      IconButton={
+        <NotificationBall checked={notifications.length === 0}>
+          <IconBell />
+          <span id="notification">
+            {' '}
+            {`${notifications.length > 9 ? '9+' : notifications.length}`}{' '}
+          </span>
+        </NotificationBall>
+      }
+    >
       <h4>Notificações</h4>
       <ul>
         {notifications?.map(notification => (
-          <LiNotification key={notification.id}>
+          <LiNotification
+            key={notification.id}
+            to={`/projeto/${notification.projeto_id}`}
+          >
             <img src={notification.foto} alt="imagem da notificação" />
             <p>{ReactHtmlParser(notification.situacao)}</p>
           </LiNotification>
@@ -123,7 +130,9 @@ const NotificationsButton = () => {
       </ul>
 
       <aside>
-        <button className="checkNotification" onClick={handleCheckNotification}>Marcar como lida</button>
+        <button className="checkNotification" onClick={handleCheckNotification}>
+          Marcar como lida
+        </button>
         <Button theme="secondary">Ver todas</Button>
       </aside>
     </Dropdown>

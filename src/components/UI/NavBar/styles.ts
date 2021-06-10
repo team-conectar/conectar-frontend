@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
-export const LiNotification = styled.span`
+export const LiNotification = styled(Link)`
   list-style: none;
   padding: 0.8rem 1rem;
   border-bottom: solid 1px var(--borderDivision);
@@ -26,31 +26,31 @@ export const LiNotification = styled.span`
   }
 `
 
-export const NotificationBall = styled.a<{ checked: boolean}>`
-    position: relative;
-    display: inline-block;
-    #notification{
-      text-align: center;
-      line-height: 17px;
-      z-index: 14;
-      font-weight: 600;
-      font-size: 12px;
-      position: absolute;
-      top: 0px;
-      right: 2px;
-      height: 20px;
-      width: 20px;
-      border: 1px var(--borderDivision) solid;
-      border-radius: 50%;
-      color: var(--borderDivision);
-      background: var(--green);
-    }
-      ${props =>
-      props.checked &&
-      css`
-        #notification{
-          display: none;
-        }
+export const NotificationBall = styled.a<{ checked: boolean }>`
+  position: relative;
+  display: inline-block;
+  #notification {
+    text-align: center;
+    line-height: 17px;
+    z-index: 14;
+    font-weight: 600;
+    font-size: 12px;
+    position: absolute;
+    top: 0px;
+    right: 2px;
+    height: 20px;
+    width: 20px;
+    border: 1px var(--borderDivision) solid;
+    border-radius: 50%;
+    color: var(--borderDivision);
+    background: var(--green);
+  }
+  ${props =>
+    props.checked &&
+    css`
+      #notification {
+        display: none;
+      }
     `}
 `
 
@@ -132,7 +132,6 @@ export const BodyNavBar = styled.nav`
           font-weight: 800;
           color: var(--textGreen);
           font-size: 15px;
-
         }
         > ${BodyButton} {
           font-size: 0.8rem;
