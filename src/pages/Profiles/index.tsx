@@ -177,7 +177,7 @@ const Profiles: React.FC = () => {
   useEffect(() => {
     if (profile.id) {
       api
-        .get(`/api/v1/projetos/reacao/${profile.id}?reacao=FAVORITO`)
+        .get(`/api/v1/projeto/reacao/${profile.id}?reacao=FAVORITO`)
         .then(response => {
           setFavoriteProjects(response.data)
           setLoadingPage(false)
