@@ -85,6 +85,9 @@ const Profiles: React.FC = () => {
   const [showFavoritesList, setShowFavoritesList] = useState<boolean>(false)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
+  const [favoreteProjects, setFavoriteProjects] = useState<IProject[]>(
+    [] as IProject[],
+  )
   const profile_username = useParams<routeParms>().id
 
   function experiencia_profissional(array: ProfessionalType[]) {
@@ -171,7 +174,19 @@ const Profiles: React.FC = () => {
         })
     }
   }, [profile.id])
-
+  useEffect(() => {
+    if (profile.id) {
+      api
+        .get(`/api/v1/projetos/reacao/${profile.id}?reacao=FAVORITO`)
+        .then(response => {
+          setFavoriteProjects(response.data)
+          setLoadingPage(false)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+    }
+  }, [profile.id])
   return (
     <Page>
       <NavBar />
@@ -365,7 +380,11 @@ const Profiles: React.FC = () => {
                   ))}
                 </ul>
               ) : (
-                <ul></ul>
+                <ul>
+                  {favoreteProjects.map(project => (
+                    <ProjectCard key={project.id} project={project} />
+                  ))}
+                </ul>
               )
             ) : (
               <Skeleton width="100%" height="200px" />
