@@ -30,6 +30,12 @@ interface IPessoa {
   nome: string
   id: number
 }
+export interface IReaction {
+  reacao: 'FAVORITO' | 'INTERESSE'
+  pessoa_id: number
+  projeto_id: number
+  id: number
+}
 export interface IProject {
   nome: string
   descricao: string
@@ -40,6 +46,7 @@ export interface IProject {
   areas: AreaType[]
   habilidades: ToolType[]
   data_criacao: string
+  projeto_reacoes?: IReaction[]
 }
 interface IProjectCardProps {
   project: IProject
@@ -70,13 +77,25 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
     })
   }, [project.pessoa_id])
   useEffect(() => {
-    if (project.id && user?.id)
-      api
-        .get(`/api/v1/reacoes?pessoa_id=${user?.id}&projeto_id=${project.id}`)
-        .then(response => {
-          setFavoriteId(response.data.id)
-        })
-  }, [project.id, user?.id])
+    if (project.projeto_reacoes && loggedUser.id) {
+      setFavoriteId(
+        project.projeto_reacoes.find(reaction => {
+          return (
+            reaction.pessoa_id === loggedUser.id &&
+            reaction.reacao === 'FAVORITO'
+          )
+        })?.id || 0,
+      )
+      setInteresseId(
+        project.projeto_reacoes.find(reaction => {
+          return (
+            reaction.pessoa_id === loggedUser.id &&
+            reaction.reacao === 'INTERESSE'
+          )
+        })?.id || 0,
+      )
+    }
+  }, [loggedUser.id, project.id, project.projeto_reacoes])
   function ToogleFavorite() {
     if (interesseId) {
       api.delete(`/api/v1/reacoes/${interesseId}`).then(response => {
