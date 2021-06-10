@@ -84,10 +84,10 @@ const NotificationsButton = () => {
 
     console.log(res)
   }, [user.id])
-  const notificao = 10;
+  var notificao = notifications.length;
   return (
     <Dropdown IconButton={
-      <NotificationBall>
+      <NotificationBall checked={notificao==0} >
         <IconBell />
         <span id="notification"> {`${notificao > 9? "9+" : notificao}`} </span>
       </NotificationBall>
