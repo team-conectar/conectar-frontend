@@ -97,8 +97,8 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
     }
   }, [loggedUser.id, project.id, project.projeto_reacoes])
   function ToogleFavorite() {
-    if (interesseId) {
-      api.delete(`/api/v1/reacoes?reacao_id=${interesseId}`).then(response => {
+    if (favoriteId) {
+      api.delete(`/api/v1/reacoes?reacao_id=${favoriteId}`).then(response => {
         setFavoriteId(0)
       })
     } else {
