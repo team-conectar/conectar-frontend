@@ -53,10 +53,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <ProjectInfo>
           <aside>
             <Link to={`/projeto/${project.id}`}>
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU"
-                alt={project.nome}
-              />
+              <img src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`} alt={project.nome} />
             </Link>
             <section>
               <Link to={`/projeto/${project.id}`}>{project.nome}</Link>

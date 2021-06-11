@@ -276,7 +276,10 @@ const Projects: React.FC = () => {
       </Modal>
 
       <header>
-        {/* <img src={no_couver} alt="imagem de capa do projeto" /> */}
+        <img
+          src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`}
+          alt="imagem de capa do projeto"
+        />
         <Skeleton height={180} />
         {isOwner() ? (
           <IconEdit
