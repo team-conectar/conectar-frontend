@@ -87,28 +87,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
     },
   }
 
-  function FindPeople() {
-    console.log(profile)
-    console.log(vacancy)
-
-    api
-      .get(`/api/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
-      .then(() => {
-        api
-          .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
-          .then(response => {
-            setProfile(response.data)
-          })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-  }
-
-  useEffect(() => {
+  function getPeopleProject(){
     const res = [
       api
         .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
@@ -136,7 +115,36 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         }),
     ]
     console.log(res)
+    console.log(vacancy);
+    
+  }
+  
+  function FindPeople() {
+    api
+    .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
+    .then(() => {
+      api
+          .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
+          .then(response  => {
+            setProfile(response.data)
+
+
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          })
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
+      getPeopleProject()
+      
+  }
+
+  useEffect(() => {
+    getPeopleProject()
   }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
+
   return (
     <BodyCard
       isAvailable={situation[`${vacancy.situacao}`].isAvaliable}
