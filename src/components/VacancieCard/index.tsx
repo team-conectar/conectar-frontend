@@ -18,21 +18,18 @@ import Dropdown from '../UI/Dropdown'
 import api from '../../services/api'
 import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
-
+import { TypeSituationVacancy } from '../Vacancy'
+export interface IVacancyCard {
+  projeto_id: number
+  pessoa_id: number
+  papel_id: number
+  tipo_acordo_id: number
+  descricao: string
+  situacao?: TypeSituationVacancy
+  id: number
+}
 interface Props extends HTMLAttributes<HTMLLIElement> {
-  vacancy: {
-    projeto_id: number
-    pessoa_id: number
-    papel_id: number
-    tipo_acordo_id: number
-    descricao: string
-    situacao?:
-      | 'PENDENTE_IDEALIZADOR'
-      | 'PENDENTE_COLABORADOR'
-      | 'ACEITE_COLABORADOR'
-      | 'FINALIZADO'
-    id: number
-  }
+  vacancy: IVacancyCard
 }
 interface ProfileType {
   data_nascimento: string
@@ -51,12 +48,46 @@ interface ProfileType {
   data_criacao: string
   data_atualizacao: string
 }
+export type TypeStatusVacancy = 'Aceito' | 'Pendente' | 'Recusado'
+interface ISituationVacancy {
+  [key: string]: {
+    status?: TypeStatusVacancy
+    invite: string
+    isAvaliable: boolean
+  }
+}
 const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [agreement, setAgreement] = useState<string>('')
   const [office, setOffice] = useState<string>('')
+  const situation: ISituationVacancy = {
+    FINALIZADO: {
+      invite: 'Acordo Finalizado',
+      isAvaliable: false,
+    },
+    PENDENTE_IDEALIZADOR: {
+      status: 'Pendente',
+      invite: 'Sem convite',
+      isAvaliable: true,
+    },
+    PENDENTE_COLABORADOR: {
+      status: 'Pendente',
+      invite: 'Convite enviado',
+      isAvaliable: true,
+    },
+    ACEITO: {
+      status: 'Aceito',
+      invite: 'Convite enviado',
+      isAvaliable: true,
+    },
+    RECUSADO: {
+      status: 'Recusado',
+      invite: 'Convite enviado',
+      isAvaliable: true,
+    },
+  }
 
-  useEffect(() => {
+  function getPeopleProject(){
     const res = [
       api
         .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
@@ -67,55 +98,98 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           return err?.response?.data.detail
         }),
       api
-        .get(`/api/v1/tipoAcordo?id=${vacancy.tipo_acordo_id}`)
+        .get(`/api/v1/tipoAcordo?tipo_acordo_id=${vacancy.tipo_acordo_id}`)
         .then(response => {
-          setAgreement(response.data)
+          setAgreement(response.data.descricao)
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         }),
       api
-        .get(`/api/v1/papel?id=${vacancy.tipo_acordo_id}`)
+        .get(`/api/v1/papel/${vacancy.papel_id}`)
         .then(response => {
-          setOffice(response.data)
+          setOffice(response.data.descricao)
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         }),
     ]
     console.log(res)
-  }, [vacancy.pessoa_id, vacancy.tipo_acordo_id])
+    console.log(vacancy);
+    
+  }
+  
+  function FindPeople() {
+    api
+    .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
+    .then(() => {
+      api
+          .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
+          .then(response  => {
+            setProfile(response.data)
+
+
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          })
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
+      getPeopleProject()
+      
+  }
+
+  useEffect(() => {
+    getPeopleProject()
+  }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
+
   return (
-    <BodyCard isAvailable status="refused" {...rest}>
+    <BodyCard
+      isAvailable={situation[`${vacancy.situacao}`].isAvaliable}
+      status={situation[`${vacancy.situacao}`].status}
+      {...rest}
+    >
       <label>
         <DropdownList IconButton={<GiHamburgerMenu />}>
           <li>Clonar vaga</li>
-          <li>Exluir vaga</li>
+          <li>Excluir vaga</li>
         </DropdownList>
       </label>
-      <img
-        src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-        alt=""
-      />
-      <h2>{profile.nome}</h2>
+      <Link to={`/perfil/${profile?.usuario}`}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          alt=""
+        />
+        <h2>{profile?.nome?.split(` `)[0]}</h2>
+      </Link>
       <h3>
-        Colaborador
-        <br />
         {office}
+        <br />
+        {agreement}
       </h3>
 
-      <Button theme="primary">Ver currículo</Button>
-      <DropdownList IconButton={<Button theme="secondary">Nova busca</Button>}>
-        <li>Perfis similares</li>
+      {/* <Button theme="primary">Ver currículo</Button> */}
+      {/* <DropdownList IconButton={ */}
+      <Button onClick={FindPeople} theme="secondary">
+        Nova busca
+      </Button>
+      {/* <li>Perfis similares</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li>
-        <li>Perfis interessados</li>
-      </DropdownList>
+        <li>Perfis interessados</li> */}
+      {/* </DropdownList> */}
       <aside>
-        <h4>Convite enviado</h4>
-        <span>Recusado</span>
+        <h4>{situation[`${vacancy.situacao}`].invite}</h4>
+        <span>{situation[`${vacancy.situacao}`].status}</span>
       </aside>
-      <legend>Vaga disponível</legend>
+      <legend>
+        Vaga{' '}
+        {situation[`${vacancy.situacao}`].isAvaliable
+          ? 'disponível'
+          : 'preenchida'}
+      </legend>
     </BodyCard>
   )
 }

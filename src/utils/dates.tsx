@@ -63,7 +63,7 @@ function createYearOptions() {
 export const finalYearOptions = (
   initialYear: number,
 ): OptionHTMLAttributes<HTMLOptionElement>[] => {
-  const currentYear = `${new Date().getFullYear()}`
+  const currentYear = `${new Date().getFullYear() + 7}`
 
   const years: OptionHTMLAttributes<HTMLOptionElement>[] = [
     {

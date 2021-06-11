@@ -25,7 +25,7 @@ const FieldText: React.FC<FieldProps> = ({
     <BodyField isEmpty={isEmpty} htmlFor={name}>
       {children}
       {pathSubLabel && (
-        <Link to={`/${pathSubLabel}`} tabIndex={1}>
+        <Link to={pathSubLabel} tabIndex={1}>
           {subLabel}
         </Link>
       )}

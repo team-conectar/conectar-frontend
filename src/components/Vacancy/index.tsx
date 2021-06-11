@@ -4,6 +4,10 @@ import React, {
   useCallback,
   useEffect,
   OptionHTMLAttributes,
+  forwardRef,
+  useImperativeHandle,
+  Ref,
+  ForwardRefRenderFunction,
 } from 'react'
 import Input from '../UI/Input'
 import Textarea from '../UI/Textarea'
@@ -12,18 +16,23 @@ import ToggleSwitch from '../UI/ToggleSwitch'
 import Button from '../UI/Button'
 import { BodyVacancy } from './styles'
 import { finalYearOptions, yearOptions } from '../../utils/dates'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
-import { createOptionAreas, createOptionTools } from '../../utils/projects'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import VacancieListItem from '../VacancieListItem'
 import { ProjectType } from '../../pages/CreateProject'
-
+import ContainerScroll from '../UI/ContainerScroll'
+export type TypeSituationVacancy =
+  | 'PENDENTE_IDEALIZADOR'
+  | 'PENDENTE_COLABORADOR'
+  | 'ACEITO'
+  | 'RECUSADO'
+  | 'FINALIZADO'
 export interface VacanciesType {
   projeto_id: number
   remunerado: boolean
@@ -32,14 +41,15 @@ export interface VacanciesType {
   papel_id: number
   tipo_acordo_id: number
   descricao: string
-  situacao?:
-    | 'PENDENTE_IDEALIZADOR'
-    | 'PENDENTE_COLABORADOR'
-    | 'ACEITE_COLABORADOR'
-    | 'FINALIZADO'
+  situacao: TypeSituationVacancy
   habilidades: Array<ToolType>
   areas: Array<AreaType>
   id: number
+  quantidade?: number
+}
+interface ITipoAcordo {
+  id: number
+  descricao: string
 }
 
 interface IFormData {
@@ -54,47 +64,103 @@ interface IFormData {
 }
 interface VacancyProps {
   project: ProjectType
+  dontRender?: boolean
 }
-
-const Vacancy: React.FC<VacancyProps> = ({ project }) => {
+export interface handleVacancy {
+  setEditVacancies(vacancies: VacanciesType[]): void
+  setShowRegister(register: boolean): void
+}
+const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
+  { project, dontRender },
+  ref,
+) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
-  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
-  const [editingId, setEditingId] = useState<number>(0)
-  const formRef = useRef<FormHandles>(null)
-  const optionsContrato: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
-    { value: '1', label: 'Trainee' },
-    { value: '2', label: 'Terceirizado' },
-    { value: '3', label: 'Intermitente' },
-    { value: '4', label: 'Aprendiz' },
-    { value: '5', label: 'Estágio' },
-    { value: '6', label: 'Temporário' },
-    { value: '7', label: 'Freelance' },
-    { value: '8', label: 'Autônomo' },
-    { value: '9', label: 'Meio Período' },
-    { value: '10', label: ' Tempo Integral' },
-  ]
-  const optionsPerfil: Array<OptionHTMLAttributes<HTMLOptionElement>> = [
-    { value: '1', label: 'Aliado' },
-    { value: '2', label: 'Colaborador' },
-    { value: '3', label: 'Idealizador' },
-  ]
+  const [groupedVacancies, setGroupedVacancies] = useState<
+    Array<VacanciesType[]>
+  >([])
+  const [editVacancies, setEditVacancies] = useState<VacanciesType[]>([])
 
-  const optionsAreas: Array<
-    OptionHTMLAttributes<HTMLOptionElement>
-  > = createOptionAreas(project.areas)
-  const optionsTools: Array<
-    OptionHTMLAttributes<HTMLOptionElement>
-  > = createOptionTools(project.habilidades)
+  const [optionsAcordo, setOptionsAcordo] = useState<
+    Array<OptionHTMLAttributes<HTMLOptionElement>>
+  >([])
+  const [optionsPapel, setOptionsPapel] = useState<
+    Array<OptionHTMLAttributes<HTMLOptionElement>>
+  >([])
+  const formRef = useRef<FormHandles>(null)
+  useImperativeHandle(ref, () => ({ setEditVacancies, setShowRegister }), [])
+
   useEffect(() => {
+    async function get_async() {
+      await api
+        .get('/api/v1/papel')
+        .then((response: AxiosResponse<ITipoAcordo[]>) => {
+          setOptionsPapel(
+            response.data.map(item => {
+              return { value: item.id, label: item.descricao }
+            }),
+          )
+        })
+        .catch((err: AxiosError) => {
+          // Returns error message from backend
+          return err?.response?.data.detail
+        })
+      await api
+        .get('/api/v1/tipoAcordo/all')
+        .then((response: AxiosResponse<ITipoAcordo[]>) => {
+          setOptionsAcordo(
+            response.data.map(item => {
+              return { value: item.id, label: item.descricao }
+            }),
+          )
+        })
+        .catch((err: AxiosError) => {
+          // Returns error message from backend
+          return err?.response?.data.detail
+        })
+    }
+    get_async()
+  }, [editVacancies])
+  const get_pessoa_projeto = useCallback(() => {
     api
-      .get('/api/v1/experiencias/academica/me', {
-        withCredentials: true,
+      .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
+      .then((response: AxiosResponse<VacanciesType[]>) => {
+        const GroupResponse = response.data.map(vacancy => {
+          return response.data.filter(data => {
+            return (
+              JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
+              JSON.stringify(data.habilidades) ===
+                JSON.stringify(vacancy.habilidades) &&
+              data.remunerado === vacancy.remunerado &&
+              data.tipo_acordo_id === vacancy.tipo_acordo_id &&
+              data.papel_id === vacancy.papel_id &&
+              data.titulo === vacancy.titulo
+            )
+          })
+        })
+        setGroupedVacancies(
+          GroupResponse.filter((vacancies, index) => {
+            return (
+              JSON.stringify(vacancies) !==
+              JSON.stringify(GroupResponse[index + 1])
+            )
+          }),
+        )
       })
-      .catch((err: AxiosError) => {
-        // Returns error message from backend
-        return err?.response?.data.detail
+  }, [project.id])
+  const handleDeleteVacancy = useCallback(
+    (vacancies: VacanciesType[]) => {
+      vacancies.forEach(vacancy => {
+        const res = api
+          .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+          .then(get_pessoa_projeto)
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        console.log(res)
       })
-  }, [editingId, showRegister])
+    },
+    [get_pessoa_projeto],
+  )
   const handleSubmit = useCallback(
     async (formData: IFormData) => {
       console.log(formData)
@@ -109,17 +175,19 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
             .min(1, 'Deve conter no mínimo uma vaga'),
           descricao: Yup.string().required('Descrição é obrigatório'),
           tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
-          // areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
-          // habilidades: Yup.array().min(
-          //   1,
-          //   'Habilidades de contrato é obrigatório',
-          // ),
+          areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
+          habilidades: Yup.array().min(
+            1,
+            'Habilidades de contrato é obrigatório',
+          ),
         })
         await schema.validate(formData, {
           abortEarly: false,
         })
         // Validation passed
-
+        if (editVacancies) {
+          handleDeleteVacancy(editVacancies)
+        }
         const data = {
           ...formData,
           projeto_id: project.id,
@@ -127,38 +195,39 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
           papel_id: formData.perfil,
           tipo_acordo_id: formData.tipoContrato,
           remunerado: !!(formData.remunerado[0] === 'remunerado'),
-          situacao: 'Não enviado',
+          situacao: 'PENDENTE_IDEALIZADOR',
         }
-        console.log(data)
+        for (let index = 1; index <= formData.quantidade; index++) {
+          await api
+            .post('/api/v1/pessoa_projeto', data, {
+              withCredentials: true,
+            })
+            .then(async response => {
+              const res = await api
+                .put(
+                  `/api/v1/pessoa_projeto/${response.data.id}`,
+                  {
+                    areas: formData.areas.map(area => {
+                      return { descricao: area }
+                    }),
+                    habilidades: formData.habilidades.map(habilidade => {
+                      return { nome: habilidade }
+                    }),
+                  },
+                  {
+                    withCredentials: true,
+                  },
+                )
+                .catch((err: AxiosError) => {
+                  return err?.response?.data.detail
+                })
+              console.log(res)
+            })
+            .catch((err: AxiosError) => {
+              return err?.response?.data.detail
+            })
+        }
 
-        await api
-          .post('/api/v1/pessoa_projeto', data, {
-            withCredentials: true,
-          })
-          .then(async response => {
-            const res = await api
-              .put(
-                `/api/v1/pessoa_projeto/${response.data.id}`,
-                {
-                  areas: formData.areas.map(area => {
-                    return { descricao: area }
-                  }),
-                  habilidades: formData.habilidades.map(habilidade => {
-                    return { nome: habilidade }
-                  }),
-                },
-                {
-                  withCredentials: true,
-                },
-              )
-              .catch((err: AxiosError) => {
-                return err?.response?.data.detail
-              })
-            console.log(res)
-          })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
         setShowRegister(false)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -168,14 +237,12 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         }
       }
     },
-    [project.id],
+    [editVacancies, handleDeleteVacancy, project.id],
   )
-  useEffect(() => {
-    api.get(`/api/v1/pessoa_projeto/projeto/${project.id}`).then(response => {
-      setVacancies(response.data)
-    })
-  }, [project.id, showRegister])
-  return (
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(get_pessoa_projeto, [project.id, showRegister])
+  return !dontRender ? (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
       <h1>
         Vagas
@@ -187,61 +254,112 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         )}
       </h1>
       {!showRegister ? (
-        <ul>
-          {vacancies.map(vacancy => (
-            <VacancieListItem key={vacancy.id} vacancy={vacancy} />
+        <ContainerScroll autoHeight autoHeightMax="50vh">
+          {groupedVacancies.map(vacancies => (
+            <VacancieListItem
+              key={vacancies[0].id}
+              vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
+              onDelete={() => handleDeleteVacancy(vacancies)}
+              onEdit={() => {
+                setShowRegister(true)
+                setEditVacancies(vacancies)
+              }}
+            />
           ))}
-        </ul>
+        </ContainerScroll>
       ) : (
         <Form ref={formRef} onSubmit={handleSubmit}>
           <Input
             label="Cargo"
             name="cargo"
-            // defaultValue={academicFormData?.instituicao}
+            defaultValue={editVacancies[0]?.titulo}
           />
-          <Select label="Perfil" options={optionsPerfil} name="perfil" />
+          <Select
+            label="Perfil"
+            options={optionsPapel}
+            name="perfil"
+            defaultValue={optionsPapel?.find(
+              option => Number(option.value) === editVacancies[0]?.papel_id,
+            )}
+          />
           <Input
             label="Quantidade"
             name="quantidade"
             type="number"
-            // defaultValue={academicFormData?.instituicao}
+            defaultValue={editVacancies.length > 0 ? editVacancies.length : ' '}
           />
-
           <Select
             label="Habilidade ou Ferramentas"
             name="habilidades"
-            options={optionsTools}
             multi
+            options={project.habilidades.map(tool => {
+              return { value: tool.nome, label: tool.nome }
+            })}
+            defaultValue={editVacancies[0]?.habilidades.map(tool => {
+              return { value: tool.nome, label: tool.nome }
+            })}
           />
           <div className="bloco-area">
-            <Select label="Áreas" name="areas" options={optionsAreas} multi />
+            <Select
+              label="Áreas"
+              name="areas"
+              multi
+              options={project.areas.map(area => {
+                return { value: area.descricao, label: area.descricao }
+              })}
+              defaultValue={editVacancies[0]?.areas.map(area => {
+                return { value: area.descricao, label: area.descricao }
+              })}
+            />
           </div>
 
-          <Textarea name="descricao" label="Descrição" />
+          <Textarea
+            name="descricao"
+            label="Descrição"
+            defaultValue={editVacancies[0]?.descricao}
+          />
           <section className="bloco-contrato">
             <Select
               label="Tipo de contrato"
-              options={optionsContrato}
+              options={optionsAcordo}
               name="tipoContrato"
+              defaultValue={optionsAcordo.find(
+                option =>
+                  Number(option.value) ===
+                  Number(editVacancies[0]?.tipo_acordo_id),
+              )}
             />
             <ToggleSwitch
-              options={[
-                { label: 'Remunerado', id: 'remunerado', value: 'remunerado' },
-              ]}
               name="remunerado"
+              defaultChecked={editVacancies[0]?.remunerado}
+              options={[
+                {
+                  label: 'Remunerado',
+                  id: 'remunerado',
+                  value: 'remunerado',
+                },
+              ]}
             />
           </section>
           <section className="area-botoes">
             <Button type="submit" theme="primary">
               Salvar
             </Button>
-            <Button theme="secondary">Excluir</Button>
             <Button
+              theme="secondary"
+              onClick={() => {
+                handleDeleteVacancy(editVacancies)
+                setShowRegister(false)
+              }}
+            >
+              Excluir
+            </Button>
+            <Button
+              theme="secondary"
               onClick={() => {
                 setShowRegister(false)
-                setEditingId(0)
+                setEditVacancies([])
               }}
-              theme="secondary"
             >
               Cancelar
             </Button>
@@ -249,7 +367,9 @@ const Vacancy: React.FC<VacancyProps> = ({ project }) => {
         </Form>
       )}
     </BodyVacancy>
+  ) : (
+    <></>
   )
 }
 
-export default Vacancy
+export default forwardRef(Vacancy)

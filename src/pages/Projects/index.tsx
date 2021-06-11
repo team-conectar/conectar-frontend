@@ -7,13 +7,24 @@ import React, {
   useContext,
   Fragment,
   useCallback,
+  Ref,
+  MutableRefObject,
+  ForwardRefExoticComponent,
+  RefAttributes,
 } from 'react'
 import { Link } from 'react-router-dom'
-import { BodyProjects, DivSobre, DivTags, DivVagas } from './styles'
+import {
+  BodyProjects,
+  DivConvite,
+  DivParticipants,
+  DivSobre,
+  DivTags,
+  DivVagas,
+} from './styles'
 import edit from '../../assets/icon/editar.svg'
 import TrashIcon from '../../assets/icon/lixeira.svg'
 import { Scrollbars } from 'react-custom-scrollbars'
-
+import urlConvite from '../../assets/image/convite_dias.svg'
 // import clone from '../../assets/icon/clone.svg'
 import config from '../../assets/icon/config.svg'
 import no_couver from '../../assets/image/no_couver.svg'
@@ -26,7 +37,7 @@ import like from '../../assets/icon/like.svg'
 import { useHistory, useParams } from 'react-router'
 import Button from '../../components/UI/Button'
 import api from '../../services/api'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import SelectArea, { AreaType } from '../../components/UI/SelectArea'
 import SelectTool, { ToolType } from '../../components/UI/SelectTools'
 import Modal from '../../components/UI/Modal'
@@ -36,7 +47,11 @@ import Dropzone from '../../components/UI/Dropzone'
 import { Context } from '../../context/AuthContext'
 import Login from '../../components/UI/Login'
 import NavBar from '../../components/UI/NavBar'
-import Vacancy, { VacanciesType } from '../../components/Vacancy'
+import Vacancy, {
+  handleVacancy,
+  TypeSituationVacancy,
+  VacanciesType,
+} from '../../components/Vacancy'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
@@ -47,6 +62,7 @@ import VacancieListItem from '../../components/VacancieListItem'
 import Skeleton from 'react-loading-skeleton'
 import { IconEdit } from '../../assets/icon'
 import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
+import VacancieCard from '../../components/VacancieCard'
 interface routeParms {
   id: string
 }
@@ -61,15 +77,22 @@ interface ProjectType {
   id: number
   pessoa_id: number
 }
-interface IProjectOwner {
+interface IPeopleLink {
   usuario: string
   foto_perfil: string
   nome: string
+  id: number
 }
+
 /**
  * @constructor
  * @content is the iten of the modal
  */
+interface IVacancyDetail extends VacanciesType {
+  pessoas_ids: number[]
+  pessoas_projeto_ids: number[]
+  aceito_ids: number[]
+}
 
 const Projects: React.FC = () => {
   const { loading, isAuthenticated, user } = useContext(Context)
@@ -88,63 +111,115 @@ const Projects: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(
     loading && isAuthenticated,
   )
-
   const projeto_id = useParams<routeParms>().id
-  const [projectOwner, setProjectOwner] = useState({} as IProjectOwner)
+  const [projectOwner, setProjectOwner] = useState({} as IPeopleLink)
+  const [participantsDetail, setParticipantsDetail] = useState<IPeopleLink[]>(
+    [],
+  )
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
-  const [vacancyDetail, setVacancyDetail] = useState<VacanciesType>(
-    vacancies[0],
+  const vacancyComponentRef = useRef<handleVacancy>(null)
+  const [groupedVacancies, setGroupedVacancies] = useState<
+    Array<VacanciesType[]>
+  >([])
+  const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>({
+    ...vacancies[0],
+    pessoas_ids: [],
+    pessoas_projeto_ids: [],
+    aceito_ids: [],
+  })
+
+  const getset_pessoa_projeto = useCallback(async () => {
+    if (projeto_id)
+      await api
+        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
+        .then((response: AxiosResponse<VacanciesType[]>) => {
+          setVacancies(response.data)
+
+          const GroupResponse = response.data.map(vacancy => {
+            return response.data.filter(data => {
+              return (
+                JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
+                JSON.stringify(data.habilidades) ===
+                  JSON.stringify(vacancy.habilidades) &&
+                data.remunerado === vacancy.remunerado &&
+                data.tipo_acordo_id === vacancy.tipo_acordo_id &&
+                data.papel_id === vacancy.papel_id &&
+                data.titulo === vacancy.titulo
+              )
+            })
+          })
+          setGroupedVacancies(
+            GroupResponse.filter((vacancies, index, self) => {
+              let indexOfDuplicated = -1
+              for (let i = 0; i < self.length; i++) {
+                if (JSON.stringify(self[i]) === JSON.stringify(vacancies)) {
+                  indexOfDuplicated = i
+                }
+              }
+              return index === indexOfDuplicated
+            }),
+          )
+        })
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
+        })
+    return true
+  }, [projeto_id])
+  const handleDeclineInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'RECUSADO',
+        })
+        .then(() => getset_pessoa_projeto())
+    },
+    [getset_pessoa_projeto],
+  )
+  const handleAcceptInvitation = useCallback(
+    (pessoa_projeto_id: number) => {
+      api
+        .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
+          situacao: 'ACEITO',
+        })
+        .then(() => getset_pessoa_projeto())
+    },
+    [getset_pessoa_projeto],
   )
   const formRef = useRef<FormHandles>(null)
-  useEffect(() => {
-    const res = [
-      api
-        .get(`/api/v1/projeto/${projeto_id}`)
-        .then(response => {
-          setProject(response.data)
-          setStoredTools(response.data.habilidades)
-          setStoredAreas(response.data.areas)
-          api
-            .get(`/api/v1/pessoas/${response.data.pessoa_id}`)
-            .then(response => {
-              setProjectOwner(response.data)
-            })
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        }),
-      api
-        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
-        .then(response => {
-          setVacancies(response.data)
-          setVacancyDetail(response.data[0])
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        }),
-    ]
-    console.log(res)
-  }, [projeto_id])
-  useEffect(() => {
+  const handleDeleteVacancy = useCallback(
+    (vacancies: VacanciesType[]) => {
+      vacancies.forEach(vacancy => {
+        const res = api
+          .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+          .then(getset_pessoa_projeto)
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        console.log(res)
+      })
+    },
+    [getset_pessoa_projeto],
+  )
+  const handleFindTeam = useCallback(() => {
     const res = api
-      .get(`/api/v1/pessoas/${project.pessoa_id}`)
-      .then(response => {
-        setProjectOwner(response.data)
-        console.log(response.data)
+      .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
+      .finally(() => {
+        history.push(`/projeto-conectado/${projeto_id}`)
       })
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
       })
     console.log(res)
-  }, [project.pessoa_id, openModal])
+  }, [history, projeto_id])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
+
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
@@ -173,8 +248,37 @@ const Projects: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
-        await api.put(`/api/v1/projeto/${projeto_id}`, formData)
-        setOpenModal(false)
+        if (modalContent.areas) {
+          const data = {
+            areas: formData.areas.map(area => {
+              return { descricao: area }
+            }),
+          }
+          await api
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setOpenModal(false)
+            })
+        } else if (modalContent.habilidades) {
+          const data = {
+            habilidades: formData.habilidades.map(tool => {
+              return { nome: tool }
+            }),
+          }
+          await api
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
+              withCredentials: true,
+            })
+            .then(() => {
+              setOpenModal(false)
+            })
+        } else {
+          await api.put(`/api/v1/projeto/${projeto_id}`, formData).then(() => {
+            setOpenModal(false)
+          })
+        }
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -190,23 +294,101 @@ const Projects: React.FC = () => {
       return !!(project.pessoa_id === user.id)
     } else return false
   }
-  function areaTypeToString() {
-    const defo: Array<string> = []
+  useEffect(() => {
+    const res = api
+      .get(`/api/v1/projeto/${projeto_id}`)
+      .then(response => {
+        setProject(response.data)
+        setStoredTools(response.data.habilidades)
+        setStoredAreas(response.data.areas)
+        api.get(`/api/v1/pessoas/${response.data.pessoa_id}`).then(response => {
+          setProjectOwner(response.data)
+        })
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
 
-    storedAreas.forEach(area => {
-      defo.push(area.descricao)
-    })
+    getset_pessoa_projeto()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projeto_id, openModal])
+  useEffect(() => {
+    if (groupedVacancies.length > 0) {
+      setVacancyDetail({
+        ...groupedVacancies[0][0],
+        pessoas_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.pessoa_id
+        }),
+        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
+          return vacancy.id
+        }),
+        aceito_ids: groupedVacancies[0]
+          .filter(vacancy => {
+            return (
+              vacancy.situacao === 'ACEITO' || vacancy.situacao === 'FINALIZADO'
+            )
+          })
+          .map(vacancy => vacancy.pessoa_id),
+      })
+    }
+  }, [groupedVacancies])
 
-    return defo
-  }
-  function toolTypeToString() {
-    const defo: Array<string> = []
+  useEffect(() => {
+    const res = api
+      .get(`/api/v1/pessoas/${project.pessoa_id}`)
+      .then(response => {
+        setProjectOwner(response.data)
+      })
+      .catch((error: AxiosError) => {
+        return error?.response?.data.detail
+      })
+    console.log(res)
+  }, [project.pessoa_id, openModal])
 
-    storedTools.forEach(tool => {
-      defo.push(tool.nome)
-    })
-
-    return defo
+  useEffect(() => {
+    setParticipantsDetail(
+      vacancyDetail.aceito_ids?.map(id => {
+        let res: IPeopleLink = {} as IPeopleLink
+        api
+          .get(`/api/v1/pessoas/${id}`)
+          .then((response: AxiosResponse<IPeopleLink>) => {
+            res = response.data
+          })
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        return res
+      }),
+    )
+  }, [vacancyDetail])
+  console.log(vacancyDetail.aceito_ids)
+  function buttonMatchContent(option?: TypeSituationVacancy) {
+    switch (option) {
+      case 'FINALIZADO':
+        return (
+          <Button
+            theme="primary"
+            onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
+          >
+            Relatório do Time
+          </Button>
+        )
+      case 'PENDENTE_IDEALIZADOR':
+        return (
+          <Button theme="primary" onClick={handleFindTeam}>
+            Buscar Time
+          </Button>
+        )
+      default:
+        return (
+          <Button
+            theme="primary"
+            onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
+          >
+            Status do time
+          </Button>
+        )
+    }
   }
   return (
     <BodyProjects>
@@ -216,6 +398,8 @@ const Projects: React.FC = () => {
         setOpen={setOpenModal}
         onAfterClose={() => {
           setOpenModal(!isAuthenticated)
+          vacancyComponentRef.current?.setShowRegister(false)
+          vacancyComponentRef.current?.setEditVacancies([])
         }}
       >
         {!loading && !isAuthenticated ? (
@@ -253,16 +437,20 @@ const Projects: React.FC = () => {
                 )}
                 {modalContent.areas && (
                   <SelectArea
-                    name="area"
+                    name="areas"
                     label="Selecione as àreas de atuação"
-                    defaultValue={areaTypeToString()}
+                    defaultValue={storedAreas.map(area => {
+                      return area.descricao
+                    })}
                   />
                 )}
                 {modalContent.habilidades && (
                   <SelectTool
                     name="habilidades"
                     label="Selecione as ferramentas ou habilidades"
-                    defaultValue={toolTypeToString()}
+                    defaultValue={storedTools.map(tool => {
+                      return tool.nome
+                    })}
                   />
                 )}
                 <Button theme="primary" type="submit">
@@ -270,7 +458,13 @@ const Projects: React.FC = () => {
                 </Button>
               </Form>
             )}
-            {modalContent.vaga && <Vacancy project={project} />}
+            {
+              <Vacancy
+                project={project}
+                ref={vacancyComponentRef}
+                dontRender={!modalContent.vaga}
+              />
+            }
           </>
         )}
       </Modal>
@@ -289,14 +483,14 @@ const Projects: React.FC = () => {
             }}
           />
         ) : (
-          <ProfileLink to="">
+          <ProfileLink to={`/perfil/${projectOwner?.usuario}`}>
             <img
               src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
               alt=""
             />
             <aside>
-              <h2>{projectOwner.nome}</h2>
-              <p>@{projectOwner.usuario}</p>
+              <h2>{projectOwner?.nome?.split(' ')[0]}</h2>
+              <p>@{projectOwner?.usuario}</p>
             </aside>
           </ProfileLink>
         )}
@@ -306,13 +500,8 @@ const Projects: React.FC = () => {
           </section>
 
           <section>
-            {isOwner() ? (
-              <Button
-                theme="primary"
-                onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
-              >
-                Buscar Time
-              </Button>
+            {isOwner() && groupedVacancies.length > 0 ? (
+              buttonMatchContent(groupedVacancies[0][0].situacao)
             ) : (
               <Button theme="secondary" className="fav-button">
                 <img src={like} alt="curtidas" /> Favoritar
@@ -320,10 +509,10 @@ const Projects: React.FC = () => {
             )}
             <a>
               <span>
-                <img src={like} alt="curtidas" />
-                194
+                {/* <img src={like} alt="curtidas" /> */}
+                {/* 194 */}
               </span>
-              <p>Publicado em:</p>
+              {/* <p>Publicado em:</p> */}
             </a>
           </section>
           <aside>
@@ -432,7 +621,47 @@ const Projects: React.FC = () => {
           )}
         </DivTags>
       </DivSobre>
-
+      {vacanciesList &&
+        vacancyDetail?.situacao === 'PENDENTE_COLABORADOR' &&
+        vacancyDetail?.pessoas_ids?.includes(user.id) && (
+          <DivConvite>
+            <figure>
+              <img
+                src={urlConvite}
+                alt="Mulher apertando a mão de um homem simbolizando um acordo"
+              />
+              <figcaption>
+                Você tem apenas {3} dias para responder este covnite
+              </figcaption>
+            </figure>
+            <aside>
+              <Button
+                theme="secondary"
+                onClick={() =>
+                  handleDeclineInvitation(
+                    vacancyDetail?.pessoas_projeto_ids[
+                      vacancyDetail.pessoas_ids.indexOf(user.id)
+                    ],
+                  )
+                }
+              >
+                Recusar
+              </Button>
+              <Button
+                theme="primary"
+                onClick={() =>
+                  handleAcceptInvitation(
+                    vacancyDetail?.pessoas_projeto_ids[
+                      vacancyDetail.pessoas_ids.indexOf(user.id)
+                    ],
+                  )
+                }
+              >
+                Aceitar
+              </Button>
+            </aside>
+          </DivConvite>
+        )}
       <DivVagas showVagas={vacanciesList}>
         <section>
           <legend>
@@ -449,14 +678,43 @@ const Projects: React.FC = () => {
           </legend>
 
           <ContainerScroll>
-            {console.log(vacancies)}
-            {vacancies.map(vacancy => (
+            {groupedVacancies.map(vacancies => (
               <VacancieListItem
-                key={vacancy.id}
-                vacancy={vacancy}
-                onClick={() => setVacancyDetail(vacancy)}
+                dontShowOption={isOwner() ? undefined : true}
+                key={vacancies[0].id}
+                vacancy={{
+                  ...vacancies[0],
+                  quantidade: vacancies.length,
+                }}
+                onDelete={() => handleDeleteVacancy(vacancies)}
+                onEdit={() => {
+                  setOpenModal(true)
+                  setModalContent({ ...initialModalContent, vaga: true })
+                  vacancyComponentRef.current?.setShowRegister(true)
+                  vacancyComponentRef.current?.setEditVacancies(vacancies)
+                  console.log(vacancies)
+                }}
+                onClick={() => {
+                  setVacancyDetail({
+                    ...vacancies[0],
+                    pessoas_ids: vacancies.map(vacancy => {
+                      return vacancy.pessoa_id
+                    }),
+                    pessoas_projeto_ids: vacancies.map(vacancy => {
+                      return vacancy.id
+                    }),
+                    aceito_ids: vacancies
+                      .filter(vacancy => {
+                        return (
+                          vacancy.situacao === 'ACEITO' ||
+                          vacancy.situacao === 'FINALIZADO'
+                        )
+                      })
+                      .map(vacancy => vacancy.pessoa_id),
+                  })
+                }}
                 style={
-                  vacancyDetail === vacancy
+                  vacancyDetail.titulo === vacancies[0].titulo
                     ? { background: 'var(--backgroundElevation)' }
                     : { background: 'transparent' }
                 }
@@ -505,6 +763,25 @@ const Projects: React.FC = () => {
                 ))}
               </aside>
             </DivTags>
+            {participantsDetail.length > 0 && (
+              <DivParticipants>
+                <legend>Pessoas participando dessa vaga:</legend>
+                <aside>
+                  {participantsDetail?.map(participant => (
+                    <ProfileLink
+                      key={participant?.usuario}
+                      to={`/perfil/${participant?.usuario}`}
+                    >
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+                        alt=""
+                      />
+                      <h2>{participant?.nome?.split(' ')[0]}</h2>
+                    </ProfileLink>
+                  ))}
+                </aside>
+              </DivParticipants>
+            )}
           </aside>
         </section>
       </DivVagas>

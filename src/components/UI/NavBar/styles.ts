@@ -1,5 +1,58 @@
-import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import styled, { css } from 'styled-components'
+import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
+export const LiNotification = styled(Link)`
+  list-style: none;
+  padding: 0.8rem 1rem;
+  border-bottom: solid 1px var(--borderDivision);
+  border-top: solid 1px var(--borderDivision);
+  display: flex;
+  flex-direction: row;
+  gap: 0.6rem;
+  align-items: center;
+  img {
+    display: initial;
+    width: 4rem;
+    height: 4rem;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  p {
+    text-align: start;
+    word-break: normal;
+    gap: 0.3rem;
+    width: calc(100%-4rem);
+  }
+`
+
+export const NotificationBall = styled.a<{ checked: boolean }>`
+  position: relative;
+  display: inline-block;
+  #notification {
+    text-align: center;
+    line-height: 17px;
+    z-index: 14;
+    font-weight: 600;
+    font-size: 12px;
+    position: absolute;
+    top: 0px;
+    right: 2px;
+    height: 20px;
+    width: 20px;
+    border: 1px var(--borderDivision) solid;
+    border-radius: 50%;
+    color: var(--borderDivision);
+    background: var(--green);
+  }
+  ${props =>
+    props.checked &&
+    css`
+      #notification {
+        display: none;
+      }
+    `}
+`
 
 export const BodyNavBar = styled.nav`
   width: 100%;
@@ -13,9 +66,6 @@ export const BodyNavBar = styled.nav`
   position: sticky;
   top: 0;
   z-index: 2;
-  img {
-    width: 12rem;
-  }
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.2);
   .searchBlock {
     background: white;
@@ -48,11 +98,46 @@ export const BodyNavBar = styled.nav`
     }
   }
   aside {
+    > a img {
+      width: 12rem;
+      display: flex;
+      flex-direction: row;
+    }
     display: flex;
     align-items: center;
     height: 100%;
     gap: 1.2rem;
     ${DropdownContent} {
+      max-height: 800px;
+      > ul {
+        overflow-y: auto;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+      > h4 {
+        padding: 0 1rem;
+        align-self: flex-start;
+        font-weight: 600;
+      }
+      > aside {
+        padding: 0.4rem 1rem;
+        border-top: solid 1px var(--borderDivision);
+        font-size: 0.9rem;
+        width: 100%;
+        justify-content: space-between;
+        .checkNotification {
+          background: transparent;
+          border: 0;
+          font-weight: 800;
+          color: var(--textGreen);
+          font-size: 15px;
+        }
+        > ${BodyButton} {
+          font-size: 0.8rem;
+          height: 1.6rem;
+        }
+      }
       section {
         position: relative;
         padding: 1rem;
@@ -61,7 +146,7 @@ export const BodyNavBar = styled.nav`
         grid-template-rows: repeat(3, 1rem);
         gap: 0.5rem;
         border-bottom: solid 1px var(--borderDivision);
-        img {
+        > img {
           grid-column: 1;
           grid-row: 1 / 3;
           border-radius: 50%;
@@ -85,14 +170,14 @@ export const BodyNavBar = styled.nav`
           grid-row: 3;
         }
       }
-      a {
+      > a {
         text-decoration: none;
         display: flex;
         padding: 0.6rem 1.2rem;
         margin: 0;
         align-self: flex-start;
       }
-      button {
+      > button {
         color: var(--textGreen);
         border: 0;
         border-top: solid 1px var(--borderDivision);
@@ -103,7 +188,7 @@ export const BodyNavBar = styled.nav`
       }
     }
 
-    a {
+    > a {
       text-decoration: none;
       font: 500 0.9rem Raleway;
 

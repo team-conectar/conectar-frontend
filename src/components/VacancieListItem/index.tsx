@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useEffect, useState } from 'react'
+import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react'
 import { VacancieLi, DropdownList } from './styles'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
@@ -10,8 +10,17 @@ import { VacanciesType } from '../Vacancy'
 
 interface Props extends HTMLAttributes<HTMLLIElement> {
   vacancy: VacanciesType
+  onEdit(): void
+  onDelete(): void
+  dontShowOption?: true
 }
-const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
+const VacancieListItem: React.FC<Props> = ({
+  vacancy,
+  onEdit,
+  onDelete,
+  dontShowOption,
+  ...rest
+}) => {
   const [profile, setProfile] = useState<string>('')
   const [agreement, setAgreement] = useState<string>('')
   useEffect(() => {
@@ -35,13 +44,14 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
     ]
     console.log(res)
   }, [vacancy.papel_id, vacancy.tipo_acordo_id])
+
   return (
     <VacancieLi {...rest}>
       <img
         src={
           (profile?.toLowerCase() === 'colaborador' && co) ||
-          (profile?.toLowerCase() === 'idealizador' && al) ||
-          (profile?.toLowerCase() === 'aliado' && id) ||
+          (profile?.toLowerCase() === 'idealizador' && id) ||
+          (profile?.toLowerCase() === 'aliado' && al) ||
           ''
         }
         alt={profile}
@@ -54,13 +64,18 @@ const VacancieListItem: React.FC<Props> = ({ vacancy, ...rest }) => {
         <span>{agreement} </span>
         <strong>{vacancy.remunerado ? 'Remunerado' : 'Não remunerado'}</strong>
         <br />
-        <span>2 vagas</span>
+        <span>
+          {vacancy.quantidade} vaga
+          {vacancy.quantidade && vacancy.quantidade > 1 ? 's' : ' '}
+        </span>
       </p>
 
-      <DropdownList IconButton={<GiHamburgerMenu />}>
-        <li>Clonar vaga</li>
-        <li>Exluir vaga</li>
-      </DropdownList>
+      {!dontShowOption && (
+        <DropdownList IconButton={<GiHamburgerMenu />}>
+          <li onClick={() => onEdit && onEdit()}>Editar vaga</li>
+          <li onClick={() => onDelete && onDelete()}>Excluir vaga</li>
+        </DropdownList>
+      )}
     </VacancieLi>
   )
 }

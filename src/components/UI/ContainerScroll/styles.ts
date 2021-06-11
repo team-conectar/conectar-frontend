@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
 export const DivScroll = styled.div`
+  width: 100%;
+  height: 100%;
   .thumb-horizontal,
   .thumb-vertical {
     background: var(--gray);

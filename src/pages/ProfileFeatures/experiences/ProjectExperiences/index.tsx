@@ -27,6 +27,7 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { OptionTypeBase, Props as SelectProps } from 'react-select'
+import { showToast } from '../../../../components/Toast/Toast'
 export interface IExperienceProject {
   id: number
   nome: string
@@ -142,7 +143,6 @@ const ProjectExperiences: React.FC = () => {
         })
         // Validation passed
         const {
-          currentProject,
           nome,
           cargo,
           descricao,
@@ -156,7 +156,7 @@ const ProjectExperiences: React.FC = () => {
         let data_fim = null
         const data_inicio = `${initialYear}-${initialMonth}-01`
 
-        if (!currentProject) {
+        if (!currentilyProject) {
           data_fim = `${finalYear}-${finalMonth}-01`
         }
 
@@ -180,6 +180,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
+                showToast( "success" ,"Editado com sucesso!")
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })
@@ -192,6 +193,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
+                showToast( "success" ,"Cadastrado com sucesso!")
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })
@@ -241,6 +243,9 @@ const ProjectExperiences: React.FC = () => {
     setShowRegister(true)
     setEditStored(data)
   }
+  useEffect(() => {
+    setCurrentilyProject(editStored.situacao === 'Em andamento')
+  }, [editStored])
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
@@ -273,7 +278,10 @@ const ProjectExperiences: React.FC = () => {
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: IExperienceProject) => (
-            <div key={experience.id} className="experiencia-cadastrada">
+            <div
+              key={experience.id}
+              className="experiencia-cadastrada projeto-cadastrado"
+            >
               <section className="icones">
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash
@@ -383,8 +391,8 @@ const ProjectExperiences: React.FC = () => {
                       editStored.id &&
                       Number(editStored?.finalYear) > initialYear
                         ? {
-                            label: editStored?.finalMonth,
-                            value: editStored?.finalMonth,
+                            label: editStored?.finalYear,
+                            value: editStored?.finalYear,
                           }
                         : null
                     }
@@ -399,6 +407,7 @@ const ProjectExperiences: React.FC = () => {
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   setCurrentilyProject(event.target.value === 'Em andamento')
                 }
+                defaultValue={editStored?.situacao}
                 options={[
                   {
                     label: 'Incompleto',

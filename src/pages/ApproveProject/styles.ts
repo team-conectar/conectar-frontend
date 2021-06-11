@@ -57,9 +57,11 @@ export const BodyApproveProject = styled.div`
       & + section {
         border-top: solid 1px var(--borderDivision);
       }
-      > button {
-        align-self: flex-end;
-      }
+    }
+    > aside {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 1rem;
     }
   }
 `

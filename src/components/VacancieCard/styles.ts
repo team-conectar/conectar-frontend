@@ -1,9 +1,10 @@
 import styled, { css } from 'styled-components'
+import { TypeStatusVacancy } from '.'
 import Dropdown from '../UI/Dropdown'
 import { BodyButton as DropdownStyle } from '../UI/Dropdown/styles'
 interface CardProps {
   isAvailable: boolean
-  status?: 'accepted' | 'pending' | 'refused'
+  status?: TypeStatusVacancy
 }
 export const DropdownList = styled(Dropdown)`
   position: absolute;
@@ -31,6 +32,7 @@ export const BodyCard = styled.li<CardProps>`
   text-align: center;
   position: relative;
   ${DropdownStyle} {
+    width: 100%;
     aside {
       li {
         text-align: start;
@@ -69,17 +71,17 @@ export const BodyCard = styled.li<CardProps>`
       opacity: 0;
       font: 600 0.8rem Raleway;
       ${({ status }) =>
-        (status === 'accepted' &&
+        (status === 'Aceito' &&
           css`
             opacity: 1;
             color: var(--green);
           `) ||
-        (status === 'pending' &&
+        (status === 'Pendente' &&
           css`
             opacity: 1;
             color: var(--yellow);
           `) ||
-        (status === 'refused' &&
+        (status === 'Recusado' &&
           css`
             opacity: 1;
             color: var(--red);
@@ -102,7 +104,7 @@ export const BodyCard = styled.li<CardProps>`
   }
   button {
     width: 100%;
-    font-size: 1rem;
+    font-size: 0.8rem;
     height: 2rem;
   }
 `

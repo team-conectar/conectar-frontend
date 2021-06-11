@@ -10,7 +10,6 @@ import { AxiosError } from 'axios'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { useHistory, useParams } from 'react-router'
 import SearchInput from '../../components/UI/SearchInput'
-import { ProjectType } from '../CreateProject'
 import noProject from '../../assets/image/sem_projetos.svg'
 
 interface IParmsProps {

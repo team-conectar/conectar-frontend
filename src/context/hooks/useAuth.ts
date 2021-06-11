@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import api from '../../services/api'
 import { IUserContext } from '../AuthContext'
+import { useHistory } from 'react-router-dom'
 export default function useAuth(): {
   isAuthenticated: boolean
   loading: boolean

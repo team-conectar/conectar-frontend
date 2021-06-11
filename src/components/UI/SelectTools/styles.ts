@@ -12,7 +12,7 @@ export const BodySelectTool = styled.div`
     font: 400 0.9rem Raleway;
   }
   > div {
-    background: white;
+    background: var(--backgroundElevation);
     margin-top: 0.2rem;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -80,6 +80,8 @@ export const BodySelectTool = styled.div`
       }
       .area-insercao {
         border-top: 2px solid var(--borderDivision);
+        
+        
         height: 10%;
         > button {
           background: none;
@@ -91,6 +93,7 @@ export const BodySelectTool = styled.div`
           text-align: center;
         }
         > input {
+          background:transparent;
           width: 90%;
           border: 0;
           margin-left: 0.2rem;

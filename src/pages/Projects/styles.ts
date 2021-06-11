@@ -13,7 +13,6 @@ export const DivTags = styled.div`
   legend {
     font: 600 1.2rem Raleway;
     margin: 0.4rem 0;
-    padding-left: 0.4rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -34,6 +33,53 @@ export const DivTags = styled.div`
     & + legend {
       margin-top: 0.8rem;
     }
+  }
+`
+export const DivParticipants = styled.div`
+  legend {
+    font: 600 1rem Raleway;
+    margin: 0.4rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  aside {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding-left: 0.4rem;
+    ${ProfileLink} {
+      flex-direction: column;
+      column-gap: 0.2rem;
+      h2 {
+        font-size: 1rem;
+      }
+    }
+  }
+`
+export const DivConvite = styled.div`
+  background: white;
+  border-radius: 0.6rem;
+  box-shadow: var(--boxShadow);
+  padding: 1rem;
+  figure {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      width: 20rem;
+    }
+    figcaption {
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
+  aside {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding-left: 0.4rem;
   }
 `
 interface IPropsSobre {
@@ -88,7 +134,7 @@ export const DivSobre = styled.div<IPropsSobre>`
 
   @media (min-width: 1024px) {
     grid-template-columns: 2fr 1fr;
-    grid-template-rows: repeat(3, auto);
+
     column-gap: var(--gap);
     > header {
       border-radius: 0.4rem;
@@ -212,17 +258,17 @@ export const BodyProjects = styled.div`
   align-items: center;
   gap: 2rem;
   padding-bottom: 2rem;
-  ${DivSobre},${DivVagas},header {
+  ${DivSobre},${DivVagas},${DivConvite} {
     width: var(--container);
   }
 
   ${DivModalWindow} {
-    form {
+    > form {
       display: flex;
       flex-direction: column;
       gap: 2rem;
       width: 100%;
-      button {
+      > button {
         align-self: flex-end;
       }
     }
@@ -255,7 +301,7 @@ export const BodyProjects = styled.div`
       gap: 1rem;
       h1 {
         font-size: 2rem;
-
+        width: 60%;
         display: flex;
         align-items: center;
         justify-content: space-between;

@@ -26,6 +26,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
+import { showToast } from '../../../../components/Toast/Toast'
 export interface ProfessionalType {
   id: number
   organizacao: string
@@ -157,10 +158,10 @@ const ProfessionalExperiences: React.FC = () => {
           finalMonth,
         }: ProfessionalDataType = formData
         // setting to null because if there a update an experience with an existing data_fim it will not send
-        let data_fim = null
         const data_inicio = `${initialYear}-${initialMonth}-01`
 
-        if (!currentWorking) {
+        let data_fim = null
+        if (!currentilyWork) {
           data_fim = `${finalYear}-${finalMonth}-01`
         }
 
@@ -184,6 +185,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
+              showToast( "success" ,"Editado com sucesso!")
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
@@ -197,6 +199,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
+              showToast( "success" ,"Cadastrado com sucesso!")
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
@@ -247,7 +250,9 @@ const ProfessionalExperiences: React.FC = () => {
     setShowRegister(true)
     setEditStored(data)
   }
-
+  useEffect(() => {
+    setCurrentilyWork(editStored.currentWorking)
+  }, [editStored])
   return (
     <BodyExperiences>
       <Modal setOpen={setOpenModal} open={openModal}>
@@ -279,7 +284,10 @@ const ProfessionalExperiences: React.FC = () => {
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: ProfessionalType) => (
-            <div key={experience.id} className="experiencia-cadastrada">
+            <div
+              key={experience.id}
+              className="experiencia-cadastrada atuacao-profissional-cadastrada"
+            >
               <section className="icones">
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash

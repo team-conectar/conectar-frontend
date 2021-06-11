@@ -20,6 +20,7 @@ import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import getValidationErrors from '../../../utils/getValidationErrors'
 import useAuth from '../../../context/hooks/useAuth'
+import getBackendErrors from '../../../utils/getBackendErros'
 interface loginProps {
   onSuccessLogin(): void
 }
@@ -53,8 +54,8 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       })
       .then(() => {
         checkProfileType()
-        onSuccessLogin()
         handleLogin(true)
+        onSuccessLogin()
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -90,6 +91,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         await schema.validate(formData, {
           abortEarly: false,
         })
+        // validation passed
 
         const data = new FormData()
         data.append('username', formData.email)
@@ -98,16 +100,18 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         await api.post('/api/token', data)
         onSuccessLogin()
         handleLogin(true)
-      } catch (error) {
-        if (error instanceof Yup.ValidationError) {
-          const errors = getValidationErrors(error)
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err)
 
           formRef.current?.setErrors(errors)
-          console.log(error)
+          console.log(err)
+        } else {
+          const { fieldName, error } = getBackendErrors(err)
 
-          return
+          formRef.current?.setFieldError(fieldName, error)
+          console.log(err.response)
         }
-        alert('Lgoin ou senha incorreto')
       }
     },
     [onSuccessLogin],
@@ -121,7 +125,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         type="password"
         label="Senha"
         subLabel="Esqueceu a senha?"
-        pathSubLabel="#"
+        pathSubLabel="/esqueceu-senha"
       />
       <Button type="submit" theme="primary">
         Entrar

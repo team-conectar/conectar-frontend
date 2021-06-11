@@ -25,12 +25,7 @@ export const BodyVacancy = styled.section`
       }
     }
   }
-  > ul {
-    width: 100%;
-    height: 100%;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
+
   > form {
     display: flex;
     flex-direction: column;

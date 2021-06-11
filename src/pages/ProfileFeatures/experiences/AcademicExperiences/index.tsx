@@ -21,6 +21,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
+import { showToast } from '../../../../components/Toast/Toast'
 /**
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
@@ -101,6 +102,8 @@ const AcademicExperiences: React.FC = () => {
         return err?.response?.data.detail
       })
   }
+  console.log(editStored)
+
   const handleSubmit = useCallback(
     async (formData: AcademicType) => {
       console.log(formData)
@@ -142,7 +145,7 @@ const AcademicExperiences: React.FC = () => {
             situacao !== 'Incompleto' && data_fim ? `${data_fim}-02-01` : null,
           escolaridade,
           curso,
-          situacao: situacao[0],
+          situacao: situacao,
         }
         console.log(data)
 
@@ -159,6 +162,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
+                showToast( "success" ,"Editado com sucesso!")
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -171,6 +175,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
+                showToast( "success" ,"Cadastrado com sucesso!")
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -185,7 +190,6 @@ const AcademicExperiences: React.FC = () => {
           formRef.current?.setErrors(errors)
           return
         }
-        alert('Lgoin ou senha incorreto')
       }
 
       // Do something
@@ -219,6 +223,9 @@ const AcademicExperiences: React.FC = () => {
     setShowRegister(true)
     setEditStored(data)
   }
+  useEffect(() => {
+    setIsIncomplete(editStored.situacao === 'Incompleto')
+  }, [editStored])
 
   return (
     <BodyExperiences>
@@ -248,7 +255,10 @@ const AcademicExperiences: React.FC = () => {
       {!showRegister ? (
         <div className="experiencias">
           {stored?.map((experience: AcademicType) => (
-            <div key={experience.id} className="experiencia-cadastrada">
+            <div
+              key={experience.id}
+              className="experiencia-cadastrada educacao-cadastrada"
+            >
               <section className="icones">
                 <IconEdit
                   onClick={() => {
@@ -272,9 +282,9 @@ const AcademicExperiences: React.FC = () => {
                 <p>
                   {experience.instituicao} <br />
                   {experience.situacao} <br />
-                  {`${experience?.data_inicio?.split('-')[0]} até ${
-                    experience?.data_fim?.split('-')[0]
-                  }`}
+                  {experience?.data_inicio?.split('-')[0]}
+                  {experience?.data_fim &&
+                    ` até ${experience?.data_fim?.split('-')[0]}`}
                 </p>
               </fieldset>
             </div>
@@ -354,10 +364,11 @@ const AcademicExperiences: React.FC = () => {
                 onChange={(event: ChangeEvent<HTMLInputElement>) =>
                   setIsIncomplete(event.target.value === 'Incompleto')
                 }
+                defaultValue={editStored?.situacao}
                 options={[
                   {
                     label: 'Incompleto',
-                    id: 'incompleto',
+                    id: 'Incompleto',
                     value: 'Incompleto',
                   },
                   {

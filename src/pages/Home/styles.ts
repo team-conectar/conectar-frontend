@@ -1,22 +1,24 @@
 import styled, { keyframes } from 'styled-components'
 const moveDownUp = keyframes`
   
-  90%{
-    bottom:20px;
+  90% {
+    bottom: 20px;
   }
-  100%{
-    bottom:15px;
+  100% {
+    bottom: 15px;
   }
   
 
 `
 export const BodyHome = styled.div`
   background: var(--background);
+  width: 100% !important;
   area {
     background: black;
   }
   > main {
     height: 100vh;
+    width: 100%;
     scroll-snap-type: y mandatory;
     overflow-y: scroll;
     scroll-behavior: smooth;
@@ -24,6 +26,7 @@ export const BodyHome = styled.div`
     > div {
       scroll-snap-align: start;
       height: 100%;
+      width: 100%;
       position: relative;
       display: flex;
       flex-direction: column;
@@ -52,7 +55,6 @@ export const BodyHome = styled.div`
     }
 
     .topo-background {
-      width: calc(100vw -18px);
       justify-content: flex-start;
       .topo {
         display: flex;
@@ -114,7 +116,7 @@ export const BodyHome = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 99.27vw;
+        width: 100%;
         background: var(--green);
         margin: 0 0 15% 0;
         position: sticky;
@@ -600,7 +602,7 @@ export const BodyHome = styled.div`
     }
     #rodape {
       justify-content: space-between;
-      width: calc(100vw -17.28px);
+      width: 100%;
       > p {
         margin-top: 2rem;
         text-align: center;

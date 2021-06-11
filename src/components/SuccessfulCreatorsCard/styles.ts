@@ -7,6 +7,7 @@ export const ProfileLink = styled(Link)`
   text-decoration: none;
   justify-content: center;
   gap: 0.6rem;
+  margin: 0.4rem;
   > img {
     border-radius: 50%;
     border: solid 1px var(--borderDivision);
