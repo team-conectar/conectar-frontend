@@ -346,18 +346,20 @@ const Projects: React.FC = () => {
   }, [project.pessoa_id, openModal])
 
   useEffect(() => {
-    vacancyDetail.aceito_ids?.map(id => {
-      api
-        .get(`/api/v1/pessoas/${id}`)
-        .then((response: AxiosResponse<IPeopleLink>) => {
-          setParticipantsDetail(participant =>
-            participant.concat(response.data),
-          )
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        })
-    })
+    setParticipantsDetail(
+      vacancyDetail.aceito_ids?.map(id => {
+        let res: IPeopleLink = {} as IPeopleLink
+        api
+          .get(`/api/v1/pessoas/${id}`)
+          .then((response: AxiosResponse<IPeopleLink>) => {
+            res = response.data
+          })
+          .catch((error: AxiosError) => {
+            return error?.response?.data.detail
+          })
+        return res
+      }),
+    )
   }, [vacancyDetail])
   console.log(vacancyDetail.aceito_ids)
   function buttonMatchContent(option?: TypeSituationVacancy) {
@@ -690,7 +692,6 @@ const Projects: React.FC = () => {
                   console.log(vacancies)
                 }}
                 onClick={() => {
-                  setParticipantsDetail([])
                   setVacancyDetail({
                     ...vacancies[0],
                     pessoas_ids: vacancies.map(vacancy => {
