@@ -89,15 +89,13 @@ const NotificationsButton = () => {
   }
 
   function handleCheckNotification() {
-    notifications.forEach(notification => {
-      api
-        .put(`/api/v1/notificacao?notificacao_id=${notification.id}`, {
-          lido: true,
-        })
-        .catch((err: AxiosError) => {
-          return err?.response?.data.detail
-        })
-    })
+    api
+      .post(`/api/v1/notificacao/ler-todas?destinatario_id=${user.id}`, {
+        lido: true,
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
     getNotification()
   }
 
