@@ -87,66 +87,60 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
     },
   }
 
-  function getPeopleProject(){
-    const res = [
+    function FindPeople() {
       api
-        .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
+        .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
         .then(response => {
           setProfile(response.data)
-        })
+          
+          // api
+          // .get(`/api/v1/pessoas/${response}`)
+          // .then(response  => {
+          //   setProfile(response.data)
+          // })
+          // .catch((err: AxiosError) => {
+          //     return err?.response?.data.detail
+          //   })
+          })
+
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
-        }),
-      api
-        .get(`/api/v1/tipoAcordo?tipo_acordo_id=${vacancy.tipo_acordo_id}`)
-        .then(response => {
-          setAgreement(response.data.descricao)
         })
-        .catch((err: AxiosError) => {
-          return err?.response?.data.detail
-        }),
-      api
-        .get(`/api/v1/papel/${vacancy.papel_id}`)
-        .then(response => {
-          setOffice(response.data.descricao)
-        })
-        .catch((err: AxiosError) => {
-          return err?.response?.data.detail
-        }),
-    ]
-    console.log(res)
-    console.log(vacancy);
+      console.log(profile);
+      
+    }
     
-  }
-  
-  function FindPeople() {
-    api
-    .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
-    .then(() => {
-      api
+    useEffect(() => {
+      const res = [
+        api
           .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
-          .then(response  => {
+          .then(response => {
             setProfile(response.data)
-
-
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
+          }),
+        api
+          .get(`/api/v1/tipoAcordo?tipo_acordo_id=${vacancy.tipo_acordo_id}`)
+          .then(response => {
+            setAgreement(response.data.descricao)
           })
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-      getPeopleProject()
-      
-  }
-
-  useEffect(() => {
-    getPeopleProject()
-  }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
-
-  return (
-    <BodyCard
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          }),
+        api
+          .get(`/api/v1/papel/${vacancy.papel_id}`)
+          .then(response => {
+            setOffice(response.data.descricao)
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          }),
+    ]
+    }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
+    
+    return (
+      <BodyCard
       isAvailable={situation[`${vacancy.situacao}`].isAvaliable}
       status={situation[`${vacancy.situacao}`].status}
       {...rest}
