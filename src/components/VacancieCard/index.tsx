@@ -86,18 +86,6 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       isAvaliable: true,
     },
   }
-
-  function FindNewPeople() {
-    api
-      .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
-      .then(response => {
-        setProfile(response.data)
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-  }
-
   useEffect(() => {
     const res = [
       api
@@ -126,9 +114,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         }),
     ]
     console.log(res)
-    console.log(vacancy)
   }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
-
   return (
     <BodyCard
       isAvailable={situation[`${vacancy.situacao}`].isAvaliable}
@@ -141,12 +127,12 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           <li>Excluir vaga</li>
         </DropdownList>
       </label>
-      <Link to={`/perfil/${profile?.usuario}`}>
+      <Link to={`/perfil/${profile.id}`}>
         <img
           src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
           alt=""
         />
-        <h2>{profile?.nome?.split(` `)[0]}</h2>
+        <h2>{profile.nome?.split(` `)[0]}</h2>
       </Link>
       <h3>
         {office}
@@ -156,9 +142,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
 
       {/* <Button theme="primary">Ver currículo</Button> */}
       {/* <DropdownList IconButton={ */}
-      <Button onClick={FindNewPeople} theme="secondary">
-        Nova busca
-      </Button>
+      <Button theme="secondary">Nova busca</Button>
       {/* <li>Perfis similares</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li>
