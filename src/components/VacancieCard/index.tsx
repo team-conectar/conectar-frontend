@@ -87,7 +87,18 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
     },
   }
 
-  function getPeopleProject(){
+  function FindNewPeople() {
+    api
+      .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
+      .then(response => {
+        setProfile(response.data)
+      })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
+  }
+
+  useEffect(() => {
     const res = [
       api
         .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
@@ -115,34 +126,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         }),
     ]
     console.log(res)
-    console.log(vacancy);
-    
-  }
-  
-  function FindPeople() {
-    api
-    .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
-    .then(() => {
-      api
-          .get(`/api/v1/pessoas/${vacancy.pessoa_id}`)
-          .then(response  => {
-            setProfile(response.data)
-
-
-          })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
-      })
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-      getPeopleProject()
-      
-  }
-
-  useEffect(() => {
-    getPeopleProject()
+    console.log(vacancy)
   }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
 
   return (
@@ -172,7 +156,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
 
       {/* <Button theme="primary">Ver currículo</Button> */}
       {/* <DropdownList IconButton={ */}
-      <Button onClick={FindPeople} theme="secondary">
+      <Button onClick={FindNewPeople} theme="secondary">
         Nova busca
       </Button>
       {/* <li>Perfis similares</li>
