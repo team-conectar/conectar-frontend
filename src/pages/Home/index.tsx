@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 import NavBar from '../../components/UI/NavBar'
 import { BodyHome } from './styles'
 
@@ -28,7 +28,9 @@ import ContainerScroll from '../../components/UI/ContainerScroll'
 const Home: React.FC = () => {
   const { handleLogin, isAuthenticated } = useContext(Context)
   const history = useHistory()
-  return (
+  return isAuthenticated ? (
+    <Redirect to="explorer" />
+  ) : (
     <BodyHome>
       <main>
         <div className="topo-background">
@@ -44,14 +46,13 @@ const Home: React.FC = () => {
                 </strong>
                 time ideal
               </h1>
-              {!isAuthenticated && (
-                <Login
-                  onSuccessLogin={() => {
-                    history.push('/explorar')
-                    handleLogin(true)
-                  }}
-                />
-              )}
+
+              <Login
+                onSuccessLogin={() => {
+                  history.push('/explorar')
+                  handleLogin(true)
+                }}
+              />
             </section>
 
             <a className="arrow-bottom" href="#introducao">
