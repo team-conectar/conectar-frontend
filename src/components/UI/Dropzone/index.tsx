@@ -68,7 +68,7 @@ export default function ReactDropzoneInput({ name }: Props) {
             ) : (
               <p>Arraste o arquivo para cá</p>
             )}
-            <p>Tamanho mínimo de 805x632px</p>
+            <p>O tamanho recomendado é de 1300x900px</p>
           </>
         )}
       </main>

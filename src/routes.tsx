@@ -39,7 +39,7 @@ const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
             <Modal
               open={modalOpen}
               setOpen={setModalOpen}
-              onAfterClose={() => setModalOpen(false)}
+              onAfterClose={() => setModalOpen(!isAuthenticated)}
             >
               <Login onSuccessLogin={() => setModalOpen(false)} />
             </Modal>
@@ -51,11 +51,12 @@ const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   )
 }
 const Routes: React.FC = () => {
+  const { isAuthenticated } = useContext(Context)
   return (
     <AuthProvider>
       <BrowserRouter>
         <ToastAnimated />
-        <Route exact path="/" component={Home} />
+        <Route exact path="/" component={isAuthenticated ? Explorer : Home} />
         <Route path="/cadastrar/:parte" component={SignUp} />
         <Route path="/esqueceu-senha" component={ForgotPassword} />
         <Route path="/experiencias-do-usuario" component={ProfileFeatures} />

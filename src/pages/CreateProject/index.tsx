@@ -49,10 +49,8 @@ const CreateProject: React.FC = () => {
     nome: '',
     visibilidade: [],
   })
-  const [showModal, setShowModal] = useState<boolean>(!isAuthenticated)
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
-  const [selectedFile, setSelectedFile] = useState<File>()
 
   const handleSubmit = useCallback(async (formData: FirstFormData) => {
     console.log(formData)
