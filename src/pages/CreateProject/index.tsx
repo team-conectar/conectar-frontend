@@ -60,7 +60,22 @@ const CreateProject: React.FC = () => {
       // Remove all previogeus errors
       formRef.current?.setErrors({})
       const schema = Yup.object().shape({
-        nome: Yup.string().required('Nome é obrigatório'),
+        nome: Yup.string().required('Insira o nome do projeto!'),
+        img: Yup.mixed()
+          .required('Insira a capa do projeto!')
+          .test(
+            'tipo do arquivo',
+            'Insira arquivos com a extensão .png ou .jpg',
+            file => {
+              let valid = true
+              if (file) {
+                if (!['image/jpg', 'image/png'].includes(file.type)) {
+                  valid = false
+                }
+              }
+              return valid
+            },
+          ),
         areas: Yup.array()
           .min(1, 'Seleciono pelo menos 1 item')
           .max(15, 'Seleciono no máximo 15'),
@@ -97,7 +112,6 @@ const CreateProject: React.FC = () => {
 
   const handleSecondSubmit = useCallback(
     async (formData: SecondFormData) => {
-      console.log(formData)
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})

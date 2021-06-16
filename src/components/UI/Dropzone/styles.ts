@@ -1,5 +1,10 @@
 import styled from 'styled-components'
-
+export const ImgPreview = styled.img`
+  object-fit: cover;
+  object-position: center;
+  width: 260px;
+  height: 180px;
+`
 export const BodyDropzone = styled.div`
   position: relative;
   padding: 0.5rem 0;
@@ -30,11 +35,6 @@ export const BodyDropzone = styled.div`
       margin-top: 0.8rem;
       color: gray;
       font-size: 0.8rem;
-    }
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
   }
   span {

@@ -1,8 +1,7 @@
 import styled, { css } from 'styled-components'
 
-
 export const ButtonFavorite = styled.button<{ checked: boolean }>`
-  >svg {
+  > svg {
     height: 1.2rem;
     width: 1.2rem;
     margin-right: 8px;
@@ -18,7 +17,7 @@ export const ButtonFavorite = styled.button<{ checked: boolean }>`
   border-top: 1px solid var(--borderDivision);
   background: transparent;
   color: var(--textGreen);
-  
+
   ${props =>
     props.checked &&
     css`
@@ -27,11 +26,11 @@ export const ButtonFavorite = styled.button<{ checked: boolean }>`
 `
 
 export const ButtonInterest = styled.button<{ checked: boolean }>`
-  >svg {
-      height: 1.2rem;
-      width: 1.2rem;
-      margin-right: 8px;
-    }
+  > svg {
+    height: 1.2rem;
+    width: 1.2rem;
+    margin-right: 8px;
+  }
   font-weight: 600;
   width: 50%;
   display: flex;
@@ -44,12 +43,12 @@ export const ButtonInterest = styled.button<{ checked: boolean }>`
   border-top: 1px solid var(--borderDivision);
   background: transparent;
   color: var(--textGreen);
-    
-    ${props =>
-      props.checked &&
-      css`
-        color: var(--red);
-      `}
+
+  ${props =>
+    props.checked &&
+    css`
+      color: var(--red);
+    `}
 `
 
 export const UserInfo = styled.main`
@@ -87,7 +86,6 @@ export const ProjectInfo = styled.main`
       width: 50%;
       align-items: center;
       img {
-        
         width: 100%;
         height: 180px;
         object-fit: cover;
@@ -163,7 +161,7 @@ export const BodyCard = styled.li`
     box-shadow: 0 0 1px 1px var(--borderDivision);
     background: white;
     height: 100%;
-    
+
     > p {
       padding: 16px 0 24px 0;
       width: 95%;
