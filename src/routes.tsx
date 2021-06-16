@@ -56,7 +56,13 @@ const Routes: React.FC = () => {
     <AuthProvider>
       <BrowserRouter>
         <ToastAnimated />
-        <Route exact path="/" component={isAuthenticated ? Explorer : Home} />
+        <Route
+          exact
+          path="/"
+          component={() => {
+            return isAuthenticated ? <Explorer /> : <Home />
+          }}
+        />
         <Route path="/cadastrar/:parte" component={SignUp} />
         <Route path="/esqueceu-senha" component={ForgotPassword} />
         <Route path="/experiencias-do-usuario" component={ProfileFeatures} />
