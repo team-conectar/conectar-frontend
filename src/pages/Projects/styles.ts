@@ -284,6 +284,8 @@ export const BodyProjects = styled.div`
     padding: 0 0.6rem; //desktop
     ${ProfileLink} {
       display: none;
+      width: auto;
+      height: auto;
     }
     > ${Icon}, ${ProfileLink} {
       position: absolute;
