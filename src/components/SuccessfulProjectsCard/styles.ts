@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 export const ProfileLink = styled(Link)`
-  width: 100%;
+  width: 90%;
   height: 100%;
   cursor: pointer;
   display: flex;
