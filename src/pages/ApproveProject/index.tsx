@@ -8,6 +8,7 @@ import api from '../../services/api'
 import ProfileLink from '../../components/ProfileLink'
 import LinksCard from '../../components/LinksCard'
 import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
+import SuccessfulProjectsCard from '../../components/SuccessfulProjectsCard'
 import VacancieCard, { IVacancyCard } from '../../components/VacancieCard'
 import { useParams } from 'react-router-dom'
 import hero from '../../assets/image/temos_um_time_para_seu_projeto.svg'
@@ -130,8 +131,11 @@ const ApproveProject: React.FC = () => {
             </Button>
           </aside>
         </main>
-        <LinksCard />
-        <SuccessfulCreatorsCard />
+        <section>
+          <LinksCard />
+          <SuccessfulCreatorsCard />
+          <SuccessfulProjectsCard />
+        </section>
       </BodyApproveProject>
     </>
   )

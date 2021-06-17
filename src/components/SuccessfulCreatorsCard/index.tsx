@@ -5,7 +5,7 @@ import React, {
   useState,
 } from 'react'
 import { BodyCard, ProfileLink } from './styles'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
 import twoUsers from '../../assets/icon/twoUsers.svg'
@@ -33,10 +33,11 @@ interface ProfileType {
   data_atualizacao: string
 }
 const SuccessfulCreatorsCard: React.FC = () => {
-  const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
+  const history = useHistory()
+  const [profile, setProfile] = useState<ProfileType[]>({} as ProfileType[])
   useEffect(() => {
     const res = api
-      .get(`/api/v1/pessoas/me`)
+      .get(`/api/v1/pessoas/destaque/2`)
       .then(response => {
         setProfile(response.data)
       })
@@ -48,19 +49,32 @@ const SuccessfulCreatorsCard: React.FC = () => {
   return (
     <BodyCard>
       <h2>Criadores de sucesso</h2>
-      <ProfileLink to="">
+      
+      <ProfileLink to={`/perfil/${profile[0]?.usuario}`}>
         <img
           src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
           alt=""
         />
         <aside>
-          <h2>{profile.nome}</h2>
-          <p>@{profile.usuario}</p>
+          <h2>{profile[0]?.nome}</h2>
+          <p>@{profile[0]?.usuario}</p>
+        </aside>
+      </ProfileLink>
+      <ProfileLink to={`/perfil/${profile[1]?.usuario}`}>
+        <img
+          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          alt=""
+        />
+        <aside>
+          <h2>{profile[1]?.nome}</h2>
+          <p>@{profile[1]?.usuario}</p>
         </aside>
       </ProfileLink>
 
-      <button>
-        <img src={twoUsers} alt="botao ecncontrar usuarios" /> Encontre os que
+      <button onClick={() => {
+            history.push('/pesquisar/pessoa/nome/')
+          }}>
+        <img src={twoUsers} alt="botao encontrar usuarios" /> Encontre os que
         você conhece
       </button>
     </BodyCard>
