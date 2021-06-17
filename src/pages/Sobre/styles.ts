@@ -24,6 +24,10 @@ export const BodySobre = styled.div`
         }
         >ul{
             margin-top: 1rem;
+
+            >li{
+                margin-top: 0.5rem;
+            }
         }
     }
 

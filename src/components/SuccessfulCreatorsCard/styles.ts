@@ -49,7 +49,8 @@ export const BodyCard = styled.div`
   justify-content: space-evenly;
   > h2 {
     font-size: 1rem;
-
+    word-break: keep-all;
+    padding-right: 2rem;
     align-self: flex-start;
     margin-left: 1rem;
   }
