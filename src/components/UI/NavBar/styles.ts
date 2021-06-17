@@ -200,7 +200,22 @@ export const BodyNavBar = styled.nav`
       border-bottom: solid 4px transparent;
       border-top: solid 4px transparent;
     }
-
+    .sobre{
+      height: 100%;
+      padding: 0 0.3rem;
+      &:hover {
+        border-bottom: solid 4px var(--textGreen);
+        transition: 0.5s ease-out;
+        img {
+          :nth-last-of-type(1) {
+            display: none;
+          }
+          :nth-last-of-type(2) {
+            display: initial;
+          }
+        }
+      }
+    }
     .explorar {
       height: 100%;
       padding: 0 0.3rem;
