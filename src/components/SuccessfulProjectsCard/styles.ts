@@ -20,11 +20,14 @@ export const ProfileLink = styled(Link)`
     object-position: center;
   }
   > aside {
+   
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 
     > h2 {
+      padding-right: 2rem;
+      word-break: keep-all;
       font-size: 1rem;
     }
     > p {

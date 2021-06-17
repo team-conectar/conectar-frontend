@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { BodyCard as LinksCard } from '../../components/LinksCard/styles'
 import { BodyCard as ProfileCard } from '../../components/ProfileLink/styles'
 import { BodyCard as SuccessfulCreatorsCard } from '../../components/SuccessfulCreatorsCard/styles'
+import { BodyCard as SuccessfulProjectsCard } from '../../components/SuccessfulProjectsCard/styles'
 
 export const BodyApproveProject = styled.div`
   width: var(--container);
@@ -16,13 +17,13 @@ export const BodyApproveProject = styled.div`
   > ${ProfileCard} {
     grid-column: 1;
   }
-  > ${LinksCard} {
+  > section {
     grid-column: 3;
-    grid-row: 1;
-  }
-  > ${SuccessfulCreatorsCard} {
-    grid-column: 3;
-    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    position: sticky;
+    top: calc(2rem + 45px);
   }
   > main {
     grid-column: 2;

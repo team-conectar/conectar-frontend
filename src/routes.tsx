@@ -15,6 +15,7 @@ import CreateProject from './pages/CreateProject'
 import ApproveProject from './pages/ApproveProject'
 import Projects from './pages/Projects'
 import Profiles from './pages/Profiles'
+import Sobre from './pages/Sobre'
 import { GlobalStyle } from './assets/style/global'
 import { AuthProvider, Context } from './context/AuthContext'
 import Explorer from './pages/Explorer'
@@ -72,6 +73,7 @@ const Routes: React.FC = () => {
         <Route path="/perfil/:id" component={Profiles} />
         <Route path="/explorar" component={Explorer} />
         <Route path="/pesquisar/:for?/:attribute?/:key?" component={Search} />
+        <Route path="/sobre" component={Sobre} />
       </BrowserRouter>
       <GlobalStyle />
     </AuthProvider>
