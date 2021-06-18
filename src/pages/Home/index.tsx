@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, Redirect, useHistory } from 'react-router-dom'
 import NavBar from '../../components/UI/NavBar'
 import { BodyHome } from './styles'
 
@@ -25,9 +25,8 @@ import { Context } from '../../context/AuthContext'
 
 import Button from '../../components/UI/Button'
 import ContainerScroll from '../../components/UI/ContainerScroll'
-import { isAuthenticated } from '../../utils/auth'
 const Home: React.FC = () => {
-  const { handleLogin } = useContext(Context)
+  const { handleLogin, isAuthenticated } = useContext(Context)
   const history = useHistory()
   return (
     <BodyHome>
@@ -45,14 +44,13 @@ const Home: React.FC = () => {
                 </strong>
                 time ideal
               </h1>
-              {!isAuthenticated() && (
-                <Login
-                  onSuccessLogin={() => {
-                    history.push('/explorar')
-                    handleLogin(true)
-                  }}
-                />
-              )}
+
+              <Login
+                onSuccessLogin={() => {
+                  history.push('/explorar')
+                  handleLogin(true)
+                }}
+              />
             </section>
 
             <a className="arrow-bottom" href="#introducao">
@@ -216,7 +214,12 @@ const Home: React.FC = () => {
                 </section>
               </aside>
             </div>
-            <Button onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Criar sua conta</Button>
+            <Button
+              onClick={() => history.push(`/cadastrar/a`)}
+              theme="primary"
+            >
+              Criar sua conta
+            </Button>
           </section>
 
           <a className="arrow-bottom" href="#colaborador">
@@ -261,7 +264,12 @@ const Home: React.FC = () => {
               </aside>
             </div>
 
-            <Button  onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Criar sua conta</Button>
+            <Button
+              onClick={() => history.push(`/cadastrar/a`)}
+              theme="primary"
+            >
+              Criar sua conta
+            </Button>
             <img src={colaborador} alt="Avatar fictício do colaborador" />
           </section>
 
@@ -305,7 +313,12 @@ const Home: React.FC = () => {
                 </section>
               </aside>
             </div>
-            <Button  onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Criar sua conta</Button>
+            <Button
+              onClick={() => history.push(`/cadastrar/a`)}
+              theme="primary"
+            >
+              Criar sua conta
+            </Button>
           </section>
 
           <a className="arrow-bottom" href="#rodape">
@@ -325,7 +338,12 @@ const Home: React.FC = () => {
           <aside>
             <img src={curtiu} alt="e aí curtiu? vem pra cá!" />
 
-            <Button  onClick={()=> history.push(`/cadastrar/a`)} theme="primary">Crie sua conta</Button>
+            <Button
+              onClick={() => history.push(`/cadastrar/a`)}
+              theme="primary"
+            >
+              Crie sua conta
+            </Button>
           </aside>
           <footer>
             <h3>

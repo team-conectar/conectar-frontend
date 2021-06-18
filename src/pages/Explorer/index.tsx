@@ -19,6 +19,7 @@ import SuccessfulCreatorsCard from '../../components/SuccessfulCreatorsCard'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
 import Skeleton from 'react-loading-skeleton'
+import SuccessfulProjectsCard from '../../components/SuccessfulProjectsCard'
 
 const Explorer: React.FC = () => {
   const { loading, isAuthenticated } = useContext(Context)
@@ -51,6 +52,7 @@ const Explorer: React.FC = () => {
         <section>
           <LinksCard />
           <SuccessfulCreatorsCard />
+          <SuccessfulProjectsCard />
         </section>
       </Page>
     </Fragment>

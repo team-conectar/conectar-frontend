@@ -20,13 +20,15 @@ export const ProfileLink = styled(Link)`
     object-position: center;
   }
   > aside {
+   
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 
     > h2 {
-      font-size: 1rem;
+      padding-right: 2rem;
       word-break: keep-all;
+      font-size: 1rem;
     }
     > p {
       text-align: center;
@@ -50,8 +52,7 @@ export const BodyCard = styled.div`
   justify-content: space-evenly;
   > h2 {
     font-size: 1rem;
-    padding-right: 2rem;
-    word-break: keep-all;
+
     align-self: flex-start;
     margin-left: 1rem;
   }

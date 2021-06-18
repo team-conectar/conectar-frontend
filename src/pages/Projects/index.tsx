@@ -63,6 +63,7 @@ import Skeleton from 'react-loading-skeleton'
 import { IconEdit } from '../../assets/icon'
 import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
 import VacancieCard from '../../components/VacancieCard'
+import { showToast } from '../../components/Toast/Toast'
 interface routeParms {
   id: string
 }
@@ -631,30 +632,35 @@ const Projects: React.FC = () => {
                 alt="Mulher apertando a mão de um homem simbolizando um acordo"
               />
               <figcaption>
-                Você tem apenas {3} dias para responder este covnite
+                Você tem apenas {3} dias para responder este convite
               </figcaption>
             </figure>
             <aside>
               <Button
                 theme="secondary"
-                onClick={() =>
+                onClick={() =>{
+                  showToast( "error" ,"Vaga recusada com sucesso!")
                   handleDeclineInvitation(
-                    vacancyDetail?.pessoas_projeto_ids[
-                      vacancyDetail.pessoas_ids.indexOf(user.id)
-                    ],
-                  )
+                      vacancyDetail?.pessoas_projeto_ids[
+                        vacancyDetail.pessoas_ids.indexOf(user.id)
+                      ],
+                    )
+                  }
+
                 }
               >
                 Recusar
               </Button>
               <Button
                 theme="primary"
-                onClick={() =>
+                onClick={() =>{
+                  showToast( "success" ,"Vaga aceita com sucesso!")
                   handleAcceptInvitation(
                     vacancyDetail?.pessoas_projeto_ids[
                       vacancyDetail.pessoas_ids.indexOf(user.id)
                     ],
                   )
+                }
                 }
               >
                 Aceitar

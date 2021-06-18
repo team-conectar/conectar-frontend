@@ -1,81 +1,64 @@
 import React, {
   ChangeEvent,
-  useRef,
-  useEffect,
   useCallback,
+  useEffect,
+  useRef,
   useState,
 } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useField } from '@unform/core'
-import { BodyDropzone } from './styles'
-
+import { BodyDropzone, ImgPreview } from './styles'
 interface Props {
   name: string
 }
-// eslint-disable-next-line no-undef
-type InputProps = JSX.IntrinsicElements['input'] & Props
-/**
- * This component receives images with the drop zone functionality
- *
- * @component
- * @param {string} name is the name on the form data
- * @example
- * return (
- *   <Dropzone name="img" />
- * )
- */
-const Dropzone: React.FC<InputProps> = ({ name, ...rest }) => {
-  const inputRef = useRef<HTMLInputElement>(null)
+interface InputRefProps extends HTMLInputElement {
+  acceptedFile: File
+}
+export default function ReactDropzoneInput({ name }: Props) {
+  const inputRef = useRef<InputRefProps>(null)
   const { fieldName, registerField, defaultValue, error } = useField(name)
+  const [acceptedFile, setAcceptedFile] = useState(defaultValue)
   const [preview, setPreview] = useState(defaultValue)
-  const handlePreview = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) {
-      setPreview(null)
-    }
-    const previewURL = URL.createObjectURL(file)
-    setPreview(previewURL)
-  }, [])
-  const onDrop = useCallback(acceptedFiles => {
-    const file = acceptedFiles[0]
-
-    const fileUrl = URL.createObjectURL(file)
-    setPreview(fileUrl)
-  }, [])
-
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'image/*',
-    onDrop,
+    onDrop: onDropAcceptedFiles => {
+      if (inputRef.current) {
+        inputRef.current.acceptedFile = onDropAcceptedFiles[0]
+        setAcceptedFile(onDropAcceptedFiles[0])
+      }
+    },
   })
+
   useEffect(() => {
     registerField({
       name: fieldName,
       ref: inputRef.current,
-      path: 'files[0]',
-      clearValue(ref: HTMLInputElement) {
-        ref.value = ''
-        setPreview(null)
+      getValue: (ref: InputRefProps) => {
+        return ref.acceptedFile
       },
-      setValue(_: HTMLInputElement, value: string) {
-        setPreview(value)
+      clearValue: (ref: InputRefProps) => {
+        ref.acceptedFile = {} as File
+        setAcceptedFile(null)
+      },
+      setValue: (ref: InputRefProps, value) => {
+        ref.acceptedFile = value
+        setAcceptedFile(value)
       },
     })
   }, [fieldName, registerField])
-
   return (
-    <BodyDropzone className="view-img" {...getRootProps()}>
+    <BodyDropzone
+      className="view-img"
+      {...getRootProps()}
+      onClick={() => inputRef.current?.click()}
+    >
       <main>
-        <input
-          type="file"
-          ref={inputRef}
-          onChange={handlePreview}
-          {...getInputProps()}
-          accept="image/*"
-          id={fieldName}
-          {...rest}
-        />
-        {preview ? (
-          <img src={preview} alt="Preview" width="100" />
+        <input {...getInputProps()} accept="image/*" ref={inputRef} />
+        {acceptedFile ? (
+          <ImgPreview
+            src={URL.createObjectURL(acceptedFile)}
+            alt="prvia de imagem"
+          />
         ) : (
           <>
             <label>Fazer Upload de Imagem</label>
@@ -85,7 +68,7 @@ const Dropzone: React.FC<InputProps> = ({ name, ...rest }) => {
             ) : (
               <p>Arraste o arquivo para cá</p>
             )}
-            <p>Tamanho mínimo de 805x632px</p>
+            <p>O tamanho recomendado é de 1300x900px</p>
           </>
         )}
       </main>
@@ -93,5 +76,3 @@ const Dropzone: React.FC<InputProps> = ({ name, ...rest }) => {
     </BodyDropzone>
   )
 }
-
-export default Dropzone
