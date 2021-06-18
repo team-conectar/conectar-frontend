@@ -1,0 +1,41 @@
+# Notice: Collection of data on Conectar through automated means is
+# prohibited unless you have express written permission from Conectar
+# and may only be conducted for the limited purpose contained in said
+# permission.
+
+User-agent: Applebot
+Disallow: /auth
+Disallow: /notificacao/
+Disallow: /pesquisar/
+
+User-agent: baiduspider
+Disallow: /auth
+Disallow: /notificacao/
+Disallow: /pesquisar/
+
+User-agent: Bingbot
+Disallow: /auth
+Disallow: /notificacao/
+Disallow: /pesquisar/
+
+User-agent: Discordbot
+Disallow: /auth
+Disallow: /notificacao/
+Disallow: /pesquisar/
+
+User-agent: Googlebot
+Disallow: /auth
+Disallow: /notificacao/
+Disallow: /pesquisar/
+
+User-agent: Googlebot-Image
+Disallow: /api/v1/notificacao/
+Disallow: /auth
+
+User-agent: Twitterbot
+Disallow: /auth
+Disallow: /notificacao/
+Disallow: /pesquisar/
+
+User-agent: *
+Disallow: /
