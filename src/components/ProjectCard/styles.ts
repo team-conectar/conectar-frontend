@@ -141,7 +141,10 @@ export const BodyCard = styled.li`
     grid-column: 1;
     grid-row: 1 / -1;
     img {
-      width: 100%;
+      width: 3.2rem;
+      height: 3.2rem;
+      object-fit: cover;
+      object-position: center;
     }
   }
   ${UserInfo} {
