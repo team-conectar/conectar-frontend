@@ -200,7 +200,7 @@ export const BodyNavBar = styled.nav`
       border-bottom: solid 4px transparent;
       border-top: solid 4px transparent;
     }
-    .sobre{
+    .sobre {
       height: 100%;
       padding: 0 0.3rem;
       &:hover {
@@ -266,6 +266,12 @@ export const BodyNavBar = styled.nav`
     #user {
       border-radius: 50%;
       border: solid 2px var(--green);
+    }
+    #user.img {
+      width: 2.2rem;
+      height: 2.2rem;
+      object-fit: cover;
+      object-position: center;
     }
   }
 `

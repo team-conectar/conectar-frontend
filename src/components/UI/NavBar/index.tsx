@@ -35,7 +35,11 @@ const UserButton = () => {
       IconButton={
         <figure>
           {user.foto_perfil ? (
-            <img src={user.foto_perfil} alt="sua conta" />
+            <img
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`}
+              alt="sua conta"
+              id="user"
+            />
           ) : (
             <IconUser id="user" />
           )}
@@ -44,7 +48,11 @@ const UserButton = () => {
     >
       <section>
         <img
-          src={user.foto_perfil ? user.foto_perfil : userDefault}
+          src={
+            user.foto_perfil
+              ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`
+              : userDefault
+          }
           alt={user.nome}
         />
         <legend>{user.nome?.split(' ')[0]}</legend>
