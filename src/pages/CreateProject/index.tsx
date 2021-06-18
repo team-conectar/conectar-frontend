@@ -32,6 +32,7 @@ interface FirstFormData {
   nome: string
   visibilidade: Array<string>
   areas: string[]
+  img: File
 }
 interface SecondFormData {
   descricao: string
@@ -48,6 +49,7 @@ const CreateProject: React.FC = () => {
     areas: [],
     nome: '',
     visibilidade: [],
+    img: {} as File,
   })
   const [idProject, setIdProject] = useState(0)
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
@@ -98,6 +100,14 @@ const CreateProject: React.FC = () => {
         })
       ).data
       setIdProject(id)
+      const foto = new FormData()
+      console.log(formData.img)
+      foto.append('foto_capa', formData.img)
+      console.log(foto)
+
+      await api.put(`/api/v1/projeto/foto/${id}`, foto, {
+        withCredentials: true,
+      })
       setShownStep(2)
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
