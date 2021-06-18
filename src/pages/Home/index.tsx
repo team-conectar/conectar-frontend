@@ -28,9 +28,7 @@ import ContainerScroll from '../../components/UI/ContainerScroll'
 const Home: React.FC = () => {
   const { handleLogin, isAuthenticated } = useContext(Context)
   const history = useHistory()
-  return isAuthenticated ? (
-    <Redirect to="explorer" />
-  ) : (
+  return (
     <BodyHome>
       <main>
         <div className="topo-background">

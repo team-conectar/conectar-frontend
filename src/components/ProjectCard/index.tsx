@@ -47,6 +47,7 @@ export interface IProject {
   habilidades: ToolType[]
   data_criacao: string
   projeto_reacoes?: IReaction[]
+  foto_capa: string
 }
 interface IProjectCardProps {
   project: IProject
@@ -137,7 +138,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <>
           <Link to={`/perfil/${user?.usuario}`}>
             <img
-              src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+              src={process.env.AMAZON_URL + project.foto_capa}
               alt={user?.nome}
             />
           </Link>

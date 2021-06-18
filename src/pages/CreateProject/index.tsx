@@ -67,7 +67,7 @@ const CreateProject: React.FC = () => {
             file => {
               let valid = true
               if (file) {
-                if (!['image/jpg', 'image/png'].includes(file.type)) {
+                if (!['image/jpeg', 'image/png'].includes(file.type)) {
                   valid = false
                 }
               }

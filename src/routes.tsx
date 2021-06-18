@@ -28,7 +28,7 @@ import Login from './components/UI/Login'
 import ToastAnimated from './components/Toast/Toast'
 const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   const { isAuthenticated } = useContext(Context)
-  const [modalOpen, setModalOpen] = useState(!isAuthenticated)
+  const [modalOpen, setModalOpen] = useState(false)
   console.log(isAuthenticated)
 
   return (

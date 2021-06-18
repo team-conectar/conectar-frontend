@@ -219,11 +219,14 @@ const Profiles: React.FC = () => {
         <PerfilDiv>
           <PerfilMain>
             <figure>
-              {/* <img
-                      src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-                      alt=""
-                    /> */}
-              <Skeleton circle height="100px" width="100px" />
+              {profile.foto_perfil ? (
+                <img
+                  src={process.env.AMAZON_URL + profile.foto_perfil}
+                  alt={profile.nome}
+                />
+              ) : (
+                <Skeleton circle height="100px" width="100px" />
+              )}
               <figcaption>
                 <h2>{profile?.nome || <Skeleton width="150px" />}</h2>
                 <p>
