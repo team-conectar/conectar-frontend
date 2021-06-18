@@ -57,7 +57,7 @@ interface IProjectCardProps {
 const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   const [favoriteId, setFavoriteId] = useState<number>(0)
   const [interesseId, setInteresseId] = useState<number>(0)
-  const [user, setUser] = useState<IPessoa>()
+  const [user, setUser] = useState<IPessoa>({} as IPessoa)
   const loggedUser = useContext(Context).user
   const SelectFavorite: any = () => {
     if (favoriteId) {
@@ -138,7 +138,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <>
           <Link to={`/perfil/${user?.usuario}`}>
             <img
-              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user?.foto_perfil}`}
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`}
               alt={user?.nome}
             />
           </Link>
