@@ -302,11 +302,13 @@ const Projects: React.FC = () => {
   useEffect(() => {
     const res = api
       .get(`/api/v1/projeto/${projeto_id}`)
-      .then((response : AxiosResponse<ProjectType>) => {
+      .then((response: AxiosResponse<ProjectType>) => {
         setProject(response.data)
-        setLikeCount(response.data.projeto_reacoes?.filter(project => {
-          return project.reacao === 'FAVORITO'
-        }).length || 0)
+        setLikeCount(
+          response.data.projeto_reacoes?.filter(project => {
+            return project.reacao === 'FAVORITO'
+          }).length || 0,
+        )
         setStoredTools(response.data.habilidades)
         setStoredAreas(response.data.areas)
         api.get(`/api/v1/pessoas/${response.data.pessoa_id}`).then(response => {
@@ -516,26 +518,24 @@ const Projects: React.FC = () => {
               </Button>
             )}
             <a>
-              { likeCount != 0 && (
+              {likeCount !== 0 && (
                 <span>
-                { <img src={like} alt="curtidas" /> }
-                { likeCount }
+                  {<img src={like} alt="curtidas" />}
+                  {likeCount}
                 </span>
-              )             
-              }
-              
-              { 
-              <p>
-                Publicado em:{' '}
-                {`${
-                  project.data_criacao?.split('T')[0]?.split('-')[2] +
-                  '/' +
-                  project.data_criacao?.split('T')[0]?.split('-')[1] +
-                  '/' +
-                  project.data_criacao?.split('T')[0]?.split('-')[0]
-                }`}
+              )}
 
-              </p> 
+              {
+                <p>
+                  Publicado em:{' '}
+                  {`${
+                    project.data_criacao?.split('T')[0]?.split('-')[2] +
+                    '/' +
+                    project.data_criacao?.split('T')[0]?.split('-')[1] +
+                    '/' +
+                    project.data_criacao?.split('T')[0]?.split('-')[0]
+                  }`}
+                </p>
               }
             </a>
           </section>
@@ -661,30 +661,27 @@ const Projects: React.FC = () => {
             <aside>
               <Button
                 theme="secondary"
-                onClick={() =>{
-                  showToast( "error" ,"Vaga recusada com sucesso!")
+                onClick={() => {
+                  showToast('error', 'Vaga recusada com sucesso!')
                   handleDeclineInvitation(
-                      vacancyDetail?.pessoas_projeto_ids[
-                        vacancyDetail.pessoas_ids.indexOf(user.id)
-                      ],
-                    )
-                  }
-
-                }
+                    vacancyDetail?.pessoas_projeto_ids[
+                      vacancyDetail.pessoas_ids.indexOf(user.id)
+                    ],
+                  )
+                }}
               >
                 Recusar
               </Button>
               <Button
                 theme="primary"
-                onClick={() =>{
-                  showToast( "success" ,"Vaga aceita com sucesso!")
+                onClick={() => {
+                  showToast('success', 'Vaga aceita com sucesso!')
                   handleAcceptInvitation(
                     vacancyDetail?.pessoas_projeto_ids[
                       vacancyDetail.pessoas_ids.indexOf(user.id)
                     ],
                   )
-                }
-                }
+                }}
               >
                 Aceitar
               </Button>

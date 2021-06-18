@@ -154,10 +154,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <ProjectInfo>
           <aside>
             <Link to={`/projeto/${project.id}`}>
-              <img
-                src={process.env.AMAZON_URL + project.foto_capa}
-                alt={project.nome}
-              />
+              <img src={project.foto_capa} alt={project.nome} />
             </Link>
             <section>
               <Link to={`/projeto/${project.id}`}>{project.nome}</Link>

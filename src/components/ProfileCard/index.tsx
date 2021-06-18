@@ -40,7 +40,7 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
   return (
     <BodyCard>
       <Link to={`/perfil/${profile.usuario}`}>
-        <img src={process.env.AMAZON_URL + profile.foto_perfil} alt="" />
+        <img src={profile.foto_perfil} alt="" />
       </Link>
 
       <section>

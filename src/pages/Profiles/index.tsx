@@ -79,8 +79,6 @@ const Profiles: React.FC = () => {
     areas: false,
     habilidades: false,
   }
-  const { AMAZON_URL } = process.env
-  console.log(AMAZON_URL)
 
   const [loadingPage, setLoadingPage] = useState(true)
   const history = useHistory()
@@ -222,10 +220,7 @@ const Profiles: React.FC = () => {
           <PerfilMain>
             <figure>
               {profile.foto_perfil ? (
-                <img
-                  src={AMAZON_URL + profile.foto_perfil}
-                  alt={profile.nome}
-                />
+                <img src={profile.foto_perfil} alt={profile.nome} />
               ) : (
                 <Skeleton circle height="100px" width="100px" />
               )}
