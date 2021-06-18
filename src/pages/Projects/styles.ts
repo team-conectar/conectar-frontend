@@ -248,6 +248,37 @@ export const DivVagas = styled.div<IPropsVagas>`
   }
 `
 
+export const ButtonFavorite = styled.button<{ checked: boolean }>`
+  color: var(--yellow);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2rem;
+  font: 600 14px Raleway;
+  text-transform: uppercase;
+  letter-spacing: 1.25px;
+  cursor: pointer;
+  border: 2px solid var(--yellow);
+  margin: 0;
+  padding: 0.6rem;
+  outline: 0;
+  gap: 0.4rem;
+  width: 12rem;
+  height: 2.2rem;
+  > svg {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+  ${props =>
+    props.checked &&
+    css`
+      color: white;
+      background: var(--yellow);
+           
+    `}
+`
+
 export const BodyProjects = styled.div`
   --gap: 1.2rem;
   width: 100%;
@@ -319,10 +350,7 @@ export const BodyProjects = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        .fav-button {
-          border-color: var(--yellow);
-          color: var(--yellow);
-        }
+        
         a {
           font-size: 0.6rem;
           color: var(--gray);

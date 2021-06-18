@@ -15,6 +15,7 @@ import React, {
 import { Link } from 'react-router-dom'
 import {
   BodyProjects,
+  ButtonFavorite,
   DivConvite,
   DivParticipants,
   DivSobre,
@@ -65,6 +66,7 @@ import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
 import VacancieCard from '../../components/VacancieCard'
 import { showToast } from '../../components/Toast/Toast'
 import { IProject, IReaction } from '../../components/ProjectCard'
+import { BsFillStarFill } from 'react-icons/bs'
 interface routeParms {
   id: string
 }
@@ -125,6 +127,7 @@ const Projects: React.FC = () => {
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
+  const [favoriteId, setFavoriteId] = useState<Number>(0)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [likeCount, setLikeCount] = useState<Number>(0)
   const vacancyComponentRef = useRef<handleVacancy>(null)
@@ -195,6 +198,39 @@ const Projects: React.FC = () => {
     },
     [getset_pessoa_projeto],
   )
+
+  useEffect(() => {
+    if (project.projeto_reacoes && isAuthenticated ) {
+      setFavoriteId(
+        project.projeto_reacoes.find(reaction => {
+          return (
+            reaction.pessoa_id === user.id &&
+            reaction.reacao === 'FAVORITO'
+          )
+        })?.id || 0,
+      )
+      }
+  }, [user.id, project.id, project.projeto_reacoes])
+
+  function ToogleFavorite() {
+    if (favoriteId) {
+      api.delete(`/api/v1/reacoes?reacao_id=${favoriteId}`).then(response => {
+        setFavoriteId(0)
+      })
+    } else {
+      api
+        .post('/api/v1/reacoes', {
+          reacao: 'FAVORITO',
+          pessoa_id: user?.id,
+          projeto_id: project.id,
+        })
+        .then(response => {
+          setFavoriteId(response.data.id)
+        })
+    }
+    console.log(!favoriteId? "FAVORITO": "NAO FAVORITO");
+  }
+
   const formRef = useRef<FormHandles>(null)
   const handleDeleteVacancy = useCallback(
     (vacancies: VacanciesType[]) => {
@@ -319,7 +355,7 @@ const Projects: React.FC = () => {
 
     getset_pessoa_projeto()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projeto_id, openModal])
+  }, [projeto_id, openModal, favoriteId])
   useEffect(() => {
     if (groupedVacancies.length > 0) {
       setVacancyDetail({
@@ -508,9 +544,10 @@ const Projects: React.FC = () => {
             {isOwner() && groupedVacancies.length > 0 ? (
               buttonMatchContent(groupedVacancies[0][0].situacao)
             ) : (
-              <Button theme="secondary" className="fav-button">
-                <img src={like} alt="curtidas" /> Favoritar
-              </Button>
+              <ButtonFavorite checked={!!favoriteId} onClick={ToogleFavorite} theme="secondary">
+                <BsFillStarFill />
+                Favoritar
+              </ButtonFavorite>
             )}
             <a>
               { likeCount != 0 && (
