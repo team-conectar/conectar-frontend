@@ -137,16 +137,16 @@ export const BodyCard = styled.li`
   grid-template-columns: 2.4rem auto;
   grid-template-rows: 1.2rem auto;
   gap: 0.6rem;
+  .user-img {
+    width: 3rem;
+    height: 3rem;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+  }
   > a {
     grid-column: 1;
     grid-row: 1 / -1;
-    img {
-      width: 3rem;
-      height: 3rem;
-      object-fit: cover;
-      object-position: center;
-      border-radius: 50%;
-    }
   }
   ${UserInfo} {
     > aside {
