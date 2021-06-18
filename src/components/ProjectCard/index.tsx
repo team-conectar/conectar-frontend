@@ -138,7 +138,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <>
           <Link to={`/perfil/${user?.usuario}`}>
             <img
-              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`}
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user?.foto_perfil}`}
               alt={user?.nome}
             />
           </Link>

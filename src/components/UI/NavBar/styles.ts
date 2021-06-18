@@ -267,7 +267,7 @@ export const BodyNavBar = styled.nav`
       border-radius: 50%;
       border: solid 2px var(--green);
     }
-    #user.img {
+    img#user {
       width: 2.2rem;
       height: 2.2rem;
       object-fit: cover;
