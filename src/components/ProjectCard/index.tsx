@@ -140,7 +140,10 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
       {!hiddeOwner && (
         <>
           <Link to={`/perfil/${user?.usuario}`}>
-            <img src={user?.foto_perfil} alt={user?.nome} />
+            <img
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user?.foto_perfil}`}
+              alt={user?.nome}
+            />
           </Link>
           <UserInfo>
             <Link to={`/perfil/${user?.usuario}`}>
@@ -154,7 +157,10 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <ProjectInfo>
           <aside>
             <Link to={`/projeto/${project.id}`}>
-              <img src={project.foto_capa} alt={project.nome} />
+              <img
+                src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`}
+                alt={project.nome}
+              />
             </Link>
             <section>
               <Link to={`/projeto/${project.id}`}>{project.nome}</Link>

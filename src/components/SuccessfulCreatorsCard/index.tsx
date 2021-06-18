@@ -49,10 +49,10 @@ const SuccessfulCreatorsCard: React.FC = () => {
   return (
     <BodyCard>
       <h2>Criadores de sucesso</h2>
-      
+
       <ProfileLink to={`/perfil/${profile[0]?.usuario}`}>
         <img
-          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile[0]?.foto_perfil}`}
           alt=""
         />
         <aside>
@@ -62,7 +62,7 @@ const SuccessfulCreatorsCard: React.FC = () => {
       </ProfileLink>
       <ProfileLink to={`/perfil/${profile[1]?.usuario}`}>
         <img
-          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile[1]?.foto_perfil}`}
           alt=""
         />
         <aside>
@@ -71,9 +71,11 @@ const SuccessfulCreatorsCard: React.FC = () => {
         </aside>
       </ProfileLink>
 
-      <button onClick={() => {
-            history.push('/pesquisar/pessoa/nome/')
-          }}>
+      <button
+        onClick={() => {
+          history.push('/pesquisar/pessoa/nome/')
+        }}
+      >
         <img src={twoUsers} alt="botao encontrar usuarios" /> Encontre os que
         você conhece
       </button>

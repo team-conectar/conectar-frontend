@@ -220,7 +220,10 @@ const Profiles: React.FC = () => {
           <PerfilMain>
             <figure>
               {profile.foto_perfil ? (
-                <img src={profile.foto_perfil} alt={profile.nome} />
+                <img
+                  src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`}
+                  alt={profile.nome}
+                />
               ) : (
                 <Skeleton circle height="100px" width="100px" />
               )}

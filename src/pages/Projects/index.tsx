@@ -495,7 +495,7 @@ const Projects: React.FC = () => {
         ) : (
           <ProfileLink to={`/perfil/${projectOwner?.usuario}`}>
             <img
-              src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${projectOwner.foto_perfil}`}
               alt=""
             />
             <aside>
@@ -799,7 +799,7 @@ const Projects: React.FC = () => {
                       to={`/perfil/${participant?.usuario}`}
                     >
                       <img
-                        src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+                        src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${participant.foto_perfil}`}
                         alt=""
                       />
                       <h2>{participant?.nome?.split(' ')[0]}</h2>
