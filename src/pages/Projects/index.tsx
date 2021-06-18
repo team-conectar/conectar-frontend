@@ -64,6 +64,7 @@ import { IconEdit } from '../../assets/icon'
 import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
 import VacancieCard from '../../components/VacancieCard'
 import { showToast } from '../../components/Toast/Toast'
+import { IProject, IReaction } from '../../components/ProjectCard'
 interface routeParms {
   id: string
 }
@@ -73,8 +74,10 @@ interface ProjectType {
   visibilidade: Array<string>
   objetivo: string
   foto_capa: string
+  data_criacao: string
   areas: AreaType[]
   habilidades: ToolType[]
+  projeto_reacoes?: IReaction[]
   id: number
   pessoa_id: number
 }
@@ -123,6 +126,7 @@ const Projects: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+  const [likeCount, setLikeCount] = useState<Number>(0)
   const vacancyComponentRef = useRef<handleVacancy>(null)
   const [groupedVacancies, setGroupedVacancies] = useState<
     Array<VacanciesType[]>
@@ -298,8 +302,11 @@ const Projects: React.FC = () => {
   useEffect(() => {
     const res = api
       .get(`/api/v1/projeto/${projeto_id}`)
-      .then(response => {
+      .then((response : AxiosResponse<ProjectType>) => {
         setProject(response.data)
+        setLikeCount(response.data.projeto_reacoes?.filter(project => {
+          return project.reacao === 'FAVORITO'
+        }).length || 0)
         setStoredTools(response.data.habilidades)
         setStoredAreas(response.data.areas)
         api.get(`/api/v1/pessoas/${response.data.pessoa_id}`).then(response => {
@@ -509,11 +516,27 @@ const Projects: React.FC = () => {
               </Button>
             )}
             <a>
-              <span>
-                {/* <img src={like} alt="curtidas" /> */}
-                {/* 194 */}
-              </span>
-              {/* <p>Publicado em:</p> */}
+              { likeCount != 0 && (
+                <span>
+                { <img src={like} alt="curtidas" /> }
+                { likeCount }
+                </span>
+              )             
+              }
+              
+              { 
+              <p>
+                Publicado em:{' '}
+                {`${
+                  project.data_criacao?.split('T')[0]?.split('-')[2] +
+                  '/' +
+                  project.data_criacao?.split('T')[0]?.split('-')[1] +
+                  '/' +
+                  project.data_criacao?.split('T')[0]?.split('-')[0]
+                }`}
+
+              </p> 
+              }
             </a>
           </section>
           <aside>

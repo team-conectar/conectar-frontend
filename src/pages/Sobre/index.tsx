@@ -1,5 +1,6 @@
 import React from "react"
 import NavBar from "../../components/UI/NavBar"
+import logo from '../../assets/image/logo_fundoClaro.svg'
 import { BodySobre } from './styles'
 
 const Sobre: React.FC = () => {
@@ -7,6 +8,7 @@ const Sobre: React.FC = () => {
         <BodySobre>
             <NavBar />
             <section>
+                <img src={logo} alt="" />
                 <h1>
                     Gerencie suas iniciativas de inovação em uma única
                     plataforma, para isso criamos uma oportunidade para
