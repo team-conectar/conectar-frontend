@@ -480,11 +480,14 @@ const Projects: React.FC = () => {
       </Modal>
 
       <header>
-        <img
-          src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`}
-          alt="imagem de capa do projeto"
-        />
-        <Skeleton height={180} />
+        {project.foto_capa ? (
+          <img
+            src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`}
+            alt="imagem de capa do projeto"
+          />
+        ) : (
+          <Skeleton height={180} />
+        )}
         {isOwner() ? (
           <IconEdit
             onClick={() => {
@@ -495,7 +498,7 @@ const Projects: React.FC = () => {
         ) : (
           <ProfileLink to={`/perfil/${projectOwner?.usuario}`}>
             <img
-              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${projectOwner.foto_perfil}`}
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${projectOwner?.foto_perfil}`}
               alt=""
             />
             <aside>
