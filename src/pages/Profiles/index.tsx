@@ -79,6 +79,9 @@ const Profiles: React.FC = () => {
     areas: false,
     habilidades: false,
   }
+  const { AMAZON_URL } = process.env
+  console.log(AMAZON_URL)
+
   const [loadingPage, setLoadingPage] = useState(true)
   const history = useHistory()
   const { user } = useContext(Context)
@@ -89,7 +92,6 @@ const Profiles: React.FC = () => {
     [] as IProject[],
   )
   const profile_username = useParams<routeParms>().id
-
   function experiencia_profissional(array: ProfessionalType[]) {
     const found = array.filter(element => element.data_fim == null)
     if (!found.length) {
@@ -221,7 +223,7 @@ const Profiles: React.FC = () => {
             <figure>
               {profile.foto_perfil ? (
                 <img
-                  src={process.env.AMAZON_URL + profile.foto_perfil}
+                  src={AMAZON_URL + profile.foto_perfil}
                   alt={profile.nome}
                 />
               ) : (

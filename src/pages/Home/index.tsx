@@ -26,6 +26,8 @@ import { Context } from '../../context/AuthContext'
 import Button from '../../components/UI/Button'
 import ContainerScroll from '../../components/UI/ContainerScroll'
 const Home: React.FC = () => {
+  const { AMAZON_URL } = process.env
+  console.log(AMAZON_URL)
   const { handleLogin, isAuthenticated } = useContext(Context)
   const history = useHistory()
   return (
