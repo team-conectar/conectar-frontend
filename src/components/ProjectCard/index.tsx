@@ -74,10 +74,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
 
   useEffect(() => {
     api.get(`/api/v1/pessoas/${project.pessoa_id}`).then(response => {
-      setUser({
-        ...response.data,
-        foto_perfil: process.env.AMAZON_URL + response.data.foto_perfil,
-      })
+      setUser(response.data)
     })
   }, [project.pessoa_id])
   useEffect(() => {
