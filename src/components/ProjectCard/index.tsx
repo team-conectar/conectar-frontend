@@ -138,7 +138,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <>
           <Link to={`/perfil/${user?.usuario}`}>
             <img
-              src={process.env.AMAZON_URL + project.foto_capa}
+              src={
+                user?.foto_perfil
+                  ? process.env.AMAZON_URL + user?.foto_perfil
+                  : ''
+              }
               alt={user?.nome}
             />
           </Link>
@@ -155,7 +159,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
           <aside>
             <Link to={`/projeto/${project.id}`}>
               <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT9foYOCHad0GC_wSsRh3q3FGuXmjidN0Gq1g&usqp=CAU"
+                src={process.env.AMAZON_URL + project.foto_capa}
                 alt={project.nome}
               />
             </Link>
