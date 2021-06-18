@@ -134,8 +134,8 @@ export const BodyCard = styled.li`
   list-style: none;
   --gap: 1rem;
   display: grid;
-  grid-template-columns: 2.4rem auto;
-  grid-template-rows: 1.2rem auto;
+  grid-template-columns: 3rem auto;
+  grid-template-rows: 3rem auto;
   gap: 0.6rem;
   .user-img {
     width: 3rem;
