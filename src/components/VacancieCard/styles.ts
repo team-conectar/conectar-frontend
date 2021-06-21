@@ -57,7 +57,8 @@ export const BodyCard = styled.li<CardProps>`
   }
   img {
     border-radius: 50%;
-    width: 40%;
+    width: 50px;
+    height: 50px;
   }
   h2 {
     font-size: 1.4rem;
