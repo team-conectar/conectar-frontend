@@ -13,13 +13,14 @@ export const BodyCard = styled.div`
   background: white;
   box-shadow: var(--boxShadow);
   border-radius: 0.8rem;
-  > img {
+  a > img {
     background: var(--borderDivision);
     grid-column: 1;
     grid-row: 1 / -1;
     border-radius: 50%;
     border: solid 1px var(--borderDivision);
-    width: 80%;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     object-position: center;
     z-index: 2;
