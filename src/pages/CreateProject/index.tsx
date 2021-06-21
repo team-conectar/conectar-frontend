@@ -101,9 +101,7 @@ const CreateProject: React.FC = () => {
       ).data
       setIdProject(id)
       const foto = new FormData()
-      console.log(formData.img)
       foto.append('foto_capa', formData.img)
-      console.log(foto)
 
       await api.put(`/api/v1/projeto/foto/${id}`, foto, {
         withCredentials: true,

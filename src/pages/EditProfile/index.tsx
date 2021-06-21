@@ -32,6 +32,7 @@ import * as Yup from 'yup'
 import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
 import ToastAnimated, { showToast } from '../../components/Toast/Toast'
 import { type } from 'os'
+import Dropzone from '../../components/UI/Dropzone'
 
 interface routeParms {
   id: string
@@ -69,6 +70,7 @@ interface IFormDataBasicInformations {
   colaborador: string
   aliado: string
   profileType: string[]
+  img: File
 }
 /**
  * @constructor
@@ -266,6 +268,21 @@ const EditProfile: React.FC = () => {
             .min(4, 'Deve conter no mínimo 4 caracteres')
             .max(20, 'Deve conter no máximo 20 caracteres')
             .required('Usuário é obrigatório'),
+          img: Yup.mixed()
+            .required('Insira a capa do projeto!')
+            .test(
+              'tipo do arquivo',
+              'Insira arquivos com a extensão .png ou .jpg',
+              file => {
+                let valid = true
+                if (file) {
+                  if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    valid = false
+                  }
+                }
+                return valid
+              },
+            ),
           profileType: Yup.array().min(
             1,
             'Deve ser selecionado ao menos um tipo de perfil abaixo!',
@@ -290,7 +307,14 @@ const EditProfile: React.FC = () => {
           colaborador,
           idealizador,
         }
+        const foto = new FormData()
+        console.log(formData.img)
+        foto.append('foto_capa', formData.img)
+        console.log(foto)
 
+        await api.put(`/api/v1/projeto/foto/${4}`, foto, {
+          withCredentials: true,
+        })
         await api
           .put('/api/v1/pessoas', data, {
             withCredentials: true,
@@ -347,13 +371,15 @@ const EditProfile: React.FC = () => {
               <Input
                 label="Nome completo"
                 name="nome"
-                defaultValue={profile.nome}
+                defaultValue={profile?.nome}
               />
-              <aside></aside>
+
+              <Dropzone name="img" />
+
               <Input
                 label="Nome de usuário"
                 name="usuario"
-                defaultValue={profile.usuario}
+                defaultValue={profile?.usuario}
               />
               <ProfileTypeToogleSwitch
                 name="profileType"
@@ -363,21 +389,21 @@ const EditProfile: React.FC = () => {
                     value: 'idealizador',
                     label: 'Idealizador',
                     message: 'Interessado em criar projetos',
-                    defaultChecked: profile.idealizador,
+                    defaultChecked: profile?.idealizador,
                   },
                   {
                     id: 'colaborador',
                     value: 'colaborador',
                     label: 'Colaborador',
                     message: 'Interessado em participar de projetos',
-                    defaultChecked: profile.colaborador,
+                    defaultChecked: profile?.colaborador,
                   },
                   {
                     id: 'aliado',
                     value: 'aliado',
                     label: 'Aliado',
                     message: 'Interessado em apoiar projetos',
-                    defaultChecked: profile.aliado,
+                    defaultChecked: profile?.aliado,
                   },
                 ]}
               />
