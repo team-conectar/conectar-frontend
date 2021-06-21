@@ -312,7 +312,7 @@ const EditProfile: React.FC = () => {
         foto.append('foto_capa', formData.img)
         console.log(foto)
 
-        await api.put(`/api/v1/projeto/foto/${4}`, foto, {
+        await api.put(`/api/v1/pessoas/foto/${profile_id}`, foto, {
           withCredentials: true,
         })
         await api
