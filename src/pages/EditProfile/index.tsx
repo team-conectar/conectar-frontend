@@ -309,7 +309,7 @@ const EditProfile: React.FC = () => {
         }
         const foto = new FormData()
         console.log(formData.img)
-        foto.append('foto_capa', formData.img)
+        foto.append('foto_perfil', formData.img)
         console.log(foto)
 
         await api.put(`/api/v1/pessoas/foto/${profile_id}`, foto, {
