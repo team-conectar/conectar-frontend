@@ -269,7 +269,7 @@ const EditProfile: React.FC = () => {
             .max(20, 'Deve conter no máximo 20 caracteres')
             .required('Usuário é obrigatório'),
           img: Yup.mixed()
-            .required('Insira a capa do projeto!')
+            .required('Insira a foto de perfil!')
             .test(
               'tipo do arquivo',
               'Insira arquivos com a extensão .png ou .jpg',
