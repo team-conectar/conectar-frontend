@@ -374,7 +374,14 @@ const EditProfile: React.FC = () => {
                 defaultValue={profile?.nome}
               />
 
-              <Dropzone name="img" />
+              <Dropzone
+                name="img"
+                defaultValue={
+                  profile.foto_perfil
+                    ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`
+                    : undefined
+                }
+              />
 
               <Input
                 label="Nome de usuário"

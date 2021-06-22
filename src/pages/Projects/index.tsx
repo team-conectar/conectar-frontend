@@ -479,7 +479,7 @@ const Projects: React.FC = () => {
                     />
                     <Dropzone
                       name="img"
-                      defaultValue="https://conectar.s3.sa-east-1.amazonaws.com/uploads/12d01f1a293a47e18db7bf4d2e464fb6.png"
+                      defaultValue={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`}
                     />
                   </>
                 )}
