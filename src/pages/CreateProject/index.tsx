@@ -1,4 +1,11 @@
-import React, { useState, useContext, useRef, useCallback } from 'react'
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useCallback,
+  useEffect,
+  createContext,
+} from 'react'
 import { BodyCreateProject } from './styles'
 import Button from '../../components/UI/Button'
 import Input from '../../components/UI/Input'
@@ -16,7 +23,6 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import Vacancy from '../../components/Vacancy'
-import { AxiosError } from 'axios'
 
 export interface ProjectType {
   descricao: string
@@ -28,102 +34,132 @@ export interface ProjectType {
   areas: AreaType[]
   id: number
 }
-interface FirstFormData {
-  nome: string
-  visibilidade: Array<string>
-  areas: string[]
-  img: File
+interface IConxtextCreateProject {
+  shownStep: 1 | 2 | 3
+  setShownStep(step: 1 | 2 | 3): void
+  firstData: FirstFormData
+  setfirstData(firstData: FirstFormData): void
+  project: ProjectType
+  setProject(project: ProjectType): void
 }
-interface SecondFormData {
+const ContextCreateProjectPage = createContext<IConxtextCreateProject>(
+  {} as IConxtextCreateProject,
+)
+interface FirstFormData extends Object {
+  nome: string
   descricao: string
   objetivo: string
-  habilidades: string[]
+  areas: string[]
 }
-const CreateProject: React.FC = () => {
-  const { isAuthenticated } = useContext(Context)
-  const id_pessoa = useContext(Context).user.id
+
+const FirstForm: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
   const history = useHistory()
-  const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
-  const [firstData, setfirstData] = useState<FirstFormData>({
-    areas: [],
-    nome: '',
-    visibilidade: [],
-    img: {} as File,
-  })
-  const [idProject, setIdProject] = useState(0)
-  const [project, setProject] = useState<ProjectType>({} as ProjectType)
-
-  const handleSubmit = useCallback(async (formData: FirstFormData) => {
-    console.log(formData)
-    try {
-      // Remove all previogeus errors
-      formRef.current?.setErrors({})
-      const schema = Yup.object().shape({
-        nome: Yup.string().required('Insira o nome do projeto!'),
-        img: Yup.mixed()
-          .required('Insira a capa do projeto!')
-          .test(
-            'tipo do arquivo',
-            'Insira arquivos com a extensão .png ou .jpg',
-            file => {
-              let valid = true
-              if (file) {
-                if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                  valid = false
-                }
-              }
-              return valid
-            },
-          ),
-        areas: Yup.array()
-          .min(1, 'Seleciono pelo menos 1 item')
-          .max(15, 'Seleciono no máximo 15'),
-      })
-      await schema.validate(formData, {
-        abortEarly: false,
-      })
-      // Validation passed
-
-      const data = new FormData()
-
-      data.append('nome', formData.nome)
-      data.append('visibilidade', JSON.stringify(true))
-      // selectedFile &&
-      //   data.append('foto_capa', selectedFile, `${formData.nome}pic.jpg`)
-      data.append('descricao', 'Não informado')
-      data.append('objetivo', 'Não informado')
-      setfirstData(formData)
-      const { id } = await (
-        await api.post('/api/v1/projeto', data, {
-          withCredentials: true,
+  const { setShownStep, firstData, setfirstData } = useContext(
+    ContextCreateProjectPage,
+  )
+  const handleSubmit = useCallback(
+    async (formData: FirstFormData) => {
+      try {
+        // Remove all previogeus errors
+        formRef.current?.setErrors({})
+        const schema = Yup.object().shape({
+          nome: Yup.string().required('Insira o nome do projeto!'),
+          descricao: Yup.string().required('Descrição é obrigatório'),
+          objetivo: Yup.string().required('Objetivo é obrigatório'),
+          areas: Yup.array()
+            .min(1, 'Seleciono pelo menos 1 item')
+            .max(15, 'Seleciono no máximo 15'),
         })
-      ).data
-      setIdProject(id)
-      const foto = new FormData()
-      foto.append('foto_capa', formData.img)
-
-      await api.put(`/api/v1/projeto/foto/${id}`, foto, {
-        withCredentials: true,
-      })
-      setShownStep(2)
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        // Validation failed
-        const errors = getValidationErrors(err)
-        formRef.current?.setErrors(errors)
+        await schema.validate(formData, {
+          abortEarly: false,
+        })
+        // Validation passed
+        Object.entries(formData).forEach(item => {
+          const [name, value] = item
+          localStorage.setItem('project_create_' + name, value)
+        })
+        setfirstData(formData)
+        setShownStep(2)
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          // Validation failed
+          const errors = getValidationErrors(err)
+          formRef.current?.setErrors(errors)
+        }
       }
-    }
-  }, [])
-
+    },
+    [setShownStep, setfirstData],
+  )
+  return (
+    <Form ref={formRef} className="primeira-etapa" onSubmit={handleSubmit}>
+      <div className="coluna-um">
+        <Input
+          name="nome"
+          label="Título do projeto"
+          defaultValue={firstData?.nome}
+        />
+        <Textarea
+          label="Objetivo do projeto"
+          name="objetivo"
+          defaultValue={firstData?.objetivo}
+        />
+        <Textarea
+          label="Descrição simples"
+          name="descricao"
+          defaultValue={firstData?.descricao}
+        />
+      </div>
+      <div className="coluna-dois">
+        <SelectArea
+          name="areas"
+          label="Área de desenvolvimento"
+          defaultValue={firstData?.areas}
+        />
+      </div>
+      <section>
+        <Button type="button" onClick={history.goBack} theme="secondary">
+          Cancelar
+        </Button>
+        <Button theme="primary" type="submit">
+          Continuar
+        </Button>
+      </section>
+    </Form>
+  )
+}
+interface SecondFormData {
+  visibilidade: Array<string>
+  img: File
+  habilidades: string[]
+}
+const SecondForm: React.FC = () => {
+  const formRef = useRef<FormHandles>(null)
+  const id_pessoa = useContext(Context).user.id
+  const { setShownStep, firstData, setProject } = useContext(
+    ContextCreateProjectPage,
+  )
   const handleSecondSubmit = useCallback(
     async (formData: SecondFormData) => {
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
-          descricao: Yup.string().required('Descrição é obrigatório'),
-          objetivo: Yup.string().required('Objetivo é obrigatório'),
+          img: Yup.mixed()
+            .required('Insira a capa do projeto!')
+            .test(
+              'tipo do arquivo',
+              'Insira arquivos com a extensão .png ou .jpg',
+              file => {
+                let valid = true
+                if (file) {
+                  if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    valid = false
+                  }
+                }
+                return valid
+              },
+            ),
           habilidades: Yup.array()
             .min(1, 'Seleciono pelo menos 1 área')
             .max(15, 'Seleciono no máximo 15'),
@@ -132,10 +168,19 @@ const CreateProject: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
-        const data = {
-          objetivo: formData.objetivo,
-          descricao: formData.descricao,
-          pessoa_id: id_pessoa,
+        const data = new FormData()
+        data.append('nome', firstData.nome)
+        data.append('visibilidade', JSON.stringify(true))
+        data.append('descricao', firstData.descricao)
+        data.append('objetivo', firstData.objetivo)
+        data.append('foto_capa', formData.img)
+        data.append('pessoa_id', id_pessoa.toString())
+        const { id } = await (
+          await api.post('/api/v1/projeto', data, {
+            withCredentials: true,
+          })
+        ).data
+        const dataEspecial = {
           areas: firstData.areas.map(area => {
             return { descricao: area }
           }),
@@ -143,16 +188,18 @@ const CreateProject: React.FC = () => {
             return { nome: habilidade }
           }),
         }
-        console.log(data)
 
         await api
-          .put(`/api/v1/projeto/${idProject}`, data, {
+          .put(`/api/v1/projeto/${id}`, dataEspecial, {
             withCredentials: true,
           })
           .then(response => {
             console.log(response.data)
             setProject(response.data)
           })
+        for (const name in firstData) {
+          localStorage.removeItem('project_create_' + name)
+        }
         setShownStep(3)
       } catch (err) {
         console.log(err)
@@ -164,82 +211,101 @@ const CreateProject: React.FC = () => {
         }
       }
     },
-    [firstData.areas, idProject, id_pessoa],
+    [firstData, id_pessoa, setProject, setShownStep],
   )
-
   return (
-    <BodyCreateProject>
-      <main>
-        {(shownStep === 1 || shownStep === 2) && <h1>Criar Projeto</h1>}
-        {(shownStep === 1 && (
-          <Form
-            ref={formRef}
-            className="primeira-etapa"
-            onSubmit={handleSubmit}
-          >
-            <div className="coluna-um">
-              <Input name="nome" label="Título do projeto" />
-              <div className="upload-img">
-                <Dropzone name="img" />
-              </div>
-            </div>
-            <div className="coluna-dois">
-              <SelectArea name="areas" label="Área de desenvolvimento" />
-            </div>
-            <section>
-              <Button type="button" onClick={history.goBack} theme="secondary">
-                Cancelar
-              </Button>
-              <Button theme="primary" type="submit">
-                Continuar
-              </Button>
-            </section>
-          </Form>
-        )) ||
-          (shownStep === 2 && (
-            <Form
-              ref={formRef}
-              className="segunda-etapa"
-              onSubmit={handleSecondSubmit}
-            >
-              <div className="coluna-um">
-                <Textarea label="Objetivo do projeto" name="objetivo" />
-                <Textarea label="Descrição simples" name="descricao" />
-              </div>
-              <div className="coluna-dois">
-                <SelectTool
-                  name="habilidades"
-                  label="Ferramentas, matérias e habilidades que o time precisa dominar"
-                />
-              </div>
-              <section>
-                <Button
-                  className="voltar"
-                  type="button"
-                  onClick={() => setShownStep(1)}
-                  theme="secondary"
-                >
-                  Voltar
-                </Button>
-                <Button theme="primary" type="submit">
-                  Continuar
-                </Button>
-              </section>
-            </Form>
-          )) ||
-          (shownStep === 3 && (
+    <Form ref={formRef} className="segunda-etapa" onSubmit={handleSecondSubmit}>
+      <div className="coluna-um">
+        <div className="upload-img">
+          <Dropzone name="img" />
+        </div>
+      </div>
+      <div className="coluna-dois">
+        <SelectTool
+          name="habilidades"
+          label="Ferramentas, matérias e habilidades que o time precisa dominar"
+        />
+      </div>
+      <section>
+        <Button
+          className="voltar"
+          type="button"
+          onClick={() => setShownStep(1)}
+          theme="secondary"
+        >
+          Voltar
+        </Button>
+        <Button theme="primary" type="submit">
+          Continuar
+        </Button>
+      </section>
+    </Form>
+  )
+}
+
+const Forms: React.FC = () => {
+  const history = useHistory()
+  const { project, shownStep } = useContext(ContextCreateProjectPage)
+  switch (shownStep) {
+    case 1:
+      return (
+        <BodyCreateProject>
+          <main>
+            <h1>Criar Projeto</h1>
+            <FirstForm />
+          </main>
+        </BodyCreateProject>
+      )
+    case 2:
+      return (
+        <BodyCreateProject>
+          <main>
+            <h1>Criar Projeto</h1>
+
+            <SecondForm />
+          </main>
+        </BodyCreateProject>
+      )
+    case 3:
+      return (
+        <BodyCreateProject>
+          <main>
             <aside className="terceira-etapa">
               <Vacancy project={project} />
               <Button
                 theme="primary"
-                onClick={() => history.push(`/projeto/${idProject}`)}
+                onClick={() => history.push(`/projeto/${project.id}`)}
               >
                 Concluir
               </Button>
             </aside>
-          ))}
-      </main>
-    </BodyCreateProject>
+          </main>
+        </BodyCreateProject>
+      )
+  }
+}
+const CreateProject: React.FC = () => {
+  const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
+  const [firstData, setfirstData] = useState<FirstFormData>({
+    areas: localStorage.getItem('project_create_areas')?.split(',') || [],
+    nome: localStorage.getItem('project_create_nome') || '',
+    objetivo: localStorage.getItem('project_create_objetivo') || '',
+    descricao: localStorage.getItem('project_create_descricao') || '',
+  })
+  const [project, setProject] = useState<ProjectType>({} as ProjectType)
+  return (
+    <ContextCreateProjectPage.Provider
+      value={{
+        firstData,
+        setfirstData,
+        project,
+        setProject,
+        shownStep,
+        setShownStep,
+      }}
+    >
+      <Forms />
+    </ContextCreateProjectPage.Provider>
   )
 }
 export default CreateProject
