@@ -407,10 +407,8 @@ const Projects: React.FC = () => {
         let res: IPeopleLink = {} as IPeopleLink
         api
           .get(`/api/v1/pessoas/${id}`)
-          .then((response: AxiosResponse<IPeopleLink>) => {
+          .then(response => {
             res = response.data
-            console.log(response.data)
-            console.log(res)
           })
           .catch((error: AxiosError) => {
             return error?.response?.data.detail
