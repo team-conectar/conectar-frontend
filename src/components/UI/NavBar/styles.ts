@@ -16,6 +16,7 @@ export const LiNotification = styled(Link)`
     width: 4rem;
     height: 4rem;
     object-fit: cover;
+    object-position: center;
     border-radius: 50%;
   }
   p {
