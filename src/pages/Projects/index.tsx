@@ -399,6 +399,7 @@ const Projects: React.FC = () => {
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
+  console.log(participantsDetail)
 
   useEffect(() => {
     setParticipantsDetail(
@@ -408,6 +409,8 @@ const Projects: React.FC = () => {
           .get(`/api/v1/pessoas/${id}`)
           .then((response: AxiosResponse<IPeopleLink>) => {
             res = response.data
+            console.log(response.data)
+            console.log(res)
           })
           .catch((error: AxiosError) => {
             return error?.response?.data.detail
