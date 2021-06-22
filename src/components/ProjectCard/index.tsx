@@ -17,6 +17,8 @@ import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import { BsStar, BsFillStarFill } from 'react-icons/bs'
 import { IconType } from 'react-icons'
+import userDefault from '../../assets/icon/user.svg'
+
 import {
   FaRegHandPointer,
   FaHandPointer,
@@ -138,7 +140,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <>
           <Link to={`/perfil/${user?.usuario}`}>
             <img
-              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user?.foto_perfil}`}
+              src={
+                user?.foto_perfil
+                  ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user?.foto_perfil}`
+                  : userDefault
+              }
               alt={user?.nome}
               className="user-img"
             />

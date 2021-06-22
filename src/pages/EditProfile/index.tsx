@@ -333,7 +333,7 @@ const EditProfile: React.FC = () => {
         }
       }
     },
-    [updateProfile],
+    [profile_id, updateProfile],
   )
   useEffect(() => {
     updateProfile()
