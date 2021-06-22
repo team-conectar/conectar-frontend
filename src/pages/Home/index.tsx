@@ -30,7 +30,9 @@ const Home: React.FC = () => {
   console.log(AMAZON_URL)
   const { handleLogin, isAuthenticated } = useContext(Context)
   const history = useHistory()
-  return (
+  return isAuthenticated ? (
+    <Redirect to="/explorar" />
+  ) : (
     <BodyHome>
       <main>
         <div className="topo-background">
