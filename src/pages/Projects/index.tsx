@@ -197,9 +197,13 @@ const Projects: React.FC = () => {
 
   function ToogleFavorite() {
     if (favoriteId) {
-      api.delete(`/api/v1/reacoes?reacao_id=${favoriteId}`).then(response => {
-        setFavoriteId(0)
-      })
+      api
+        .delete(
+          `/api/v1/reacoes?pessoa_id=${user.id}&projeto_id=${project.id}&reacao=FAVORITO`,
+        )
+        .then(response => {
+          setFavoriteId(0)
+        })
     } else {
       api
         .post('/api/v1/reacoes', {
