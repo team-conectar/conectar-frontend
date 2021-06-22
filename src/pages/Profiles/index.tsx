@@ -214,18 +214,15 @@ const Profiles: React.FC = () => {
         <PerfilDiv>
           <PerfilMain>
             <figure>
-              {profile.foto_perfil ? (
-                <img
-                  src={
-                    profile?.foto_perfil
-                      ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`
-                      : userDefault
-                  }
-                  alt={profile.nome}
-                />
-              ) : (
-                <Skeleton circle height="100px" width="100px" />
-              )}
+              <img
+                src={
+                  profile?.foto_perfil
+                    ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`
+                    : userDefault
+                }
+                alt={profile.nome}
+              />
+
               <figcaption>
                 <h2>{profile?.nome || <Skeleton width="150px" />}</h2>
                 <p>
