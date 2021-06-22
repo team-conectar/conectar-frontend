@@ -103,7 +103,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
     if (favoriteId) {
       api
         .delete(
-          `/api/v1/reacoes?reacao=FAVORITO&pessoa_id=${loggedUser.id}&projeto_id=${project.id}`,
+          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=FAVORITO`,
         )
         .then(response => {
           setFavoriteId(0)
@@ -124,7 +124,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
     if (interesseId) {
       api
         .delete(
-          `/api/v1/reacoes?reacao=INTERESSE&pessoa_id=${loggedUser.id}}&projeto_id=${project.id}`,
+          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=INTERESSE`,
         )
         .then(response => {
           setInteresseId(0)
