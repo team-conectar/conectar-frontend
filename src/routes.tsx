@@ -52,7 +52,6 @@ const PrivateRoute: React.FC<RouteProps> = ({ children, ...rest }) => {
   )
 }
 const Routes: React.FC = () => {
-  const { isAuthenticated } = useContext(Context)
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -68,7 +67,7 @@ const Routes: React.FC = () => {
           <CreateProject />
         </PrivateRoute>
         <Route path="/projeto-conectado/:id" component={ApproveProject} />
-        <Route path="/projeto/:id" component={Projects} />
+        <Route path="/projeto/:id?/:step" component={Projects} />
         <Route path="/editar-perfil/:id" component={EditProfile} />
         <Route path="/perfil/:id" component={Profiles} />
         <Route path="/explorar" component={Explorer} />
