@@ -125,7 +125,6 @@ const Projects: React.FC = () => {
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
-  const [selectedImage, setSelectedImage] = useState<File>()
   const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [favoriteId, setFavoriteId] = useState<Number>(0)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
@@ -200,16 +199,15 @@ const Projects: React.FC = () => {
   )
 
   useEffect(() => {
-    if (project.projeto_reacoes && isAuthenticated ) {
+    if (project.projeto_reacoes && isAuthenticated) {
       setFavoriteId(
         project.projeto_reacoes.find(reaction => {
           return (
-            reaction.pessoa_id === user.id &&
-            reaction.reacao === 'FAVORITO'
+            reaction.pessoa_id === user.id && reaction.reacao === 'FAVORITO'
           )
         })?.id || 0,
       )
-      }
+    }
   }, [user.id, project.id, project.projeto_reacoes])
 
   function ToogleFavorite() {
@@ -228,7 +226,7 @@ const Projects: React.FC = () => {
           setFavoriteId(response.data.id)
         })
     }
-    console.log(!favoriteId? "FAVORITO": "NAO FAVORITO");
+    console.log(!favoriteId ? 'FAVORITO' : 'NAO FAVORITO')
   }
 
   const formRef = useRef<FormHandles>(null)
@@ -268,6 +266,21 @@ const Projects: React.FC = () => {
           nome: modalContent.nome
             ? Yup.string().required('Nome é obrigatório')
             : Yup.string(),
+          img: Yup.mixed()
+            .required('Insira a capa do projeto!')
+            .test(
+              'tipo do arquivo',
+              'Insira arquivos com a extensão .png ou .jpg',
+              file => {
+                let valid = true
+                if (file) {
+                  if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    valid = false
+                  }
+                }
+                return valid
+              },
+            ),
           descricao: modalContent.descricao
             ? Yup.string().required('Descrição é obrigatória')
             : Yup.string(),
@@ -464,7 +477,10 @@ const Projects: React.FC = () => {
                       label="Nome do projeto"
                       defaultValue={project.nome}
                     />
-                    <Dropzone name="capa" />
+                    <Dropzone
+                      name="img"
+                      defaultValue="https://conectar.s3.sa-east-1.amazonaws.com/uploads/12d01f1a293a47e18db7bf4d2e464fb6.png"
+                    />
                   </>
                 )}
                 {modalContent.objetivo && (
@@ -552,7 +568,11 @@ const Projects: React.FC = () => {
             {isOwner() && groupedVacancies.length > 0 ? (
               buttonMatchContent(groupedVacancies[0][0].situacao)
             ) : (
-              <ButtonFavorite checked={!!favoriteId} onClick={ToogleFavorite} theme="secondary">
+              <ButtonFavorite
+                checked={!!favoriteId}
+                onClick={ToogleFavorite}
+                theme="secondary"
+              >
                 <BsFillStarFill />
                 Favoritar
               </ButtonFavorite>

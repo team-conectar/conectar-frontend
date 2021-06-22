@@ -16,8 +16,6 @@ import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import { BsStar, BsFillStarFill } from 'react-icons/bs'
-import userDefault from '../../assets/icon/user.svg'
-
 import { IconType } from 'react-icons'
 import {
   FaRegHandPointer,
@@ -140,11 +138,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
         <>
           <Link to={`/perfil/${user?.usuario}`}>
             <img
-              src={
-                user?.foto_perfil
-                  ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`
-                  : userDefault
-              }
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user?.foto_perfil}`}
               alt={user?.nome}
               className="user-img"
             />
