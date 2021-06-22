@@ -124,7 +124,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
     if (interesseId) {
       api
         .delete(
-          `/api/v1/reacoes?reacao=INTERESSE&pessoa_id=${user.id}}&projeto_id=${project.id}`,
+          `/api/v1/reacoes?reacao=INTERESSE&pessoa_id=${loggedUser.id}}&projeto_id=${project.id}`,
         )
         .then(response => {
           setInteresseId(0)
