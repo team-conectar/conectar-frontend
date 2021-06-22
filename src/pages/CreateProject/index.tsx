@@ -3,7 +3,6 @@ import React, {
   useContext,
   useRef,
   useCallback,
-  useEffect,
   createContext,
 } from 'react'
 import { BodyCreateProject } from './styles'
@@ -16,7 +15,6 @@ import SelectTool, { ToolType } from '../../components/UI/SelectTools'
 import Dropzone from '../../components/UI/Dropzone'
 import Modal from '../../components/UI/Modal'
 import api from '../../services/api'
-import Login from '../../components/UI/Login'
 import { Context } from '../../context/AuthContext'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
@@ -34,9 +32,10 @@ export interface ProjectType {
   areas: AreaType[]
   id: number
 }
+type Step = 1 | 2 | 3
 interface IConxtextCreateProject {
-  shownStep: 1 | 2 | 3
-  setShownStep(step: 1 | 2 | 3): void
+  shownStep: Step
+  setShownStep(step: Step): void
   firstData: FirstFormData
   setfirstData(firstData: FirstFormData): void
   project: ProjectType
