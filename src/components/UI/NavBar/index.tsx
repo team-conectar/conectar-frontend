@@ -130,7 +130,10 @@ const NotificationsButton = () => {
             key={notification.id}
             to={`/projeto/${notification.projeto_id}`}
           >
-            <img src={notification.foto} alt="imagem da notificação" />
+            <img
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.foto}`}
+              alt="imagem da notificação"
+            />
             <p>{ReactHtmlParser(notification.situacao)}</p>
           </LiNotification>
         ))}
