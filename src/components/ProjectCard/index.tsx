@@ -101,9 +101,13 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   }, [loggedUser.id, project.id, project.projeto_reacoes])
   function ToogleFavorite() {
     if (favoriteId) {
-      api.delete(`/api/v1/reacoes?reacao_id=${favoriteId}`).then(response => {
-        setFavoriteId(0)
-      })
+      api
+        .delete(
+          `/api/v1/reacoes?reacao=FAVORITO&pessoa_id=${user.id}&projeto_id=${project.id}`,
+        )
+        .then(response => {
+          setFavoriteId(0)
+        })
     } else {
       api
         .post('/api/v1/reacoes', {
@@ -118,9 +122,13 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   }
   function ToogleInteresse() {
     if (interesseId) {
-      api.delete(`/api/v1/reacoes?reacao_id=${interesseId}`).then(response => {
-        setInteresseId(0)
-      })
+      api
+        .delete(
+          `/api/v1/reacoes?reacao=INTERESSE&pessoa_id=${user.id}}&projeto_id=${project.id}`,
+        )
+        .then(response => {
+          setInteresseId(0)
+        })
     } else {
       api
         .post('/api/v1/reacoes', {
