@@ -1,21 +1,14 @@
-import React, {
-  InputHTMLAttributes,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import React from 'react'
 import { BodyCard } from './styles'
 import { Link } from 'react-router-dom'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
 import co from '../../assets/icon/co.svg'
-import { AxiosError } from 'axios'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
-import api from '../../services/api'
 import Skeleton from 'react-loading-skeleton'
 import Button from '../UI/Button'
-
+import userDefault from '../../assets/icon/user.svg'
 export interface IProfile {
   data_nascimento: string
   usuario: string
@@ -41,7 +34,11 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
     <BodyCard>
       <Link to={`/perfil/${profile.usuario}`}>
         <img
-          src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`}
+          src={
+            profile?.foto_perfil
+              ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile?.foto_perfil}`
+              : userDefault
+          }
           alt={profile.nome}
         />
       </Link>

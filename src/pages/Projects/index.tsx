@@ -1,18 +1,10 @@
 import React, {
   useState,
-  ChangeEvent,
-  FormEvent,
   useEffect,
   useRef,
   useContext,
-  Fragment,
   useCallback,
-  Ref,
-  MutableRefObject,
-  ForwardRefExoticComponent,
-  RefAttributes,
 } from 'react'
-import { Link } from 'react-router-dom'
 import {
   BodyProjects,
   ButtonFavorite,
@@ -22,17 +14,11 @@ import {
   DivTags,
   DivVagas,
 } from './styles'
-import edit from '../../assets/icon/editar.svg'
-import TrashIcon from '../../assets/icon/lixeira.svg'
-import { Scrollbars } from 'react-custom-scrollbars'
+import userDefault from '../../assets/icon/user.svg'
+
 import urlConvite from '../../assets/image/convite_dias.svg'
 // import clone from '../../assets/icon/clone.svg'
-import config from '../../assets/icon/config.svg'
-import no_couver from '../../assets/image/no_couver.svg'
 import objetivo from '../../assets/icon/objetivo.svg'
-import id from '../../assets/icon/id.svg'
-import al from '../../assets/icon/al.svg'
-import co from '../../assets/icon/co.svg'
 import vagas from '../../assets/icon/vagas.svg'
 import like from '../../assets/icon/like.svg'
 import { useHistory, useParams } from 'react-router'
@@ -63,9 +49,8 @@ import VacancieListItem from '../../components/VacancieListItem'
 import Skeleton from 'react-loading-skeleton'
 import { IconEdit } from '../../assets/icon'
 import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
-import VacancieCard from '../../components/VacancieCard'
 import { showToast } from '../../components/Toast/Toast'
-import { IProject, IReaction } from '../../components/ProjectCard'
+import { IReaction } from '../../components/ProjectCard'
 import { BsFillStarFill } from 'react-icons/bs'
 interface routeParms {
   id: string
@@ -550,8 +535,12 @@ const Projects: React.FC = () => {
         ) : (
           <ProfileLink to={`/perfil/${projectOwner?.usuario}`}>
             <img
-              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${projectOwner?.foto_perfil}`}
-              alt=""
+              src={
+                projectOwner?.foto_perfil
+                  ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${projectOwner?.foto_perfil}`
+                  : userDefault
+              }
+              alt={projectOwner?.nome}
             />
             <aside>
               <h2>{projectOwner?.nome?.split(' ')[0]}</h2>

@@ -10,11 +10,8 @@ import {
 } from './styles'
 import trabalho from '../../assets/icon/trabalho.svg'
 import educação from '../../assets/icon/educação.svg'
-// import clone from '../../assets/icon/clone.svg'
+import userDefault from '../../assets/icon/user.svg'
 import projeto from '../../assets/icon/projeto.svg'
-import no_couver from '../../assets/image/no_couver.svg'
-import view from '../../assets/icon/view.svg'
-import like from '../../assets/icon/like.svg'
 import capa_id from '../../assets/image/capa_id.svg'
 import capa_al from '../../assets/image/capa_al.svg'
 import capa_co from '../../assets/image/capa_co.svg'
@@ -25,9 +22,8 @@ import { useHistory, useParams } from 'react-router'
 import Button from '../../components/UI/Button'
 import api from '../../services/api'
 import { AxiosError } from 'axios'
-import SelectArea, { AreaType } from '../../components/UI/SelectArea'
-import SelectTool, { ToolType } from '../../components/UI/SelectTools'
-import Modal from '../../components/UI/Modal'
+import { AreaType } from '../../components/UI/SelectArea'
+import { ToolType } from '../../components/UI/SelectTools'
 import { Context } from '../../context/AuthContext'
 import NavBar from '../../components/UI/NavBar'
 import ProjectCard, { IProject } from '../../components/ProjectCard'
@@ -37,7 +33,6 @@ import { IExperienceProject } from '../ProfileFeatures/experiences/ProjectExperi
 import { toMonth } from '../../utils/dates'
 import Skeleton from 'react-loading-skeleton'
 import ContainerScroll from '../../components/UI/ContainerScroll'
-import { FileWatcherEventKind } from 'typescript'
 
 interface routeParms {
   id: string
@@ -221,7 +216,11 @@ const Profiles: React.FC = () => {
             <figure>
               {profile.foto_perfil ? (
                 <img
-                  src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`}
+                  src={
+                    profile?.foto_perfil
+                      ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`
+                      : userDefault
+                  }
                   alt={profile.nome}
                 />
               ) : (

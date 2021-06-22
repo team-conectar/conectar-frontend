@@ -1,20 +1,10 @@
-import React, {
-  HTMLAttributes,
-  InputHTMLAttributes,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { BodyCard, DropdownList } from './styles'
 import { Link } from 'react-router-dom'
-import id from '../../assets/icon/id.svg'
-import al from '../../assets/icon/al.svg'
-import co from '../../assets/icon/co.svg'
-import { Context } from '../../context/AuthContext'
+import userDefault from '../../assets/icon/user.svg'
 import { AxiosError } from 'axios'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
-import Dropdown from '../UI/Dropdown'
 import api from '../../services/api'
 import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
@@ -155,7 +145,11 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       </label>
       <Link to={`/perfil/${profile.id}`}>
         <img
-          src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`}
+          src={
+            profile?.foto_perfil
+              ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile?.foto_perfil}`
+              : userDefault
+          }
           alt=""
         />
         <h2>{profile.nome?.split(` `)[0]}</h2>
