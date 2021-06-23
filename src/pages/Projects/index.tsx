@@ -84,13 +84,9 @@ interface IVacancyDetail extends VacanciesType {
   pessoas_projeto_ids: number[]
   aceito_ids: number[]
 }
-interface IParmsProps {
-  id: string
-  step?: string
-}
+
 const Projects: React.FC = () => {
   const { loading, isAuthenticated, user } = useContext(Context)
-  const routeParms = useParams<IParmsProps>()
 
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
   const initialModalContent = {
@@ -106,6 +102,7 @@ const Projects: React.FC = () => {
   const [openModal, setOpenModal] = useState<boolean>(
     loading && isAuthenticated,
   )
+  const projeto_id = useParams<routeParms>().id
   const [projectOwner, setProjectOwner] = useState({} as IPeopleLink)
   const [participantsDetail, setParticipantsDetail] = useState<IPeopleLink[]>(
     [],
@@ -113,9 +110,7 @@ const Projects: React.FC = () => {
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
-  const [vacanciesList, setVacanciesList] = useState<boolean>(
-    routeParms.step === 'vagas',
-  )
+  const [vacanciesList, setVacanciesList] = useState<boolean>(false)
   const [favoriteId, setFavoriteId] = useState<Number>(0)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [likeCount, setLikeCount] = useState<Number>(0)
@@ -131,9 +126,9 @@ const Projects: React.FC = () => {
   })
 
   const getset_pessoa_projeto = useCallback(async () => {
-    if (routeParms.id)
+    if (projeto_id)
       await api
-        .get(`/api/v1/pessoa_projeto/projeto/${routeParms.id}`)
+        .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
         .then((response: AxiosResponse<VacanciesType[]>) => {
           setVacancies(response.data)
 
@@ -166,7 +161,7 @@ const Projects: React.FC = () => {
           return error?.response?.data.detail
         })
     return true
-  }, [routeParms.id])
+  }, [projeto_id])
   const handleDeclineInvitation = useCallback(
     (pessoa_projeto_id: number) => {
       api
@@ -240,15 +235,15 @@ const Projects: React.FC = () => {
   )
   const handleFindTeam = useCallback(() => {
     const res = api
-      .get(`/api/v1/pessoa_projeto/similaridade_projeto/${routeParms.id}`)
+      .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
       .finally(() => {
-        history.push(`/projeto-conectado/${routeParms.id}`)
+        history.push(`/projeto-conectado/${projeto_id}`)
       })
       .catch((error: AxiosError) => {
         return error?.response?.data.detail
       })
     console.log(res)
-  }, [history, routeParms.id])
+  }, [history, projeto_id])
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
@@ -303,7 +298,7 @@ const Projects: React.FC = () => {
             }),
           }
           await api
-            .put(`/api/v1/projeto/${routeParms.id}`, data, {
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
               withCredentials: true,
             })
             .then(() => {
@@ -316,18 +311,16 @@ const Projects: React.FC = () => {
             }),
           }
           await api
-            .put(`/api/v1/projeto/${routeParms.id}`, data, {
+            .put(`/api/v1/projeto/${projeto_id}`, data, {
               withCredentials: true,
             })
             .then(() => {
               setOpenModal(false)
             })
         } else {
-          await api
-            .put(`/api/v1/projeto/${routeParms.id}`, formData)
-            .then(() => {
-              setOpenModal(false)
-            })
+          await api.put(`/api/v1/projeto/${projeto_id}`, formData).then(() => {
+            setOpenModal(false)
+          })
         }
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -337,7 +330,7 @@ const Projects: React.FC = () => {
         }
       }
     },
-    [modalContent, routeParms.id],
+    [modalContent, projeto_id],
   )
   function isOwner() {
     if (project.pessoa_id && user.id) {
@@ -346,7 +339,7 @@ const Projects: React.FC = () => {
   }
   useEffect(() => {
     const res = api
-      .get(`/api/v1/projeto/${routeParms.id}`)
+      .get(`/api/v1/projeto/${projeto_id}`)
       .then((response: AxiosResponse<ProjectType>) => {
         setProject(response.data)
         setLikeCount(
@@ -366,7 +359,7 @@ const Projects: React.FC = () => {
 
     getset_pessoa_projeto()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [routeParms.id, openModal, favoriteId])
+  }, [projeto_id, openModal, favoriteId])
   useEffect(() => {
     if (groupedVacancies.length > 0) {
       setVacancyDetail({
@@ -399,7 +392,6 @@ const Projects: React.FC = () => {
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
-  console.log(participantsDetail)
 
   useEffect(() => {
     setParticipantsDetail(
@@ -407,7 +399,7 @@ const Projects: React.FC = () => {
         let res: IPeopleLink = {} as IPeopleLink
         api
           .get(`/api/v1/pessoas/${id}`)
-          .then(response => {
+          .then((response: AxiosResponse<IPeopleLink>) => {
             res = response.data
           })
           .catch((error: AxiosError) => {
@@ -424,7 +416,7 @@ const Projects: React.FC = () => {
         return (
           <Button
             theme="primary"
-            onClick={() => history.push(`/projeto-conectado/${routeParms.id}`)}
+            onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
           >
             Relatório do Time
           </Button>
@@ -439,7 +431,7 @@ const Projects: React.FC = () => {
         return (
           <Button
             theme="primary"
-            onClick={() => history.push(`/projeto-conectado/${routeParms.id}`)}
+            onClick={() => history.push(`/projeto-conectado/${projeto_id}`)}
           >
             Status do time
           </Button>
