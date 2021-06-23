@@ -14,8 +14,6 @@ import idealizador from '../../assets/image/idealizador.svg'
 import fc from '../../assets/image/fc.png'
 import aliado from '../../assets/image/aliado.svg'
 import curtiu from '../../assets/image/curtiu.svg'
-import aspasDestaque from '../../assets/image/aspasDestaque.svg'
-import logo from '../../assets/image/logo.svg'
 import Modal from '../../components/UI/Modal'
 import { IoIosArrowDown } from 'react-icons/io'
 import { FaLinkedinIn } from 'react-icons/fa'
@@ -25,6 +23,7 @@ import { Context } from '../../context/AuthContext'
 
 import Button from '../../components/UI/Button'
 import ContainerScroll from '../../components/UI/ContainerScroll'
+import Footer from '../../components/UI/Footer'
 const Home: React.FC = () => {
   const { AMAZON_URL } = process.env
   console.log(AMAZON_URL)
@@ -349,40 +348,7 @@ const Home: React.FC = () => {
               Crie sua conta
             </Button>
           </aside>
-          <footer>
-            <h3>
-              <img
-                src={aspasDestaque}
-                alt=" vamos ser aaspasDestaque nas redes sociais"
-              />
-              Vamos ser amigos nas redes sociais
-              <img
-                src={aspasDestaque}
-                alt=" vamos ser aaspasDestaque nas redes sociais"
-              />
-            </h3>
-
-            <section className="redes">
-              <a href="https://www.facebook.com/boraConectar/">
-                <AiFillFacebook />
-                <span>/boraconectar</span>
-              </a>
-              <a href="https://www.instagram.com/boraconectar/">
-                <AiOutlineInstagram />
-                <span>/boraconectar</span>
-              </a>
-              <a href="https://www.linkedin.com/company/boraconectar/">
-                <FaLinkedinIn color="#fff" />
-                <span>/company/boraconectar</span>
-              </a>
-            </section>
-            <section>
-              <img src={logo} alt="conectar logo" />
-              <Link to="">Termos de Uso | Política de privacidade </Link>
-            </section>
-
-            <p> © 2020, Conectar. Todos os direitos reservados.</p>
-          </footer>
+          <Footer/>
         </div>
       </main>
     </BodyHome>
