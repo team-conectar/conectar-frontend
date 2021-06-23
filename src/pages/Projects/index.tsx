@@ -409,7 +409,6 @@ const Projects: React.FC = () => {
           .get(`/api/v1/pessoas/${id}`)
           .then(response => {
             res = response.data
-            console.log(response.data)
           })
           .catch((error: AxiosError) => {
             return error?.response?.data.detail
@@ -418,7 +417,6 @@ const Projects: React.FC = () => {
       }),
     )
   }, [vacancyDetail])
-  console.log('aqui')
   console.log(vacancyDetail.aceito_ids)
   function buttonMatchContent(option?: TypeSituationVacancy) {
     switch (option) {
