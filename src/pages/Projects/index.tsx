@@ -258,21 +258,23 @@ const Projects: React.FC = () => {
           nome: modalContent.nome
             ? Yup.string().required('Nome é obrigatório')
             : Yup.string(),
-          img: Yup.mixed()
-            .required('Insira a capa do projeto!')
-            .test(
-              'tipo do arquivo',
-              'Insira arquivos com a extensão .png ou .jpg',
-              file => {
-                let valid = true
-                if (file) {
-                  if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                    valid = false
-                  }
-                }
-                return valid
-              },
-            ),
+          img: modalContent.nome
+            ? Yup.mixed()
+                .required('Insira a capa do projeto!')
+                .test(
+                  'tipo do arquivo',
+                  'Insira arquivos com a extensão .png ou .jpg',
+                  file => {
+                    let valid = true
+                    if (file) {
+                      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                        valid = false
+                      }
+                    }
+                    return valid
+                  },
+                )
+            : Yup.mixed(),
           descricao: modalContent.descricao
             ? Yup.string().required('Descrição é obrigatória')
             : Yup.string(),
