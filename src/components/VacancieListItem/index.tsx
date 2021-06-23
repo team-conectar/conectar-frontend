@@ -7,6 +7,7 @@ import { AxiosError } from 'axios'
 import api from '../../services/api'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { VacanciesType } from '../Vacancy'
+import { showToast } from '../../components/Toast/Toast'
 
 interface Props extends HTMLAttributes<HTMLLIElement> {
   vacancy: VacanciesType
@@ -73,7 +74,12 @@ const VacancieListItem: React.FC<Props> = ({
       {!dontShowOption && (
         <DropdownList IconButton={<GiHamburgerMenu />}>
           <li onClick={() => onEdit && onEdit()}>Editar vaga</li>
-          <li onClick={() => onDelete && onDelete()}>Excluir vaga</li>
+          <li onClick={() => 
+            {
+              onDelete && (onDelete())
+              showToast('success', 'Vaga removida com Sucesso!')
+            }
+            }>Excluir vaga</li>
         </DropdownList>
       )}
     </VacancieLi>

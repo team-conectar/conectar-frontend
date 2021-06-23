@@ -425,6 +425,7 @@ const Projects: React.FC = () => {
             Status do time
           </Button>
         )
+        
     }
   }
   return (
@@ -493,7 +494,7 @@ const Projects: React.FC = () => {
                     })}
                   />
                 )}
-                <Button theme="primary" type="submit">
+                <Button onClick={()=>showToast('success', 'Editado com Sucesso!')} theme="primary" type="submit">
                   Salvar
                 </Button>
               </Form>
@@ -547,8 +548,12 @@ const Projects: React.FC = () => {
           </section>
 
           <section>
-            {isOwner() && groupedVacancies.length > 0 ? (
-              buttonMatchContent(groupedVacancies[0][0].situacao)
+            {isOwner() && user.id === project.pessoa_id? (
+              groupedVacancies.length > 0? 
+                buttonMatchContent(groupedVacancies[0][0].situacao)
+                :
+                <div></div>
+            
             ) : (
               <ButtonFavorite
                 checked={!!favoriteId}
