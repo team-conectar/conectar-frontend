@@ -23,6 +23,10 @@ import SuccessfulProjectsCard from '../../components/SuccessfulProjectsCard'
 
 const Explorer: React.FC = () => {
   const { loading, isAuthenticated } = useContext(Context)
+  console.log("esta autenticado?");
+  console.log(isAuthenticated);
+  
+  
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
   useEffect(() => {
     api
@@ -51,8 +55,15 @@ const Explorer: React.FC = () => {
         </ul>
         <section>
           <LinksCard />
-          <SuccessfulCreatorsCard />
-          <SuccessfulProjectsCard />
+          {
+            isAuthenticated && (
+              <>
+                <SuccessfulCreatorsCard />
+                <SuccessfulProjectsCard />
+              </>
+            )
+            
+          }
         </section>
       </Page>
     </Fragment>
