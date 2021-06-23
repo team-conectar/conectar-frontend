@@ -491,7 +491,7 @@ const Projects: React.FC = () => {
                     })}
                   />
                 )}
-                <Button theme="primary" type="submit">
+                <Button onClick={()=>showToast('success', 'Editado com Sucesso!')} theme="primary" type="submit">
                   Salvar
                 </Button>
               </Form>

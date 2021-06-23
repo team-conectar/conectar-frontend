@@ -27,6 +27,7 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import VacancieListItem from '../VacancieListItem'
 import { ProjectType } from '../../pages/CreateProject'
 import ContainerScroll from '../UI/ContainerScroll'
+import { showToast } from '../Toast/Toast'
 export type TypeSituationVacancy =
   | 'PENDENTE_IDEALIZADOR'
   | 'PENDENTE_COLABORADOR'
@@ -350,6 +351,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
               onClick={() => {
                 handleDeleteVacancy(editVacancies)
                 setShowRegister(false)
+                showToast('success', 'Vaga removida com Sucesso!')
               }}
             >
               Excluir
