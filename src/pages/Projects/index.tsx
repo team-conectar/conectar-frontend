@@ -395,24 +395,7 @@ const Projects: React.FC = () => {
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
-  const getParticipantDetail = useCallback(() => {
-    try {
-      const res: IPeopleLink[] = []
-      vacancyDetail.aceito_ids?.forEach(async id => {
-        await api
-          .get(`/api/v1/pessoas/${id}`)
-          .then((response: AxiosResponse<IPeopleLink>) => {
-            res.push(response.data)
-          })
-      })
-      setParticipantsDetail(res)
-    } catch (err) {
-      console.log(err)
-    }
-  }, [])
-  useEffect(() => {
-    getParticipantDetail()
-  }, [vacancyDetail])
+
   console.log(vacancyDetail.aceito_ids)
   function buttonMatchContent(option?: TypeSituationVacancy) {
     switch (option) {
