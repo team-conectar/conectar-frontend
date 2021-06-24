@@ -14,6 +14,7 @@ export const LiNotification = styled.button`
   gap: 0.6rem;
   align-items: center;
   color: var(--textGreen);
+  font-size: 1rem;
   img {
     display: initial;
     width: 4rem;
