@@ -129,6 +129,7 @@ const NotificationsButton = () => {
         {notifications?.map(notification => (
           <LiNotification
             key={notification.id}
+            target="_blank"
             href={
               notification.anexo
                 ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.anexo}`
