@@ -2,15 +2,18 @@ import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
 import { BodyButton } from '../Button/styles'
 import { DropdownContent } from '../Dropdown/styles'
-export const LiNotification = styled.a`
+export const LiNotification = styled.button`
   list-style: none;
+  background: transparent;
   padding: 0.8rem 1rem;
+  border: 0;
   border-bottom: solid 1px var(--borderDivision);
   border-top: solid 1px var(--borderDivision);
   display: flex;
   flex-direction: row;
   gap: 0.6rem;
   align-items: center;
+  color: var(--textGreen);
   img {
     display: initial;
     width: 4rem;

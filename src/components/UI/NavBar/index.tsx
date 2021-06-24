@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { BodyNavBar, LiNotification, NotificationBall } from './styles'
 import logo from '../../../assets/image/logo_fundoClaro.svg'
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom'
@@ -96,7 +96,9 @@ const NotificationsButton = () => {
 
     console.log(res)
   }
-
+  const dowloadAnexonotification = useCallback((anexo: string) => {
+    window.location.href = `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${anexo}`
+  }, [])
   function handleCheckNotification() {
     api
       .post(`/api/v1/notificacao/ler-todas?destinatario_id=${user.id}`, {
@@ -129,13 +131,10 @@ const NotificationsButton = () => {
         {notifications?.map(notification => (
           <LiNotification
             key={notification.id}
-            target="_blank"
-            href={
-              notification.anexo
-                ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.anexo}`
-                : ''
-            }
-            onClick={() => notification.link && history.push(notification.link)}
+            onClick={() => {
+              notification.link && history.push(notification.link)
+              notification.anexo && dowloadAnexonotification(notification.anexo)
+            }}
           >
             <img
               src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.foto}`}
