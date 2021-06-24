@@ -129,7 +129,11 @@ const NotificationsButton = () => {
         {notifications?.map(notification => (
           <LiNotification
             key={notification.id}
-            href={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.anexo}`}
+            href={
+              notification.anexo
+                ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.anexo}`
+                : ''
+            }
             onClick={() => notification.link && history.push(notification.link)}
           >
             <img
