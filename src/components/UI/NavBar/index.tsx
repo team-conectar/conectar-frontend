@@ -97,7 +97,7 @@ const NotificationsButton = () => {
     console.log(res)
   }
   const dowloadAnexonotification = useCallback((anexo: string) => {
-    window.location.href = `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${anexo}`
+    window.location.href = `https://conectar.s3.sa-east-1.amazonaws.com/PDF/${anexo}`
   }, [])
   function handleCheckNotification() {
     api
