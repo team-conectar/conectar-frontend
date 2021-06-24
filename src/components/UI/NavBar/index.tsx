@@ -23,6 +23,7 @@ interface INotification {
   lido: boolean
   foto: string
   link?: string
+  anexo?: string
   id: number
   data_criacao: string
   data_atualizacao: string
@@ -76,7 +77,7 @@ const UserButton = () => {
 const NotificationsButton = () => {
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   const { user } = useContext(Context)
-
+  const history = useHistory()
   function getNotification() {
     const res = api
       .get(
@@ -128,7 +129,8 @@ const NotificationsButton = () => {
         {notifications?.map(notification => (
           <LiNotification
             key={notification.id}
-            to={`/projeto/${notification.projeto_id}`}
+            href={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.anexo}`}
+            onClick={() => notification.link && history.push(notification.link)}
           >
             <img
               src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.foto}`}
