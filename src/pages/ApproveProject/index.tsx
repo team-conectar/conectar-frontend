@@ -125,7 +125,11 @@ const ApproveProject: React.FC = () => {
               Finalizar acordos
             </Button>
 
-            <Button theme="primary" onClick={handleInvite}>
+            <Button
+              theme="primary"
+              onClick={handleInvite}
+              disabled={possibleDeal || finalizedDeal}
+            >
               Enviar convites
             </Button>
           </aside>
