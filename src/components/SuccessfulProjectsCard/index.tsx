@@ -41,11 +41,12 @@ const SuccessfulProjectsCard: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    projects.reverse().map(project => {
+    projects.map(project => {
       api.get(`/api/v1/pessoas/${project.pessoa_id}`).then(response => {
         setUsers(user => user.concat([response.data]))
       })
     })
+    setUsers(users.reverse())
   }, [projects])
 
   return (

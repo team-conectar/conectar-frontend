@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 
 export const BodySobre = styled.div`
+    overflow-x: hidden;
     width: 100%;
     background: var(--background);
     border-radius: var(--borderRadius);
