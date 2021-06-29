@@ -166,7 +166,13 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
 
   async function put_pessoa_projeto(formData: IFormData, id: number) {
     const data = {
-      ...formData,
+      descricao: formData.descricao,
+      areas: formData.areas.map(area => {
+        return { descricao: area }
+      }),
+      habilidades: formData.habilidades.map(habilidade => {
+        return { nome: habilidade }
+      }),
       titulo: formData.cargo,
       papel_id: formData.perfil,
       tipo_acordo_id: formData.tipoContrato,
