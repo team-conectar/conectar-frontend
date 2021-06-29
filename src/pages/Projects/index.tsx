@@ -118,15 +118,9 @@ const Projects: React.FC = () => {
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [likeCount, setLikeCount] = useState<Number>(0)
   const vacancyComponentRef = useRef<handleVacancy>(null)
-  const [groupedVacancies, setGroupedVacancies] = useState<
-    Array<VacanciesType[]>
-  >([])
-  const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>({
-    ...vacancies[0],
-    pessoas_ids: [],
-    pessoas_projeto_ids: [],
-    aceito_ids: [],
-  })
+  const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>(
+    {} as IVacancyDetail,
+  )
 
   const getset_pessoa_projeto = useCallback(async () => {
     if (projeto_id)
@@ -134,31 +128,6 @@ const Projects: React.FC = () => {
         .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
         .then((response: AxiosResponse<VacanciesType[]>) => {
           setVacancies(response.data)
-
-          const GroupResponse = response.data.map(vacancy => {
-            return response.data.filter(data => {
-              return (
-                JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
-                JSON.stringify(data.habilidades) ===
-                  JSON.stringify(vacancy.habilidades) &&
-                data.remunerado === vacancy.remunerado &&
-                data.tipo_acordo_id === vacancy.tipo_acordo_id &&
-                data.papel_id === vacancy.papel_id &&
-                data.titulo === vacancy.titulo
-              )
-            })
-          })
-          setGroupedVacancies(
-            GroupResponse.filter((vacancies, index, self) => {
-              let indexOfDuplicated = -1
-              for (let i = 0; i < self.length; i++) {
-                if (JSON.stringify(self[i]) === JSON.stringify(vacancies)) {
-                  indexOfDuplicated = i
-                }
-              }
-              return index === indexOfDuplicated
-            }),
-          )
         })
         .catch((error: AxiosError) => {
           return error?.response?.data.detail
@@ -365,26 +334,26 @@ const Projects: React.FC = () => {
     getset_pessoa_projeto()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projeto_id, openModal, favoriteId])
-  useEffect(() => {
-    if (groupedVacancies.length > 0) {
-      setVacancyDetail({
-        ...groupedVacancies[0][0],
-        pessoas_ids: groupedVacancies[0].map(vacancy => {
-          return vacancy.pessoa_id
-        }),
-        pessoas_projeto_ids: groupedVacancies[0].map(vacancy => {
-          return vacancy.id
-        }),
-        aceito_ids: groupedVacancies[0]
-          .filter(vacancy => {
-            return (
-              vacancy.situacao === 'ACEITO' || vacancy.situacao === 'FINALIZADO'
-            )
-          })
-          .map(vacancy => vacancy.pessoa_id),
-      })
-    }
-  }, [groupedVacancies])
+  // useEffect(() => {
+  //   if (groupedVacancies.length > 0) {
+  //     setVacancyDetail({
+  //       ...groupedVacancy[0],
+  //       pessoas_ids: groupedVacancy.map(vacancy => {
+  //         return vacancy.pessoa_id
+  //       }),
+  //       pessoas_projeto_ids: groupedVacancy.map(vacancy => {
+  //         return vacancy.id
+  //       }),
+  //       aceito_ids: groupedVacancy
+  //         .filter(vacancy => {
+  //           return (
+  //             vacancy.situacao === 'ACEITO' || vacancy.situacao === 'FINALIZADO'
+  //           )
+  //         })
+  //         .map(vacancy => vacancy.pessoa_id),
+  //     })
+  //   }
+  // }, [groupedVacancies])
 
   useEffect(() => {
     const res = api
@@ -425,7 +394,6 @@ const Projects: React.FC = () => {
             Status do time
           </Button>
         )
-        
     }
   }
   return (
@@ -437,7 +405,7 @@ const Projects: React.FC = () => {
         onAfterClose={() => {
           setOpenModal(!isAuthenticated)
           vacancyComponentRef.current?.setShowRegister(false)
-          vacancyComponentRef.current?.setEditVacancies([])
+          vacancyComponentRef.current?.setEditVacancy({} as VacanciesType)
         }}
       >
         {!loading && !isAuthenticated ? (
@@ -494,7 +462,11 @@ const Projects: React.FC = () => {
                     })}
                   />
                 )}
-                <Button onClick={()=>showToast('success', 'Editado com Sucesso!')} theme="primary" type="submit">
+                <Button
+                  onClick={() => showToast('success', 'Editado com Sucesso!')}
+                  theme="primary"
+                  type="submit"
+                >
                   Salvar
                 </Button>
               </Form>
@@ -548,12 +520,12 @@ const Projects: React.FC = () => {
           </section>
 
           <section>
-            {isOwner() && user.id === project.pessoa_id? (
-              groupedVacancies.length > 0? 
-                buttonMatchContent(groupedVacancies[0][0].situacao)
-                :
+            {isOwner() && user.id === project.pessoa_id ? (
+              vacancies.length > 0 ? (
+                buttonMatchContent(vacancies[0].situacao)
+              ) : (
                 <div></div>
-            
+              )
             ) : (
               <ButtonFavorite
                 checked={!!favoriteId}
@@ -751,25 +723,22 @@ const Projects: React.FC = () => {
           </legend>
 
           <ContainerScroll>
-            {groupedVacancies.map(vacancies => (
+            {vacancies.map(vacancy => (
               <VacancieListItem
                 dontShowOption={isOwner() ? undefined : true}
-                key={vacancies[0].id}
-                vacancy={{
-                  ...vacancies[0],
-                  quantidade: vacancies.length,
-                }}
+                key={vacancy.id}
+                vacancy={vacancy}
                 onDelete={() => handleDeleteVacancy(vacancies)}
                 onEdit={() => {
                   setOpenModal(true)
                   setModalContent({ ...initialModalContent, vaga: true })
                   vacancyComponentRef.current?.setShowRegister(true)
-                  vacancyComponentRef.current?.setEditVacancies(vacancies)
+                  vacancyComponentRef.current?.setEditVacancy(vacancy)
                   console.log(vacancies)
                 }}
                 onClick={() => {
                   setVacancyDetail({
-                    ...vacancies[0],
+                    ...vacancy,
                     pessoas_ids: vacancies.map(vacancy => {
                       return vacancy.pessoa_id
                     }),
@@ -786,11 +755,7 @@ const Projects: React.FC = () => {
                       .map(vacancy => vacancy.pessoa_id),
                   })
                 }}
-                style={
-                  vacancyDetail.titulo === vacancies[0].titulo
-                    ? { background: 'var(--backgroundElevation)' }
-                    : { background: 'transparent' }
-                }
+                clicked={vacancyDetail.id === vacancy.id}
               />
             ))}
           </ContainerScroll>

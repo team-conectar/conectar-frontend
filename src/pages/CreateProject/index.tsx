@@ -160,7 +160,7 @@ const SecondForm: React.FC = () => {
               },
             ),
           habilidades: Yup.array()
-            .min(1, 'Seleciono pelo menos 1 área')
+            .min(1, 'Seleciono pelo menos 1 item')
             .max(15, 'Seleciono no máximo 15'),
         })
         await schema.validate(formData, {

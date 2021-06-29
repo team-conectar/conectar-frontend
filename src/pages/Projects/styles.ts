@@ -275,7 +275,6 @@ export const ButtonFavorite = styled.button<{ checked: boolean }>`
     css`
       color: white;
       background: var(--yellow);
-           
     `}
 `
 
@@ -350,7 +349,7 @@ export const BodyProjects = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        
+
         a {
           font-size: 0.6rem;
           color: var(--gray);

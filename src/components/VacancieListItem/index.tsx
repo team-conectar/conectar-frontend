@@ -1,5 +1,5 @@
 import React, { HTMLAttributes, useCallback, useEffect, useState } from 'react'
-import { VacancieLi, DropdownList } from './styles'
+import { IPropsLiVancancyStyles, VacancyLi } from './styles'
 import id from '../../assets/icon/id.svg'
 import al from '../../assets/icon/al.svg'
 import co from '../../assets/icon/co.svg'
@@ -8,14 +8,14 @@ import api from '../../services/api'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { VacanciesType } from '../Vacancy'
 import { showToast } from '../../components/Toast/Toast'
-
-interface Props extends HTMLAttributes<HTMLLIElement> {
+import { IconEdit, IconTrash } from '../../assets/icon'
+interface Props extends IPropsLiVancancyStyles {
   vacancy: VacanciesType
   onEdit(): void
   onDelete(): void
   dontShowOption?: true
 }
-const VacancieListItem: React.FC<Props> = ({
+const VacancyListItem: React.FC<Props> = ({
   vacancy,
   onEdit,
   onDelete,
@@ -47,7 +47,7 @@ const VacancieListItem: React.FC<Props> = ({
   }, [vacancy.papel_id, vacancy.tipo_acordo_id])
 
   return (
-    <VacancieLi {...rest}>
+    <VacancyLi {...rest}>
       <img
         src={
           (profile?.toLowerCase() === 'colaborador' && co) ||
@@ -66,23 +66,21 @@ const VacancieListItem: React.FC<Props> = ({
         <strong>{vacancy.remunerado ? 'Remunerado' : 'Não remunerado'}</strong>
         <br />
         <span>
-          {vacancy.quantidade} vaga
-          {vacancy.quantidade && vacancy.quantidade > 1 ? 's' : ' '}
+          {`vaga ${vacancy.pessoa_id ? 'indisponível' : 'disponível'} `}
         </span>
       </p>
 
       {!dontShowOption && (
-        <DropdownList IconButton={<GiHamburgerMenu />}>
-          <li onClick={() => onEdit && onEdit()}>Editar vaga</li>
-          <li onClick={() => 
-            {
-              onDelete && (onDelete())
-              showToast('success', 'Vaga removida com Sucesso!')
-            }
-            }>Excluir vaga</li>
-        </DropdownList>
+        <aside>
+          <IconEdit onClick={() => onEdit && onEdit()} />
+          <IconTrash
+            onClick={() => {
+              onDelete && onDelete()
+            }}
+          />
+        </aside>
       )}
-    </VacancieLi>
+    </VacancyLi>
   )
 }
-export default VacancieListItem
+export default VacancyListItem
