@@ -129,8 +129,17 @@ const Projects: React.FC = () => {
         .then((response: AxiosResponse<VacanciesType[]>) => {
           setVacancies(response.data)
         })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
+        .catch((err: AxiosError) => {
+          if (err.response?.status === 404) {
+            setVacancies([])
+          } else {
+            showToast(
+              'error',
+              err?.response?.data.detail ||
+                'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+            )
+          }
+          return err?.response?.data.detail
         })
     return true
   }, [projeto_id])
@@ -191,20 +200,7 @@ const Projects: React.FC = () => {
   }
 
   const formRef = useRef<FormHandles>(null)
-  const handleDeleteVacancy = useCallback(
-    (vacancies: VacanciesType[]) => {
-      vacancies.forEach(vacancy => {
-        const res = api
-          .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
-          .then(getset_pessoa_projeto)
-          .catch((error: AxiosError) => {
-            return error?.response?.data.detail
-          })
-        console.log(res)
-      })
-    },
-    [getset_pessoa_projeto],
-  )
+
   const handleFindTeam = useCallback(() => {
     const res = api
       .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
@@ -728,13 +724,15 @@ const Projects: React.FC = () => {
                 dontShowOption={isOwner() ? undefined : true}
                 key={vacancy.id}
                 vacancy={vacancy}
-                onDelete={() => handleDeleteVacancy(vacancies)}
+                onDelete={() => {
+                  vacancyComponentRef.current?.handleDeleteVacancy(vacancy)
+                  getset_pessoa_projeto()
+                }}
                 onEdit={() => {
                   setOpenModal(true)
                   setModalContent({ ...initialModalContent, vaga: true })
                   vacancyComponentRef.current?.setShowRegister(true)
                   vacancyComponentRef.current?.setEditVacancy(vacancy)
-                  console.log(vacancies)
                 }}
                 onClick={() => {
                   setVacancyDetail({

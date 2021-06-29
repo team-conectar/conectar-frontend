@@ -67,8 +67,9 @@ interface VacancyProps {
   dontRender?: boolean
 }
 export interface handleVacancy {
-  setEditVacancy(vacancies: VacanciesType): void
+  setEditVacancy(vacancy: VacanciesType): void
   setShowRegister(register: boolean): void
+  handleDeleteVacancy(vacancy: VacanciesType): void
 }
 const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
   { project, dontRender },
@@ -85,7 +86,51 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     Array<OptionHTMLAttributes<HTMLOptionElement>>
   >([])
   const formRef = useRef<FormHandles>(null)
-  useImperativeHandle(ref, () => ({ setEditVacancy, setShowRegister }), [])
+  const getset_pessoa_projeto = useCallback(() => {
+    api
+      .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
+      .then((response: AxiosResponse<VacanciesType[]>) => {
+        setVacancies(response.data)
+      })
+      .catch((err: AxiosError) => {
+        if (err.response?.status === 404) {
+          setVacancies([])
+        } else {
+          showToast(
+            'error',
+            err?.response?.data.detail ||
+              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+          )
+        }
+        return err?.response?.data.detail
+      })
+  }, [project.id])
+
+  const handleDeleteVacancy = useCallback(
+    (vacancy: VacanciesType) => {
+      const res = api
+        .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+        .then(() => {
+          getset_pessoa_projeto()
+          showToast('success', 'Vaga removida com Sucesso!')
+        })
+        .catch((err: AxiosError) => {
+          showToast(
+            'error',
+            err?.response?.data.detail ||
+              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+          )
+          return err?.response?.data.detail
+        })
+      console.log(res)
+    },
+    [getset_pessoa_projeto],
+  )
+  useImperativeHandle(
+    ref,
+    () => ({ setEditVacancy, setShowRegister, handleDeleteVacancy }),
+    [],
+  )
 
   useEffect(() => {
     async function get_async() {
@@ -118,28 +163,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     }
     get_async()
   }, [editVacancy])
-  const get_pessoa_projeto = useCallback(() => {
-    api
-      .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
-      .then((response: AxiosResponse<VacanciesType[]>) => {
-        setVacancies(response.data)
-      })
-  }, [project.id])
-  const handleDeleteVacancy = useCallback(
-    (vacancy: VacanciesType) => {
-      const res = api
-        .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
-        .then(() => {
-          get_pessoa_projeto()
-          showToast('success', 'Vaga removida com Sucesso!')
-        })
-        .catch((error: AxiosError) => {
-          return error?.response?.data.detail
-        })
-      console.log(res)
-    },
-    [get_pessoa_projeto],
-  )
+
   async function put_pessoa_projeto(formData: IFormData, id: number) {
     const data = {
       ...formData,
@@ -253,7 +277,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
   )
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(get_pessoa_projeto, [project.id, showRegister])
+  useEffect(getset_pessoa_projeto, [project.id, showRegister])
   return !dontRender ? (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
       <h1>
