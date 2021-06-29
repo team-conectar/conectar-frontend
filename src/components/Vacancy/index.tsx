@@ -129,7 +129,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
   useImperativeHandle(
     ref,
     () => ({ setEditVacancy, setShowRegister, handleDeleteVacancy }),
-    [],
+    [handleDeleteVacancy],
   )
 
   useEffect(() => {
