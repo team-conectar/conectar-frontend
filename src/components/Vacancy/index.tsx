@@ -166,80 +166,86 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     get_async()
   }, [editVacancy])
 
-  async function put_pessoa_projeto(formData: IFormData, id: number) {
-    const data = {
-      descricao: formData.descricao,
-      areas: formData.areas.map(area => {
-        return { descricao: area }
-      }),
-      habilidades: formData.habilidades.map(habilidade => {
-        return { nome: habilidade }
-      }),
-      titulo: formData.cargo,
-      papel_id: formData.perfil,
-      tipo_acordo_id: formData.tipoContrato,
-      remunerado: !!(formData.remunerado[0] === 'remunerado'),
-    }
-    await api
-      .put(`/api/v1/pessoa_projeto/${id}`, data, {
-        withCredentials: true,
-      })
-      .catch((err: AxiosError) => {
-        showToast(
-          'error',
-          err?.response?.data.detail ||
-            'Ocorreu um erro inesperado. Tente novamente mais tarde.',
-        )
-        return err?.response?.data.detail
-      })
-  }
-  async function post_pessoa_projeto(formData: IFormData) {
-    const data = {
-      ...formData,
-      projeto_id: project.id,
-      titulo: formData.cargo,
-      papel_id: formData.perfil,
-      tipo_acordo_id: formData.tipoContrato,
-      remunerado: !!(formData.remunerado[0] === 'remunerado'),
-      situacao: 'PENDENTE_IDEALIZADOR',
-    }
-    for (let index = 1; index <= formData.quantidade; index++) {
+  const put_pessoa_projeto = useCallback(
+    async (formData: IFormData, id: number) => {
+      const data = {
+        descricao: formData.descricao,
+        areas: formData.areas.map(area => {
+          return { descricao: area }
+        }),
+        habilidades: formData.habilidades.map(habilidade => {
+          return { nome: habilidade }
+        }),
+        titulo: formData.cargo,
+        papel_id: formData.perfil,
+        tipo_acordo_id: formData.tipoContrato,
+        remunerado: !!(formData.remunerado[0] === 'remunerado'),
+      }
       await api
-        .post('/api/v1/pessoa_projeto', data, {
+        .put(`/api/v1/pessoa_projeto/${id}`, data, {
           withCredentials: true,
         })
-        .then(async response => {
-          const res = await api
-            .put(
-              `/api/v1/pessoa_projeto/${response.data.id}`,
-              {
-                areas: formData.areas.map(area => {
-                  return { descricao: area }
-                }),
-                habilidades: formData.habilidades.map(habilidade => {
-                  return { nome: habilidade }
-                }),
-              },
-              {
-                withCredentials: true,
-              },
-            )
-            .catch((err: AxiosError) => {
-              showToast(
-                'error',
-                err?.response?.data.detail ||
-                  'Ocorreu um erro inesperado. Tente novamente mais tarde.',
-              )
-              return err?.response?.data.detail
-            })
-          console.log(res)
-        })
         .catch((err: AxiosError) => {
-          showToast('error', err?.response?.data.detail)
+          showToast(
+            'error',
+            err?.response?.data.detail ||
+              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+          )
           return err?.response?.data.detail
         })
-    }
-  }
+    },
+    [],
+  )
+  const post_pessoa_projeto = useCallback(
+    async (formData: IFormData) => {
+      const data = {
+        ...formData,
+        projeto_id: project.id,
+        titulo: formData.cargo,
+        papel_id: formData.perfil,
+        tipo_acordo_id: formData.tipoContrato,
+        remunerado: !!(formData.remunerado[0] === 'remunerado'),
+        situacao: 'PENDENTE_IDEALIZADOR',
+      }
+      for (let index = 1; index <= formData.quantidade; index++) {
+        await api
+          .post('/api/v1/pessoa_projeto', data, {
+            withCredentials: true,
+          })
+          .then(async response => {
+            const res = await api
+              .put(
+                `/api/v1/pessoa_projeto/${response.data.id}`,
+                {
+                  areas: formData.areas.map(area => {
+                    return { descricao: area }
+                  }),
+                  habilidades: formData.habilidades.map(habilidade => {
+                    return { nome: habilidade }
+                  }),
+                },
+                {
+                  withCredentials: true,
+                },
+              )
+              .catch((err: AxiosError) => {
+                showToast(
+                  'error',
+                  err?.response?.data.detail ||
+                    'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+                )
+                return err?.response?.data.detail
+              })
+            console.log(res)
+          })
+          .catch((err: AxiosError) => {
+            showToast('error', err?.response?.data.detail)
+            return err?.response?.data.detail
+          })
+      }
+    },
+    [project.id],
+  )
   const handleSubmit = useCallback(
     async (formData: IFormData) => {
       console.log(formData)
@@ -281,7 +287,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
         }
       }
     },
-    [editVacancy, handleDeleteVacancy, project.id],
+    [editVacancy?.id, post_pessoa_projeto, put_pessoa_projeto],
   )
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
