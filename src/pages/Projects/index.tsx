@@ -352,7 +352,10 @@ const Projects: React.FC = () => {
   //     })
   //   }
   // }, [groupedVacancies])
-
+  const handleDeleteVacancy = useCallback(async (vacancy: VacanciesType) => {
+    await vacancyComponentRef.current?.handleDeleteVacancy(vacancy)
+    await getset_pessoa_projeto()
+  }, [])
   useEffect(() => {
     const res = api
       .get(`/api/v1/pessoas/${project.pessoa_id}`)
@@ -726,10 +729,7 @@ const Projects: React.FC = () => {
                 dontShowOption={isOwner() ? undefined : true}
                 key={vacancy.id}
                 vacancy={vacancy}
-                onDelete={async () => {
-                  vacancyComponentRef.current?.handleDeleteVacancy(vacancy)
-                  await getset_pessoa_projeto()
-                }}
+                onDelete={() => handleDeleteVacancy(vacancy)}
                 onEdit={() => {
                   setOpenModal(true)
                   setModalContent({ ...initialModalContent, vaga: true })
