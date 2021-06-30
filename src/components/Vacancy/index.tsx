@@ -274,10 +274,11 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
         })
         // Validation passed
         if (editVacancy?.id) {
-          put_pessoa_projeto(formData, editVacancy?.id)
+          await put_pessoa_projeto(formData, editVacancy?.id)
         } else {
-          post_pessoa_projeto(formData)
+          await post_pessoa_projeto(formData)
         }
+        await getset_pessoa_projeto()
         setShowRegister(false)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
