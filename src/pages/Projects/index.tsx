@@ -726,9 +726,9 @@ const Projects: React.FC = () => {
                 dontShowOption={isOwner() ? undefined : true}
                 key={vacancy.id}
                 vacancy={vacancy}
-                onDelete={() => {
+                onDelete={async () => {
                   vacancyComponentRef.current?.handleDeleteVacancy(vacancy)
-                  getset_pessoa_projeto()
+                  await getset_pessoa_projeto()
                 }}
                 onEdit={() => {
                   setOpenModal(true)
