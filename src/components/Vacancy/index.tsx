@@ -288,7 +288,12 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
         }
       }
     },
-    [editVacancy?.id, post_pessoa_projeto, put_pessoa_projeto],
+    [
+      editVacancy?.id,
+      getset_pessoa_projeto,
+      post_pessoa_projeto,
+      put_pessoa_projeto,
+    ],
   )
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
