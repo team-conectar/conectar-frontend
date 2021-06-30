@@ -33,30 +33,12 @@ import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch
 import ToastAnimated, { showToast } from '../../components/Toast/Toast'
 import { type } from 'os'
 import Dropzone from '../../components/UI/Dropzone'
+import { ProfileType } from '../Profiles'
 
 interface routeParms {
   id: string
 }
-interface ProfileType {
-  data_nascimento: string
-  usuario: string
-  email: string
-  ativo: boolean
-  nome: string
-  telefone: string
-  colaborador: boolean
-  idealizador: boolean
-  aliado: boolean
-  foto_perfil: string
-  habilidades: ToolType[]
-  areas: AreaType[]
-  id: number
-  data_criacao: string
-  data_atualizacao: string
-  experiencia_profissional: ProfessionalType[]
-  experiencia_projetos: IExperienceProject[]
-  experiencia_academica: AcademicType[]
-}
+
 interface IFormDataBasicInformations {
   email: string
   telefone: string

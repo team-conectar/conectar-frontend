@@ -127,6 +127,8 @@ const Projects: React.FC = () => {
       await api
         .get(`/api/v1/pessoa_projeto/projeto/${projeto_id}`)
         .then((response: AxiosResponse<VacanciesType[]>) => {
+          console.log(response.data)
+
           setVacancies(response.data)
         })
         .catch((err: AxiosError) => {
@@ -144,8 +146,8 @@ const Projects: React.FC = () => {
     return true
   }, [projeto_id])
   const handleDeclineInvitation = useCallback(
-    (pessoa_projeto_id: number) => {
-      api
+    async (pessoa_projeto_id: number) => {
+      await api
         .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
           situacao: 'RECUSADO',
         })
@@ -154,8 +156,8 @@ const Projects: React.FC = () => {
     [getset_pessoa_projeto],
   )
   const handleAcceptInvitation = useCallback(
-    (pessoa_projeto_id: number) => {
-      api
+    async (pessoa_projeto_id: number) => {
+      await api
         .put(`api/v1/pessoa_projeto/${pessoa_projeto_id}`, {
           situacao: 'ACEITO',
         })
@@ -201,8 +203,8 @@ const Projects: React.FC = () => {
 
   const formRef = useRef<FormHandles>(null)
 
-  const handleFindTeam = useCallback(() => {
-    const res = api
+  const handleFindTeam = useCallback(async () => {
+    const res = await api
       .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
       .finally(() => {
         history.push(`/projeto-conectado/${projeto_id}`)

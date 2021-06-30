@@ -38,7 +38,7 @@ interface routeParms {
   id: string
 }
 
-interface ProfileType {
+export interface ProfileType {
   data_nascimento: string
   usuario: string
   email: string

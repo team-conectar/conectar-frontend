@@ -27,6 +27,7 @@ import VacancieListItem from '../VacancieListItem'
 import { ProjectType } from '../../pages/CreateProject'
 import ContainerScroll from '../UI/ContainerScroll'
 import { showToast } from '../Toast/Toast'
+import { ProfileType } from '../../pages/Profiles'
 export type TypeSituationVacancy =
   | 'PENDENTE_IDEALIZADOR'
   | 'PENDENTE_COLABORADOR'
@@ -46,6 +47,7 @@ export interface VacanciesType {
   areas: Array<AreaType>
   id: number
   quantidade?: number
+  pessoa?: ProfileType
 }
 interface ITipoAcordo {
   id: number
@@ -86,8 +88,8 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     Array<OptionHTMLAttributes<HTMLOptionElement>>
   >([])
   const formRef = useRef<FormHandles>(null)
-  const getset_pessoa_projeto = useCallback(() => {
-    api
+  const getset_pessoa_projeto = useCallback(async () => {
+    await api
       .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
       .then((response: AxiosResponse<VacanciesType[]>) => {
         setVacancies(response.data)
@@ -107,8 +109,8 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
   }, [project.id])
 
   const handleDeleteVacancy = useCallback(
-    (vacancy: VacanciesType) => {
-      const res = api
+    async (vacancy: VacanciesType) => {
+      const res = await api
         .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
         .then(() => {
           getset_pessoa_projeto()
@@ -283,7 +285,9 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
   )
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(getset_pessoa_projeto, [project.id, showRegister])
+  useEffect(() => {
+    getset_pessoa_projeto()
+  }, [getset_pessoa_projeto, project.id, showRegister])
   return !dontRender ? (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
       <h1>
@@ -300,7 +304,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
           {vacancies.map(vacancy => (
             <VacancieListItem
               key={vacancy.id}
-              vacancy={{ ...vacancy, quantidade: 0 }}
+              vacancy={vacancy}
               onDelete={() => {
                 handleDeleteVacancy(vacancy)
               }}
