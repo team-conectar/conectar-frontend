@@ -227,7 +227,10 @@ const EditProfile: React.FC = () => {
       .get(`/api/v1/pessoas/${profile_id}`)
       .then((response: { data: ProfileType }) => {
         setProfile(response.data)
-      })
+        console.log("USUARIO");
+        
+        console.log(profile.usuario)      
+        })
       .catch((err: AxiosError) => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
@@ -331,7 +334,7 @@ const EditProfile: React.FC = () => {
         <header>
           <Button
             theme="primary"
-            onClick={() => history.push(`/perfil/${user.usuario}`)}
+            onClick={() => history.push(`/perfil/${profile.usuario}`)}
           >
             voltar ao perfil
           </Button>

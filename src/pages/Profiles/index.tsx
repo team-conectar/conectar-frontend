@@ -256,13 +256,16 @@ const Profiles: React.FC = () => {
 
           <ContainerScroll autoHeight autoHeightMax="50vh">
             <ul>
-              {profile?.areas?.length && <h3>Áreas de atuação</h3>}
+              {profile?.areas?.length > 0 && <h3>Áreas de atuação</h3>}
+              
               {profile?.areas?.map(area => (
                 <li key={area.id}>{area.descricao}</li>
               ))}
-              {profile?.habilidades?.length && (
+              
+              {profile?.habilidades?.length > 0 && (
                 <h3>Habilidades e ferramentas de domínio</h3>
               )}
+              
               {profile?.habilidades?.map(habilidade => (
                 <li key={habilidade.id}>{habilidade.nome}</li>
               ))}
