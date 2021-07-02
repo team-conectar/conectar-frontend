@@ -71,6 +71,11 @@ textarea {
     outline: none;
 }
 
+.swal2-popup {
+  font-family: Raleway !important;
+
+}
+
 .confirmButtonSweet {
   /* background: var(--green)!important; */
   color: white !important;
@@ -83,9 +88,6 @@ textarea {
   height: 2.2rem;
 }
 
-.confirmButtonSweet:hover {
-}
-
 .cancelButtonSweet {
   border-radius: 2rem!important;
   font-weight: 600;
@@ -94,9 +96,6 @@ textarea {
   justify-content: center;
   padding: 0.6rem 2rem;
   height: 2.2rem;
-}
-
-.cancelButtonSweet:hover {
 }
 
 `
