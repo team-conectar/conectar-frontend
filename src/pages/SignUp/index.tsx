@@ -66,11 +66,8 @@ const SignUp: React.FC = () => {
             .email('Não corresponde ao formato exemple@ex.com')
             .required('Email é obrigatório'),
           password: Yup.string()
-            .matches(/(?=.*[!@#$%^&*])/g, 'Deve conter caracteres especiais')
-            .matches(/(?=.*[A-Z])/g, 'Deve conter caracteres maiúsculas')
-            .matches(/(?=.*[0-9])/g, 'Deve conter caracteres numéricos')
-            .matches(/(?=.*[a-z])/g, 'Deve conter caracteres minúsculas')
-            .min(8, 'Deve conter no mínimo 8 caracteres')
+            .matches(/(?=.*[!@#$%^&*].*[A-Z].*[0-9].*[a-z])/g, 'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos')
+            .min(8, 'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos')
             .required('Senha é obritória'),
           username: Yup.string()
             .min(4, 'Deve conter no mínimo 4 caracteres')

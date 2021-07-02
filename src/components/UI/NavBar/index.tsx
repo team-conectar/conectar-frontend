@@ -61,7 +61,7 @@ const UserButton = () => {
         <p>{user.email}</p>
       </section>
       <Link to={`/perfil/${user.usuario}`}>Perfil no Conectar</Link>
-      <Link to="/explore">Configurações</Link>
+      {/* <Link to="/explore">Configurações</Link> */}
       <Link to="/explore">Ajuda</Link>
       <button
         onClick={() => {
