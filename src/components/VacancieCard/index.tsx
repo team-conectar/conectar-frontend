@@ -9,6 +9,7 @@ import api from '../../services/api'
 import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { TypeSituationVacancy } from '../Vacancy'
+import Sweet from '../../utils/Sweet'
 export interface IVacancyCard {
   projeto_id: number
   pessoa_id: number
@@ -77,29 +78,23 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
     },
   }
 
-  function FindPeople() {
-    console.log('ola')
-    console.log(vacancy)
+  async function FindPeople() {
+      var teste = await Sweet({
+        title: "Deseja realmente efetuar uma nova busca?",
+        text: "O usuario nao aparecera mais para a preencher a vaga",
+        icon: "warning",
+        textButton: "Nova busca"
+      });
+    if(teste.isConfirmed)
+      api
+        .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
+        .then(response => {
+          setProfile(response.data)
+        })
 
-    api
-      .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
-      .then(response => {
-        setProfile(response.data)
-
-        // api
-        // .get(`/api/v1/pessoas/${response}`)
-        // .then(response  => {
-        //   setProfile(response.data)
-        // })
-        // .catch((err: AxiosError) => {
-        //     return err?.response?.data.detail
-        //   })
-      })
-
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-    console.log(profile)
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
   }
 
   useEffect(() => {
@@ -143,7 +138,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           <li>Excluir vaga</li>
         </DropdownList>
       </label>
-      <Link to={`/perfil/${profile.id}`}>
+      <Link to={`/perfil/${profile?.usuario}`}>
         <img
           src={
             profile?.foto_perfil
@@ -152,7 +147,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
           }
           alt=""
         />
-        <h2>{profile.nome?.split(` `)[0]}</h2>
+        <h2>{profile?.nome?.split(` `)[0]}</h2>
       </Link>
       <h3>
         {office}

@@ -3,7 +3,9 @@ import backgroud from '../image/background.svg'
 export const GlobalStyle = createGlobalStyle`
 :root {
     /* font-size: 60%; */
-    --yellow: #ebae3c;
+
+
+    --yellow:  #ebae3c;
     --yellow-dark: #fea81b;
     --green: #99b876;
     --textGreen: #072f3f;
@@ -68,4 +70,33 @@ select,
 textarea {
     outline: none;
 }
+
+.confirmButtonSweet {
+  /* background: var(--green)!important; */
+  color: white !important;
+  box-shadow: none!important;
+  font-weight: 600;
+  border-radius: 2rem!important;
+  text-transform: uppercase;
+  margin-right: 0.6rem;
+  padding: 0.6rem 2rem;
+  height: 2.2rem;
+}
+
+.confirmButtonSweet:hover {
+}
+
+.cancelButtonSweet {
+  border-radius: 2rem!important;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 2rem;
+  height: 2.2rem;
+}
+
+.cancelButtonSweet:hover {
+}
+
 `
