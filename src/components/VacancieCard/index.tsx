@@ -81,19 +81,33 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   async function FindPeople() {
       var teste = await Sweet({
         title: "Deseja realmente efetuar uma nova busca?",
-        text: "O usuario nao aparecera mais para a preencher a vaga",
+        text: "O usuário não aparecerá mais para a preencher essa vaga",
         icon: "warning",
         textButton: "Nova busca"
       });
-    if(teste.isConfirmed)
+    if(teste)
       api
         .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
         .then(response => {
           setProfile(response.data)
+          Sweet({
+            deleted: true,
+            title: "Novo Usuário encontrado",
+            icon: "success",
+            textButton: "OK"
+          })
         })
 
         .catch((err: AxiosError) => {
+          Sweet({
+            title: "Erro",
+            text: "Não foi possível efetuar a busca, tente novamente!",
+            icon: "error",
+            deleted: true,
+            textButton: "OK"
+          })
           return err?.response?.data.detail
+          
         })
   }
 
