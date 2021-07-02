@@ -59,7 +59,7 @@ const VacancyListItem: React.FC<Props> = ({
       />
       <p>
         <strong>
-          {vacancy.id} | {profile}
+          {vacancy.titulo} | {profile}
         </strong>
         <br />
         <span>{agreement} </span>

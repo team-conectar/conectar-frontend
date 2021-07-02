@@ -15,7 +15,7 @@ import {
   DivVagas,
 } from './styles'
 import userDefault from '../../assets/icon/user.svg'
-
+import { FiPlusCircle } from 'react-icons/fi'
 import urlConvite from '../../assets/image/convite_dias.svg'
 // import clone from '../../assets/icon/clone.svg'
 import objetivo from '../../assets/icon/objetivo.svg'
@@ -79,11 +79,6 @@ interface IPeopleLink {
  * @constructor
  * @content is the iten of the modal
  */
-interface IVacancyDetail extends VacanciesType {
-  pessoas_ids: number[]
-  pessoas_projeto_ids: number[]
-  aceito_ids: number[]
-}
 interface IParmsProps {
   id: string
   step?: string
@@ -118,8 +113,8 @@ const Projects: React.FC = () => {
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [likeCount, setLikeCount] = useState<Number>(0)
   const vacancyComponentRef = useRef<handleVacancy>(null)
-  const [vacancyDetail, setVacancyDetail] = useState<IVacancyDetail>(
-    {} as IVacancyDetail,
+  const [vacancyDetail, setVacancyDetail] = useState<VacanciesType>(
+    {} as VacanciesType,
   )
 
   const getset_pessoa_projeto = useCallback(async () => {
@@ -332,26 +327,11 @@ const Projects: React.FC = () => {
     getset_pessoa_projeto()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projeto_id, openModal, favoriteId])
-  // useEffect(() => {
-  //   if (groupedVacancies.length > 0) {
-  //     setVacancyDetail({
-  //       ...groupedVacancy[0],
-  //       pessoas_ids: groupedVacancy.map(vacancy => {
-  //         return vacancy.pessoa_id
-  //       }),
-  //       pessoas_projeto_ids: groupedVacancy.map(vacancy => {
-  //         return vacancy.id
-  //       }),
-  //       aceito_ids: groupedVacancy
-  //         .filter(vacancy => {
-  //           return (
-  //             vacancy.situacao === 'ACEITO' || vacancy.situacao === 'FINALIZADO'
-  //           )
-  //         })
-  //         .map(vacancy => vacancy.pessoa_id),
-  //     })
-  //   }
-  // }, [groupedVacancies])
+  useEffect(() => {
+    if (vacancies.length > 0) {
+      setVacancyDetail(vacancies[0])
+    }
+  }, [vacancies])
   const handleDeleteVacancy = useCallback(async (vacancy: VacanciesType) => {
     await vacancyComponentRef.current?.handleDeleteVacancy(vacancy)
     await getset_pessoa_projeto()
@@ -368,7 +348,6 @@ const Projects: React.FC = () => {
     console.log(res)
   }, [project.pessoa_id, openModal])
 
-  console.log(vacancyDetail.aceito_ids)
   function buttonMatchContent(option?: TypeSituationVacancy) {
     switch (option) {
       case 'FINALIZADO':
@@ -667,7 +646,7 @@ const Projects: React.FC = () => {
       </DivSobre>
       {vacanciesList &&
         vacancyDetail?.situacao === 'PENDENTE_COLABORADOR' &&
-        vacancyDetail?.pessoas_ids?.includes(user.id) && (
+        vacancyDetail?.pessoa_id === user.id && (
           <DivConvite>
             <figure>
               <img
@@ -683,11 +662,7 @@ const Projects: React.FC = () => {
                 theme="secondary"
                 onClick={() => {
                   showToast('error', 'Vaga recusada com sucesso!')
-                  handleDeclineInvitation(
-                    vacancyDetail?.pessoas_projeto_ids[
-                      vacancyDetail.pessoas_ids.indexOf(user.id)
-                    ],
-                  )
+                  handleDeclineInvitation(vacancyDetail.id)
                 }}
               >
                 Recusar
@@ -696,11 +671,7 @@ const Projects: React.FC = () => {
                 theme="primary"
                 onClick={() => {
                   showToast('success', 'Vaga aceita com sucesso!')
-                  handleAcceptInvitation(
-                    vacancyDetail?.pessoas_projeto_ids[
-                      vacancyDetail.pessoas_ids.indexOf(user.id)
-                    ],
-                  )
+                  handleAcceptInvitation(vacancyDetail.id)
                 }}
               >
                 Aceitar
@@ -714,9 +685,10 @@ const Projects: React.FC = () => {
             <img src={vagas} alt="vagas" />
             Vagas
             {isOwner() && (
-              <IconEdit
+              <FiPlusCircle
                 onClick={() => {
                   setModalContent({ ...initialModalContent, vaga: true })
+                  vacancyComponentRef.current?.setShowRegister(true)
                   setOpenModal(true)
                 }}
               />
@@ -737,23 +709,7 @@ const Projects: React.FC = () => {
                   vacancyComponentRef.current?.setEditVacancy(vacancy)
                 }}
                 onClick={() => {
-                  setVacancyDetail({
-                    ...vacancy,
-                    pessoas_ids: vacancies.map(vacancy => {
-                      return vacancy.pessoa_id
-                    }),
-                    pessoas_projeto_ids: vacancies.map(vacancy => {
-                      return vacancy.id
-                    }),
-                    aceito_ids: vacancies
-                      .filter(vacancy => {
-                        return (
-                          vacancy.situacao === 'ACEITO' ||
-                          vacancy.situacao === 'FINALIZADO'
-                        )
-                      })
-                      .map(vacancy => vacancy.pessoa_id),
-                  })
+                  setVacancyDetail(vacancy)
                 }}
                 clicked={vacancyDetail.id === vacancy.id}
               />
@@ -801,25 +757,24 @@ const Projects: React.FC = () => {
                 ))}
               </aside>
             </DivTags>
-            {participantsDetail.length > 0 && (
-              <DivParticipants>
-                <legend>Pessoas participando dessa vaga:</legend>
-                <aside>
-                  {participantsDetail?.map(participant => (
+            {vacancyDetail?.situacao === 'ACEITO' ||
+              (vacancyDetail?.situacao === 'FINALIZADO' && (
+                <DivParticipants>
+                  <legend>Participando dessa vaga:</legend>
+                  <aside>
                     <ProfileLink
-                      key={participant?.usuario}
-                      to={`/perfil/${participant?.usuario}`}
+                      key={vacancyDetail.pessoa?.usuario}
+                      to={`/perfil/${vacancyDetail.pessoa?.usuario}`}
                     >
                       <img
-                        src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${participant.foto_perfil}`}
-                        alt=""
+                        src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
+                        alt={vacancyDetail.pessoa?.nome}
                       />
-                      <h2>{participant?.nome?.split(' ')[0]}</h2>
+                      <h2>{vacancyDetail.pessoa?.nome?.split(' ')[0]}</h2>
                     </ProfileLink>
-                  ))}
-                </aside>
-              </DivParticipants>
-            )}
+                  </aside>
+                </DivParticipants>
+              ))}
           </aside>
         </section>
       </DivVagas>

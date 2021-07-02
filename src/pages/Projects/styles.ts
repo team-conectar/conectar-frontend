@@ -203,9 +203,13 @@ export const DivVagas = styled.div<IPropsVagas>`
           width: 1.6rem;
           margin: 0 0.5rem;
         }
-        ${Icon} {
+        svg {
           position: absolute;
           right: 0.5rem;
+          color: var(--green);
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 1.6rem;
         }
       }
       ${DivScroll} {
