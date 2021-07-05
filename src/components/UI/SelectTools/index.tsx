@@ -93,7 +93,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
   const handleAddNewTool = useCallback(
     async (tool: ToolType) => {
       console.log(newTool)
-      if (!tools.includes(tool)) {
+      if (!tools.includes(tool) && tool.nome.replace(/\s/g, '') !== '') {
         const res = await api
           .post('/api/v1/habilidades', tool, {
             withCredentials: true,
@@ -105,13 +105,13 @@ const SelectTool: React.FC<SelectToolProps> = ({
             ) as HTMLInputElement
             inputCheck.checked = true
             setSelectedTools(tools => tools.concat(tool.nome))
-            setNewTool({ nome: '' })
           })
           .catch((err: AxiosError) => {
             return err?.response?.data.detail
           })
         console.log(res)
       }
+      setNewTool({ nome: '' })
     },
     [get_set_habilidades, newTool, tools],
   )
