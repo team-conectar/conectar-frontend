@@ -227,10 +227,10 @@ const EditProfile: React.FC = () => {
       .get(`/api/v1/pessoas/${profile_id}`)
       .then((response: { data: ProfileType }) => {
         setProfile(response.data)
-        console.log("USUARIO");
-        
-        console.log(profile.usuario)      
-        })
+        console.log('USUARIO')
+
+        console.log(profile.usuario)
+      })
       .catch((err: AxiosError) => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
@@ -362,7 +362,7 @@ const EditProfile: React.FC = () => {
               <Dropzone
                 name="img"
                 defaultValue={
-                  profile.foto_perfil
+                  profile?.foto_perfil
                     ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`
                     : undefined
                 }
