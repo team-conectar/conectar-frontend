@@ -43,7 +43,7 @@ const AcademicExperiences: React.FC = () => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [isIncomplete, setIsIncomplete] = useState<boolean>(false)
   const [initialYear, setInitialYear] = useState<number>(
-    new Date().getFullYear() + 1,
+    new Date().getFullYear() + 9,
   )
   const [stored, setStored] = useState<AcademicType[]>([])
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -162,7 +162,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
-                showToast( "success" ,"Editado com sucesso!")
+                showToast('success', 'Editado com sucesso!')
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -175,7 +175,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
-                showToast( "success" ,"Cadastrado com sucesso!")
+                showToast('success', 'Cadastrado com sucesso!')
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -188,7 +188,6 @@ const AcademicExperiences: React.FC = () => {
           const errors = getValidationErrors(error)
 
           formRef.current?.setErrors(errors)
-          return
         }
       }
 
@@ -342,6 +341,9 @@ const AcademicExperiences: React.FC = () => {
                 />
                 {!isIncomplete && (
                   <Select
+                    noOptionsMessage={props =>
+                      'Selecione primeiro o ano inicial'
+                    }
                     label="Ano final"
                     name="data_fim"
                     options={finalYearOptions(Number(initialYear))}

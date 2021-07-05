@@ -180,7 +180,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
-                showToast( "success" ,"Editado com sucesso!")
+                showToast('success', 'Editado com sucesso!')
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })
@@ -193,7 +193,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
-                showToast( "success" ,"Cadastrado com sucesso!")
+                showToast('success', 'Cadastrado com sucesso!')
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })
@@ -387,6 +387,9 @@ const ProjectExperiences: React.FC = () => {
                     label="Ano final"
                     name="finalYear"
                     options={finalYearOptions(initialYear)}
+                    noOptionsMessage={props =>
+                      'Selecione primeiro o ano inicial'
+                    }
                     defaultValue={
                       editStored.id &&
                       Number(editStored?.finalYear) > initialYear

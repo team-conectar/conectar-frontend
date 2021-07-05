@@ -185,7 +185,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
-              showToast( "success" ,"Editado com sucesso!")
+              showToast('success', 'Editado com sucesso!')
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
@@ -199,7 +199,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
-              showToast( "success" ,"Cadastrado com sucesso!")
+              showToast('success', 'Cadastrado com sucesso!')
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
@@ -426,6 +426,9 @@ const ProfessionalExperiences: React.FC = () => {
                     label="Ano final"
                     name="finalYear"
                     options={finalYearOptions(Number(initialYear))}
+                    noOptionsMessage={props =>
+                      'Selecione primeiro o ano inicial'
+                    }
                     defaultValue={
                       editStored.id &&
                       Number(editStored?.finalYear > initialYear)
