@@ -111,10 +111,10 @@ const AcademicExperiences: React.FC = () => {
       try {
         const schema = Yup.object().shape({
           escolaridade: Yup.string().required('Informe a escolaridade'),
-          descricao: Yup.string()
-            .min(20, 'Descreva um pouco mais')
-            .max(500, 'Excedeu o limite de caractéres (500)')
-            .required('Informe a descrição'),
+          descricao: Yup.string().max(
+            500,
+            'Excedeu o limite de caractéres (500)',
+          ),
           data_fim: !isIncomplete
             ? Yup.string().required('Ano final é obrigatório')
             : Yup.string(),
