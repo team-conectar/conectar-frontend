@@ -38,7 +38,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
   name,
   defaultValue,
 }) => {
-  const [newTool, setNewTool] = useState<ToolType>()
+  const [newTool, setNewTool] = useState<ToolType>({ nome: '' })
   const [tools, setTools] = useState<ToolType[]>([])
   const [selectedTools, setSelectedTools] = useState<string[]>(
     defaultValue || [],
@@ -77,28 +77,8 @@ const SelectTool: React.FC<SelectToolProps> = ({
     },
     [selectedTools],
   )
-  const handleAddNewTool = useCallback(
-    async (tool: ToolType) => {
-      console.log(newTool)
-      if (!tools.includes(tool)) {
-        const res = await api
-          .post('/api/v1/habilidades', tool, {
-            withCredentials: true,
-          })
-          .then(() => {
-            newTool && setSelectedTools(selectedTools.concat([newTool.nome]))
-            setNewTool({ nome: '' })
-          })
-          .catch((err: AxiosError) => {
-            return err?.response?.data.detail
-          })
-        console.log(res)
-      }
-    },
-    [newTool, selectedTools, tools],
-  )
-  useEffect(() => {
-    api
+  const get_set_habilidades = useCallback(async () => {
+    await api
       .get('/api/v1/habilidades', {
         withCredentials: true,
       })
@@ -109,6 +89,35 @@ const SelectTool: React.FC<SelectToolProps> = ({
         // Returns error message from backend
         return err?.response?.data.detail
       })
+  }, [])
+  const handleAddNewTool = useCallback(
+    async (tool: ToolType) => {
+      console.log(newTool)
+      if (!tools.includes(tool)) {
+        const res = await api
+          .post('/api/v1/habilidades', tool, {
+            withCredentials: true,
+          })
+          .then(async () => {
+            await get_set_habilidades()
+            const inputCheck: HTMLInputElement = document.getElementById(
+              tool.nome,
+            ) as HTMLInputElement
+            inputCheck.checked = true
+            setSelectedTools(tools => tools.concat(tool.nome))
+            setNewTool({ nome: '' })
+          })
+          .catch((err: AxiosError) => {
+            return err?.response?.data.detail
+          })
+        console.log(res)
+      }
+    },
+    [get_set_habilidades, newTool, tools],
+  )
+
+  useEffect(() => {
+    get_set_habilidades()
   }, [newTool])
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -139,40 +148,42 @@ const SelectTool: React.FC<SelectToolProps> = ({
         <div className="area-selecao">
           <legend>Habilidades e Ferramentas</legend>
           <ul>
-            {tools
-              ?.filter(tool => {
-                if (tool.nome && newTool?.nome) {
-                  const name = newTool.nome.toLowerCase()
-                  const tool_name = tool.nome.toLowerCase()
-                  return tool_name.includes(name) ? tool : null
-                }
-                return tool
-              })
-              .map((tool, index) => (
-                <li key={tool.nome}>
-                  <label htmlFor={tool.nome}>
-                    <span>
-                      {selectedTools?.includes(tool.nome) && (
-                        <GoCheck size={20} />
-                      )}
-                    </span>
-                    <legend>{tool.nome}</legend>
-                    <GoPlus size={15} />
-                  </label>
-                  <input
-                    type="checkbox"
-                    id={tool.nome}
-                    value={tool.nome}
-                    defaultChecked={
-                      defaultValue ? selectedTools.includes(tool.nome) : false
-                    }
-                    ref={ref => {
-                      inputRefs.current[index] = ref as HTMLInputElement
-                    }}
-                    onChange={handleInputCheckChange}
-                  />
-                </li>
-              ))}
+            {tools.map((tool, index) => (
+              <li
+                key={tool.nome}
+                style={{
+                  display:
+                    newTool &&
+                    tool.nome
+                      .toLowerCase()
+                      .includes(newTool?.nome.toLowerCase())
+                      ? 'initial'
+                      : 'none',
+                }}
+              >
+                <label htmlFor={tool.nome}>
+                  <span>
+                    {selectedTools?.includes(tool.nome) && (
+                      <GoCheck size={20} />
+                    )}
+                  </span>
+                  <legend>{tool.nome}</legend>
+                  <GoPlus size={15} />
+                </label>
+                <input
+                  type="checkbox"
+                  id={tool.nome}
+                  value={tool.nome}
+                  defaultChecked={
+                    defaultValue ? selectedTools.includes(tool.nome) : false
+                  }
+                  ref={ref => {
+                    inputRefs.current[index] = ref as HTMLInputElement
+                  }}
+                  onChange={handleInputCheckChange}
+                />
+              </li>
+            ))}
           </ul>
           <fieldset className="area-insercao">
             <legend>
@@ -185,7 +196,7 @@ const SelectTool: React.FC<SelectToolProps> = ({
               onChange={handleInputChange}
             />
             <button
-              type="button"
+              type="reset"
               onClick={() => newTool && handleAddNewTool(newTool)}
             >
               <GoPlus size={15} />
