@@ -754,24 +754,24 @@ const Projects: React.FC = () => {
                 ))}
               </aside>
             </DivTags>
-            {vacancyDetail?.situacao === 'ACEITO' ||
-              (vacancyDetail?.situacao === 'FINALIZADO' && (
-                <DivParticipants>
-                  <legend>Participando dessa vaga:</legend>
-                  <aside>
-                    <ProfileLink
-                      key={vacancyDetail.pessoa?.usuario}
-                      to={`/perfil/${vacancyDetail.pessoa?.usuario}`}
-                    >
-                      <img
-                        src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
-                        alt={vacancyDetail.pessoa?.nome}
-                      />
-                      <h2>{vacancyDetail.pessoa?.nome?.split(' ')[0]}</h2>
-                    </ProfileLink>
-                  </aside>
-                </DivParticipants>
-              ))}
+            {(vacancyDetail?.situacao === 'ACEITO' ||
+              vacancyDetail?.situacao === 'FINALIZADO') && (
+              <DivParticipants>
+                <legend>Participando dessa vaga:</legend>
+                <aside>
+                  <ProfileLink
+                    key={vacancyDetail.pessoa?.usuario}
+                    to={`/perfil/${vacancyDetail.pessoa?.usuario}`}
+                  >
+                    <img
+                      src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
+                      alt={vacancyDetail.pessoa?.nome}
+                    />
+                    <h2>{vacancyDetail.pessoa?.nome?.split(' ')[0]}</h2>
+                  </ProfileLink>
+                </aside>
+              </DivParticipants>
+            )}
           </aside>
         </section>
       </DivVagas>
