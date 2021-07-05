@@ -9,7 +9,7 @@ import api from '../../services/api'
 import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { TypeSituationVacancy } from '../Vacancy'
-import Sweet from '../../utils/Sweet'
+import Alert from '../../utils/SweetAlert'
 export interface IVacancyCard {
   projeto_id: number
   pessoa_id: number
@@ -77,37 +77,31 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       isAvaliable: true,
     },
   }
-
   async function FindPeople() {
-      var teste = await Sweet({
-        title: "Deseja realmente efetuar uma nova busca?",
-        text: "O usuário não aparecerá mais para a preencher essa vaga",
-        icon: "warning",
-        textButton: "Nova busca"
-      });
-    if(teste)
+    const result = await Alert({
+      title: 'Deseja realmente efetuar uma nova busca?',
+      text: 'O usuário não aparecerá mais para a preencher essa vaga',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Nova busca',
+    })
+    if (result.isConfirmed)
       api
         .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
         .then(response => {
           setProfile(response.data)
-          Sweet({
-            deleted: true,
-            title: "Novo Usuário encontrado",
-            icon: "success",
-            textButton: "OK"
+          Alert({
+            title: 'Novo Usuário encontrado',
+            icon: 'success',
           })
         })
-
         .catch((err: AxiosError) => {
-          Sweet({
-            title: "Erro",
-            text: "Não foi possível efetuar a busca, tente novamente!",
-            icon: "error",
-            deleted: true,
-            textButton: "OK"
+          Alert({
+            title: 'Erro',
+            text: 'Não foi possível efetuar a busca, tente novamente!',
+            icon: 'error',
           })
           return err?.response?.data.detail
-          
         })
   }
 
