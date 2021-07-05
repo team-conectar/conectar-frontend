@@ -767,7 +767,7 @@ const Projects: React.FC = () => {
                       src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
                       alt={vacancyDetail.pessoa?.nome}
                     />
-                    <h2>{vacancyDetail.pessoa?.nome?.split(' ')[0]}</h2>
+                    <h2>{vacancyDetail.pessoa?.nome}</h2>
                   </ProfileLink>
                 </aside>
               </DivParticipants>
