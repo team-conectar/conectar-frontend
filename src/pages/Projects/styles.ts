@@ -46,7 +46,8 @@ export const DivParticipants = styled.div`
   aside {
     display: flex;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: flex-start;
     padding-left: 0.4rem;
     ${ProfileLink} {
       flex-direction: column;
