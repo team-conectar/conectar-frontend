@@ -1,29 +1,34 @@
-import Swal from "sweetalert2";
-import { GlobalStyle } from "../assets/style/global";
+import Swal, { SweetAlertCustomClass } from 'sweetalert2'
+import { GlobalStyle } from '../assets/style/global'
 
 interface SweetAlert {
-    title?: string,
-    text?: string,
-    icon?: "success" | "error" | "warning" | "info" | "question",
-    textButton?:string,
-    deleted?: boolean 
+  title?: string
+  text?: string
+  icon?: 'success' | 'error' | 'warning' | 'info' | 'question'
+  textButton?: string
+  deleted?: boolean
 }
 
-export default async function Sweet({title, text, icon, textButton, deleted}: SweetAlert){
-  if(deleted){
+export default async function Sweet({
+  title,
+  text,
+  icon,
+  textButton,
+  deleted,
+}: SweetAlert) {
+  if (deleted) {
     Swal.fire({
-      title:  title,
-      text:  text,
-      icon:  icon,
+      title: title,
+      text: text,
+      icon: icon,
       confirmButtonText: textButton,
       confirmButtonColor: `var(--gray)`,
       customClass: {
-        confirmButton: "confirmButtonSweet",
-      }
+        confirmButton: 'confirmButtonSweet',
+      },
     })
-    return true;
-  }
-  else{
+    return true
+  } else {
     return await Swal.fire({
       title: title,
       text: text,
@@ -31,16 +36,15 @@ export default async function Sweet({title, text, icon, textButton, deleted}: Sw
       showCancelButton: true,
       confirmButtonText: textButton,
       confirmButtonColor: `var(--green)`,
-      cancelButtonText: "Cancelar",
+      cancelButtonText: 'Cancelar',
       cancelButtonColor: `var(--gray)`,
       customClass: {
-        confirmButton: "confirmButtonSweet",
-        cancelButton: "cancelButtonSweet",
-      }
-    }).then((result) => {
-      console.log(result);
+        confirmButton: 'confirmButtonSweet',
+        cancelButton: 'cancelButtonSweet',
+      },
+    }).then(result => {
+      console.log(result)
       return result.isConfirmed
     })
   }
 }
-

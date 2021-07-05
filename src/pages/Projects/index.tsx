@@ -102,9 +102,6 @@ const Projects: React.FC = () => {
     loading && isAuthenticated,
   )
   const [projectOwner, setProjectOwner] = useState({} as IPeopleLink)
-  const [participantsDetail, setParticipantsDetail] = useState<IPeopleLink[]>(
-    [],
-  )
   const [project, setProject] = useState({} as ProjectType)
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
@@ -171,7 +168,7 @@ const Projects: React.FC = () => {
         })?.id || 0,
       )
     }
-  }, [user.id, project.id, project.projeto_reacoes])
+  }, [user.id, project.id, project.projeto_reacoes, isAuthenticated])
 
   function ToogleFavorite() {
     if (favoriteId) {
