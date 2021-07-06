@@ -212,7 +212,7 @@ const EditProfile: React.FC = () => {
   const [menuOptionSelected, setMenuOptionSelected] = useState<TypeMenuOptions>(
     'Informações básicas',
   )
-  const { user } = useContext(Context)
+  const { user, handleLogout } = useContext(Context)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const profile_id = Number(useParams<routeParms>().id)
   const OptionsMenu = [
@@ -337,6 +337,7 @@ const EditProfile: React.FC = () => {
             title: "Perfil Apagado com Sucesso",
             icon: "success",
           })
+          handleLogout()
           history.push("/")
         })
         .catch((err: AxiosError) => {

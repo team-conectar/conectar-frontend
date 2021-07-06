@@ -363,7 +363,6 @@ const Projects: React.FC = () => {
             title: "Projeto Apagado com Sucesso",
             icon: "success",
           })
-          handleLogout()
           history.push("/")
         })
         .catch((err: AxiosError) => {
