@@ -53,7 +53,6 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       .post(`/api/login?provider=facebook`, {
         email,
         nome: name,
-        foto_perfil,
       })
       .then(response => {
         checkProfileType()
