@@ -57,6 +57,10 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
       .then(response => {
         checkProfileType()
         handleLogin(true)
+        api.post('/api/refresh_token').then(async req => {
+          const accessToken = await req.data.access_token
+          api.defaults.headers.Authorization = `Bearer ${accessToken}`
+        })
         onSuccessLogin()
         console.log(response)
       })
@@ -138,7 +142,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         <FacebookLogin
           textButton=""
           appId="364709984736964"
-          autoLoad={false}
+          autoLoad={true}
           fields="name,email,picture"
           callback={responseFacebook}
           cssClass="facebook-button"
