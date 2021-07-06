@@ -46,16 +46,20 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
     const { email, name } = resposta
     const foto_perfil = resposta.picture?.data.url
+
+    console.log(resposta)
+
     const res = await api
       .post(`/api/login?provider=facebook`, {
         email,
         nome: name,
         foto_perfil,
       })
-      .then(() => {
+      .then(response => {
         checkProfileType()
         handleLogin(true)
         onSuccessLogin()
+        console.log(response)
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
