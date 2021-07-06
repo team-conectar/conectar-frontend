@@ -73,6 +73,14 @@ const SignUp: React.FC = () => {
               8,
               'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos',
             )
+            .matches(
+              /(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/g,
+              'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos',
+            )
+            .min(
+              8,
+              'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos',
+            )
             .required('Senha é obritória'),
           username: Yup.string()
             .min(4, 'Deve conter no mínimo 4 caracteres')
