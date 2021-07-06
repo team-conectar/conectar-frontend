@@ -64,24 +64,26 @@ export const Page = styled.div`
       grid-template-rows: auto auto;
       column-gap: 1rem;
       row-gap: 2rem;
-      > header {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: var(--backgroundElevation);
-        border-radius: 0.8rem;
-        padding: 2rem 0;
-      }
       > aside {
         grid-column: 1;
         grid-row: 2;
-        background: var(--backgroundElevation);
-        border-radius: 0.8rem;
-        height: min-content;
-        flex-direction: column;
+        > menu{
+          background: var(--backgroundElevation);
+          border-radius: 0.8rem;
+          height: min-content;
+          flex-direction: column;
+        }
         //box-shadow: var(--boxShadow);
+        > header {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border-radius: 0.8rem;
+          > Button{
+            margin-top: 1rem;
+          }
+        }
       }
       > div {
         grid-column: 2;

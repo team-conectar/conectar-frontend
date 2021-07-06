@@ -34,6 +34,7 @@ import ToastAnimated, { showToast } from '../../components/Toast/Toast'
 import { type } from 'os'
 import Dropzone from '../../components/UI/Dropzone'
 import { ProfileType } from '../Profiles'
+import Alert from '../../utils/SweetAlert'
 
 interface routeParms {
   id: string
@@ -320,6 +321,34 @@ const EditProfile: React.FC = () => {
     },
     [profile_id, updateProfile],
   )
+  async function deleteProfile(){
+    var delet = await Alert({
+      title: `Deseja realmente apagar o seu perfil?`,
+      text: "Todas as informações e registros serão perdidos",
+      showCancelButton: true,
+      confirmButtonText: "apagar",
+      icon: "warning",
+    })
+    if (delet.isConfirmed) {
+      const res = api
+        .delete(`/api/v1/pessoas`)
+        .then(async () => {
+          await Alert({
+            title: "Perfil Apagado com Sucesso",
+            icon: "success",
+          })
+          history.push("/")
+        })
+        .catch((err: AxiosError) => {
+          Alert({
+            title: `Erro: ${err.message}`,
+            text: 'Não foi possível apagar o perfil, tente novamente!',
+            icon: 'error',
+          })
+        })
+      console.log(res);
+    }
+  }
   useEffect(() => {
     updateProfile()
 
@@ -331,24 +360,33 @@ const EditProfile: React.FC = () => {
     <Page>
       <NavBar />
       <main>
-        <header>
-          <Button
-            theme="primary"
-            onClick={() => history.push(`/perfil/${profile.usuario}`)}
-          >
-            voltar ao perfil
-          </Button>
-        </header>
         <aside>
-          {OptionsMenu.map((description, index) => (
-            <ButtonList
-              isSelected={description === menuOptionSelected}
-              key={index}
-              onClick={() => setMenuOptionSelected(description)}
-            >
-              {description}
-            </ButtonList>
-          ))}
+          <menu>
+            {OptionsMenu.map((description, index) => (
+              <ButtonList
+                isSelected={description === menuOptionSelected}
+                key={index}
+                onClick={() => setMenuOptionSelected(description)}
+              >
+                {description}
+              </ButtonList>
+            ))}
+          </menu>
+          <header>
+              <Button
+                theme="error"
+                onClick={deleteProfile}
+                
+              >
+                excluir perfil
+              </Button>
+              <Button
+                theme="primary"
+                onClick={() => history.push(`/perfil/${profile.usuario}`)}
+              >
+                voltar ao perfil
+              </Button>
+            </header>
         </aside>
         <div>
           {(menuOptionSelected === 'Informações básicas' && (
@@ -422,6 +460,7 @@ const EditProfile: React.FC = () => {
             (menuOptionSelected === 'Habilidades e ferramentas' && (
               <FormTools profile={profile} updateProfile={updateProfile} />
             ))}
+            
         </div>
       </main>
     </Page>

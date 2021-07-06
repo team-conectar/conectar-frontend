@@ -86,7 +86,7 @@ interface IParmsProps {
   step?: string
 }
 const Projects: React.FC = () => {
-  const { loading, isAuthenticated, user } = useContext(Context)
+  const { loading, isAuthenticated, user, handleLogout } = useContext(Context)
   const projeto_id = useParams<IParmsProps>().id
   const { step } = useParams<IParmsProps>()
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
@@ -358,11 +358,12 @@ const Projects: React.FC = () => {
     if (delet.isConfirmed) {
       const res = api
         .delete(`/api/v1/projeto/${project.id}`)
-        .then(() => {
-          Alert({
+        .then(async () => {
+          await Alert({
             title: "Projeto Apagado com Sucesso",
             icon: "success",
           })
+          handleLogout()
           history.push("/")
         })
         .catch((err: AxiosError) => {
