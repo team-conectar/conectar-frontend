@@ -47,11 +47,13 @@ import { ButtonList } from '../Profiles/styles'
 import ContainerScroll from '../../components/UI/ContainerScroll'
 import VacancieListItem from '../../components/VacancieListItem'
 import Skeleton from 'react-loading-skeleton'
-import { IconEdit } from '../../assets/icon'
+import { IconEdit, IconTrash } from '../../assets/icon'
 import { ProfileLink } from '../../components/SuccessfulCreatorsCard/styles'
 import { showToast } from '../../components/Toast/Toast'
 import { IReaction } from '../../components/ProjectCard'
 import { BsFillStarFill } from 'react-icons/bs'
+import Alert from '../../utils/SweetAlert'
+import { icons } from 'react-icons'
 interface projeto_id {
   id: string
 }
@@ -130,7 +132,7 @@ const Projects: React.FC = () => {
             showToast(
               'error',
               err?.response?.data.detail ||
-                'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
             )
           }
           return err?.response?.data.detail
@@ -219,20 +221,20 @@ const Projects: React.FC = () => {
             : Yup.string(),
           img: modalContent.nome
             ? Yup.mixed()
-                .required('Insira a capa do projeto!')
-                .test(
-                  'tipo do arquivo',
-                  'Insira arquivos com a extensão .png ou .jpg',
-                  file => {
-                    let valid = true
-                    if (file) {
-                      if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                        valid = false
-                      }
+              .required('Insira a capa do projeto!')
+              .test(
+                'tipo do arquivo',
+                'Insira arquivos com a extensão .png ou .jpg',
+                file => {
+                  let valid = true
+                  if (file) {
+                    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                      valid = false
                     }
-                    return valid
-                  },
-                )
+                  }
+                  return valid
+                },
+              )
             : Yup.mixed(),
           descricao: modalContent.descricao
             ? Yup.string().required('Descrição é obrigatória')
@@ -242,13 +244,13 @@ const Projects: React.FC = () => {
             : Yup.string(),
           habilidades: modalContent.habilidades
             ? Yup.array()
-                .min(1, 'Seleciono pelo menos 1 item')
-                .max(5, 'Seleciono no máximo 5')
+              .min(1, 'Seleciono pelo menos 1 item')
+              .max(5, 'Seleciono no máximo 5')
             : Yup.array(),
           areas: modalContent.areas
             ? Yup.array()
-                .min(1, 'Seleciono pelo menos 1 item')
-                .max(5, 'Seleciono no máximo 5')
+              .min(1, 'Seleciono pelo menos 1 item')
+              .max(5, 'Seleciono no máximo 5')
             : Yup.array(),
         })
         await schema.validate(formData, {
@@ -344,6 +346,35 @@ const Projects: React.FC = () => {
       })
     console.log(res)
   }, [project.pessoa_id, openModal])
+
+  async function deleteProject() {
+    var delet = await Alert({
+      title: `Deseja realmente apagar o projeto ${project.nome}?`,
+      text: "Todas as informações e registros do projeto serão perdidos",
+      showCancelButton: true,
+      confirmButtonText: "apagar",
+      icon: "warning",
+    })
+    if (delet.isConfirmed) {
+      const res = api
+        .delete(`/api/v1/projeto/${project.id}`)
+        .then(() => {
+          Alert({
+            title: "Projeto Apagado com Sucesso",
+            icon: "success",
+          })
+          history.push("/")
+        })
+        .catch((err: AxiosError) => {
+          Alert({
+            title: `Erro: ${err.message}`,
+            text: 'Não foi possível apagar o projeto, tente novamente!',
+            icon: 'error',
+          })
+        })
+      console.log(res);
+    }
+  }
 
   function buttonMatchContent(option?: TypeSituationVacancy) {
     switch (option) {
@@ -469,12 +500,18 @@ const Projects: React.FC = () => {
           <Skeleton height={180} />
         )}
         {isOwner() ? (
-          <IconEdit
-            onClick={() => {
-              setModalContent({ ...initialModalContent, nome: true })
-              setOpenModal(true)
-            }}
-          />
+          <aside>
+            <IconEdit
+              onClick={() => {
+                setModalContent({ ...initialModalContent, nome: true })
+                setOpenModal(true)
+              }}
+            />
+            <IconTrash
+              onClick={deleteProject}
+            />
+          </aside>
+
         ) : (
           <ProfileLink to={`/perfil/${projectOwner?.usuario}`}>
             <img
@@ -491,6 +528,7 @@ const Projects: React.FC = () => {
             </aside>
           </ProfileLink>
         )}
+
         <div>
           <section>
             <h1>{project.nome || <Skeleton width="200px" />} </h1>
@@ -524,13 +562,12 @@ const Projects: React.FC = () => {
               {
                 <p>
                   Publicado em:{' '}
-                  {`${
-                    project.data_criacao?.split('T')[0]?.split('-')[2] +
+                  {`${project.data_criacao?.split('T')[0]?.split('-')[2] +
                     '/' +
                     project.data_criacao?.split('T')[0]?.split('-')[1] +
                     '/' +
                     project.data_criacao?.split('T')[0]?.split('-')[0]
-                  }`}
+                    }`}
                 </p>
               }
             </a>
@@ -756,22 +793,22 @@ const Projects: React.FC = () => {
             </DivTags>
             {(vacancyDetail?.situacao === 'ACEITO' ||
               vacancyDetail?.situacao === 'FINALIZADO') && (
-              <DivParticipants>
-                <legend>Participando dessa vaga:</legend>
-                <aside>
-                  <ProfileLink
-                    key={vacancyDetail.pessoa?.usuario}
-                    to={`/perfil/${vacancyDetail.pessoa?.usuario}`}
-                  >
-                    <img
-                      src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
-                      alt={vacancyDetail.pessoa?.nome}
-                    />
-                    <h2>{vacancyDetail.pessoa?.nome}</h2>
-                  </ProfileLink>
-                </aside>
-              </DivParticipants>
-            )}
+                <DivParticipants>
+                  <legend>Participando dessa vaga:</legend>
+                  <aside>
+                    <ProfileLink
+                      key={vacancyDetail.pessoa?.usuario}
+                      to={`/perfil/${vacancyDetail.pessoa?.usuario}`}
+                    >
+                      <img
+                        src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
+                        alt={vacancyDetail.pessoa?.nome}
+                      />
+                      <h2>{vacancyDetail.pessoa?.nome}</h2>
+                    </ProfileLink>
+                  </aside>
+                </DivParticipants>
+              )}
           </aside>
         </section>
       </DivVagas>
