@@ -6,7 +6,7 @@ import Input from '../../components/UI/Input'
 import Select from '../../components/UI/Select'
 import ToggleSwitch from '../../components/UI/ToggleSwitch'
 import InputMask from '../../components/UI/InputMask'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import Button from '../../components/UI/Button'
 import { ReactFacebookLoginInfo } from 'react-facebook-login'
 import FacebookLogin from 'react-facebook-login'
@@ -46,16 +46,15 @@ interface PessoaType {
 }
 const SignUp: React.FC = () => {
   const history = useHistory()
-  const { handleLogin } = useContext(Context)
+  const { handleLogin, isAuthenticated } = useContext(Context)
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
   const [yearInitial, setInitialYear] = useState(2001)
   const [monthInitial, setInitialMonth] = useState(2)
   const [dayInitial, setInitialDay] = useState<any>()
   const [showNextStep, setShowNextStep] = useState<boolean>(
-    params.parte === '2',
+    params.parte === '2' && isAuthenticated,
   )
-
   const handleSubmit = useCallback(
     async (formData: PessoaType) => {
       try {
@@ -66,8 +65,14 @@ const SignUp: React.FC = () => {
             .email('Não corresponde ao formato exemple@ex.com')
             .required('Email é obrigatório'),
           password: Yup.string()
-            .matches(/(?=.*[!@#$%^&*].*[A-Z].*[0-9].*[a-z])/g, 'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos')
-            .min(8, 'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos')
+            .matches(
+              /(?=.*[!@#$%^&*].*[A-Z].*[0-9].*[a-z])/g,
+              'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos',
+            )
+            .min(
+              8,
+              'Deve conter no mínimo 8 caracteres, letras maiúsculas e minúsculas números e símbolos',
+            )
             .required('Senha é obritória'),
           username: Yup.string()
             .min(4, 'Deve conter no mínimo 4 caracteres')
@@ -165,8 +170,21 @@ const SignUp: React.FC = () => {
     [history],
   )
 
-  useEffect(()=>{
-    const finalDay = [31, yearInitial%4 == 0 ? 29: 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  useEffect(() => {
+    const finalDay = [
+      31,
+      yearInitial % 4 === 0 ? 29 : 28,
+      31,
+      30,
+      31,
+      30,
+      31,
+      31,
+      30,
+      31,
+      30,
+      31,
+    ]
 
     const days = [
       {
@@ -174,7 +192,7 @@ const SignUp: React.FC = () => {
         value: 1,
       },
     ]
-    for (let index = 2; index <= finalDay[monthInitial-1]; index++) {
+    for (let index = 2; index <= finalDay[monthInitial - 1]; index++) {
       days.push({
         value: index,
         label: index < 10 ? `0${index}` : `${index}`,

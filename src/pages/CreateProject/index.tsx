@@ -16,13 +16,13 @@ import SelectTool, { ToolType } from '../../components/UI/SelectTools'
 import Dropzone from '../../components/UI/Dropzone'
 import Modal from '../../components/UI/Modal'
 import api from '../../services/api'
-import { Context } from '../../context/AuthContext'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import Vacancy from '../../components/Vacancy'
 import Alert from '../../utils/SweetAlert'
+import { Context } from '../../context/AuthContext'
 
 export interface ProjectType {
   descricao: string
@@ -292,6 +292,7 @@ const Forms: React.FC = () => {
 }
 const CreateProject: React.FC = () => {
   const [shownStep, setShownStep] = useState<1 | 2 | 3>(1)
+  const { isAuthenticated } = useContext(Context)
   const [firstData, setfirstData] = useState<FirstFormData>({
     areas: localStorage.getItem('project_create_areas')?.split(',') || [],
     nome: localStorage.getItem('project_create_nome') || '',
@@ -299,9 +300,10 @@ const CreateProject: React.FC = () => {
     descricao: localStorage.getItem('project_create_descricao') || '',
   })
   useEffect(() => {
-    if (localStorage.length > 0) {
+    if (localStorage.length > 0 && isAuthenticated) {
       const projectName = localStorage.getItem('project_create_nome')
       Alert({
+        icon: 'question',
         title: projectName
           ? `Você inciou a criação do projeto ${projectName}, deseja continuar?`
           : 'Você inciou a criação de um projeto, deseja continuar?',
@@ -309,12 +311,15 @@ const CreateProject: React.FC = () => {
         showDenyButton: true,
       }).then(result => {
         if (result.isDenied) {
-          localStorage.clear()
+          Object.entries(firstData).forEach(item => {
+            const [name] = item
+            localStorage.removeItem('project_create_' + name)
+          })
           setfirstData({} as FirstFormData)
         }
       })
     }
-  }, [])
+  }, [isAuthenticated])
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
   return (
     <ContextCreateProjectPage.Provider

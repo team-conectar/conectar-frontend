@@ -38,7 +38,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
     const { aliado, colaborador, idealizador } = (
       await api.get('/api/v1/pessoas/me')
     ).data
-    if (!aliado || !colaborador || !idealizador) {
+    if (!aliado && !colaborador && !idealizador) {
       history.push('/cadastrar/2')
     }
   }
@@ -121,7 +121,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         }
       }
     },
-    [onSuccessLogin],
+    [handleLogin, onSuccessLogin],
   )
 
   return (
