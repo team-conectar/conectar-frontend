@@ -80,9 +80,10 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   async function FindPeople() {
     const result = await Alert({
       title: 'Deseja realmente efetuar uma nova busca?',
-      text: 'O usuário não aparecerá mais para a preencher essa vaga',
+      text: 'O usuário não aparecerá mais para preencher essa vaga',
       icon: 'warning',
       showCancelButton: true,
+      showDenyButton: true,
       confirmButtonText: 'Nova busca',
     })
     if (result.isConfirmed)
@@ -97,7 +98,7 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         })
         .catch((err: AxiosError) => {
           Alert({
-            title: 'Erro',
+            title: `Erro: ${err.message}`,
             text: 'Não foi possível efetuar a busca, tente novamente!',
             icon: 'error',
           })
