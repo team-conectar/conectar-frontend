@@ -4,6 +4,7 @@ import React, {
   useRef,
   useCallback,
   createContext,
+  useEffect,
 } from 'react'
 import { BodyCreateProject } from './styles'
 import Button from '../../components/UI/Button'
@@ -21,6 +22,7 @@ import { FormHandles } from '@unform/core'
 import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import Vacancy from '../../components/Vacancy'
+import Alert from '../../utils/SweetAlert'
 
 export interface ProjectType {
   descricao: string
@@ -57,6 +59,11 @@ const FirstForm: React.FC = () => {
   const { setShownStep, firstData, setfirstData } = useContext(
     ContextCreateProjectPage,
   )
+  useEffect(() => {
+    if (Object.entries(firstData).length === 0) {
+      formRef.current?.reset()
+    }
+  }, [firstData])
   const handleSubmit = useCallback(
     async (formData: FirstFormData) => {
       try {
@@ -291,6 +298,23 @@ const CreateProject: React.FC = () => {
     objetivo: localStorage.getItem('project_create_objetivo') || '',
     descricao: localStorage.getItem('project_create_descricao') || '',
   })
+  useEffect(() => {
+    if (localStorage.length > 0) {
+      const projectName = localStorage.getItem('project_create_nome')
+      Alert({
+        title: projectName
+          ? `Você inciou a criação do projeto ${projectName}, deseja continuar?`
+          : 'Você inciou a criação de um projeto, deseja continuar?',
+        confirmButtonText: 'Sim',
+        showDenyButton: true,
+      }).then(result => {
+        if (result.isDenied) {
+          localStorage.clear()
+          setfirstData({} as FirstFormData)
+        }
+      })
+    }
+  }, [])
   const [project, setProject] = useState<ProjectType>({} as ProjectType)
   return (
     <ContextCreateProjectPage.Provider

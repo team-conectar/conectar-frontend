@@ -20,6 +20,7 @@ export default async function Alert({
     confirmButtonColor: `var(--green)`,
     cancelButtonColor: `var(--gray)`,
     cancelButtonText: 'Cancelar',
+    denyButtonText: 'Não',
     customClass: {
       confirmButton: 'confirmButtonSweet',
       cancelButton: 'cancelButtonSweet',
