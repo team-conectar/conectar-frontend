@@ -358,8 +358,8 @@ const Projects: React.FC = () => {
     if (delet.isConfirmed) {
       const res = api
         .delete(`/api/v1/projeto/${project.id}`)
-        .then(() => {
-          Alert({
+        .then(async () => {
+          await Alert({
             title: "Projeto Apagado com Sucesso",
             icon: "success",
           })
