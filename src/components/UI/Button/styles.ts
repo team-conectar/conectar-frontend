@@ -23,24 +23,16 @@ export const BodyButton = styled.button<PropsBodyButton>`
     height: 1rem;
   }
   ${props =>
-    props.theme === 'yellow' &&
+    props.theme === 'error' &&
     css`
-      background: var(--yellow);
+      color: white;
+      background: var(--red);
 
       :hover {
-        background: var(--yellow-dark);
+        background: var(--red-dark);
       }
     `}
-  ${props =>
-    props.theme === 'yellowG' &&
-    css`
-      border: 2px solid var(--yellow);
-      color: var(--yellow);
-      background: transparent;
-      :hover {
-        border: 2px solid var(--yellow-dark);
-      }
-    `}
+  
   ${props =>
     props.theme === 'primary' &&
     css`
