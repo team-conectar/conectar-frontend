@@ -83,13 +83,24 @@ textarea {
   font-weight: 600;
   border-radius: 2rem!important;
   text-transform: uppercase;
-  margin-right: 0.6rem;
   padding: 0.6rem 2rem;
   height: 2.2rem;
 }
 
 .cancelButtonSweet {
   border-radius: 2rem!important;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 2rem;
+  height: 2.2rem;
+}
+
+.denyButtonSweet {
+  border-radius: 2rem!important;
+  text-transform: uppercase;
   font-weight: 600;
   display: flex;
   align-items: center;

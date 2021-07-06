@@ -19,11 +19,13 @@ export default async function Alert({
     ...rest,
     confirmButtonColor: `var(--green)`,
     cancelButtonColor: `var(--gray)`,
-    cancelButtonText: 'Cancelar',
-    denyButtonText: 'Não',
+    denyButtonColor: `var(--red)`,
+    cancelButtonText: `${rest.cancelButtonText? rest.cancelButtonText: "Cancelar"}`,
+    denyButtonText: `${rest.denyButtonText? rest.denyButtonText: "Não"}`,
     customClass: {
       confirmButton: 'confirmButtonSweet',
       cancelButton: 'cancelButtonSweet',
+      denyButton: 'denyButtonSweet',
     },
   })
     .then(result => {
