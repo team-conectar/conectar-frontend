@@ -237,7 +237,7 @@ const EditProfile: React.FC = () => {
         return err?.response?.data.detail
       })
     console.log(res)
-  }, [profile_id])
+  }, [profile?.usuario, profile_id])
   const handleSubmit = useCallback(
     async (formData: IFormDataBasicInformations) => {
       console.log(formData)
@@ -321,24 +321,24 @@ const EditProfile: React.FC = () => {
     },
     [profile_id, updateProfile],
   )
-  async function deleteProfile(){
-    var delet = await Alert({
+  async function deleteProfile() {
+    const delet = await Alert({
       title: `Deseja realmente apagar o seu perfil?`,
-      text: "Todas as informações e registros serão perdidos",
+      text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
-      confirmButtonText: "apagar",
-      icon: "warning",
+      confirmButtonText: 'apagar',
+      icon: 'warning',
     })
     if (delet.isConfirmed) {
       const res = api
         .delete(`/api/v1/pessoas`)
         .then(async () => {
           await Alert({
-            title: "Perfil Apagado com Sucesso",
-            icon: "success",
+            title: 'Perfil Apagado com Sucesso',
+            icon: 'success',
           })
           handleLogout()
-          history.push("/")
+          history.push('/')
         })
         .catch((err: AxiosError) => {
           Alert({
@@ -347,7 +347,7 @@ const EditProfile: React.FC = () => {
             icon: 'error',
           })
         })
-      console.log(res);
+      console.log(res)
     }
   }
   useEffect(() => {
@@ -374,20 +374,16 @@ const EditProfile: React.FC = () => {
             ))}
           </menu>
           <header>
-              <Button
-                theme="error"
-                onClick={deleteProfile}
-                
-              >
-                excluir perfil
-              </Button>
-              <Button
-                theme="primary"
-                onClick={() => history.push(`/perfil/${profile.usuario}`)}
-              >
-                voltar ao perfil
-              </Button>
-            </header>
+            <Button theme="error" onClick={deleteProfile}>
+              excluir perfil
+            </Button>
+            <Button
+              theme="primary"
+              onClick={() => history.push(`/perfil/${profile.usuario}`)}
+            >
+              voltar ao perfil
+            </Button>
+          </header>
         </aside>
         <div>
           {(menuOptionSelected === 'Informações básicas' && (
@@ -461,7 +457,6 @@ const EditProfile: React.FC = () => {
             (menuOptionSelected === 'Habilidades e ferramentas' && (
               <FormTools profile={profile} updateProfile={updateProfile} />
             ))}
-            
         </div>
       </main>
     </Page>

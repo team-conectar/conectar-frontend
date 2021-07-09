@@ -26,6 +26,8 @@ import { useContext, useEffect } from 'react'
 
 import { Context } from '../../context/AuthContext'
 import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
+import Alert from '../../utils/SweetAlert'
+import { OptionTypeBase } from 'react-select'
 
 interface routeParms {
   parte: string
@@ -49,69 +51,75 @@ const SignUp: React.FC = () => {
   const { handleLogin, isAuthenticated } = useContext(Context)
   const params = useParams<routeParms>()
   const formRef = useRef<FormHandles>(null)
-  const [yearInitial, setInitialYear] = useState(2001)
-  const [monthInitial, setInitialMonth] = useState(2)
-  const [dayInitial, setInitialDay] = useState<any>()
+
+  const [daysOption, setDaysOption] = useState<OptionTypeBase[]>([])
+  const defaultFormData: PessoaType = {
+    nome: '',
+    email: '',
+    aliado: 'false',
+    colaborador: 'false',
+    idealizador: 'false',
+    day: '',
+    year: '2001',
+    month: '3',
+    password: '',
+    telefone: '',
+    username: '',
+    profileType: [],
+  }
+  const [firstFormData, setFirstData] = useState<PessoaType>(defaultFormData)
   const [showNextStep, setShowNextStep] = useState<boolean>(
-    params.parte === '2' && isAuthenticated,
+    params.parte === '2' && (isAuthenticated || firstFormData !== undefined),
   )
-  const handleSubmit = useCallback(
-    async (formData: PessoaType) => {
-      try {
-        // Remove all previous errors
-        formRef.current?.setErrors({})
-        const schema = Yup.object().shape({
-          email: Yup.string()
-            .email('Não corresponde ao formato exemple@ex.com')
-            .required('Email é obrigatório'),
-          password: Yup.string()
-            .matches(
-              /(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/g,
-              'Deve conter letras maiúsculas e minúsculas números e símbolos',
-            )
-            .min(8, 'Deve conter no mínimo 8 caracteres')
-            .required('Senha é obritória'),
-          username: Yup.string()
-            .min(4, 'Deve conter no mínimo 4 caracteres')
-            .max(20, 'Deve conter no máximo 20 caracteres')
-            .required('Usuário é obrigatório'),
-          nome: Yup.string()
-            .max(80)
-            .matches(/(?=.*[ ])/g, 'Informe o nome completo')
-            .matches(
-              /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
-              'Informe um nome válido',
-            )
-            .required('Usuário é obrigatório'),
-        })
+  const handleSubmit = useCallback(async (formData: PessoaType) => {
+    try {
+      // Remove all previous errors
+      formRef.current?.setErrors({})
+      const schema = Yup.object().shape({
+        email: Yup.string()
+          .email('Não corresponde ao formato exemple@ex.com')
+          .required('Email é obrigatório'),
+        password: Yup.string()
+          .matches(
+            /(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/g,
+            'Deve conter letras maiúsculas e minúsculas números e símbolos',
+          )
+          .min(8, 'Deve conter no mínimo 8 caracteres')
+          .required('Senha é obritória'),
+        username: Yup.string()
+          .min(4, 'Deve conter no mínimo 4 caracteres')
+          .max(20, 'Deve conter no máximo 20 caracteres')
+          .required('Usuário é obrigatório'),
+        nome: Yup.string()
+          .max(80)
+          .matches(/(?=.*[ ])/g, 'Informe o nome completo')
+          .matches(
+            /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
+            'Informe um nome válido',
+          )
+          .required('Usuário é obrigatório'),
+      })
 
-        await schema.validate(formData, {
-          abortEarly: false,
-        })
-        // Validation passed
-        const data = new FormData()
+      await schema.validate(formData, {
+        abortEarly: false,
+      })
+      // Validation passed
+      setFirstData(formData)
 
-        data.append('email', formData.email)
-        data.append('nome', formData.nome)
-        data.append('username', formData.username)
-        data.append('password', formData.password)
-        await api.post('/api/signup', data)
-        setShowNextStep(true)
-        handleLogin(true)
-      } catch (err) {
-        if (err instanceof Yup.ValidationError) {
-          // Validation failed
-          const errors = getValidationErrors(err)
-          formRef.current?.setErrors(errors)
-          // alert(errors);
-        }
+      setShowNextStep(true)
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        // Validation failed
+        const errors = getValidationErrors(err)
+        formRef.current?.setErrors(errors)
+        // alert(errors);
       }
-    },
-    [handleLogin],
-  )
+    }
+  }, [])
   const handleSecondSubmit = useCallback(
     async (formData: PessoaType) => {
       console.log(formData)
+      console.log(JSON.stringify(formData.profileType.includes('aliado')))
 
       try {
         // Remove all previogeus errors
@@ -133,27 +141,35 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
-        const { year, month, day, telefone } = formData
+        if (firstFormData) {
+          const aliado = formData.profileType.includes('aliado')
+          const colaborador = formData.profileType.includes('colaborador')
+          const idealizador = formData.profileType.includes('idealizador')
+          const { year, month, day } = formData
+          const data = new FormData()
+          data.append('email', firstFormData.email)
+          data.append('nome', firstFormData.nome)
+          data.append('username', firstFormData.username)
+          data.append('password', firstFormData.password)
+          data.append('telefone', formData.telefone)
+          data.append('data_nascimento', `${year}-${month}-${day}`)
 
-        const data_nascimento = `${year}-${month}-${day}`
+          await api.post('/api/signup', data).then(async res => {
+            await api.put('/api/v1/pessoas', {
+              aliado,
+              colaborador,
+              idealizador,
+            })
+          })
 
-        const aliado = formData.profileType.includes('aliado')
-        const colaborador = formData.profileType.includes('colaborador')
-        const idealizador = formData.profileType.includes('idealizador')
-
-        const data = {
-          data_nascimento,
-          aliado,
-          colaborador,
-          idealizador,
-          telefone,
+          handleLogin(true)
+          history.push('/experiencias-do-usuario')
+        } else {
+          Alert({
+            icon: 'error',
+            title: 'Não consegui encontrar a primeiras informações',
+          })
         }
-        console.log(data)
-
-        await api.put('/api/v1/pessoas', data, {
-          withCredentials: true,
-        })
-        history.push('/experiencias-do-usuario')
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
@@ -164,13 +180,13 @@ const SignUp: React.FC = () => {
         }
       }
     },
-    [history],
+    [firstFormData, handleLogin, history],
   )
 
   useEffect(() => {
     const finalDay = [
       31,
-      yearInitial % 4 === 0 ? 29 : 28,
+      Number(firstFormData.year) % 4 === 0 ? 29 : 28,
       31,
       30,
       31,
@@ -189,14 +205,18 @@ const SignUp: React.FC = () => {
         value: 1,
       },
     ]
-    for (let index = 2; index <= finalDay[monthInitial - 1]; index++) {
+    for (
+      let index = 2;
+      index <= finalDay[Number(firstFormData.month) - 1];
+      index++
+    ) {
       days.push({
         value: index,
         label: index < 10 ? `0${index}` : `${index}`,
       })
     }
-    setInitialDay(days)
-  }, [yearInitial, monthInitial])
+    setDaysOption(days)
+  }, [firstFormData.month, firstFormData.year])
 
   /** This function checks if the profile is idealizer, collaborator or ally then advances to the next form and set name and email in formData */
   async function checkProfileType() {
@@ -253,11 +273,28 @@ const SignUp: React.FC = () => {
 
             <div className="area-form">
               <h1>Criar sua conta</h1>
-              <Input name="nome" label="Nome Completo" />
-              <Input name="email" label="E-mail" />
+              <Input
+                name="nome"
+                label="Nome Completo"
+                defaultValue={firstFormData?.nome}
+              />
+              <Input
+                name="email"
+                label="E-mail"
+                defaultValue={firstFormData?.email}
+              />
               <section>
-                <Input name="username" label="Nome de usuário" />
-                <Input type="password" name="password" label="Senha" />
+                <Input
+                  name="username"
+                  label="Nome de usuário"
+                  defaultValue={firstFormData?.username}
+                />
+                <Input
+                  type="password"
+                  name="password"
+                  label="Senha"
+                  defaultValue={firstFormData?.password}
+                />
               </section>
               <p>
                 Ao prosseguir, você concorda com os{' '}
@@ -321,29 +358,37 @@ const SignUp: React.FC = () => {
                 mask="(99) 99999-9999 "
               />
               <Select
-                label="Ano de Nascimento"
-                name="year"
-                defaultOption="Ano"
-                options={yearOptions}
-                onChange={(option: any) => {
-                  setInitialYear(Number(option.value))
+                label="Dia de Nascimento"
+                name="day"
+                options={daysOption}
+                onChange={(option: OptionTypeBase) => {
+                  setFirstData({
+                    ...firstFormData,
+                    day: option?.value,
+                  })
                 }}
               />
               <Select
                 label="Mês de Nascimento"
                 name="month"
-                defaultOption="Mês"
                 options={monthOptions}
-                onChange={(option: any) => {
-                  setInitialMonth(Number(option.value))
+                onChange={(option: OptionTypeBase) => {
+                  setFirstData({
+                    ...firstFormData,
+                    month: option?.value,
+                  })
                 }}
               />
-
               <Select
-                label="Dia de Nascimento"
-                name="day"
-                defaultOption="Dia"
-                options={dayInitial}
+                label="Ano de Nascimento"
+                name="year"
+                options={yearOptions}
+                onChange={(option: OptionTypeBase) => {
+                  setFirstData({
+                    ...firstFormData,
+                    year: option?.value,
+                  })
+                }}
               />
             </section>
             <ProfileTypeToogleSwitch
@@ -373,9 +418,9 @@ const SignUp: React.FC = () => {
               <Button
                 theme="secondary"
                 type="submit"
-                onClick={() => history.push('/experiencias-do-usuario')}
+                onClick={() => setShowNextStep(false)}
               >
-                Pular
+                Voltar
               </Button>
               <Button theme="primary" type="submit">
                 Continuar
