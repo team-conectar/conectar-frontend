@@ -90,6 +90,7 @@ textarea {
 
 .cancelButtonSweet {
   border-radius: 2rem!important;
+  box-shadow: none!important;
   text-transform: uppercase;
   font-weight: 600;
   display: flex;
@@ -101,6 +102,7 @@ textarea {
 
 .denyButtonSweet {
   border-radius: 2rem!important;
+  box-shadow: none!important;
   text-transform: uppercase;
   font-weight: 600;
   display: flex;
