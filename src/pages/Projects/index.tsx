@@ -132,7 +132,7 @@ const Projects: React.FC = () => {
             showToast(
               'error',
               err?.response?.data.detail ||
-              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+                'Ocorreu um erro inesperado. Tente novamente mais tarde.',
             )
           }
           return err?.response?.data.detail
@@ -221,20 +221,20 @@ const Projects: React.FC = () => {
             : Yup.string(),
           img: modalContent.nome
             ? Yup.mixed()
-              .required('Insira a capa do projeto!')
-              .test(
-                'tipo do arquivo',
-                'Insira arquivos com a extensão .png ou .jpg',
-                file => {
-                  let valid = true
-                  if (file) {
-                    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-                      valid = false
+                .required('Insira a capa do projeto!')
+                .test(
+                  'tipo do arquivo',
+                  'Insira arquivos com a extensão .png ou .jpg',
+                  file => {
+                    let valid = true
+                    if (file) {
+                      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                        valid = false
+                      }
                     }
-                  }
-                  return valid
-                },
-              )
+                    return valid
+                  },
+                )
             : Yup.mixed(),
           descricao: modalContent.descricao
             ? Yup.string().required('Descrição é obrigatória')
@@ -244,13 +244,13 @@ const Projects: React.FC = () => {
             : Yup.string(),
           habilidades: modalContent.habilidades
             ? Yup.array()
-              .min(1, 'Seleciono pelo menos 1 item')
-              .max(5, 'Seleciono no máximo 5')
+                .min(1, 'Seleciono pelo menos 1 item')
+                .max(5, 'Seleciono no máximo 5')
             : Yup.array(),
           areas: modalContent.areas
             ? Yup.array()
-              .min(1, 'Seleciono pelo menos 1 item')
-              .max(5, 'Seleciono no máximo 5')
+                .min(1, 'Seleciono pelo menos 1 item')
+                .max(5, 'Seleciono no máximo 5')
             : Yup.array(),
         })
         await schema.validate(formData, {
@@ -348,22 +348,22 @@ const Projects: React.FC = () => {
   }, [project.pessoa_id, openModal])
 
   async function deleteProject() {
-    var delet = await Alert({
+    const delet = await Alert({
       title: `Deseja realmente apagar o projeto ${project.nome}?`,
-      text: "Todas as informações e registros do projeto serão perdidos",
+      text: 'Todas as informações e registros do projeto serão perdidos',
       showCancelButton: true,
-      confirmButtonText: "apagar",
-      icon: "warning",
+      confirmButtonText: 'apagar',
+      icon: 'warning',
     })
     if (delet.isConfirmed) {
       const res = api
         .delete(`/api/v1/projeto/${project.id}`)
         .then(async () => {
           await Alert({
-            title: "Projeto Apagado com Sucesso",
-            icon: "success",
+            title: 'Projeto Apagado com Sucesso',
+            icon: 'success',
           })
-          history.push("/")
+          history.push('/')
         })
         .catch((err: AxiosError) => {
           Alert({
@@ -372,7 +372,7 @@ const Projects: React.FC = () => {
             icon: 'error',
           })
         })
-      console.log(res);
+      console.log(res)
     }
   }
 
@@ -507,11 +507,8 @@ const Projects: React.FC = () => {
                 setOpenModal(true)
               }}
             />
-            <IconTrash
-              onClick={deleteProject}
-            />
+            <IconTrash onClick={deleteProject} />
           </aside>
-
         ) : (
           <ProfileLink to={`/perfil/${projectOwner?.usuario}`}>
             <img
@@ -562,12 +559,13 @@ const Projects: React.FC = () => {
               {
                 <p>
                   Publicado em:{' '}
-                  {`${project.data_criacao?.split('T')[0]?.split('-')[2] +
+                  {`${
+                    project.data_criacao?.split('T')[0]?.split('-')[2] +
                     '/' +
                     project.data_criacao?.split('T')[0]?.split('-')[1] +
                     '/' +
                     project.data_criacao?.split('T')[0]?.split('-')[0]
-                    }`}
+                  }`}
                 </p>
               }
             </a>
@@ -721,9 +719,16 @@ const Projects: React.FC = () => {
             {isOwner() && (
               <FiPlusCircle
                 onClick={() => {
-                  setModalContent({ ...initialModalContent, vaga: true })
-                  vacancyComponentRef.current?.setShowRegister(true)
-                  setOpenModal(true)
+                  if (vacancies.length >= 5) {
+                    showToast(
+                      'error',
+                      'Não é possível adicionar mais que 5 vagas',
+                    )
+                  } else {
+                    setModalContent({ ...initialModalContent, vaga: true })
+                    vacancyComponentRef.current?.setShowRegister(true)
+                    setOpenModal(true)
+                  }
                 }}
               />
             )}
@@ -793,22 +798,22 @@ const Projects: React.FC = () => {
             </DivTags>
             {(vacancyDetail?.situacao === 'ACEITO' ||
               vacancyDetail?.situacao === 'FINALIZADO') && (
-                <DivParticipants>
-                  <legend>Participando dessa vaga:</legend>
-                  <aside>
-                    <ProfileLink
-                      key={vacancyDetail.pessoa?.usuario}
-                      to={`/perfil/${vacancyDetail.pessoa?.usuario}`}
-                    >
-                      <img
-                        src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
-                        alt={vacancyDetail.pessoa?.nome}
-                      />
-                      <h2>{vacancyDetail.pessoa?.nome}</h2>
-                    </ProfileLink>
-                  </aside>
-                </DivParticipants>
-              )}
+              <DivParticipants>
+                <legend>Participando dessa vaga:</legend>
+                <aside>
+                  <ProfileLink
+                    key={vacancyDetail.pessoa?.usuario}
+                    to={`/perfil/${vacancyDetail.pessoa?.usuario}`}
+                  >
+                    <img
+                      src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${vacancyDetail.pessoa?.foto_perfil}`}
+                      alt={vacancyDetail.pessoa?.nome}
+                    />
+                    <h2>{vacancyDetail.pessoa?.nome}</h2>
+                  </ProfileLink>
+                </aside>
+              </DivParticipants>
+            )}
           </aside>
         </section>
       </DivVagas>

@@ -246,19 +246,27 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     },
     [project.id],
   )
+
+  console.log(vacancies.length)
   const handleSubmit = useCallback(
     async (formData: IFormData) => {
       console.log(formData)
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
+        console.log(vacancies.length)
+
         const schema = Yup.object().shape({
           cargo: Yup.string().required('Cargo é obrigatório'),
           perfil: Yup.string().required('Perfil é obrigatório'),
           quantidade: !editVacancy?.id
-            ? Yup.number()
+            ? Yup.string()
                 .required('Quantidade é obrigatório')
                 .min(1, 'Deve conter no mínimo uma vaga')
+                .max(
+                  5 - vacancies.length,
+                  'Deve conter no maximo 5 vagas totais',
+                )
             : Yup.number(),
           descricao: Yup.string().required('Descrição é obrigatório'),
           tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
@@ -293,6 +301,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
       getset_pessoa_projeto,
       post_pessoa_projeto,
       put_pessoa_projeto,
+      vacancies.length,
     ],
   )
 
@@ -305,7 +314,16 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
       <h1>
         Vagas
         {!showRegister && (
-          <button onClick={() => setShowRegister(true)}>
+          <button
+            onClick={() => {
+              vacancies.length >= 5
+                ? showToast(
+                    'error',
+                    'Não é possível adicionar mais que 5 vagas',
+                  )
+                : setShowRegister(true)
+            }}
+          >
             <span>+ </span>
             Adicionar
           </button>

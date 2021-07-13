@@ -20,6 +20,10 @@ export const BodyVacancy = styled.section`
       background: none;
       font: 500 1.2rem Raleway;
       color: var(--green);
+      :disabled {
+        opacity: 0.6;
+        cursor: no-drop;
+      }
       span {
         font: 500 2rem Raleway;
       }
