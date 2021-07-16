@@ -28,6 +28,7 @@ import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { OptionTypeBase, Props as SelectProps } from 'react-select'
 import { showToast } from '../../../../components/Toast/Toast'
+import Alert from '../../../../utils/SweetAlert'
 export interface IExperienceProject {
   id: number
   nome: string
@@ -246,9 +247,26 @@ const ProjectExperiences: React.FC = () => {
   useEffect(() => {
     setCurrentilyProject(editStored.situacao === 'Em andamento')
   }, [editStored])
+
+  async function deleteExperience( experience: IExperienceProject){
+    const delet = await Alert({
+      title: `Deseja realmente excluir ${experience.nome}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton:false,
+      denyButtonText: "apagar",
+      icon: "warning",
+    })
+    if (delet.isDenied) {
+      console.log(experience);
+      handleDeleteExperience(experience.id)
+    }
+  }
+
   return (
     <BodyExperiences>
-      <Modal setOpen={setOpenModal} open={openModal}>
+      {/* <Modal setOpen={setOpenModal} open={openModal}>
         <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
         <footer>
           <Button
@@ -264,7 +282,7 @@ const ProjectExperiences: React.FC = () => {
             Manter
           </Button>
         </footer>
-      </Modal>
+      </Modal> */}
       <h2>
         Projetos
         {!showRegister && (
@@ -286,8 +304,8 @@ const ProjectExperiences: React.FC = () => {
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash
                   onClick={() => {
-                    setOpenModal(true)
-                    setExperienceExcluded(experience)
+                    deleteExperience(experience)
+                    // setOpenModal(true)
                   }}
                 />
               </section>
