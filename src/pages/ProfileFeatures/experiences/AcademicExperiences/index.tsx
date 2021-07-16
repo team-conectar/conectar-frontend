@@ -22,6 +22,7 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { showToast } from '../../../../components/Toast/Toast'
+import Alert from '../../../../utils/SweetAlert'
 /**
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
@@ -226,9 +227,25 @@ const AcademicExperiences: React.FC = () => {
     setIsIncomplete(editStored.situacao === 'Incompleto')
   }, [editStored])
 
+  async function deleteExperience( experience: AcademicType){
+    const delet = await Alert({
+      title: `Deseja realmente excluir ${experience.curso}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton:false,
+      denyButtonText: "apagar",
+      icon: "warning",
+    })
+    if (delet.isDenied) {
+      console.log(experience);
+      handleDeleteExperience(experience.id)
+    }
+  }
+
   return (
     <BodyExperiences>
-      <Modal setOpen={setOpenModal} open={openModal}>
+      {/* <Modal setOpen={setOpenModal} open={openModal}>
         <h1>Deseja realmente excluir {experienceExcluded.nome}?</h1>
         <footer>
           <Button
@@ -241,7 +258,7 @@ const AcademicExperiences: React.FC = () => {
             Manter
           </Button>
         </footer>
-      </Modal>
+      </Modal> */}
       <h2>
         Educação
         {!showRegister && (
@@ -266,11 +283,12 @@ const AcademicExperiences: React.FC = () => {
                 />
                 <IconTrash
                   onClick={() => {
-                    setOpenModal(true)
-                    setExperienceExcluded({
-                      ...experience,
-                      nome: experience.curso,
-                    })
+                    deleteExperience(experience)
+                    // setOpenModal(true)
+                    // setExperienceExcluded({
+                    //   ...experience,
+                    //   nome: experience.curso,
+                    // })
                   }}
                 />
               </section>

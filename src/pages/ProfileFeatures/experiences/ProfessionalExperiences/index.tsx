@@ -27,6 +27,8 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { showToast } from '../../../../components/Toast/Toast'
+import Alert from '../../../../utils/SweetAlert'
+import { IExperienceProject } from '../ProjectExperiences'
 export interface ProfessionalType {
   id: number
   organizacao: string
@@ -253,10 +255,27 @@ const ProfessionalExperiences: React.FC = () => {
   useEffect(() => {
     setCurrentilyWork(editStored.currentWorking)
   }, [editStored])
+
+  async function deleteExperience( experience: ProfessionalType){
+    const delet = await Alert({
+      title: `Deseja realmente excluir ${experience.cargo}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton:false,
+      denyButtonText: "apagar",
+      icon: "warning",
+    })
+    if (delet.isDenied) {
+      console.log(experience);
+      handleDeleteExperience(experience.id)
+    }
+  }
+
   return (
     <BodyExperiences>
-      <Modal setOpen={setOpenModal} open={openModal}>
-        <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
+      {/* <Modal setOpen={setOpenModal} open={openModal}>
+        <h1>Deseja realmente excluir o projeto {experienceExcluded?.nome}?</h1>
         <footer>
           <Button
             theme="primary"
@@ -271,7 +290,7 @@ const ProfessionalExperiences: React.FC = () => {
             Manter
           </Button>
         </footer>
-      </Modal>
+      </Modal> */}
       <h2>
         Atuação Profissional
         {!showRegister && (
@@ -292,11 +311,12 @@ const ProfessionalExperiences: React.FC = () => {
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash
                   onClick={() => {
-                    setOpenModal(true)
-                    setExperienceExcluded({
-                      ...experience,
-                      nome: experience.cargo,
-                    })
+                    deleteExperience(experience)
+                    //setOpenModal(true)
+                    // setExperienceExcluded({
+                    //   ...experience,
+                    //   nome: experience.cargo,
+                    // })
                   }}
                 />
               </section>
