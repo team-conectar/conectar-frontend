@@ -326,10 +326,12 @@ const EditProfile: React.FC = () => {
       title: `Deseja realmente apagar o seu perfil?`,
       text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
-      confirmButtonText: 'apagar',
-      icon: 'warning',
+      showDenyButton: true,
+      showConfirmButton:false,
+      denyButtonText: "apagar",
+      icon: "warning",
     })
-    if (delet.isConfirmed) {
+    if (delet.isDenied) {
       const res = api
         .delete(`/api/v1/pessoas`)
         .then(async () => {

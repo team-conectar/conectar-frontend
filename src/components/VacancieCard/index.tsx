@@ -80,10 +80,9 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   async function FindPeople() {
     const result = await Alert({
       title: 'Deseja realmente efetuar uma nova busca?',
-      text: 'O usuário não aparecerá mais para preencher essa vaga',
+      text: `${profile?.nome?.split(` `)[0]} não aparecerá mais para preencher essa vaga`,
       icon: 'warning',
       showCancelButton: true,
-      showDenyButton: true,
       confirmButtonText: 'Nova busca',
     })
     if (result.isConfirmed)
