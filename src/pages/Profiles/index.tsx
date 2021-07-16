@@ -78,10 +78,13 @@ const Profiles: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState(true)
   const history = useHistory()
   const { user } = useContext(Context)
-  const [showFavoritesList, setShowFavoritesList] = useState<boolean>(false)
+  const [showProjectList, setShowProjectList] = useState<1 | 2 | 3>(1)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
   const [favoreteProjects, setFavoriteProjects] = useState<IProject[]>(
+    [] as IProject[],
+  )
+  const [participantsProjects, setParticipantsProjects] = useState<IProject[]>(
     [] as IProject[],
   )
   const profile_username = useParams<routeParms>().id
@@ -182,6 +185,19 @@ const Profiles: React.FC = () => {
         })
     }
   }, [profile.id])
+  useEffect(() => {
+    if (profile.id) {
+      api
+        .get(`/api/v1/projeto/participando/${profile.id}`)
+        .then(response => {
+          setParticipantsProjects(response.data)
+          setLoadingPage(false)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+    }
+  }, [profile.id])
   return (
     <Page>
       <NavBar />
@@ -194,20 +210,28 @@ const Profiles: React.FC = () => {
           </aside>
           <section>
             <ButtonList
-              borderBottom={!showFavoritesList}
+              borderBottom={showProjectList === 1}
               onClick={() => {
-                setShowFavoritesList(false)
+                setShowProjectList(1)
               }}
             >
               Projetos
             </ButtonList>
             <ButtonList
-              borderBottom={showFavoritesList}
+              borderBottom={showProjectList === 2}
               onClick={() => {
-                setShowFavoritesList(true)
+                setShowProjectList(2)
               }}
             >
               Favoritos
+            </ButtonList>
+            <ButtonList
+              borderBottom={showProjectList === 3}
+              onClick={() => {
+                setShowProjectList(3)
+              }}
+            >
+              Participando
             </ButtonList>
           </section>
         </header>
@@ -257,15 +281,15 @@ const Profiles: React.FC = () => {
           <ContainerScroll autoHeight autoHeightMax="50vh">
             <ul>
               {profile?.areas?.length > 0 && <h3>Áreas de atuação</h3>}
-              
+
               {profile?.areas?.map(area => (
                 <li key={area.id}>{area.descricao}</li>
               ))}
-              
+
               {profile?.habilidades?.length > 0 && (
                 <h3>Habilidades e ferramentas de domínio</h3>
               )}
-              
+
               {profile?.habilidades?.map(habilidade => (
                 <li key={habilidade.id}>{habilidade.nome}</li>
               ))}
@@ -375,19 +399,27 @@ const Profiles: React.FC = () => {
         <ul>
           <ProjetosSection>
             {profile?.id ? (
-              !showFavoritesList ? (
+              (showProjectList === 1 && (
                 <ul>
                   {projects.map(project => (
                     <ProjectCard key={project.id} project={project} />
                   ))}
                 </ul>
-              ) : (
+              )) ||
+              (showProjectList === 2 && (
                 <ul>
                   {favoreteProjects.map(project => (
                     <ProjectCard key={project.id} project={project} />
                   ))}
                 </ul>
-              )
+              )) ||
+              (showProjectList === 3 && (
+                <ul>
+                  {participantsProjects.map(project => (
+                    <ProjectCard key={project.id} project={project} />
+                  ))}
+                </ul>
+              ))
             ) : (
               <Skeleton width="100%" height="200px" />
             )}

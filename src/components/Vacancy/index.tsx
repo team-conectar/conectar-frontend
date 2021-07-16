@@ -247,7 +247,6 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     [project.id],
   )
 
-  console.log(vacancies.length)
   const handleSubmit = useCallback(
     async (formData: IFormData) => {
       console.log(formData)
