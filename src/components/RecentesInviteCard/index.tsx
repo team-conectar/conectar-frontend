@@ -24,7 +24,9 @@ const RecentesInviteCard: React.FC = () => {
       })
     console.log(res)
   }, [])
-  return (
+  return projects.length === 0 ? (
+    <></>
+  ) : (
     <BodyCard>
       <h2>Convites recentes</h2>
       {projects.map(project => (
