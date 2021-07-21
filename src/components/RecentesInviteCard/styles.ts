@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-export const ProfileLink = styled(Link)`
+export const ProjectLink = styled(Link)`
   width: 90%;
   height: 100%;
   cursor: pointer;
@@ -25,14 +25,14 @@ export const ProfileLink = styled(Link)`
     align-items: flex-start;
 
     > h2 {
-      padding-right: 2rem;
-      word-break: keep-all;
       font-size: 1rem;
+      word-break: keep-all;
     }
-    > p {
+    > a {
       text-align: center;
-      color: var(--gray);
+      color: var(--textGreen);
       font-size: 0.8rem;
+      text-decoration: underline;
     }
   }
 `
@@ -51,7 +51,8 @@ export const BodyCard = styled.div`
   justify-content: space-evenly;
   > h2 {
     font-size: 1rem;
-
+    padding-right: 2rem;
+    word-break: keep-all;
     align-self: flex-start;
     margin-left: 1rem;
   }

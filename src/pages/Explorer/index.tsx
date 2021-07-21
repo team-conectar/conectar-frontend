@@ -20,6 +20,7 @@ import api from '../../services/api'
 import { AxiosError } from 'axios'
 import Skeleton from 'react-loading-skeleton'
 import SuccessfulProjectsCard from '../../components/SuccessfulProjectsCard'
+import RecentesInviteCard from '../../components/RecentesInviteCard'
 
 const Explorer: React.FC = () => {
   const { loading, isAuthenticated } = useContext(Context)
@@ -41,7 +42,10 @@ const Explorer: React.FC = () => {
     <Fragment>
       <NavBar />
       <Page>
-        <ProfileLink />
+        <nav>
+          <ProfileLink />
+          <RecentesInviteCard />
+        </nav>
         <ul>
           {projects.length ? (
             projects.map(project => (
