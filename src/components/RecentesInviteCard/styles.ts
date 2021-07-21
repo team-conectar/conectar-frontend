@@ -42,6 +42,7 @@ export const BodyCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-bottom: 1rem;
   align-items: center;
   justify-content: space-evenly;
   > h2 {
