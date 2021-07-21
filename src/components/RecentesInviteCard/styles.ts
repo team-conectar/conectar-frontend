@@ -12,12 +12,7 @@ export const ProjectLink = styled(Link)`
   margin: 0.4rem;
   margin-left: 2rem;
   > img {
-    border-radius: 50%;
-    border: solid 1px var(--borderDivision);
-    width: 2.4rem;
-    height: 2.4rem;
-    object-fit: cover;
-    object-position: center;
+    width: 2rem;
   }
   > aside {
     display: flex;
