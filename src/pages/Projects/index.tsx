@@ -200,9 +200,9 @@ const Projects: React.FC = () => {
   const handleFindTeam = useCallback(async () => {
     const search = Alert({
       title: `Deseja realmente buscar um time para o seu projeto?`,
-      confirmButtonText: "Buscar Time",
+      confirmButtonText: 'Buscar Time',
       showCancelButton: true,
-      icon: "warning",
+      icon: 'warning',
     })
     if ((await search).isConfirmed) {
       const res = await api
@@ -216,7 +216,6 @@ const Projects: React.FC = () => {
       console.log(res)
     }
   }, [history, projeto_id])
-
 
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
