@@ -327,9 +327,9 @@ const EditProfile: React.FC = () => {
       text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
       showDenyButton: true,
-      showConfirmButton:false,
-      denyButtonText: "apagar",
-      icon: "warning",
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
     })
     if (delet.isDenied) {
       const res = api

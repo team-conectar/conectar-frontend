@@ -259,7 +259,8 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
           cargo: Yup.string().required('Cargo é obrigatório'),
           perfil: Yup.string().required('Perfil é obrigatório'),
           quantidade: !editVacancy?.id
-            ? Yup.string()
+            ? Yup.number()
+                .typeError('Amount must be a number')
                 .required('Quantidade é obrigatório')
                 .min(1, 'Deve conter no mínimo uma vaga')
                 .max(
