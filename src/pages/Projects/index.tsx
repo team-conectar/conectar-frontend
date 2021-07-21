@@ -198,16 +198,26 @@ const Projects: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
 
   const handleFindTeam = useCallback(async () => {
-    const res = await api
-      .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
-      .finally(() => {
-        history.push(`/projeto-conectado/${projeto_id}`)
-      })
-      .catch((error: AxiosError) => {
-        return error?.response?.data.detail
-      })
-    console.log(res)
+    const search = Alert({
+      title: `Deseja realmente buscar um time para o seu projeto?`,
+      confirmButtonText: "Buscar Time",
+      showCancelButton: true,
+      icon: "warning",
+    })
+    if ((await search).isConfirmed) {
+      const res = await api
+        .get(`/api/v1/pessoa_projeto/similaridade_projeto/${projeto_id}`)
+        .finally(() => {
+          history.push(`/projeto-conectado/${projeto_id}`)
+        })
+        .catch((error: AxiosError) => {
+          return error?.response?.data.detail
+        })
+      console.log(res)
+    }
   }, [history, projeto_id])
+
+
   const handleSubmit = useCallback(
     async (formData: ProjectType) => {
       console.log(formData)
