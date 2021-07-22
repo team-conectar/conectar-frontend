@@ -46,6 +46,25 @@ export const ProjetosSection = styled.section`
     gap: 2rem;
     width: 100%!important;
   }
+  section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    h2{
+      margin-top: 1rem;
+    }
+    h1{
+      margin-top: 0.2rem;
+      font-weight: 400;
+      font-size: 1rem;
+    }
+
+    svg{
+      width: 30px;
+      height: 30px;
+    }
+  }
   @media (min-width: 1024px) {
   }
 `

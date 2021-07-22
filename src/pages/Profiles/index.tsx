@@ -35,6 +35,7 @@ import Skeleton from 'react-loading-skeleton'
 import ContainerScroll from '../../components/UI/ContainerScroll'
 import { FaCircle, FaUserFriends } from 'react-icons/fa'
 import ProfileCard, { IProfile } from '../../components/ProfileCard'
+import { BsPeople } from 'react-icons/bs'
 
 interface routeParms {
   id: string
@@ -481,19 +482,40 @@ const Profiles: React.FC = () => {
                 // <ul>
                 //   <ProfileCard key={profile.id} profile={profile} />
                 // </ul>
-                
-                <ul>
-                  {peoplesfrs.map(profile => (
-                    <ProfileCard key={profile.id} profile={profile} />
-                  ))}
-                </ul>
+                <>
+                  {(peoplesfng.length)? (
+                    <ul>
+                      {peoplesfrs.map((profile: IProfile) => (
+                        <ProfileCard key={profile.id} profile={profile} />
+                      ))}
+                    </ul>
+                  ) : (
+                    <section>
+                      <BsPeople/>
+                      <h2>{profile.nome} </h2>
+                      <h1>Não segue ninguém</h1>
+                    </section>
+                  )
+                  }
+                </>
               )) ||
               (showProjectList === 5 && (
-                <ul>
-                  {peoplesfng.map(profile => (
-                    <ProfileCard key={profile.id} profile={profile} />
-                  ))}
-                </ul>
+                <>
+                  {(peoplesfng.length)? (
+                    <ul>
+                      {peoplesfng.map((profile: IProfile) => (
+                        <ProfileCard key={profile.id} profile={profile} />
+                      ))}
+                    </ul>
+                  ) : (
+                    <section>
+                      <BsPeople/>
+                      <h2>{profile.nome} </h2>
+                      <h1>Não tem nenhum seguidor</h1>
+                    </section>
+                  )
+                  }
+                </>
               ))
             ) : (
               <Skeleton width="100%" height="200px" />
