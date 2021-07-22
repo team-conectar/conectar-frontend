@@ -46,6 +46,17 @@ export const BodyButton = styled.button<PropsBodyButton>`
 
       background: transparent;
     `}
+
+    ${props =>
+    props.theme === 'tertiary' &&
+    css`
+      background: transparent;
+      padding: 0;
+      :hover{
+        color: var(--gray);
+      }
+    `}
+
   :disabled {
     cursor: no-drop;
     opacity: 0.5;

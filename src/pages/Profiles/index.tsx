@@ -21,7 +21,7 @@ import co from '../../assets/icon/co.svg'
 import { useHistory, useParams } from 'react-router'
 import Button from '../../components/UI/Button'
 import api from '../../services/api'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosResponse } from 'axios'
 import { AreaType } from '../../components/UI/SelectArea'
 import { ToolType } from '../../components/UI/SelectTools'
 import { Context } from '../../context/AuthContext'
@@ -33,6 +33,8 @@ import { IExperienceProject } from '../ProfileFeatures/experiences/ProjectExperi
 import { toMonth } from '../../utils/dates'
 import Skeleton from 'react-loading-skeleton'
 import ContainerScroll from '../../components/UI/ContainerScroll'
+import { FaCircle, FaUserFriends } from 'react-icons/fa'
+import ProfileCard, { IProfile } from '../../components/ProfileCard'
 
 interface routeParms {
   id: string
@@ -78,12 +80,16 @@ const Profiles: React.FC = () => {
   const [loadingPage, setLoadingPage] = useState(true)
   const history = useHistory()
   const { user } = useContext(Context)
-  const [showProjectList, setShowProjectList] = useState<1 | 2 | 3>(1)
+  const [showProjectList, setShowProjectList] = useState<1 | 2 | 3 | 4 | 5>(1)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const [projects, setProjects] = useState<IProject[]>([] as IProject[])
   const [favoreteProjects, setFavoriteProjects] = useState<IProject[]>(
     [] as IProject[],
   )
+  const [qtdfollowers, setFollowersqtd] = useState()
+  const [qtdfollowing, setFollowingqtd] = useState()
+  const [peoplesfrs, setPeoplesfrs] = useState<IProfile[]>([] as IProfile[])
+  const [peoplesfng, setPeoplesfng] = useState<IProfile[]>([] as IProfile[])
   const [participantsProjects, setParticipantsProjects] = useState<IProject[]>(
     [] as IProject[],
   )
@@ -158,6 +164,8 @@ const Profiles: React.FC = () => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
+      
+
   }, [history, profile_username])
   useEffect(() => {
     if (profile.id) {
@@ -183,6 +191,41 @@ const Profiles: React.FC = () => {
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
+      console.log(profile.id);
+      console.log("blabla");
+      api
+        .get(`/api/v1/qtd_seguidores?pessoa_id=${profile.id}`)
+        .then((response : AxiosResponse<any>)=>{
+          setFollowersqtd(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+      api
+        .get(`/api/v1/qtd_seguindo?pessoa_id=${profile.id}`)
+        .then((response : AxiosResponse<any>)=>{
+          setFollowingqtd(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+      api
+        .get(`/api/v1/seguidores?pessoa_id=${profile.id}`)
+        .then((response : AxiosResponse<any>)=>{
+          setPeoplesfrs(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+      api
+        .get(`/api/v1/seguindo?pessoa_id=1=${profile.id}`)
+        .then((response : AxiosResponse<any>)=>{
+          setPeoplesfng(response.data)
+        })
+        .catch((err: AxiosError) => {
+          return err?.response?.data.detail
+        })
+
     }
   }, [profile.id])
   useEffect(() => {
@@ -256,6 +299,20 @@ const Profiles: React.FC = () => {
                 </p>
               </figcaption>
             </figure>
+            <div>
+              <Button theme="tertiary" onClick={()=>{
+                setShowProjectList(4)
+              }}>
+                <FaUserFriends/>
+                 {qtdfollowers} Seguindo&ensp;
+              </Button>
+              <FaCircle/>
+              <Button theme="tertiary" onClick={()=>{
+                setShowProjectList(5)
+              }}>
+              &ensp; {qtdfollowing} Seguidores 
+              </Button>
+            </div>
             <section>
               {profile?.id ? (
                 <Button
@@ -417,6 +474,24 @@ const Profiles: React.FC = () => {
                 <ul>
                   {participantsProjects.map(project => (
                     <ProjectCard key={project.id} project={project} />
+                  ))}
+                </ul>
+              )) ||
+              (showProjectList === 4 && (
+                // <ul>
+                //   <ProfileCard key={profile.id} profile={profile} />
+                // </ul>
+                
+                <ul>
+                  {peoplesfrs.map(profile => (
+                    <ProfileCard key={profile.id} profile={profile} />
+                  ))}
+                </ul>
+              )) ||
+              (showProjectList === 5 && (
+                <ul>
+                  {peoplesfng.map(profile => (
+                    <ProfileCard key={profile.id} profile={profile} />
                   ))}
                 </ul>
               ))

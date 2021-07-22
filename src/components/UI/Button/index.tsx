@@ -1,7 +1,7 @@
 import React, { ButtonHTMLAttributes } from 'react'
 import { BodyButton } from './styles'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  theme?: 'yellow' | 'yellowG' | 'primary' | 'secondary' | 'error'
+  theme?: 'yellow' | 'yellowG' | 'primary' | 'secondary' | 'error' | 'tertiary'
   color?: string
 }
 /**

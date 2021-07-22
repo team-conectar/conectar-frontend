@@ -44,6 +44,7 @@ export const ProjetosSection = styled.section`
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    width: 100%!important;
   }
   @media (min-width: 1024px) {
   }
@@ -152,6 +153,21 @@ export const PerfilMain = styled.main`
       display: flex;
       flex-direction: column;
       text-align: center;
+    }
+  }
+  >div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    >svg{
+      width: 4px;
+      height: 4px;
+    }
+    >Button{
+      font-weight: 400;
+      font-size: 10px;
+      width: auto;
+      height: auto;
     }
   }
   > section {
