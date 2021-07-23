@@ -49,9 +49,9 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
         })
     }
   }, [loggedUser.id, profile.id])
-  function ToogleFollow() {
+  async function ToogleFollow() {
     if (followed) {
-      api
+      await api
         .delete(
           `/api/v1/seguir?seguido_id=${profile.id}&seguidor_id=${loggedUser.id}`,
         )
@@ -59,7 +59,7 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
           setFollowed(false)
         })
     } else {
-      api
+      await api
         .post('/api/v1/seguir', {
           seguidor_id: loggedUser?.id,
           seguido_id: profile.id,
