@@ -353,7 +353,11 @@ const Profiles: React.FC = () => {
                       : ToogleFollow()
                   }}
                 >
-                  {user.id === profile?.id ? 'EDITAR' : 'SEGUIR'}
+                  {user.id === profile?.id
+                    ? 'EDITAR'
+                    : followed
+                    ? 'deixar de seguir'
+                    : 'SEGUIR'}
                 </Button>
               ) : (
                 <Skeleton width="150px" height="30px" />
