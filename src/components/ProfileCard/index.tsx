@@ -10,6 +10,7 @@ import Skeleton from 'react-loading-skeleton'
 import Button from '../UI/Button'
 import userDefault from '../../assets/icon/user.svg'
 import { Context } from '../../context/AuthContext'
+import api from '../../services/api'
 
 export interface IProfile {
   data_nascimento: string
@@ -53,25 +54,25 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
   //       }),
   //     )
   //   }
-  }, [loggedUser.id, project.id, project.projeto_reacoes])
+  // }, [loggedUser.id, project.id, project.projeto_reacoes])
   function ToogleFollow() {
-    if (favorited) {
+    if (followed) {
       api
         .delete(
-          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=FAVORITO`,
+          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${profile.id}&reacao=FAVORITO`,
         )
         .then(response => {
-          setFavorited(false)
+          setFollowed(false)
         })
     } else {
       api
         .post('/api/v1/reacoes', {
           reacao: 'FAVORITO',
           pessoa_id: loggedUser?.id,
-          projeto_id: project.id,
+          projeto_id: profile.id,
         })
         .then(response => {
-          setFavorited(true)
+          setFollowed(true)
         })
     }
   }
