@@ -89,8 +89,8 @@ const Profiles: React.FC = () => {
   )
   const [qtdfollowers, setFollowersqtd] = useState()
   const [qtdfollowing, setFollowingqtd] = useState()
-  const [peoplesfrs, setPeoplesfrs] = useState<IProfile[]>([] as IProfile[])
-  const [peoplesfng, setPeoplesfng] = useState<IProfile[]>([] as IProfile[])
+  const [peoplesfrs, setPeoplesfrs] = useState<IProfile[]>([])
+  const [peoplesfng, setPeoplesfng] = useState<IProfile[]>([])
   const [participantsProjects, setParticipantsProjects] = useState<IProject[]>(
     [] as IProject[],
   )
@@ -214,14 +214,17 @@ const Profiles: React.FC = () => {
         .get(`/api/v1/seguidores?pessoa_id=${profile.id}`)
         .then((response : AxiosResponse<any>)=>{
           setPeoplesfrs(response.data)
+          
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
       api
-        .get(`/api/v1/seguindo?pessoa_id=1=${profile.id}`)
+        .get(`/api/v1/seguindo?pessoa_id=${profile.id}`)
         .then((response : AxiosResponse<any>)=>{
           setPeoplesfng(response.data)
+          console.log(peoplesfng);
+          
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
@@ -305,13 +308,13 @@ const Profiles: React.FC = () => {
                 setShowProjectList(4)
               }}>
                 <FaUserFriends/>
-                 {qtdfollowers} Seguindo&ensp;
+                 {qtdfollowing} Seguindo&ensp;
               </Button>
               <FaCircle/>
               <Button theme="tertiary" onClick={()=>{
                 setShowProjectList(5)
               }}>
-              &ensp; {qtdfollowing} Seguidores 
+              &ensp; {qtdfollowers} Seguidores 
               </Button>
             </div>
             <section>
@@ -479,27 +482,6 @@ const Profiles: React.FC = () => {
                 </ul>
               )) ||
               (showProjectList === 4 && (
-                // <ul>
-                //   <ProfileCard key={profile.id} profile={profile} />
-                // </ul>
-                <>
-                  {(peoplesfng.length)? (
-                    <ul>
-                      {peoplesfrs.map((profile: IProfile) => (
-                        <ProfileCard key={profile.id} profile={profile} />
-                      ))}
-                    </ul>
-                  ) : (
-                    <section>
-                      <BsPeople/>
-                      <h2>{profile.nome} </h2>
-                      <h1>Não segue ninguém</h1>
-                    </section>
-                  )
-                  }
-                </>
-              )) ||
-              (showProjectList === 5 && (
                 <>
                   {(peoplesfng.length)? (
                     <ul>
@@ -516,7 +498,25 @@ const Profiles: React.FC = () => {
                   )
                   }
                 </>
-              ))
+              ))||
+              (showProjectList === 5 && (
+                <>
+                  {(peoplesfng.length)? (
+                    <ul>
+                      {peoplesfrs.map((profile: IProfile) => (
+                        <ProfileCard key={profile.id} profile={profile} />
+                      ))}
+                    </ul>
+                  ) : (
+                    <section>
+                      <BsPeople/>
+                      <h2>{profile.nome} </h2>
+                      <h1>Não segue ninguém</h1>
+                    </section>
+                  )
+                  }
+                </>
+              )) 
             ) : (
               <Skeleton width="100%" height="200px" />
             )}
