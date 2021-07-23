@@ -93,16 +93,16 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
         </p>
       </section>
       <aside>
-        <span>
-          {profile.idealizador && <img src={id} alt="" />}
-          {profile.aliado && <img src={al} alt="" />}
-          {profile.colaborador && <img src={co} alt="" />}
-        </span>
         {loggedUser.id !== profile.id && (
           <Button onClick={ToogleFollow} theme="primary">
             {followed ? 'deixar de seguir' : 'SEGUIR'}
           </Button>
         )}
+        <span>
+          {profile.idealizador && <img src={id} alt="" />}
+          {profile.aliado && <img src={al} alt="" />}
+          {profile.colaborador && <img src={co} alt="" />}
+        </span>
       </aside>
     </BodyCard>
   )

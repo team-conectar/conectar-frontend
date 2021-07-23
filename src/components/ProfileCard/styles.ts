@@ -34,6 +34,7 @@ export const BodyCard = styled.div`
     grid-column: 1 / -1;
     grid-row: 2;
     display: grid;
+    align-items: center;
     grid-template-columns: var(--gridColumn1) calc(var(--gridColumn2) / 2) calc(
         var(--gridColumn2) / 2
       );
@@ -43,24 +44,24 @@ export const BodyCard = styled.div`
       margin: 0.5rem 5%;
       grid-row: 1;
     }
-    > span:empty ~ ${BodyButton} {
-      grid-column: 2 / -1;
-      width: 50%;
-      margin: 0.5rem 25%;
-    }
     > span {
-      &:not(:empty) {
-        grid-column: 3;
-        border-left: solid 2px var(--borderDivision);
-      }
+      grid-column: 2 / -1;
       grid-row: 1;
+      border-left: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 0.4rem;
+      padding: 0.4rem 0;
       img {
         width: 1.4rem;
       }
+    }
+    ${BodyButton} + span {
+      border-left: solid 2px var(--borderDivision);
+      grid-column: 3;
+      width: 50%;
+      margin: 0.5rem 25%;
     }
   }
 `
