@@ -166,6 +166,11 @@ const Profiles: React.FC = () => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
   }, [history, profile_username])
   useEffect(() => {
     if (profile.id) {
@@ -195,7 +200,11 @@ const Profiles: React.FC = () => {
       console.log('blabla')
       api
         .get(`/api/v1/qtd_seguidores?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
+        .then((response: AxiosResponse<any>) => {
+=======
         .then(response => {
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
           setFollowersqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -203,7 +212,11 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/qtd_seguindo?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
+        .then((response: AxiosResponse<any>) => {
+=======
         .then(response => {
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
           setFollowingqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -211,6 +224,11 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/seguidores?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
+        .then((response: AxiosResponse<any>) => {
+          setPeoplesfrs(response.data)
+
+=======
         .then((response: AxiosResponse<IProfile[]>) => {
           setPeoplesfrs(response.data)
           setFollowed(
@@ -218,14 +236,22 @@ const Profiles: React.FC = () => {
               return people.id === user.id
             }),
           )
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
       api
         .get(`/api/v1/seguindo?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
+        .then((response: AxiosResponse<any>) => {
+          setPeoplesfng(response.data)
+          console.log(peoplesfng);
+
+=======
         .then(response => {
           setPeoplesfng(response.data)
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
@@ -324,22 +350,34 @@ const Profiles: React.FC = () => {
               </figcaption>
             </figure>
             <div>
+<<<<<<< HEAD
+              <Button theme="tertiary" onClick={() => {
+                setShowProjectList(4)
+              }}>
+=======
               <Button
                 theme="tertiary"
                 onClick={() => {
                   setShowProjectList(4)
                 }}
               >
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                 <FaUserFriends />
                 {qtdfollowing} Seguindo&ensp;
               </Button>
               <FaCircle />
+<<<<<<< HEAD
+              <Button theme="tertiary" onClick={() => {
+                setShowProjectList(5)
+              }}>
+=======
               <Button
                 theme="tertiary"
                 onClick={() => {
                   setShowProjectList(5)
                 }}
               >
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                 &ensp; {qtdfollowers} Seguidores
               </Button>
             </div>
@@ -424,23 +462,21 @@ const Profiles: React.FC = () => {
                         profile?.experiencia_profissional.data_inicio?.split(
                           '-',
                         )[1],
-                      )} de  ${
-                        profile?.experiencia_profissional.data_inicio?.split(
-                          '-',
-                        )[0]
-                      } até ${
-                        profile?.experiencia_profissional.data_fim == null
+                      )} de  ${profile?.experiencia_profissional.data_inicio?.split(
+                        '-',
+                      )[0]
+                        } até ${profile?.experiencia_profissional.data_fim == null
                           ? 'o momento'
                           : toMonth(
-                              profile?.experiencia_profissional.data_fim?.split(
-                                '-',
-                              )[1],
-                            ) +
-                            ' de ' +
                             profile?.experiencia_profissional.data_fim?.split(
                               '-',
-                            )[0]
-                      }`}
+                            )[1],
+                          ) +
+                          ' de ' +
+                          profile?.experiencia_profissional.data_fim?.split(
+                            '-',
+                          )[0]
+                        }`}
                     </p>
                   </aside>
                 </button>
@@ -460,23 +496,21 @@ const Profiles: React.FC = () => {
                         profile?.experiencia_projetos.data_inicio?.split(
                           '-',
                         )[1],
-                      )} de  ${
-                        profile?.experiencia_projetos.data_inicio?.split('-')[0]
-                      } até 
-                      ${
-                        profile?.experiencia_projetos.situacao ===
-                        'Em andamento'
+                      )} de  ${profile?.experiencia_projetos.data_inicio?.split('-')[0]
+                        } até 
+                      ${profile?.experiencia_projetos.situacao ===
+                          'Em andamento'
                           ? 'o momento'
                           : toMonth(
-                              profile?.experiencia_projetos.data_fim?.split(
-                                '-',
-                              )[1],
-                            ) +
-                            ' de ' +
                             profile?.experiencia_projetos.data_fim?.split(
                               '-',
-                            )[0]
-                      }
+                            )[1],
+                          ) +
+                          ' de ' +
+                          profile?.experiencia_projetos.data_fim?.split(
+                            '-',
+                          )[0]
+                        }
                       `}
                     </p>
                   </aside>
@@ -514,7 +548,11 @@ const Profiles: React.FC = () => {
               )) ||
               (showProjectList === 4 && (
                 <>
+<<<<<<< HEAD
+                  {(peoplesfng.length) ? (
+=======
                   {peoplesfng.length ? (
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                     <ul>
                       {peoplesfng.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -524,14 +562,18 @@ const Profiles: React.FC = () => {
                     <section>
                       <BsPeople />
                       <h2>{profile.nome} </h2>
-                      <h1>Não tem nenhum seguidor</h1>
+                      <h1>Não segue ninguém</h1>
                     </section>
                   )}
                 </>
               )) ||
               (showProjectList === 5 && (
                 <>
+<<<<<<< HEAD
+                  {(peoplesfrs.length) ? (
+=======
                   {peoplesfng.length ? (
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                     <ul>
                       {peoplesfrs.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -541,7 +583,8 @@ const Profiles: React.FC = () => {
                     <section>
                       <BsPeople />
                       <h2>{profile.nome} </h2>
-                      <h1>Não segue ninguém</h1>
+                      <h1>Não tem nenhum seguidor</h1>
+
                     </section>
                   )}
                 </>

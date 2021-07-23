@@ -28,6 +28,7 @@ import { ProjectType } from '../../pages/CreateProject'
 import ContainerScroll from '../UI/ContainerScroll'
 import { showToast } from '../Toast/Toast'
 import { ProfileType } from '../../pages/Profiles'
+import Alert from '../../utils/SweetAlert'
 export type TypeSituationVacancy =
   | 'PENDENTE_IDEALIZADOR'
   | 'PENDENTE_COLABORADOR'
@@ -305,6 +306,18 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     ],
   )
 
+  async function deleteVacancy(vacancy: VacanciesType) {
+    const delet = Alert(
+      {title: `Deseja realmente apagar a vaga ${vacancy.titulo}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',})
+    if((await delet).isDenied)
+      handleDeleteVacancy(vacancy)
+  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     getset_pessoa_projeto()
@@ -335,9 +348,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
             <VacancieListItem
               key={vacancy.id}
               vacancy={vacancy}
-              onDelete={() => {
-                handleDeleteVacancy(vacancy)
-              }}
+              onDelete={()=>{deleteVacancy(vacancy)}}
               onEdit={() => {
                 setShowRegister(true)
                 setEditVacancy(vacancy)
@@ -424,7 +435,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
             <Button
               theme="secondary"
               onClick={() => {
-                editVacancy && handleDeleteVacancy(editVacancy)
+                editVacancy && deleteVacancy(editVacancy)
                 setShowRegister(false)
               }}
             >
