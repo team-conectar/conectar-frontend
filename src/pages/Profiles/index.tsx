@@ -87,6 +87,7 @@ const Profiles: React.FC = () => {
   const [favoreteProjects, setFavoriteProjects] = useState<IProject[]>(
     [] as IProject[],
   )
+  const [followed, setFollowed] = useState(false)
   const [qtdfollowers, setFollowersqtd] = useState()
   const [qtdfollowing, setFollowingqtd] = useState()
   const [peoplesfrs, setPeoplesfrs] = useState<IProfile[]>([])
@@ -165,8 +166,6 @@ const Profiles: React.FC = () => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
-      
-
   }, [history, profile_username])
   useEffect(() => {
     if (profile.id) {
@@ -192,11 +191,11 @@ const Profiles: React.FC = () => {
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
-      console.log(profile.id);
-      console.log("blabla");
+      console.log(profile.id)
+      console.log('blabla')
       api
         .get(`/api/v1/qtd_seguidores?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then(response => {
           setFollowersqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -204,7 +203,7 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/qtd_seguindo?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then(response => {
           setFollowingqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -212,26 +211,47 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/seguidores?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then((response: AxiosResponse<IProfile[]>) => {
           setPeoplesfrs(response.data)
-          
+          setFollowed(
+            !!response.data.find(people => {
+              return people.id === user.id
+            }),
+          )
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
       api
         .get(`/api/v1/seguindo?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then(response => {
           setPeoplesfng(response.data)
-          console.log(peoplesfng);
-          
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
-
     }
   }, [profile.id])
+  async function ToogleFollow() {
+    if (followed) {
+      await api
+        .delete(
+          `/api/v1/seguir?seguido_id=${profile.id}&seguidor_id=${user.id}`,
+        )
+        .then(() => {
+          setFollowed(false)
+        })
+    } else {
+      await api
+        .post('/api/v1/seguir', {
+          seguidor_id: user?.id,
+          seguido_id: profile.id,
+        })
+        .then(() => {
+          setFollowed(true)
+        })
+    }
+  }
   useEffect(() => {
     if (profile.id) {
       api
@@ -304,17 +324,23 @@ const Profiles: React.FC = () => {
               </figcaption>
             </figure>
             <div>
-              <Button theme="tertiary" onClick={()=>{
-                setShowProjectList(4)
-              }}>
-                <FaUserFriends/>
-                 {qtdfollowing} Seguindo&ensp;
+              <Button
+                theme="tertiary"
+                onClick={() => {
+                  setShowProjectList(4)
+                }}
+              >
+                <FaUserFriends />
+                {qtdfollowing} Seguindo&ensp;
               </Button>
-              <FaCircle/>
-              <Button theme="tertiary" onClick={()=>{
-                setShowProjectList(5)
-              }}>
-              &ensp; {qtdfollowers} Seguidores 
+              <FaCircle />
+              <Button
+                theme="tertiary"
+                onClick={() => {
+                  setShowProjectList(5)
+                }}
+              >
+                &ensp; {qtdfollowers} Seguidores
               </Button>
             </div>
             <section>
@@ -322,8 +348,9 @@ const Profiles: React.FC = () => {
                 <Button
                   theme="primary"
                   onClick={() => {
-                    user.id === profile?.id &&
-                      history.push(`/editar-perfil/${user.id}`)
+                    user.id === profile?.id
+                      ? history.push(`/editar-perfil/${user.id}`)
+                      : ToogleFollow()
                   }}
                 >
                   {user.id === profile?.id ? 'EDITAR' : 'SEGUIR'}
@@ -483,7 +510,7 @@ const Profiles: React.FC = () => {
               )) ||
               (showProjectList === 4 && (
                 <>
-                  {(peoplesfng.length)? (
+                  {peoplesfng.length ? (
                     <ul>
                       {peoplesfng.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -491,17 +518,16 @@ const Profiles: React.FC = () => {
                     </ul>
                   ) : (
                     <section>
-                      <BsPeople/>
+                      <BsPeople />
                       <h2>{profile.nome} </h2>
                       <h1>Não tem nenhum seguidor</h1>
                     </section>
-                  )
-                  }
+                  )}
                 </>
-              ))||
+              )) ||
               (showProjectList === 5 && (
                 <>
-                  {(peoplesfng.length)? (
+                  {peoplesfng.length ? (
                     <ul>
                       {peoplesfrs.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -509,14 +535,13 @@ const Profiles: React.FC = () => {
                     </ul>
                   ) : (
                     <section>
-                      <BsPeople/>
+                      <BsPeople />
                       <h2>{profile.nome} </h2>
                       <h1>Não segue ninguém</h1>
                     </section>
-                  )
-                  }
+                  )}
                 </>
-              )) 
+              ))
             ) : (
               <Skeleton width="100%" height="200px" />
             )}
