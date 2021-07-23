@@ -165,7 +165,7 @@ const Profiles: React.FC = () => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
-      
+
 
   }, [history, profile_username])
   useEffect(() => {
@@ -196,7 +196,7 @@ const Profiles: React.FC = () => {
       console.log("blabla");
       api
         .get(`/api/v1/qtd_seguidores?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then((response: AxiosResponse<any>) => {
           setFollowersqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -204,7 +204,7 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/qtd_seguindo?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then((response: AxiosResponse<any>) => {
           setFollowingqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -212,19 +212,19 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/seguidores?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then((response: AxiosResponse<any>) => {
           setPeoplesfrs(response.data)
-          
+
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
       api
         .get(`/api/v1/seguindo?pessoa_id=${profile.id}`)
-        .then((response : AxiosResponse<any>)=>{
+        .then((response: AxiosResponse<any>) => {
           setPeoplesfng(response.data)
           console.log(peoplesfng);
-          
+
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
@@ -304,17 +304,17 @@ const Profiles: React.FC = () => {
               </figcaption>
             </figure>
             <div>
-              <Button theme="tertiary" onClick={()=>{
+              <Button theme="tertiary" onClick={() => {
                 setShowProjectList(4)
               }}>
-                <FaUserFriends/>
-                 {qtdfollowing} Seguindo&ensp;
+                <FaUserFriends />
+                {qtdfollowing} Seguindo&ensp;
               </Button>
-              <FaCircle/>
-              <Button theme="tertiary" onClick={()=>{
+              <FaCircle />
+              <Button theme="tertiary" onClick={() => {
                 setShowProjectList(5)
               }}>
-              &ensp; {qtdfollowers} Seguidores 
+                &ensp; {qtdfollowers} Seguidores
               </Button>
             </div>
             <section>
@@ -393,23 +393,21 @@ const Profiles: React.FC = () => {
                         profile?.experiencia_profissional.data_inicio?.split(
                           '-',
                         )[1],
-                      )} de  ${
-                        profile?.experiencia_profissional.data_inicio?.split(
-                          '-',
-                        )[0]
-                      } até ${
-                        profile?.experiencia_profissional.data_fim == null
+                      )} de  ${profile?.experiencia_profissional.data_inicio?.split(
+                        '-',
+                      )[0]
+                        } até ${profile?.experiencia_profissional.data_fim == null
                           ? 'o momento'
                           : toMonth(
-                              profile?.experiencia_profissional.data_fim?.split(
-                                '-',
-                              )[1],
-                            ) +
-                            ' de ' +
                             profile?.experiencia_profissional.data_fim?.split(
                               '-',
-                            )[0]
-                      }`}
+                            )[1],
+                          ) +
+                          ' de ' +
+                          profile?.experiencia_profissional.data_fim?.split(
+                            '-',
+                          )[0]
+                        }`}
                     </p>
                   </aside>
                 </button>
@@ -429,23 +427,21 @@ const Profiles: React.FC = () => {
                         profile?.experiencia_projetos.data_inicio?.split(
                           '-',
                         )[1],
-                      )} de  ${
-                        profile?.experiencia_projetos.data_inicio?.split('-')[0]
-                      } até 
-                      ${
-                        profile?.experiencia_projetos.situacao ===
-                        'Em andamento'
+                      )} de  ${profile?.experiencia_projetos.data_inicio?.split('-')[0]
+                        } até 
+                      ${profile?.experiencia_projetos.situacao ===
+                          'Em andamento'
                           ? 'o momento'
                           : toMonth(
-                              profile?.experiencia_projetos.data_fim?.split(
-                                '-',
-                              )[1],
-                            ) +
-                            ' de ' +
                             profile?.experiencia_projetos.data_fim?.split(
                               '-',
-                            )[0]
-                      }
+                            )[1],
+                          ) +
+                          ' de ' +
+                          profile?.experiencia_projetos.data_fim?.split(
+                            '-',
+                          )[0]
+                        }
                       `}
                     </p>
                   </aside>
@@ -483,7 +479,7 @@ const Profiles: React.FC = () => {
               )) ||
               (showProjectList === 4 && (
                 <>
-                  {(peoplesfng.length)? (
+                  {(peoplesfng.length) ? (
                     <ul>
                       {peoplesfng.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -491,17 +487,17 @@ const Profiles: React.FC = () => {
                     </ul>
                   ) : (
                     <section>
-                      <BsPeople/>
+                      <BsPeople />
                       <h2>{profile.nome} </h2>
-                      <h1>Não tem nenhum seguidor</h1>
+                      <h1>Não segue ninguém</h1>
                     </section>
                   )
                   }
                 </>
-              ))||
+              )) ||
               (showProjectList === 5 && (
                 <>
-                  {(peoplesfng.length)? (
+                  {(peoplesfng.length) ? (
                     <ul>
                       {peoplesfrs.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -509,14 +505,15 @@ const Profiles: React.FC = () => {
                     </ul>
                   ) : (
                     <section>
-                      <BsPeople/>
+                      <BsPeople />
                       <h2>{profile.nome} </h2>
-                      <h1>Não segue ninguém</h1>
+                      <h1>Não tem nenhum seguidor</h1>
+
                     </section>
                   )
                   }
                 </>
-              )) 
+              ))
             ) : (
               <Skeleton width="100%" height="200px" />
             )}
