@@ -11,6 +11,7 @@ import Button from '../UI/Button'
 import userDefault from '../../assets/icon/user.svg'
 import { Context } from '../../context/AuthContext'
 import api from '../../services/api'
+import { AxiosResponse } from 'axios'
 
 export interface IProfile {
   data_nascimento: string
@@ -35,43 +36,35 @@ interface IProfileCardProps {
 const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
   const loggedUser = useContext(Context).user
   const [followed, setFollowed] = useState(false)
-  // useEffect(() => {
-  //   if (project.projeto_reacoes && loggedUser.id) {
-  //     setFavorited(
-  //       !!project.projeto_reacoes.find(reaction => {
-  //         return (
-  //           reaction.pessoa_id === loggedUser.id &&
-  //           reaction.reacao === 'FAVORITO'
-  //         )
-  //       }),
-  //     )
-  //     setInteressed(
-  //       !!project.projeto_reacoes.find(reaction => {
-  //         return (
-  //           reaction.pessoa_id === loggedUser.id &&
-  //           reaction.reacao === 'INTERESSE'
-  //         )
-  //       }),
-  //     )
-  //   }
-  // }, [loggedUser.id, project.id, project.projeto_reacoes])
+  useEffect(() => {
+    if (loggedUser.id) {
+      api
+        .get(`/api/v1/seguidores?pessoa_id=${profile.id}`)
+        .then((response: AxiosResponse<IProfile[]>) => {
+          setFollowed(
+            !!response.data.find(people => {
+              return people.id === loggedUser.id
+            }),
+          )
+        })
+    }
+  }, [loggedUser.id, profile.id])
   function ToogleFollow() {
     if (followed) {
       api
         .delete(
-          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${profile.id}&reacao=FAVORITO`,
+          `/api/v1/seguir?seguido_id=${profile.id}&seguidor_id=${loggedUser.id}`,
         )
-        .then(response => {
+        .then(() => {
           setFollowed(false)
         })
     } else {
       api
-        .post('/api/v1/reacoes', {
-          reacao: 'FAVORITO',
-          pessoa_id: loggedUser?.id,
-          projeto_id: profile.id,
+        .post('/api/v1/seguir', {
+          seguidor_id: loggedUser?.id,
+          seguido_id: profile.id,
         })
-        .then(response => {
+        .then(() => {
           setFollowed(true)
         })
     }
@@ -105,7 +98,9 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
           {profile.aliado && <img src={al} alt="" />}
           {profile.colaborador && <img src={co} alt="" />}
         </span>
-        <Button theme="primary">SEGUIR</Button>
+        <Button onClick={ToogleFollow} theme="primary">
+          SEGUIR
+        </Button>
       </aside>
     </BodyCard>
   )
