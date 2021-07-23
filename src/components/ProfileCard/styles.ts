@@ -47,7 +47,7 @@ export const BodyCard = styled.div`
     > span {
       grid-column: 2 / -1;
       grid-row: 1;
-      border-left: 0;
+
       display: flex;
       justify-content: center;
       align-items: center;
@@ -58,7 +58,6 @@ export const BodyCard = styled.div`
       }
     }
     ${BodyButton} + span {
-      border-left: solid 2px var(--borderDivision);
       grid-column: 3;
       width: 50%;
       margin: 0.5rem 25%;
