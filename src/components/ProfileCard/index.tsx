@@ -98,9 +98,11 @@ const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
           {profile.aliado && <img src={al} alt="" />}
           {profile.colaborador && <img src={co} alt="" />}
         </span>
-        <Button onClick={ToogleFollow} theme="primary">
-          {followed ? 'deixar de seguir' : 'SEGUIR'}
-        </Button>
+        {loggedUser.id !== profile.id && (
+          <Button onClick={ToogleFollow} theme="primary">
+            {followed ? 'deixar de seguir' : 'SEGUIR'}
+          </Button>
+        )}
       </aside>
     </BodyCard>
   )
