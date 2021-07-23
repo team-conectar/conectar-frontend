@@ -413,16 +413,16 @@ const Projects: React.FC = () => {
     }
   }
   async function deleteVacancy(vacancy: VacanciesType) {
-    const delet = Alert(
-      {title: `Deseja realmente apagar a vaga ${vacancy.titulo}?`,
+    const delet = Alert({
+      title: `Deseja realmente apagar a vaga ${vacancy.titulo}?`,
       text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
       showDenyButton: true,
       showConfirmButton: false,
       denyButtonText: 'apagar',
-      icon: 'warning',})
-    if((await delet).isDenied)
-      handleDeleteVacancy(vacancy)
+      icon: 'warning',
+    })
+    if ((await delet).isDenied) handleDeleteVacancy(vacancy)
   }
 
   return (
