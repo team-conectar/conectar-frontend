@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { BodyButton } from '../UI/Button/styles'
 export const BodyCard = styled.div`
   display: grid;
-  width: 22rem;
   --gridColumn1: 35%;
   gap: 0.6rem;
   --gridColumn2: calc(65% - 0.6rem);
