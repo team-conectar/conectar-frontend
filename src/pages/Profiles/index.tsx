@@ -497,7 +497,7 @@ const Profiles: React.FC = () => {
               )) ||
               (showProjectList === 5 && (
                 <>
-                  {(peoplesfng.length) ? (
+                  {(peoplesfrs.length) ? (
                     <ul>
                       {peoplesfrs.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -510,8 +510,7 @@ const Profiles: React.FC = () => {
                       <h1>Não tem nenhum seguidor</h1>
 
                     </section>
-                  )
-                  }
+                  )}
                 </>
               ))
             ) : (
