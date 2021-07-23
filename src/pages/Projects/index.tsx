@@ -108,7 +108,7 @@ const Projects: React.FC = () => {
   const [storedAreas, setStoredAreas] = useState<Array<AreaType>>([])
   const [storedTools, setStoredTools] = useState<Array<ToolType>>([])
   const [vacanciesList, setVacanciesList] = useState<boolean>(step === 'vagas')
-  const [favoriteId, setFavoriteId] = useState<Number>(0)
+  const [favorited, setFavorited] = useState<boolean>(false)
   const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
   const [likeCount, setLikeCount] = useState<Number>(0)
   const vacancyComponentRef = useRef<handleVacancy>(null)
@@ -162,24 +162,24 @@ const Projects: React.FC = () => {
 
   useEffect(() => {
     if (project.projeto_reacoes && isAuthenticated) {
-      setFavoriteId(
-        project.projeto_reacoes.find(reaction => {
+      setFavorited(
+        !!project.projeto_reacoes.find(reaction => {
           return (
             reaction.pessoa_id === user.id && reaction.reacao === 'FAVORITO'
           )
-        })?.id || 0,
+        }),
       )
     }
   }, [user.id, project.id, project.projeto_reacoes, isAuthenticated])
 
   function ToogleFavorite() {
-    if (favoriteId) {
+    if (favorited) {
       api
         .delete(
           `/api/v1/reacoes?pessoa_id=${user.id}&projeto_id=${project.id}&reacao=FAVORITO`,
         )
         .then(response => {
-          setFavoriteId(0)
+          setFavorited(false)
         })
     } else {
       api
@@ -189,10 +189,9 @@ const Projects: React.FC = () => {
           projeto_id: project.id,
         })
         .then(response => {
-          setFavoriteId(response.data.id)
+          setFavorited(true)
         })
     }
-    console.log(!favoriteId ? 'FAVORITO' : 'NAO FAVORITO')
   }
 
   const formRef = useRef<FormHandles>(null)
@@ -334,7 +333,7 @@ const Projects: React.FC = () => {
 
     getset_pessoa_projeto()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [projeto_id, openModal, favoriteId])
+  }, [projeto_id, openModal, favorited])
   useEffect(() => {
     if (vacancies.length > 0) {
       setVacancyDetail(vacancies[0])
@@ -549,7 +548,7 @@ const Projects: React.FC = () => {
               )
             ) : (
               <ButtonFavorite
-                checked={!!favoriteId}
+                checked={!!favorited}
                 onClick={ToogleFavorite}
                 theme="secondary"
               >

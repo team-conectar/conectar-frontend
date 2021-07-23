@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { BodyCard } from './styles'
 import { Link } from 'react-router-dom'
 import id from '../../assets/icon/id.svg'
@@ -9,6 +9,8 @@ import { ToolType } from '../UI/SelectTools'
 import Skeleton from 'react-loading-skeleton'
 import Button from '../UI/Button'
 import userDefault from '../../assets/icon/user.svg'
+import { Context } from '../../context/AuthContext'
+
 export interface IProfile {
   data_nascimento: string
   usuario: string
@@ -30,6 +32,49 @@ interface IProfileCardProps {
   profile: IProfile
 }
 const ProfileCard: React.FC<IProfileCardProps> = ({ profile }) => {
+  const loggedUser = useContext(Context).user
+  const [followed, setFollowed] = useState(false)
+  // useEffect(() => {
+  //   if (project.projeto_reacoes && loggedUser.id) {
+  //     setFavorited(
+  //       !!project.projeto_reacoes.find(reaction => {
+  //         return (
+  //           reaction.pessoa_id === loggedUser.id &&
+  //           reaction.reacao === 'FAVORITO'
+  //         )
+  //       }),
+  //     )
+  //     setInteressed(
+  //       !!project.projeto_reacoes.find(reaction => {
+  //         return (
+  //           reaction.pessoa_id === loggedUser.id &&
+  //           reaction.reacao === 'INTERESSE'
+  //         )
+  //       }),
+  //     )
+  //   }
+  }, [loggedUser.id, project.id, project.projeto_reacoes])
+  function ToogleFollow() {
+    if (favorited) {
+      api
+        .delete(
+          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=FAVORITO`,
+        )
+        .then(response => {
+          setFavorited(false)
+        })
+    } else {
+      api
+        .post('/api/v1/reacoes', {
+          reacao: 'FAVORITO',
+          pessoa_id: loggedUser?.id,
+          projeto_id: project.id,
+        })
+        .then(response => {
+          setFavorited(true)
+        })
+    }
+  }
   return (
     <BodyCard>
       <Link to={`/perfil/${profile.usuario}`}>

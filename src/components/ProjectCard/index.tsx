@@ -57,18 +57,18 @@ interface IProjectCardProps {
 }
 
 const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
-  const [favoriteId, setFavoriteId] = useState<number>(0)
-  const [interesseId, setInteresseId] = useState<number>(0)
+  const [favorited, setFavorited] = useState<boolean>(false)
+  const [interessed, setInteressed] = useState<boolean>(false)
   const [user, setUser] = useState<IPessoa>({} as IPessoa)
   const loggedUser = useContext(Context).user
   const SelectFavorite: any = () => {
-    if (favoriteId) {
+    if (favorited) {
       return <BsFillStarFill />
     }
     return <BsStar />
   }
   const SelectInteresse: IconType = ({ ...rest }) => {
-    if (interesseId) {
+    if (interessed) {
       return <FaHandPointer {...rest} />
     }
     return <FaRegHandPointer {...rest} />
@@ -81,32 +81,32 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   }, [project.pessoa_id])
   useEffect(() => {
     if (project.projeto_reacoes && loggedUser.id) {
-      setFavoriteId(
-        project.projeto_reacoes.find(reaction => {
+      setFavorited(
+        !!project.projeto_reacoes.find(reaction => {
           return (
             reaction.pessoa_id === loggedUser.id &&
             reaction.reacao === 'FAVORITO'
           )
-        })?.id || 0,
+        }),
       )
-      setInteresseId(
-        project.projeto_reacoes.find(reaction => {
+      setInteressed(
+        !!project.projeto_reacoes.find(reaction => {
           return (
             reaction.pessoa_id === loggedUser.id &&
             reaction.reacao === 'INTERESSE'
           )
-        })?.id || 0,
+        }),
       )
     }
   }, [loggedUser.id, project.id, project.projeto_reacoes])
   function ToogleFavorite() {
-    if (favoriteId) {
+    if (favorited) {
       api
         .delete(
           `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=FAVORITO`,
         )
         .then(response => {
-          setFavoriteId(0)
+          setFavorited(false)
         })
     } else {
       api
@@ -116,18 +116,18 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
           projeto_id: project.id,
         })
         .then(response => {
-          setFavoriteId(response.data.id)
+          setFavorited(true)
         })
     }
   }
   function ToogleInteresse() {
-    if (interesseId) {
+    if (interessed) {
       api
         .delete(
           `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=INTERESSE`,
         )
         .then(response => {
-          setInteresseId(0)
+          setInteressed(false)
         })
     } else {
       api
@@ -137,7 +137,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
           projeto_id: project.id,
         })
         .then(response => {
-          setInteresseId(response.data.id)
+          setInteressed(true)
         })
     }
   }
@@ -201,11 +201,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
 
         {loggedUser.id !== user?.id && (
           <aside>
-            <ButtonFavorite checked={!!favoriteId} onClick={ToogleFavorite}>
+            <ButtonFavorite checked={!!favorited} onClick={ToogleFavorite}>
               {' '}
               <SelectFavorite /> Favoritar
             </ButtonFavorite>
-            <ButtonInterest checked={!!interesseId} onClick={ToogleInteresse}>
+            <ButtonInterest checked={!!interessed} onClick={ToogleInteresse}>
               {' '}
               <SelectInteresse />
               Tenho interesse

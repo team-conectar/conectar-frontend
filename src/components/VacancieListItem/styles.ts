@@ -6,7 +6,6 @@ export interface IPropsLiVancancyStyles extends HTMLAttributes<HTMLLIElement> {
 export const VacancyLi = styled.li<IPropsLiVancancyStyles>`
   box-shadow: var(--boxShadow);
   border-radius: var(--borderRadius);
-
   border: 0;
   padding: 0.6rem 1rem;
   display: grid;
