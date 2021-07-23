@@ -87,6 +87,7 @@ const Profiles: React.FC = () => {
   const [favoreteProjects, setFavoriteProjects] = useState<IProject[]>(
     [] as IProject[],
   )
+  const [followed, setFollowed] = useState(false)
   const [qtdfollowers, setFollowersqtd] = useState()
   const [qtdfollowing, setFollowingqtd] = useState()
   const [peoplesfrs, setPeoplesfrs] = useState<IProfile[]>([])
@@ -165,8 +166,11 @@ const Profiles: React.FC = () => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
   }, [history, profile_username])
   useEffect(() => {
     if (profile.id) {
@@ -192,11 +196,15 @@ const Profiles: React.FC = () => {
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
-      console.log(profile.id);
-      console.log("blabla");
+      console.log(profile.id)
+      console.log('blabla')
       api
         .get(`/api/v1/qtd_seguidores?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
         .then((response: AxiosResponse<any>) => {
+=======
+        .then(response => {
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
           setFollowersqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -204,7 +212,11 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/qtd_seguindo?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
         .then((response: AxiosResponse<any>) => {
+=======
+        .then(response => {
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
           setFollowingqtd(response.data)
         })
         .catch((err: AxiosError) => {
@@ -212,26 +224,60 @@ const Profiles: React.FC = () => {
         })
       api
         .get(`/api/v1/seguidores?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
         .then((response: AxiosResponse<any>) => {
           setPeoplesfrs(response.data)
 
+=======
+        .then((response: AxiosResponse<IProfile[]>) => {
+          setPeoplesfrs(response.data)
+          setFollowed(
+            !!response.data.find(people => {
+              return people.id === user.id
+            }),
+          )
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
       api
         .get(`/api/v1/seguindo?pessoa_id=${profile.id}`)
+<<<<<<< HEAD
         .then((response: AxiosResponse<any>) => {
           setPeoplesfng(response.data)
           console.log(peoplesfng);
 
+=======
+        .then(response => {
+          setPeoplesfng(response.data)
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
         })
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         })
-
     }
   }, [profile.id])
+  async function ToogleFollow() {
+    if (followed) {
+      await api
+        .delete(
+          `/api/v1/seguir?seguido_id=${profile.id}&seguidor_id=${user.id}`,
+        )
+        .then(() => {
+          setFollowed(false)
+        })
+    } else {
+      await api
+        .post('/api/v1/seguir', {
+          seguidor_id: user?.id,
+          seguido_id: profile.id,
+        })
+        .then(() => {
+          setFollowed(true)
+        })
+    }
+  }
   useEffect(() => {
     if (profile.id) {
       api
@@ -304,16 +350,34 @@ const Profiles: React.FC = () => {
               </figcaption>
             </figure>
             <div>
+<<<<<<< HEAD
               <Button theme="tertiary" onClick={() => {
                 setShowProjectList(4)
               }}>
+=======
+              <Button
+                theme="tertiary"
+                onClick={() => {
+                  setShowProjectList(4)
+                }}
+              >
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                 <FaUserFriends />
                 {qtdfollowing} Seguindo&ensp;
               </Button>
               <FaCircle />
+<<<<<<< HEAD
               <Button theme="tertiary" onClick={() => {
                 setShowProjectList(5)
               }}>
+=======
+              <Button
+                theme="tertiary"
+                onClick={() => {
+                  setShowProjectList(5)
+                }}
+              >
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                 &ensp; {qtdfollowers} Seguidores
               </Button>
             </div>
@@ -322,11 +386,16 @@ const Profiles: React.FC = () => {
                 <Button
                   theme="primary"
                   onClick={() => {
-                    user.id === profile?.id &&
-                      history.push(`/editar-perfil/${user.id}`)
+                    user.id === profile?.id
+                      ? history.push(`/editar-perfil/${user.id}`)
+                      : ToogleFollow()
                   }}
                 >
-                  {user.id === profile?.id ? 'EDITAR' : 'SEGUIR'}
+                  {user.id === profile?.id
+                    ? 'EDITAR'
+                    : followed
+                    ? 'deixar de seguir'
+                    : 'SEGUIR'}
                 </Button>
               ) : (
                 <Skeleton width="150px" height="30px" />
@@ -479,7 +548,11 @@ const Profiles: React.FC = () => {
               )) ||
               (showProjectList === 4 && (
                 <>
+<<<<<<< HEAD
                   {(peoplesfng.length) ? (
+=======
+                  {peoplesfng.length ? (
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                     <ul>
                       {peoplesfng.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />
@@ -491,13 +564,16 @@ const Profiles: React.FC = () => {
                       <h2>{profile.nome} </h2>
                       <h1>Não segue ninguém</h1>
                     </section>
-                  )
-                  }
+                  )}
                 </>
               )) ||
               (showProjectList === 5 && (
                 <>
+<<<<<<< HEAD
                   {(peoplesfrs.length) ? (
+=======
+                  {peoplesfng.length ? (
+>>>>>>> 85e97d38e7b40ea8a2e35b400e5deee397cb2183
                     <ul>
                       {peoplesfrs.map((profile: IProfile) => (
                         <ProfileCard key={profile.id} profile={profile} />

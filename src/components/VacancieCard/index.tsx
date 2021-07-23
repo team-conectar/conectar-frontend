@@ -80,7 +80,9 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   async function FindPeople() {
     const result = await Alert({
       title: 'Deseja realmente efetuar uma nova busca?',
-      text: `${profile?.nome?.split(` `)[0]} não aparecerá mais para preencher essa vaga`,
+      text: `${
+        profile?.nome?.split(` `)[0]
+      } não aparecerá mais para preencher essa vaga`,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Nova busca',
@@ -140,12 +142,6 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       status={situation[`${vacancy.situacao}`].status}
       {...rest}
     >
-      <label>
-        <DropdownList IconButton={<GiHamburgerMenu />}>
-          <li>Clonar vaga</li>
-          <li>Excluir vaga</li>
-        </DropdownList>
-      </label>
       <Link to={`/perfil/${profile?.usuario}`}>
         <img
           src={

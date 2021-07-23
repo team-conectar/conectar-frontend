@@ -360,7 +360,7 @@ const Projects: React.FC = () => {
       title: `Deseja realmente apagar o projeto ${project.nome}?`,
       text: 'Todas as informações e registros do projeto serão perdidos',
       showCancelButton: true,
-      confirmButtonText: 'apagar',
+      denyButtonText: 'apagar',
       icon: 'warning',
     })
     if (delet.isConfirmed) {
