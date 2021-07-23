@@ -231,7 +231,7 @@ const Profiles: React.FC = () => {
           return err?.response?.data.detail
         })
     }
-  }, [profile.id])
+  }, [profile.id, user.id, followed])
   async function ToogleFollow() {
     if (followed) {
       await api
