@@ -7,7 +7,6 @@ import co from '../../assets/icon/co.svg'
 import Skeleton from 'react-loading-skeleton'
 import { Context } from '../../context/AuthContext'
 import Button from '../UI/Button'
-import { FaLink } from 'react-icons/fa'
 
 const ProfileLink: React.FC = () => {
   const { user, isAuthenticated } = useContext(Context)

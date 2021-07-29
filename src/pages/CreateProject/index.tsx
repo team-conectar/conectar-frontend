@@ -23,6 +23,7 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import Vacancy from '../../components/Vacancy'
 import Alert from '../../utils/SweetAlert'
 import { Context } from '../../context/AuthContext'
+import { loading } from '../../utils/loading'
 
 export interface ProjectType {
   descricao: string
@@ -173,6 +174,7 @@ const SecondForm: React.FC = () => {
         await schema.validate(formData, {
           abortEarly: false,
         })
+        loading.start()
         // Validation passed
         const data = new FormData()
         data.append('nome', firstData.nome)
@@ -215,6 +217,8 @@ const SecondForm: React.FC = () => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [firstData, id_pessoa, setProject, setShownStep],
