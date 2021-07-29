@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes, useState } from 'react'
+import React, { ButtonHTMLAttributes } from 'react'
 import { BodyButton } from './styles'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: 'primary' | 'secondary' | 'error' | 'tertiary'
