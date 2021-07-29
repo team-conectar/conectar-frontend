@@ -15,11 +15,11 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  */
 const Button: React.FC<ButtonProps> = ({ theme, color, children, ...rest }) => {
   const [loading, setLoading] = useState(false)
-  function onClickWithLoading() {
+  function onClickWithLoading(event: any) {
     if (!loading) {
       try {
         setLoading(true)
-        rest.onClick
+        rest.onClick && rest.onClick(event)
       } finally {
         setLoading(false)
       }
