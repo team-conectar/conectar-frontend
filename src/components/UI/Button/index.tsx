@@ -1,4 +1,4 @@
-import React, { ButtonHTMLAttributes } from 'react'
+import React, { ButtonHTMLAttributes, useState } from 'react'
 import { BodyButton } from './styles'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   theme?: 'yellow' | 'yellowG' | 'primary' | 'secondary' | 'error' | 'tertiary'
@@ -14,8 +14,24 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * )
  */
 const Button: React.FC<ButtonProps> = ({ theme, color, children, ...rest }) => {
+  const [loading, setLoading] = useState(false)
+  async function onClickWithLoading(event: any) {
+    if (!loading) {
+      try {
+        rest.onClick && rest.onClick(event)
+      } finally {
+        setLoading(false)
+      }
+    }
+  }
   return (
-    <BodyButton theme={theme} color={color} type="button" {...rest}>
+    <BodyButton
+      theme={theme}
+      color={color}
+      type="button"
+      onClick={onClickWithLoading}
+      {...rest}
+    >
       {children}
     </BodyButton>
   )
