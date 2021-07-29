@@ -1,7 +1,7 @@
-import React, { ButtonHTMLAttributes } from 'react'
+import React, { ButtonHTMLAttributes, useState } from 'react'
 import { BodyButton } from './styles'
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  theme?: 'primary' | 'secondary' | 'error' | 'tertiary'
+  theme?: 'yellow' | 'yellowG' | 'primary' | 'secondary' | 'error' | 'tertiary'
   color?: string
 }
 /**
@@ -14,8 +14,25 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
  * )
  */
 const Button: React.FC<ButtonProps> = ({ theme, color, children, ...rest }) => {
+  const [loading, setLoading] = useState(false)
+  function onClickWithLoading() {
+    if (!loading) {
+      try {
+        setLoading(true)
+        rest.onClick
+      } finally {
+        setLoading(false)
+      }
+    }
+  }
   return (
-    <BodyButton theme={theme} color={color} type="button" {...rest}>
+    <BodyButton
+      {...rest}
+      theme={theme}
+      color={color}
+      type="button"
+      onClick={onClickWithLoading}
+    >
       {children}
     </BodyButton>
   )
