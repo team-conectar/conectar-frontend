@@ -277,6 +277,7 @@ const Projects: React.FC = () => {
             })
             .then(() => {
               setOpenModal(false)
+              showToast('success', 'Editado com Sucesso!')
             })
         } else if (modalContent.habilidades) {
           const data = {
@@ -290,6 +291,7 @@ const Projects: React.FC = () => {
             })
             .then(() => {
               setOpenModal(false)
+              showToast('success', 'Editado com Sucesso!')
             })
         } else {
           await api.put(`/api/v1/projeto/${projeto_id}`, formData).then(() => {
@@ -492,7 +494,6 @@ const Projects: React.FC = () => {
                   />
                 )}
                 <Button
-                  onClick={() => showToast('success', 'Editado com Sucesso!')}
                   theme="primary"
                   type="submit"
                 >
