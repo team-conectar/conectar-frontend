@@ -17,7 +17,6 @@ import {
 import userDefault from '../../assets/icon/user.svg'
 import { FiPlusCircle } from 'react-icons/fi'
 import urlConvite from '../../assets/image/convite_dias.svg'
-// import clone from '../../assets/icon/clone.svg'
 import objetivo from '../../assets/icon/objetivo.svg'
 import vagas from '../../assets/icon/vagas.svg'
 import like from '../../assets/icon/like.svg'
@@ -53,11 +52,8 @@ import { showToast } from '../../components/Toast/Toast'
 import { IReaction } from '../../components/ProjectCard'
 import { BsFillStarFill } from 'react-icons/bs'
 import Alert from '../../utils/SweetAlert'
-import { icons } from 'react-icons'
 import { loading } from '../../utils/loading'
-interface projeto_id {
-  id: string
-}
+
 interface ProjectType {
   nome: string
   descricao: string
@@ -70,6 +66,7 @@ interface ProjectType {
   projeto_reacoes?: IReaction[]
   id: number
   pessoa_id: number
+  mural?: string
 }
 interface IPeopleLink {
   usuario: string
@@ -87,12 +84,7 @@ interface IParmsProps {
   step?: string
 }
 const Projects: React.FC = () => {
-  const {
-    loading: userLoading,
-    isAuthenticated,
-    user,
-    handleLogout,
-  } = useContext(Context)
+  const { loading: userLoading, isAuthenticated, user } = useContext(Context)
   const projeto_id = useParams<IParmsProps>().id
   const { step } = useParams<IParmsProps>()
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
@@ -487,9 +479,9 @@ const Projects: React.FC = () => {
                 )}
                 {modalContent.mural && (
                   <Textarea
-                    name="descricao"
+                    name="mural"
                     label="Insira informações importantes para os participantes"
-                    defaultValue={''}
+                    defaultValue={project.mural}
                   />
                 )}
                 {modalContent.areas && (
@@ -668,6 +660,7 @@ const Projects: React.FC = () => {
               )}
             </p>
           </section>
+
           <section>
             <legend>
               Mural de informações
@@ -682,7 +675,7 @@ const Projects: React.FC = () => {
             </legend>
 
             <p>
-              {' ' || (
+              {project.mural || (
                 <>
                   <Skeleton width={300} />
                   <Skeleton width={300} />
