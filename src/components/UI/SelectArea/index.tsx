@@ -89,11 +89,13 @@ const SelectArea: React.FC<SelectAreaProps> = ({
         refs.forEach(ref => {
           ref.checked = false
         })
+        setSelectedAreas([])
       },
       setValue: (refs: HTMLInputElement[], values: string[]) => {
         refs.forEach(ref => {
           if (values.includes(ref.id)) {
             ref.checked = true
+            return true
           }
         })
       },

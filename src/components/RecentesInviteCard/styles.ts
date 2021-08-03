@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-export const ProfileLink = styled(Link)`
+export const ProjectLink = styled(Link)`
   width: 90%;
   height: 100%;
   cursor: pointer;
@@ -12,12 +12,7 @@ export const ProfileLink = styled(Link)`
   margin: 0.4rem;
   margin-left: 2rem;
   > img {
-    border-radius: 50%;
-    border: solid 1px var(--borderDivision);
-    width: 2.4rem;
-    height: 2.4rem;
-    object-fit: cover;
-    object-position: center;
+    width: 2rem;
   }
   > aside {
     display: flex;
@@ -25,14 +20,14 @@ export const ProfileLink = styled(Link)`
     align-items: flex-start;
 
     > h2 {
-      padding-right: 2rem;
-      word-break: keep-all;
       font-size: 1rem;
+      word-break: keep-all;
     }
-    > p {
+    > a {
       text-align: center;
-      color: var(--gray);
+      color: var(--textGreen);
       font-size: 0.8rem;
+      text-decoration: underline;
     }
   }
 `
@@ -47,11 +42,13 @@ export const BodyCard = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-bottom: 1rem;
   align-items: center;
   justify-content: space-evenly;
   > h2 {
     font-size: 1rem;
-
+    padding-right: 2rem;
+    word-break: keep-all;
     align-self: flex-start;
     margin-left: 1rem;
   }

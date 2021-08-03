@@ -3,11 +3,14 @@ import backgroud from '../image/background.svg'
 export const GlobalStyle = createGlobalStyle`
 :root {
     /* font-size: 60%; */
-    --yellow: #ebae3c;
+
+
+    --yellow:  #ebae3c;
     --yellow-dark: #fea81b;
     --green: #99b876;
     --textGreen: #072f3f;
     --red: #d8252c;
+    --red-dark: #c92228;
     --backgroundElevation: #fafafa;
     --gray: #999999;
     --background: #f1f1f1ff;
@@ -42,6 +45,7 @@ export const GlobalStyle = createGlobalStyle`
     background-size:100%;
     background-repeat:no-repeat; */
     color: var(--textGreen);
+    position: relative;
     
 }
 
@@ -68,4 +72,67 @@ select,
 textarea {
     outline: none;
 }
+
+.swal2-popup {
+  font-family: Raleway !important;
+
+}
+
+.confirmButtonSweet {
+  /* background: var(--green)!important; */
+  color: white !important;
+  box-shadow: none!important;
+  font-weight: 600;
+  border-radius: 2rem!important;
+  text-transform: uppercase;
+  padding: 0.6rem 2rem;
+  height: 2.2rem;
+}
+
+.cancelButtonSweet {
+  border-radius: 2rem!important;
+  box-shadow: none!important;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 2rem;
+  height: 2.2rem;
+}
+
+.denyButtonSweet {
+  border-radius: 2rem!important;
+  box-shadow: none!important;
+  text-transform: uppercase;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 2rem;
+  height: 2.2rem;
+}
+#loadingContainer{
+    color:darkblue;
+    position:absolute;
+    z-index:1000;
+    width: 100%;
+    height: 100%;
+    background: black;
+    opacity: 0.4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img{
+        height: 3rem;
+        width: 3rem;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+}
+
 `

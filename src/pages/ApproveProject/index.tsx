@@ -117,16 +117,19 @@ const ApproveProject: React.FC = () => {
             </ul>
           </section>
           <aside>
-            {!finalizedDeal && (
-              <Button
-                theme="secondary"
-                disabled={!possibleDeal}
-                onClick={handleFinalizeDeal}
-              >
-                Finalizar acordos
-              </Button>
-            )}
-            <Button theme="primary" onClick={handleInvite}>
+            <Button
+              theme="secondary"
+              disabled={!possibleDeal || finalizedDeal}
+              onClick={handleFinalizeDeal}
+            >
+              Finalizar acordos
+            </Button>
+
+            <Button
+              theme="primary"
+              onClick={handleInvite}
+              disabled={possibleDeal || finalizedDeal}
+            >
               Enviar convites
             </Button>
           </aside>

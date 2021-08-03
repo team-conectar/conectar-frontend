@@ -23,45 +23,39 @@ interface IPessoa {
   id: number
 }
 
-
 const SuccessfulProjectsCard: React.FC = () => {
   const history = useHistory()
   const [users, setUsers] = useState<IPessoa[]>([])
   const [projects, setProjects] = useState<IProject[]>([])
-  
+
   useEffect(() => {
-    
     const res = api
       .get(`/api/v1/projeto/destaque/2`)
       .then(response => {
         setProjects(response.data)
       })
-    .catch((err: AxiosError) => {
-      return err?.response?.data.detail
-    })
+      .catch((err: AxiosError) => {
+        return err?.response?.data.detail
+      })
     console.log(res)
   }, [])
 
-   useEffect(() => {
+  useEffect(() => {
     projects.map(project => {
       api.get(`/api/v1/pessoas/${project.pessoa_id}`).then(response => {
-        setUsers(user => user.concat([response.data])
-      )
+        setUsers(user => user.concat([response.data]))
       })
     })
-    console.log("A!QUIII");
-
-    
+    setUsers(users.reverse())
   }, [projects])
 
   return (
     <BodyCard>
       <h2>Projetos de sucesso</h2>
-      {
-        projects?.map((project, index) =>
-        <ProfileLink to={`/projeto/${project.id}`}>
+      {projects?.map((project, index) => (
+        <ProfileLink key={project.id} to={`/projeto/${project.id}`}>
           <img
-            src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+            src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`}
             alt=""
           />
           <aside>
@@ -69,12 +63,13 @@ const SuccessfulProjectsCard: React.FC = () => {
             <p>@{users[index]?.usuario}</p>
           </aside>
         </ProfileLink>
-        )
-      }
+      ))}
 
-      <button onClick={() => {
-            history.push('/pesquisar/projeto/nome/')
-          }}>
+      <button
+        onClick={() => {
+          history.push('/pesquisar/projeto/nome/')
+        }}
+      >
         <img src={twoUsers} alt="botao encontrar projetos" /> Encontre os que
         você conhece
       </button>

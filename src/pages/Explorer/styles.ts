@@ -26,6 +26,14 @@ export const Page = styled.div`
     position: sticky;
     top: calc(2rem + 45px);
   }
+  > nav {
+    grid-column: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    position: sticky;
+    top: calc(2rem + 45px);
+  }
   > ul {
     grid-column: 2;
     border-radius: var(--borderRadius);

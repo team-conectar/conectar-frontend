@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { BodyButton } from '../UI/Button/styles'
 export const BodyCard = styled.div`
   display: grid;
-  width: 22rem;
   --gridColumn1: 35%;
   gap: 0.6rem;
   --gridColumn2: calc(65% - 0.6rem);
@@ -13,13 +12,14 @@ export const BodyCard = styled.div`
   background: white;
   box-shadow: var(--boxShadow);
   border-radius: 0.8rem;
-  > img {
+  a > img {
     background: var(--borderDivision);
     grid-column: 1;
     grid-row: 1 / -1;
     border-radius: 50%;
     border: solid 1px var(--borderDivision);
-    width: 80%;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     object-position: center;
     z-index: 2;
@@ -34,6 +34,7 @@ export const BodyCard = styled.div`
     grid-column: 1 / -1;
     grid-row: 2;
     display: grid;
+    align-items: center;
     grid-template-columns: var(--gridColumn1) calc(var(--gridColumn2) / 2) calc(
         var(--gridColumn2) / 2
       );
@@ -43,24 +44,23 @@ export const BodyCard = styled.div`
       margin: 0.5rem 5%;
       grid-row: 1;
     }
-    > span:empty ~ ${BodyButton} {
-      grid-column: 2 / -1;
-      width: 50%;
-      margin: 0.5rem 25%;
-    }
     > span {
-      &:not(:empty) {
-        grid-column: 3;
-        border-left: solid 2px var(--borderDivision);
-      }
+      grid-column: 2 / -1;
       grid-row: 1;
+
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 0.4rem;
+      padding: 0.4rem 0;
       img {
         width: 1.4rem;
       }
+    }
+    ${BodyButton} + span {
+      grid-column: 3;
+      width: 50%;
+      margin: 0.5rem 25%;
     }
   }
 `

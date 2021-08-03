@@ -1,24 +1,16 @@
-import React, {
-  HTMLAttributes,
-  InputHTMLAttributes,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import React, { HTMLAttributes, useEffect, useState } from 'react'
 import { BodyCard, DropdownList } from './styles'
 import { Link } from 'react-router-dom'
-import id from '../../assets/icon/id.svg'
-import al from '../../assets/icon/al.svg'
-import co from '../../assets/icon/co.svg'
-import { Context } from '../../context/AuthContext'
+import userDefault from '../../assets/icon/user.svg'
 import { AxiosError } from 'axios'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
-import Dropdown from '../UI/Dropdown'
 import api from '../../services/api'
 import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { TypeSituationVacancy } from '../Vacancy'
+import Alert from '../../utils/SweetAlert'
+import Swal from 'sweetalert2'
 export interface IVacancyCard {
   projeto_id: number
   pessoa_id: number
@@ -86,32 +78,73 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
       isAvaliable: true,
     },
   }
-  
-  function FindPeople() {
-    console.log("ola");
-    console.log(vacancy);
-    
-    
-    api
-      .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
-      .then(response => {
-        setProfile(response.data)
-
-        // api
-        // .get(`/api/v1/pessoas/${response}`)
-        // .then(response  => {
-        //   setProfile(response.data)
-        // })
-        // .catch((err: AxiosError) => {
-        //     return err?.response?.data.detail
-        //   })
+  async function FindPeople() {
+    const result = await Alert({
+      title: 'Como deseja efetuar a nova busca?',
+      text: `${
+        profile?.nome?.split(` `)[0]
+      } não aparecerá mais para preencher essa vaga`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Busca com o conectar',
+      showDenyButton:true,
+      denyButtonText:"Busca Manual",
+      denyButtonColor: `var(--green)`,
+    })
+    if(result.isDenied){
+      Alert({
+        title: 'Insira o username',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Buscar',
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          return api
+            .get(`/api/v1/pessoas/${login}`)
+            .then(response => {
+              return response.data
+            })
+            .catch(error => {
+              Swal.showValidationMessage(
+                `Request failed: ${error}`
+              )
+            })
+        },
+            allowOutsideClick: () => !Swal.isLoading()
+          }).then((result ) => {
+            if (result.isConfirmed) {
+              console.log(result.value);
+              
+              Alert({
+                title: `${result.value.nome}`,
+                imageUrl: result.value.foto_perfil
+                ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${result.value?.foto_perfil}`
+                : userDefault,
+              })
+            }
+            })
+    }
+    if (result.isConfirmed)
+      api
+        .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
+        .then(response => {
+          setProfile(response.data)
+          Alert({
+            title: 'Novo Usuário encontrado',
+            icon: 'success',
+          })
         })
-
-      .catch((err: AxiosError) => {
-        return err?.response?.data.detail
-      })
-    console.log(profile);
-
+        .catch((err: AxiosError) => {
+          Alert({
+            title: `Erro: ${err.message}`,
+            text: 'Não foi possível efetuar a busca, tente novamente!',
+            icon: 'error',
+          })
+          return err?.response?.data.detail
+        })
   }
 
   useEffect(() => {
@@ -140,27 +173,25 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
         .catch((err: AxiosError) => {
           return err?.response?.data.detail
         }),
-  ]
+    ]
   }, [vacancy.papel_id, vacancy.pessoa_id, vacancy.tipo_acordo_id])
-  
+
   return (
     <BodyCard
       isAvailable={situation[`${vacancy.situacao}`].isAvaliable}
       status={situation[`${vacancy.situacao}`].status}
       {...rest}
     >
-      <label>
-        <DropdownList IconButton={<GiHamburgerMenu />}>
-          <li>Clonar vaga</li>
-          <li>Excluir vaga</li>
-        </DropdownList>
-      </label>
-      <Link to={`/perfil/${profile.id}`}>
+      <Link to={`/perfil/${profile?.usuario}`}>
         <img
-          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
+          src={
+            profile?.foto_perfil
+              ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile?.foto_perfil}`
+              : userDefault
+          }
           alt=""
         />
-        <h2>{profile.nome?.split(` `)[0]}</h2>
+        <h2>{profile?.nome?.split(` `)[0]}</h2>
       </Link>
       <h3>
         {office}
@@ -170,7 +201,9 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
 
       {/* <Button theme="primary">Ver currículo</Button> */}
       {/* <DropdownList IconButton={ */}
-      <Button onClick={FindPeople} theme="secondary">Nova busca</Button>
+      <Button onClick={FindPeople} theme="secondary">
+        Nova busca
+      </Button>
       {/* <li>Perfis similares</li>
         <li>Perfis interessados</li>
         <li>Perfis interessados</li>

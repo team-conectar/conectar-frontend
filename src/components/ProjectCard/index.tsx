@@ -17,6 +17,8 @@ import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import { BsStar, BsFillStarFill } from 'react-icons/bs'
 import { IconType } from 'react-icons'
+import userDefault from '../../assets/icon/user.svg'
+
 import {
   FaRegHandPointer,
   FaHandPointer,
@@ -55,18 +57,18 @@ interface IProjectCardProps {
 }
 
 const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
-  const [favoriteId, setFavoriteId] = useState<number>(0)
-  const [interesseId, setInteresseId] = useState<number>(0)
-  const [user, setUser] = useState<IPessoa>()
+  const [favorited, setFavorited] = useState<boolean>(false)
+  const [interessed, setInteressed] = useState<boolean>(false)
+  const [user, setUser] = useState<IPessoa>({} as IPessoa)
   const loggedUser = useContext(Context).user
   const SelectFavorite: any = () => {
-    if (favoriteId) {
+    if (favorited) {
       return <BsFillStarFill />
     }
     return <BsStar />
   }
   const SelectInteresse: IconType = ({ ...rest }) => {
-    if (interesseId) {
+    if (interessed) {
       return <FaHandPointer {...rest} />
     }
     return <FaRegHandPointer {...rest} />
@@ -79,29 +81,33 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
   }, [project.pessoa_id])
   useEffect(() => {
     if (project.projeto_reacoes && loggedUser.id) {
-      setFavoriteId(
-        project.projeto_reacoes.find(reaction => {
+      setFavorited(
+        !!project.projeto_reacoes.find(reaction => {
           return (
             reaction.pessoa_id === loggedUser.id &&
             reaction.reacao === 'FAVORITO'
           )
-        })?.id || 0,
+        }),
       )
-      setInteresseId(
-        project.projeto_reacoes.find(reaction => {
+      setInteressed(
+        !!project.projeto_reacoes.find(reaction => {
           return (
             reaction.pessoa_id === loggedUser.id &&
             reaction.reacao === 'INTERESSE'
           )
-        })?.id || 0,
+        }),
       )
     }
   }, [loggedUser.id, project.id, project.projeto_reacoes])
   function ToogleFavorite() {
-    if (favoriteId) {
-      api.delete(`/api/v1/reacoes?reacao_id=${favoriteId}`).then(response => {
-        setFavoriteId(0)
-      })
+    if (favorited) {
+      api
+        .delete(
+          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=FAVORITO`,
+        )
+        .then(response => {
+          setFavorited(false)
+        })
     } else {
       api
         .post('/api/v1/reacoes', {
@@ -110,15 +116,19 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
           projeto_id: project.id,
         })
         .then(response => {
-          setFavoriteId(response.data.id)
+          setFavorited(true)
         })
     }
   }
   function ToogleInteresse() {
-    if (interesseId) {
-      api.delete(`/api/v1/reacoes?reacao_id=${interesseId}`).then(response => {
-        setInteresseId(0)
-      })
+    if (interessed) {
+      api
+        .delete(
+          `/api/v1/reacoes?pessoa_id=${loggedUser.id}&projeto_id=${project.id}&reacao=INTERESSE`,
+        )
+        .then(response => {
+          setInteressed(false)
+        })
     } else {
       api
         .post('/api/v1/reacoes', {
@@ -127,7 +137,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
           projeto_id: project.id,
         })
         .then(response => {
-          setInteresseId(response.data.id)
+          setInteressed(true)
         })
     }
   }
@@ -140,10 +150,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
             <img
               src={
                 user?.foto_perfil
-                  ? process.env.AMAZON_URL + user?.foto_perfil
-                  : ''
+                  ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user?.foto_perfil}`
+                  : userDefault
               }
               alt={user?.nome}
+              className="user-img"
             />
           </Link>
           <UserInfo>
@@ -159,7 +170,7 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
           <aside>
             <Link to={`/projeto/${project.id}`}>
               <img
-                src={process.env.AMAZON_URL + project.foto_capa}
+                src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${project.foto_capa}`}
                 alt={project.nome}
               />
             </Link>
@@ -190,11 +201,11 @@ const ProjectCard: React.FC<IProjectCardProps> = ({ project, hiddeOwner }) => {
 
         {loggedUser.id !== user?.id && (
           <aside>
-            <ButtonFavorite checked={!!favoriteId} onClick={ToogleFavorite}>
+            <ButtonFavorite checked={!!favorited} onClick={ToogleFavorite}>
               {' '}
               <SelectFavorite /> Favoritar
             </ButtonFavorite>
-            <ButtonInterest checked={!!interesseId} onClick={ToogleInteresse}>
+            <ButtonInterest checked={!!interessed} onClick={ToogleInteresse}>
               {' '}
               <SelectInteresse />
               Tenho interesse

@@ -20,6 +20,10 @@ export const BodyVacancy = styled.section`
       background: none;
       font: 500 1.2rem Raleway;
       color: var(--green);
+      :disabled {
+        opacity: 0.6;
+        cursor: no-drop;
+      }
       span {
         font: 500 2rem Raleway;
       }
@@ -62,6 +66,13 @@ export const BodyVacancy = styled.section`
       grid-template-columns: 0.5fr 0.25fr 0.25fr;
       gap: var(--gap) !important;
       padding: 0 0.2rem;
+      .quantidade-e-perfil {
+        grid-column: 2 / -1;
+        grid-row: 1;
+        display: flex;
+        flex-direction: row;
+        gap: var(--gap) !important;
+      }
       .area-botoes {
         grid-column: 1 / -1;
         grid-row: 4;

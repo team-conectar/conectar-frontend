@@ -65,13 +65,8 @@ export const finalYearOptions = (
 ): OptionHTMLAttributes<HTMLOptionElement>[] => {
   const currentYear = `${new Date().getFullYear() + 7}`
 
-  const years: OptionHTMLAttributes<HTMLOptionElement>[] = [
-    {
-      label: currentYear,
-      value: currentYear,
-    },
-  ]
-  for (let index = Number(currentYear) - 1; index > initialYear; index--) {
+  const years: OptionHTMLAttributes<HTMLOptionElement>[] = []
+  for (let index = Number(currentYear); index >= initialYear; index--) {
     const year = String(index)
     years.push({
       value: year,

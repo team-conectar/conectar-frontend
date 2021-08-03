@@ -28,6 +28,9 @@ import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { OptionTypeBase, Props as SelectProps } from 'react-select'
 import { showToast } from '../../../../components/Toast/Toast'
+import Alert from '../../../../utils/SweetAlert'
+import { loading } from '../../../../utils/loading'
+
 export interface IExperienceProject {
   id: number
   nome: string
@@ -142,6 +145,7 @@ const ProjectExperiences: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const {
           nome,
           cargo,
@@ -180,7 +184,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
-                showToast( "success" ,"Editado com sucesso!")
+                showToast('success', 'Editado com sucesso!')
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })
@@ -193,7 +197,7 @@ const ProjectExperiences: React.FC = () => {
                 withCredentials: true,
               })
               .then(() => {
-                showToast( "success" ,"Cadastrado com sucesso!")
+                showToast('success', 'Cadastrado com sucesso!')
                 setShowRegister(false)
                 setEditStored(initialProjectData)
               })
@@ -209,6 +213,8 @@ const ProjectExperiences: React.FC = () => {
 
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
 
       // Do something
@@ -246,9 +252,26 @@ const ProjectExperiences: React.FC = () => {
   useEffect(() => {
     setCurrentilyProject(editStored.situacao === 'Em andamento')
   }, [editStored])
+
+  async function deleteExperience(experience: IExperienceProject) {
+    const delet = await Alert({
+      title: `Deseja realmente excluir ${experience.nome}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
+    })
+    if (delet.isDenied) {
+      console.log(experience)
+      handleDeleteExperience(experience.id)
+    }
+  }
+
   return (
     <BodyExperiences>
-      <Modal setOpen={setOpenModal} open={openModal}>
+      {/* <Modal setOpen={setOpenModal} open={openModal}>
         <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
         <footer>
           <Button
@@ -264,7 +287,7 @@ const ProjectExperiences: React.FC = () => {
             Manter
           </Button>
         </footer>
-      </Modal>
+      </Modal> */}
       <h2>
         Projetos
         {!showRegister && (
@@ -286,8 +309,8 @@ const ProjectExperiences: React.FC = () => {
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash
                   onClick={() => {
-                    setOpenModal(true)
-                    setExperienceExcluded(experience)
+                    deleteExperience(experience)
+                    // setOpenModal(true)
                   }}
                 />
               </section>
@@ -387,6 +410,9 @@ const ProjectExperiences: React.FC = () => {
                     label="Ano final"
                     name="finalYear"
                     options={finalYearOptions(initialYear)}
+                    noOptionsMessage={props =>
+                      'Selecione primeiro o ano inicial'
+                    }
                     defaultValue={
                       editStored.id &&
                       Number(editStored?.finalYear) > initialYear

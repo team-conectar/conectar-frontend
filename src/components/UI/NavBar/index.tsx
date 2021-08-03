@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { BodyNavBar, LiNotification, NotificationBall } from './styles'
 import logo from '../../../assets/image/logo_fundoClaro.svg'
 import { Link, NavLink, useHistory, useLocation } from 'react-router-dom'
@@ -23,6 +23,7 @@ interface INotification {
   lido: boolean
   foto: string
   link?: string
+  anexo?: string
   id: number
   data_criacao: string
   data_atualizacao: string
@@ -35,7 +36,11 @@ const UserButton = () => {
       IconButton={
         <figure>
           {user.foto_perfil ? (
-            <img src={user.foto_perfil} alt="sua conta" />
+            <img
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`}
+              alt="sua conta"
+              id="user"
+            />
           ) : (
             <IconUser id="user" />
           )}
@@ -44,7 +49,11 @@ const UserButton = () => {
     >
       <section>
         <img
-          src={user.foto_perfil ? user.foto_perfil : userDefault}
+          src={
+            user.foto_perfil
+              ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`
+              : userDefault
+          }
           alt={user.nome}
         />
         <legend>{user.nome?.split(' ')[0]}</legend>
@@ -52,8 +61,8 @@ const UserButton = () => {
         <p>{user.email}</p>
       </section>
       <Link to={`/perfil/${user.usuario}`}>Perfil no Conectar</Link>
-      <Link to="/explore">Configurações</Link>
-      <Link to="/explore">Ajuda</Link>
+      {/* <Link to="/explore">Configurações</Link> */}
+      {/* <Link to="/explore">Ajuda</Link> */}
       <button
         onClick={() => {
           handleLogout()
@@ -68,7 +77,7 @@ const UserButton = () => {
 const NotificationsButton = () => {
   const [notifications, setNotifications] = useState<Array<INotification>>([])
   const { user } = useContext(Context)
-
+  const history = useHistory()
   function getNotification() {
     const res = api
       .get(
@@ -87,7 +96,9 @@ const NotificationsButton = () => {
 
     console.log(res)
   }
-
+  const dowloadAnexonotification = useCallback((anexo: string) => {
+    window.location.href = `https://conectar.s3.sa-east-1.amazonaws.com/PDF/${anexo}`
+  }, [])
   function handleCheckNotification() {
     api
       .post(`/api/v1/notificacao/ler-todas?destinatario_id=${user.id}`, {
@@ -120,9 +131,15 @@ const NotificationsButton = () => {
         {notifications?.map(notification => (
           <LiNotification
             key={notification.id}
-            to={`/projeto/${notification.projeto_id}`}
+            onClick={() => {
+              notification.link && history.push(notification.link)
+              notification.anexo && dowloadAnexonotification(notification.anexo)
+            }}
           >
-            <img src={notification.foto} alt="imagem da notificação" />
+            <img
+              src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${notification.foto}`}
+              alt="imagem da notificação"
+            />
             <p>{ReactHtmlParser(notification.situacao)}</p>
           </LiNotification>
         ))}

@@ -1,19 +1,12 @@
-import React, {
-  InputHTMLAttributes,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
+import React, { useEffect, useState } from 'react'
 import { BodyCard, ProfileLink } from './styles'
-import { Link, useHistory } from 'react-router-dom'
-import id from '../../assets/icon/id.svg'
-import al from '../../assets/icon/al.svg'
+import { useHistory } from 'react-router-dom'
 import twoUsers from '../../assets/icon/twoUsers.svg'
-import { Context } from '../../context/AuthContext'
 import { AxiosError } from 'axios'
 import { AreaType } from '../UI/SelectArea'
 import { ToolType } from '../UI/SelectTools'
 import api from '../../services/api'
+import userDefault from '../../assets/icon/user.svg'
 
 interface ProfileType {
   data_nascimento: string
@@ -49,11 +42,15 @@ const SuccessfulCreatorsCard: React.FC = () => {
   return (
     <BodyCard>
       <h2>Criadores de sucesso</h2>
-      
+
       <ProfileLink to={`/perfil/${profile[0]?.usuario}`}>
         <img
-          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-          alt=""
+          src={
+            profile[0]?.foto_perfil
+              ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile[0]?.foto_perfil}`
+              : userDefault
+          }
+          alt={profile[0]?.nome}
         />
         <aside>
           <h2>{profile[0]?.nome}</h2>
@@ -62,8 +59,12 @@ const SuccessfulCreatorsCard: React.FC = () => {
       </ProfileLink>
       <ProfileLink to={`/perfil/${profile[1]?.usuario}`}>
         <img
-          src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-          alt=""
+          src={
+            profile[1]?.foto_perfil
+              ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile[1]?.foto_perfil}`
+              : userDefault
+          }
+          alt={profile[1]?.nome}
         />
         <aside>
           <h2>{profile[1]?.nome}</h2>
@@ -71,9 +72,11 @@ const SuccessfulCreatorsCard: React.FC = () => {
         </aside>
       </ProfileLink>
 
-      <button onClick={() => {
-            history.push('/pesquisar/pessoa/nome/')
-          }}>
+      <button
+        onClick={() => {
+          history.push('/pesquisar/pessoa/nome/')
+        }}
+      >
         <img src={twoUsers} alt="botao encontrar usuarios" /> Encontre os que
         você conhece
       </button>

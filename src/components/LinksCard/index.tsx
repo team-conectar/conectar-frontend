@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React from 'react'
 import { BodyCard } from './styles'
 import { Link } from 'react-router-dom'
@@ -24,15 +25,15 @@ const LinksCard: React.FC = () => {
           alt=" vamos ser aaspasDestaque nas redes sociais"
         />
       </h3>
-      <a href="https://www.facebook.com/boraConectar/">
+      <a target="_blank" href="https://www.facebook.com/boraConectar/">
         <AiFillFacebook />
         <span>/boraconectar</span>
       </a>
-      <a href="https://www.instagram.com/boraconectar/">
+      <a target="_blank" href="https://www.instagram.com/boraconectar/">
         <AiOutlineInstagram />
         <span>/boraconectar</span>
       </a>
-      <a href="https://www.linkedin.com/company/boraconectar/">
+      <a target="_blank" href="https://www.linkedin.com/company/boraconectar/">
         <FaLinkedinIn />
         <span>/boraconectar</span>
       </a>

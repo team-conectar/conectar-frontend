@@ -22,7 +22,11 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { showToast } from '../../../../components/Toast/Toast'
+import Alert from '../../../../utils/SweetAlert'
+import { loading } from '../../../../utils/loading'
+
 /**
+ *
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
  * so we can create a full date from it and modify the state properly
@@ -43,7 +47,7 @@ const AcademicExperiences: React.FC = () => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
   const [isIncomplete, setIsIncomplete] = useState<boolean>(false)
   const [initialYear, setInitialYear] = useState<number>(
-    new Date().getFullYear() + 1,
+    new Date().getFullYear() + 9,
   )
   const [stored, setStored] = useState<AcademicType[]>([])
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -111,10 +115,10 @@ const AcademicExperiences: React.FC = () => {
       try {
         const schema = Yup.object().shape({
           escolaridade: Yup.string().required('Informe a escolaridade'),
-          descricao: Yup.string()
-            .min(20, 'Descreva um pouco mais')
-            .max(500, 'Excedeu o limite de caractéres (500)')
-            .required('Informe a descrição'),
+          descricao: Yup.string().max(
+            500,
+            'Excedeu o limite de caractéres (500)',
+          ),
           data_fim: !isIncomplete
             ? Yup.string().required('Ano final é obrigatório')
             : Yup.string(),
@@ -127,6 +131,7 @@ const AcademicExperiences: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const {
           instituicao,
           escolaridade,
@@ -162,7 +167,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
-                showToast( "success" ,"Editado com sucesso!")
+                showToast('success', 'Editado com sucesso!')
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -175,7 +180,7 @@ const AcademicExperiences: React.FC = () => {
               .then(() => {
                 setShowRegister(false)
                 setEditStored(initialAcademicData)
-                showToast( "success" ,"Cadastrado com sucesso!")
+                showToast('success', 'Cadastrado com sucesso!')
               })
               .catch((err: AxiosError) => {
                 // Returns error message from backend
@@ -188,8 +193,9 @@ const AcademicExperiences: React.FC = () => {
           const errors = getValidationErrors(error)
 
           formRef.current?.setErrors(errors)
-          return
         }
+      } finally {
+        loading.stop()
       }
 
       // Do something
@@ -227,9 +233,25 @@ const AcademicExperiences: React.FC = () => {
     setIsIncomplete(editStored.situacao === 'Incompleto')
   }, [editStored])
 
+  async function deleteExperience(experience: AcademicType) {
+    const delet = await Alert({
+      title: `Deseja realmente excluir ${experience.curso}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
+    })
+    if (delet.isDenied) {
+      console.log(experience)
+      handleDeleteExperience(experience.id)
+    }
+  }
+
   return (
     <BodyExperiences>
-      <Modal setOpen={setOpenModal} open={openModal}>
+      {/* <Modal setOpen={setOpenModal} open={openModal}>
         <h1>Deseja realmente excluir {experienceExcluded.nome}?</h1>
         <footer>
           <Button
@@ -242,7 +264,7 @@ const AcademicExperiences: React.FC = () => {
             Manter
           </Button>
         </footer>
-      </Modal>
+      </Modal> */}
       <h2>
         Educação
         {!showRegister && (
@@ -267,11 +289,12 @@ const AcademicExperiences: React.FC = () => {
                 />
                 <IconTrash
                   onClick={() => {
-                    setOpenModal(true)
-                    setExperienceExcluded({
-                      ...experience,
-                      nome: experience.curso,
-                    })
+                    deleteExperience(experience)
+                    // setOpenModal(true)
+                    // setExperienceExcluded({
+                    //   ...experience,
+                    //   nome: experience.curso,
+                    // })
                   }}
                 />
               </section>
@@ -342,6 +365,9 @@ const AcademicExperiences: React.FC = () => {
                 />
                 {!isIncomplete && (
                   <Select
+                    noOptionsMessage={props =>
+                      'Selecione primeiro o ano inicial'
+                    }
                     label="Ano final"
                     name="data_fim"
                     options={finalYearOptions(Number(initialYear))}

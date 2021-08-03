@@ -32,30 +32,15 @@ import * as Yup from 'yup'
 import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
 import ToastAnimated, { showToast } from '../../components/Toast/Toast'
 import { type } from 'os'
+import Dropzone from '../../components/UI/Dropzone'
+import { ProfileType } from '../Profiles'
+import Alert from '../../utils/SweetAlert'
+import { loading } from '../../utils/loading'
 
 interface routeParms {
   id: string
 }
-interface ProfileType {
-  data_nascimento: string
-  usuario: string
-  email: string
-  ativo: boolean
-  nome: string
-  telefone: string
-  colaborador: boolean
-  idealizador: boolean
-  aliado: boolean
-  foto_perfil: string
-  habilidades: ToolType[]
-  areas: AreaType[]
-  id: number
-  data_criacao: string
-  data_atualizacao: string
-  experiencia_profissional: ProfessionalType[]
-  experiencia_projetos: IExperienceProject[]
-  experiencia_academica: AcademicType[]
-}
+
 interface IFormDataBasicInformations {
   email: string
   telefone: string
@@ -69,6 +54,7 @@ interface IFormDataBasicInformations {
   colaborador: string
   aliado: string
   profileType: string[]
+  img: File
 }
 /**
  * @constructor
@@ -102,6 +88,7 @@ const FormAreas: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const data = {
           areas: formData.areas.map(area => {
             return { descricao: area }
@@ -126,6 +113,8 @@ const FormAreas: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [updateProfile],
@@ -167,6 +156,7 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const data = {
           habilidades: formData.habilidades.map(habilidade => {
             return { nome: habilidade }
@@ -192,8 +182,9 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
-      console.log('Salvou')
     },
     [updateProfile],
   )
@@ -227,7 +218,7 @@ const EditProfile: React.FC = () => {
   const [menuOptionSelected, setMenuOptionSelected] = useState<TypeMenuOptions>(
     'Informações básicas',
   )
-  const { user } = useContext(Context)
+  const { user, handleLogout } = useContext(Context)
   const [profile, setProfile] = useState<ProfileType>({} as ProfileType)
   const profile_id = Number(useParams<routeParms>().id)
   const OptionsMenu = [
@@ -243,13 +234,16 @@ const EditProfile: React.FC = () => {
       .get(`/api/v1/pessoas/${profile_id}`)
       .then((response: { data: ProfileType }) => {
         setProfile(response.data)
+        console.log('USUARIO')
+
+        console.log(profile.usuario)
       })
       .catch((err: AxiosError) => {
         // if (err.code === undefined) history.push('/404')
         return err?.response?.data.detail
       })
     console.log(res)
-  }, [profile_id])
+  }, [profile?.usuario, profile_id])
   const handleSubmit = useCallback(
     async (formData: IFormDataBasicInformations) => {
       console.log(formData)
@@ -261,11 +255,30 @@ const EditProfile: React.FC = () => {
           nome: Yup.string()
             .max(80)
             .matches(/(?=.*[ ])/g, 'Informe o nome completo')
-            .required('Usuário é obrigatório'),
+            .required('Usuário é obrigatório')
+            .matches(
+              /(^[a-zA-Z0-9_]*$)/g,
+              'Não pode conter espaços em branco ou simbolos',
+            ),
           usuario: Yup.string()
             .min(4, 'Deve conter no mínimo 4 caracteres')
             .max(20, 'Deve conter no máximo 20 caracteres')
             .required('Usuário é obrigatório'),
+          img: Yup.mixed()
+            .required('Insira a foto de perfil!')
+            .test(
+              'tipo do arquivo',
+              'Insira arquivos com a extensão .png ou .jpg',
+              file => {
+                let valid = true
+                if (file) {
+                  if (!['image/jpeg', 'image/png'].includes(file.type)) {
+                    valid = false
+                  }
+                }
+                return valid
+              },
+            ),
           profileType: Yup.array().min(
             1,
             'Deve ser selecionado ao menos um tipo de perfil abaixo!',
@@ -276,6 +289,9 @@ const EditProfile: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+
+        loading.start()
+
         // const { year, month, day, telefone } = formData
 
         // const data_nascimento = `${year}-${month}-${day}`
@@ -290,7 +306,14 @@ const EditProfile: React.FC = () => {
           colaborador,
           idealizador,
         }
+        const foto = new FormData()
+        console.log(formData.img)
+        foto.append('foto_perfil', formData.img)
+        console.log(foto)
 
+        await api.put(`/api/v1/pessoas/foto/${profile_id}`, foto, {
+          withCredentials: true,
+        })
         await api
           .put('/api/v1/pessoas', data, {
             withCredentials: true,
@@ -307,10 +330,43 @@ const EditProfile: React.FC = () => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
-    [updateProfile],
+    [profile_id, updateProfile],
   )
+  async function deleteProfile() {
+    const delet = await Alert({
+      title: `Deseja realmente apagar o seu perfil?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
+    })
+    if (delet.isDenied) {
+      const res = api
+        .delete(`/api/v1/pessoas`)
+        .then(async () => {
+          await Alert({
+            title: 'Perfil Apagado com Sucesso',
+            icon: 'success',
+          })
+          handleLogout()
+          history.push('/')
+        })
+        .catch((err: AxiosError) => {
+          Alert({
+            title: `Erro: ${err.message}`,
+            text: 'Não foi possível apagar o perfil, tente novamente!',
+            icon: 'error',
+          })
+        })
+      console.log(res)
+    }
+  }
   useEffect(() => {
     updateProfile()
 
@@ -322,24 +378,29 @@ const EditProfile: React.FC = () => {
     <Page>
       <NavBar />
       <main>
-        <header>
-          <Button
-            theme="primary"
-            onClick={() => history.push(`/perfil/${user.usuario}`)}
-          >
-            voltar ao perfil
-          </Button>
-        </header>
         <aside>
-          {OptionsMenu.map((description, index) => (
-            <ButtonList
-              isSelected={description === menuOptionSelected}
-              key={index}
-              onClick={() => setMenuOptionSelected(description)}
+          <menu>
+            {OptionsMenu.map((description, index) => (
+              <ButtonList
+                isSelected={description === menuOptionSelected}
+                key={index}
+                onClick={() => setMenuOptionSelected(description)}
+              >
+                {description}
+              </ButtonList>
+            ))}
+          </menu>
+          <header>
+            <Button theme="error" onClick={deleteProfile}>
+              excluir perfil
+            </Button>
+            <Button
+              theme="primary"
+              onClick={() => history.push(`/perfil/${profile.usuario}`)}
             >
-              {description}
-            </ButtonList>
-          ))}
+              voltar ao perfil
+            </Button>
+          </header>
         </aside>
         <div>
           {(menuOptionSelected === 'Informações básicas' && (
@@ -347,13 +408,22 @@ const EditProfile: React.FC = () => {
               <Input
                 label="Nome completo"
                 name="nome"
-                defaultValue={profile.nome}
+                defaultValue={profile?.nome}
               />
-              <aside></aside>
+
+              <Dropzone
+                name="img"
+                defaultValue={
+                  profile?.foto_perfil
+                    ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${profile.foto_perfil}`
+                    : undefined
+                }
+              />
+
               <Input
                 label="Nome de usuário"
                 name="usuario"
-                defaultValue={profile.usuario}
+                defaultValue={profile?.usuario}
               />
               <ProfileTypeToogleSwitch
                 name="profileType"
@@ -363,21 +433,21 @@ const EditProfile: React.FC = () => {
                     value: 'idealizador',
                     label: 'Idealizador',
                     message: 'Interessado em criar projetos',
-                    defaultChecked: profile.idealizador,
+                    defaultChecked: profile?.idealizador,
                   },
                   {
                     id: 'colaborador',
                     value: 'colaborador',
                     label: 'Colaborador',
                     message: 'Interessado em participar de projetos',
-                    defaultChecked: profile.colaborador,
+                    defaultChecked: profile?.colaborador,
                   },
                   {
                     id: 'aliado',
                     value: 'aliado',
                     label: 'Aliado',
                     message: 'Interessado em apoiar projetos',
-                    defaultChecked: profile.aliado,
+                    defaultChecked: profile?.aliado,
                   },
                 ]}
               />

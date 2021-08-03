@@ -2,6 +2,7 @@ import styled, { css } from 'styled-components'
 import { BodyField } from '../../components/UI/FieldText/styles'
 import background from '../../assets/image/background.svg'
 import { BodySwitch } from '../../components/UI/ProfileTypeToggleSwitch/styles'
+import { BodyDropzone } from '../../components/UI/Dropzone/styles'
 export const ButtonList = styled.button<{ isSelected: boolean }>`
   width: 100%;
   display: flex;
@@ -63,24 +64,26 @@ export const Page = styled.div`
       grid-template-rows: auto auto;
       column-gap: 1rem;
       row-gap: 2rem;
-      > header {
-        grid-column: 1 / -1;
-        grid-row: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: var(--backgroundElevation);
-        border-radius: 0.8rem;
-        padding: 2rem 0;
-      }
       > aside {
         grid-column: 1;
         grid-row: 2;
-        background: var(--backgroundElevation);
-        border-radius: 0.8rem;
-        height: min-content;
-        flex-direction: column;
+        > menu{
+          background: var(--backgroundElevation);
+          border-radius: 0.8rem;
+          height: min-content;
+          flex-direction: column;
+        }
         //box-shadow: var(--boxShadow);
+        > header {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          border-radius: 0.8rem;
+          > Button{
+            margin-top: 1rem;
+          }
+        }
       }
       > div {
         grid-column: 2;
@@ -101,6 +104,10 @@ export const Page = styled.div`
                 grid-row: 2;
               }
             }
+            ${BodyDropzone} {
+              grid-column: 2;
+              grid-row: 1 / 3;
+            }
             ${BodySwitch} {
               grid-column: 1 / -1;
               grid-row: 3;
@@ -110,9 +117,7 @@ export const Page = styled.div`
               grid-column: 1 / -1;
             }
           }
-          > aside {
-            grid-column: 2;
-          }
+
           > section {
             display: flex;
             align-items: center;

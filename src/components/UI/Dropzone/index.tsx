@@ -10,15 +10,21 @@ import { useField } from '@unform/core'
 import { BodyDropzone, ImgPreview } from './styles'
 interface Props {
   name: string
+  label?: string
+  defaultValue?: string
 }
 interface InputRefProps extends HTMLInputElement {
   acceptedFile: File
 }
-export default function ReactDropzoneInput({ name }: Props) {
+export default function ReactDropzoneInput({
+  name,
+  label,
+  defaultValue,
+}: Props) {
   const inputRef = useRef<InputRefProps>(null)
-  const { fieldName, registerField, defaultValue, error } = useField(name)
-  const [acceptedFile, setAcceptedFile] = useState(defaultValue)
-  const [preview, setPreview] = useState(defaultValue)
+  const { fieldName, registerField, error } = useField(name)
+
+  const [acceptedFile, setAcceptedFile] = useState<any>()
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: 'image/*',
     onDrop: onDropAcceptedFiles => {
@@ -28,6 +34,22 @@ export default function ReactDropzoneInput({ name }: Props) {
       }
     },
   })
+  const getPreview = useCallback(async () => {
+    if (defaultValue) {
+      const response = await fetch(defaultValue)
+      const data = await response.blob()
+      const metadata = {
+        type: 'image/png',
+      }
+      const file = new File([data], 'test.png', metadata)
+      console.log(file)
+
+      setAcceptedFile(file)
+    }
+  }, [defaultValue])
+  useEffect(() => {
+    getPreview()
+  }, [defaultValue, getPreview])
 
   useEffect(() => {
     registerField({

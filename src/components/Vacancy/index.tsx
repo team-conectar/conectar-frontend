@@ -15,7 +15,6 @@ import Select from '../UI/Select'
 import ToggleSwitch from '../UI/ToggleSwitch'
 import Button from '../UI/Button'
 import { BodyVacancy } from './styles'
-import { finalYearOptions, yearOptions } from '../../utils/dates'
 import { AxiosError, AxiosResponse } from 'axios'
 import api from '../../services/api'
 import { AreaType } from '../UI/SelectArea'
@@ -27,6 +26,10 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import VacancieListItem from '../VacancieListItem'
 import { ProjectType } from '../../pages/CreateProject'
 import ContainerScroll from '../UI/ContainerScroll'
+import { showToast } from '../Toast/Toast'
+import { ProfileType } from '../../pages/Profiles'
+import Alert from '../../utils/SweetAlert'
+import { loading } from '../../utils/loading'
 export type TypeSituationVacancy =
   | 'PENDENTE_IDEALIZADOR'
   | 'PENDENTE_COLABORADOR'
@@ -46,6 +49,7 @@ export interface VacanciesType {
   areas: Array<AreaType>
   id: number
   quantidade?: number
+  pessoa?: ProfileType
 }
 interface ITipoAcordo {
   id: number
@@ -67,18 +71,17 @@ interface VacancyProps {
   dontRender?: boolean
 }
 export interface handleVacancy {
-  setEditVacancies(vacancies: VacanciesType[]): void
+  setEditVacancy(vacancy: VacanciesType): void
   setShowRegister(register: boolean): void
+  handleDeleteVacancy(vacancy: VacanciesType): void
 }
 const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
   { project, dontRender },
   ref,
 ) => {
   const [showRegister, setShowRegister] = useState<boolean>(false)
-  const [groupedVacancies, setGroupedVacancies] = useState<
-    Array<VacanciesType[]>
-  >([])
-  const [editVacancies, setEditVacancies] = useState<VacanciesType[]>([])
+  const [vacancies, setVacancies] = useState<Array<VacanciesType>>([])
+  const [editVacancy, setEditVacancy] = useState<VacanciesType>()
 
   const [optionsAcordo, setOptionsAcordo] = useState<
     Array<OptionHTMLAttributes<HTMLOptionElement>>
@@ -87,7 +90,51 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
     Array<OptionHTMLAttributes<HTMLOptionElement>>
   >([])
   const formRef = useRef<FormHandles>(null)
-  useImperativeHandle(ref, () => ({ setEditVacancies, setShowRegister }), [])
+  const getset_pessoa_projeto = useCallback(async () => {
+    await api
+      .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
+      .then((response: AxiosResponse<VacanciesType[]>) => {
+        setVacancies(response.data)
+      })
+      .catch((err: AxiosError) => {
+        if (err.response?.status === 404) {
+          setVacancies([])
+        } else {
+          showToast(
+            'error',
+            err?.response?.data.detail ||
+              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+          )
+        }
+        return err?.response?.data.detail
+      })
+  }, [project.id])
+
+  const handleDeleteVacancy = useCallback(
+    async (vacancy: VacanciesType) => {
+      const res = await api
+        .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
+        .then(() => {
+          getset_pessoa_projeto()
+          showToast('success', 'Vaga removida com Sucesso!')
+        })
+        .catch((err: AxiosError) => {
+          showToast(
+            'error',
+            err?.response?.data.detail ||
+              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+          )
+          return err?.response?.data.detail
+        })
+      console.log(res)
+    },
+    [getset_pessoa_projeto],
+  )
+  useImperativeHandle(
+    ref,
+    () => ({ setEditVacancy, setShowRegister, handleDeleteVacancy }),
+    [handleDeleteVacancy],
+  )
 
   useEffect(() => {
     async function get_async() {
@@ -119,115 +166,130 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
         })
     }
     get_async()
-  }, [editVacancies])
-  const get_pessoa_projeto = useCallback(() => {
-    api
-      .get(`/api/v1/pessoa_projeto/projeto/${project.id}`)
-      .then((response: AxiosResponse<VacanciesType[]>) => {
-        const GroupResponse = response.data.map(vacancy => {
-          return response.data.filter(data => {
-            return (
-              JSON.stringify(data.areas) === JSON.stringify(vacancy.areas) &&
-              JSON.stringify(data.habilidades) ===
-                JSON.stringify(vacancy.habilidades) &&
-              data.remunerado === vacancy.remunerado &&
-              data.tipo_acordo_id === vacancy.tipo_acordo_id &&
-              data.papel_id === vacancy.papel_id &&
-              data.titulo === vacancy.titulo
-            )
-          })
+  }, [editVacancy])
+
+  const put_pessoa_projeto = useCallback(
+    async (formData: IFormData, id: number) => {
+      const data = {
+        descricao: formData.descricao,
+        areas: formData.areas.map(area => {
+          return { descricao: area }
+        }),
+        habilidades: formData.habilidades.map(habilidade => {
+          return { nome: habilidade }
+        }),
+        titulo: formData.cargo,
+        papel_id: formData.perfil,
+        tipo_acordo_id: formData.tipoContrato,
+        remunerado: !!(formData.remunerado[0] === 'remunerado'),
+      }
+      await api
+        .put(`/api/v1/pessoa_projeto/${id}`, data, {
+          withCredentials: true,
         })
-        setGroupedVacancies(
-          GroupResponse.filter((vacancies, index) => {
-            return (
-              JSON.stringify(vacancies) !==
-              JSON.stringify(GroupResponse[index + 1])
-            )
-          }),
-        )
-      })
-  }, [project.id])
-  const handleDeleteVacancy = useCallback(
-    (vacancies: VacanciesType[]) => {
-      vacancies.forEach(vacancy => {
-        const res = api
-          .delete(`/api/v1/pessoa_projeto/${vacancy.id}`)
-          .then(get_pessoa_projeto)
-          .catch((error: AxiosError) => {
-            return error?.response?.data.detail
-          })
-        console.log(res)
-      })
+        .catch((err: AxiosError) => {
+          showToast(
+            'error',
+            err?.response?.data.detail ||
+              'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+          )
+          return err?.response?.data.detail
+        })
     },
-    [get_pessoa_projeto],
+    [],
   )
+  const post_pessoa_projeto = useCallback(
+    async (formData: IFormData) => {
+      const data = {
+        ...formData,
+        projeto_id: project.id,
+        titulo: formData.cargo,
+        papel_id: formData.perfil,
+        tipo_acordo_id: formData.tipoContrato,
+        remunerado: !!(formData.remunerado[0] === 'remunerado'),
+        situacao: 'PENDENTE_IDEALIZADOR',
+      }
+      for (let index = 1; index <= formData.quantidade; index++) {
+        await api
+          .post('/api/v1/pessoa_projeto', data, {
+            withCredentials: true,
+          })
+          .then(async response => {
+            const res = await api
+              .put(
+                `/api/v1/pessoa_projeto/${response.data.id}`,
+                {
+                  areas: formData.areas.map(area => {
+                    return { descricao: area }
+                  }),
+                  habilidades: formData.habilidades.map(habilidade => {
+                    return { nome: habilidade }
+                  }),
+                },
+                {
+                  withCredentials: true,
+                },
+              )
+              .catch((err: AxiosError) => {
+                showToast(
+                  'error',
+                  err?.response?.data.detail ||
+                    'Ocorreu um erro inesperado. Tente novamente mais tarde.',
+                )
+                return err?.response?.data.detail
+              })
+            console.log(res)
+          })
+          .catch((err: AxiosError) => {
+            showToast('error', err?.response?.data.detail)
+            return err?.response?.data.detail
+          })
+      }
+    },
+    [project.id],
+  )
+
   const handleSubmit = useCallback(
     async (formData: IFormData) => {
       console.log(formData)
       try {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
+        console.log(vacancies.length)
+
         const schema = Yup.object().shape({
           cargo: Yup.string().required('Cargo é obrigatório'),
           perfil: Yup.string().required('Perfil é obrigatório'),
-          quantidade: Yup.number()
-            .required('Quantidade é obrigatório')
-            .min(1, 'Deve conter no mínimo uma vaga'),
+          quantidade: !editVacancy?.id
+            ? Yup.number()
+                .typeError('Quantidade é obrigatório')
+                .required('Quantidade é obrigatório')
+                .min(1, 'Deve conter no mínimo uma vaga')
+                .max(
+                  5 - vacancies.length,
+                  'Deve conter no maximo 5 vagas totais',
+                )
+            : Yup.number(),
           descricao: Yup.string().required('Descrição é obrigatório'),
           tipoContrato: Yup.string().required('Tipo de contrato é obrigatório'),
-          areas: Yup.array().min(1, 'Áreas de contrato é obrigatório'),
-          habilidades: Yup.array().min(
-            1,
-            'Habilidades de contrato é obrigatório',
-          ),
+          areas: Yup.array()
+            .min(1, 'Seleciono pelo menos 1 item')
+            .max(15, 'Seleciono no máximo 15'),
+          habilidades: Yup.array()
+            .min(1, 'Seleciono pelo menos 1 item')
+            .max(15, 'Seleciono no máximo 15'),
         })
         await schema.validate(formData, {
           abortEarly: false,
         })
         // Validation passed
-        if (editVacancies) {
-          handleDeleteVacancy(editVacancies)
+        loading.start()
+        if (editVacancy?.id) {
+          await put_pessoa_projeto(formData, editVacancy?.id)
+        } else {
+          await post_pessoa_projeto(formData)
         }
-        const data = {
-          ...formData,
-          projeto_id: project.id,
-          titulo: formData.cargo,
-          papel_id: formData.perfil,
-          tipo_acordo_id: formData.tipoContrato,
-          remunerado: !!(formData.remunerado[0] === 'remunerado'),
-          situacao: 'PENDENTE_IDEALIZADOR',
-        }
-        for (let index = 1; index <= formData.quantidade; index++) {
-          await api
-            .post('/api/v1/pessoa_projeto', data, {
-              withCredentials: true,
-            })
-            .then(async response => {
-              const res = await api
-                .put(
-                  `/api/v1/pessoa_projeto/${response.data.id}`,
-                  {
-                    areas: formData.areas.map(area => {
-                      return { descricao: area }
-                    }),
-                    habilidades: formData.habilidades.map(habilidade => {
-                      return { nome: habilidade }
-                    }),
-                  },
-                  {
-                    withCredentials: true,
-                  },
-                )
-                .catch((err: AxiosError) => {
-                  return err?.response?.data.detail
-                })
-              console.log(res)
-            })
-            .catch((err: AxiosError) => {
-              return err?.response?.data.detail
-            })
-        }
-
+        await getset_pessoa_projeto()
         setShowRegister(false)
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -235,19 +297,50 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
-    [editVacancies, handleDeleteVacancy, project.id],
+    [
+      editVacancy?.id,
+      getset_pessoa_projeto,
+      post_pessoa_projeto,
+      put_pessoa_projeto,
+      vacancies.length,
+    ],
   )
 
+  async function deleteVacancy(vacancy: VacanciesType) {
+    const delet = Alert({
+      title: `Deseja realmente apagar a vaga ${vacancy.titulo}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
+    })
+    if ((await delet).isDenied) handleDeleteVacancy(vacancy)
+  }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(get_pessoa_projeto, [project.id, showRegister])
+  useEffect(() => {
+    getset_pessoa_projeto()
+  }, [getset_pessoa_projeto, project.id, showRegister])
   return !dontRender ? (
     <BodyVacancy className={showRegister ? 'registro' : ''}>
       <h1>
         Vagas
         {!showRegister && (
-          <button onClick={() => setShowRegister(true)}>
+          <button
+            onClick={() => {
+              vacancies.length >= 5
+                ? showToast(
+                    'error',
+                    'Não é possível adicionar mais que 5 vagas',
+                  )
+                : setShowRegister(true)
+            }}
+          >
             <span>+ </span>
             Adicionar
           </button>
@@ -255,14 +348,16 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
       </h1>
       {!showRegister ? (
         <ContainerScroll autoHeight autoHeightMax="50vh">
-          {groupedVacancies.map(vacancies => (
+          {vacancies.map(vacancy => (
             <VacancieListItem
-              key={vacancies[0].id}
-              vacancy={{ ...vacancies[0], quantidade: vacancies.length }}
-              onDelete={() => handleDeleteVacancy(vacancies)}
+              key={vacancy.id}
+              vacancy={vacancy}
+              onDelete={() => {
+                deleteVacancy(vacancy)
+              }}
               onEdit={() => {
                 setShowRegister(true)
-                setEditVacancies(vacancies)
+                setEditVacancy(vacancy)
               }}
             />
           ))}
@@ -272,22 +367,21 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
           <Input
             label="Cargo"
             name="cargo"
-            defaultValue={editVacancies[0]?.titulo}
+            defaultValue={editVacancy?.titulo}
           />
-          <Select
-            label="Perfil"
-            options={optionsPapel}
-            name="perfil"
-            defaultValue={optionsPapel?.find(
-              option => Number(option.value) === editVacancies[0]?.papel_id,
+          <div className="quantidade-e-perfil">
+            <Select
+              label="Perfil"
+              options={optionsPapel}
+              name="perfil"
+              defaultValue={optionsPapel?.find(
+                option => Number(option.value) === editVacancy?.papel_id,
+              )}
+            />
+            {!editVacancy?.id && (
+              <Input label="Quantidade" name="quantidade" type="number" />
             )}
-          />
-          <Input
-            label="Quantidade"
-            name="quantidade"
-            type="number"
-            defaultValue={editVacancies.length > 0 ? editVacancies.length : ' '}
-          />
+          </div>
           <Select
             label="Habilidade ou Ferramentas"
             name="habilidades"
@@ -295,7 +389,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
             options={project.habilidades.map(tool => {
               return { value: tool.nome, label: tool.nome }
             })}
-            defaultValue={editVacancies[0]?.habilidades.map(tool => {
+            defaultValue={editVacancy?.habilidades?.map(tool => {
               return { value: tool.nome, label: tool.nome }
             })}
           />
@@ -307,7 +401,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
               options={project.areas.map(area => {
                 return { value: area.descricao, label: area.descricao }
               })}
-              defaultValue={editVacancies[0]?.areas.map(area => {
+              defaultValue={editVacancy?.areas?.map(area => {
                 return { value: area.descricao, label: area.descricao }
               })}
             />
@@ -316,7 +410,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
           <Textarea
             name="descricao"
             label="Descrição"
-            defaultValue={editVacancies[0]?.descricao}
+            defaultValue={editVacancy?.descricao}
           />
           <section className="bloco-contrato">
             <Select
@@ -325,13 +419,12 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
               name="tipoContrato"
               defaultValue={optionsAcordo.find(
                 option =>
-                  Number(option.value) ===
-                  Number(editVacancies[0]?.tipo_acordo_id),
+                  Number(option.value) === Number(editVacancy?.tipo_acordo_id),
               )}
             />
             <ToggleSwitch
               name="remunerado"
-              defaultChecked={editVacancies[0]?.remunerado}
+              defaultChecked={editVacancy?.remunerado}
               options={[
                 {
                   label: 'Remunerado',
@@ -348,7 +441,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
             <Button
               theme="secondary"
               onClick={() => {
-                handleDeleteVacancy(editVacancies)
+                editVacancy && deleteVacancy(editVacancy)
                 setShowRegister(false)
               }}
             >
@@ -358,7 +451,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
               theme="secondary"
               onClick={() => {
                 setShowRegister(false)
-                setEditVacancies([])
+                setEditVacancy({} as VacanciesType)
               }}
             >
               Cancelar

@@ -27,6 +27,9 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { showToast } from '../../../../components/Toast/Toast'
+import Alert from '../../../../utils/SweetAlert'
+import { IExperienceProject } from '../ProjectExperiences'
+import { loading } from '../../../../utils/loading'
 export interface ProfessionalType {
   id: number
   organizacao: string
@@ -146,6 +149,7 @@ const ProfessionalExperiences: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const {
           vinculo,
           currentWorking,
@@ -185,7 +189,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
-              showToast( "success" ,"Editado com sucesso!")
+              showToast('success', 'Editado com sucesso!')
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
@@ -199,7 +203,7 @@ const ProfessionalExperiences: React.FC = () => {
               withCredentials: true,
             })
             .then(() => {
-              showToast( "success" ,"Cadastrado com sucesso!")
+              showToast('success', 'Cadastrado com sucesso!')
               setShowRegister(false)
               setEditStored(initialProfessionalData)
             })
@@ -214,6 +218,8 @@ const ProfessionalExperiences: React.FC = () => {
 
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
 
       // Do something
@@ -253,10 +259,27 @@ const ProfessionalExperiences: React.FC = () => {
   useEffect(() => {
     setCurrentilyWork(editStored.currentWorking)
   }, [editStored])
+
+  async function deleteExperience(experience: ProfessionalType) {
+    const delet = await Alert({
+      title: `Deseja realmente excluir ${experience.cargo}?`,
+      text: 'Todas as informações e registros serão perdidos',
+      showCancelButton: true,
+      showDenyButton: true,
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
+    })
+    if (delet.isDenied) {
+      console.log(experience)
+      handleDeleteExperience(experience.id)
+    }
+  }
+
   return (
     <BodyExperiences>
-      <Modal setOpen={setOpenModal} open={openModal}>
-        <h1>Deseja realmente excluir {experienceExcluded?.nome}?</h1>
+      {/* <Modal setOpen={setOpenModal} open={openModal}>
+        <h1>Deseja realmente excluir o projeto {experienceExcluded?.nome}?</h1>
         <footer>
           <Button
             theme="primary"
@@ -271,7 +294,7 @@ const ProfessionalExperiences: React.FC = () => {
             Manter
           </Button>
         </footer>
-      </Modal>
+      </Modal> */}
       <h2>
         Atuação Profissional
         {!showRegister && (
@@ -292,11 +315,12 @@ const ProfessionalExperiences: React.FC = () => {
                 <IconEdit onClick={() => handleEditExperience(experience)} />
                 <IconTrash
                   onClick={() => {
-                    setOpenModal(true)
-                    setExperienceExcluded({
-                      ...experience,
-                      nome: experience.cargo,
-                    })
+                    deleteExperience(experience)
+                    // setOpenModal(true)
+                    // setExperienceExcluded({
+                    //   ...experience,
+                    //   nome: experience.cargo,
+                    // })
                   }}
                 />
               </section>
@@ -426,6 +450,9 @@ const ProfessionalExperiences: React.FC = () => {
                     label="Ano final"
                     name="finalYear"
                     options={finalYearOptions(Number(initialYear))}
+                    noOptionsMessage={props =>
+                      'Selecione primeiro o ano inicial'
+                    }
                     defaultValue={
                       editStored.id &&
                       Number(editStored?.finalYear > initialYear)

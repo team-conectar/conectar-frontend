@@ -9,6 +9,7 @@ import api from '../../services/api'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import getValidationErrors from '../../utils/getValidationErrors'
+import { loading } from '../../utils/loading'
 
 const ExperienceAreas: React.FC = () => {
   const history = useHistory()
@@ -28,6 +29,7 @@ const ExperienceAreas: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const data = {
           areas: formData.areas.map(area => {
             return { descricao: area }
@@ -50,6 +52,8 @@ const ExperienceAreas: React.FC = () => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [history],

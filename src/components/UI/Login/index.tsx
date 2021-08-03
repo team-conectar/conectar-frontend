@@ -21,6 +21,7 @@ import { FormHandles } from '@unform/core'
 import getValidationErrors from '../../../utils/getValidationErrors'
 import useAuth from '../../../context/hooks/useAuth'
 import getBackendErrors from '../../../utils/getBackendErros'
+import { loading } from '../../../utils/loading'
 interface loginProps {
   onSuccessLogin(): void
 }
@@ -38,7 +39,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
     const { aliado, colaborador, idealizador } = (
       await api.get('/api/v1/pessoas/me')
     ).data
-    if (!aliado || !colaborador || !idealizador) {
+    if (!aliado && !colaborador && !idealizador) {
       history.push('/cadastrar/2')
     }
   }
@@ -46,16 +47,23 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
   const responseFacebook = async (resposta: ReactFacebookLoginInfo) => {
     const { email, name } = resposta
     const foto_perfil = resposta.picture?.data.url
+
+    console.log(resposta)
+
     const res = await api
       .post(`/api/login?provider=facebook`, {
         email,
         nome: name,
-        foto_perfil,
       })
-      .then(() => {
+      .then(response => {
         checkProfileType()
         handleLogin(true)
+        api.post('/api/refresh_token').then(async req => {
+          const accessToken = await req.data.access_token
+          api.defaults.headers.Authorization = `Bearer ${accessToken}`
+        })
         onSuccessLogin()
+        console.log(response)
       })
       .catch((err: AxiosError) => {
         // Returns error message from backend
@@ -92,7 +100,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           abortEarly: false,
         })
         // validation passed
-
+        loading.start()
         const data = new FormData()
         data.append('username', formData.email)
         data.append('password', formData.senha)
@@ -100,6 +108,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         await api.post('/api/token', data)
         onSuccessLogin()
         handleLogin(true)
+        loading.stop()
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err)
@@ -114,7 +123,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         }
       }
     },
-    [onSuccessLogin],
+    [handleLogin, onSuccessLogin],
   )
 
   return (
@@ -141,7 +150,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           cssClass="facebook-button"
           icon={<FaFacebook />}
         />
-        <GoogleLogin
+        {/* <GoogleLogin
           clientId="1027346829762-a6tjn6i5a8r50nn0cskrg4sholipvt5j.apps.googleusercontent.com"
           render={renderProps => (
             <button
@@ -154,9 +163,11 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           )}
           buttonText="Login"
           onSuccess={responseGoogle}
-          onFailure={responseGoogle}
+          onFailure={res => {
+            console.log(res)
+          }}
           cookiePolicy={'single_host_origin'}
-        />
+        /> */}
       </aside>
       <p>
         Novo no Conectar? <Link to="/cadastrar/1">Crie uma conta</Link>

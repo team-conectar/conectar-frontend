@@ -7,18 +7,20 @@ import co from '../../assets/icon/co.svg'
 import Skeleton from 'react-loading-skeleton'
 import { Context } from '../../context/AuthContext'
 import Button from '../UI/Button'
-import { FaLink } from 'react-icons/fa'
 
 const ProfileLink: React.FC = () => {
   const { user, isAuthenticated } = useContext(Context)
   const history = useHistory()
   return isAuthenticated ? (
     <BodyCard>
-      {/* <img
-        src="https://upload.wikimedia.org/wikipedia/pt/thumb/4/4d/Clube_do_Remo.png/120px-Clube_do_Remo.png"
-        alt=""
-      /> */}
-      <Skeleton circle height="100px" width="100px" />
+      {user.foto_perfil ? (
+        <img
+          src={`https://conectar.s3.sa-east-1.amazonaws.com/uploads/${user.foto_perfil}`}
+          alt=""
+        />
+      ) : (
+        <Skeleton circle height="100px" width="100px" />
+      )}
       <p>
         <h2>{user.nome?.split(' ')[0] || <Skeleton width="150px" />}</h2>
         {(user.usuario && '@' + user.usuario) || <Skeleton width="100px" />}

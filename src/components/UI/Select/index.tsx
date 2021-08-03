@@ -90,6 +90,7 @@ const Select: React.FC<Props> = ({ name, label, multi, onChange, ...rest }) => {
           onChange={handleChange}
           options={rest.options}
           defaultValue={rest.defaultValue}
+          noOptionsMessage={rest.noOptionsMessage}
         />
       </FieldText>
     </BodySelect>
