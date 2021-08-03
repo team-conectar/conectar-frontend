@@ -1,4 +1,5 @@
 import styled, { keyframes } from 'styled-components'
+import { BodyFooter } from '../../components/UI/Footer/styles'
 const moveDownUp = keyframes`
   
   90% {
@@ -617,8 +618,8 @@ export const BodyHome = styled.div`
         img {
           width: 40%;
         }
-      } 
-      >Footer{
+      }
+      > ${BodyFooter} {
         width: 100% !important;
       }
     }

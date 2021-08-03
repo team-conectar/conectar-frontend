@@ -69,22 +69,24 @@ const Home: React.FC = () => {
             <section className="intro-box">
               <h4>Você já teve uma ideia brilhante e pensou:</h4>
               <p>
-              “Acho que com uma equipe qualificada, um(a) mentor(a) com experiência e um belo
-              investimento esse projeto poderia ajudar muita gente e ainda me traria grandes benefícios?”
-              Ou já se imaginou em uma oportunidade de trabalhar com o que realmente domina e se sente
-              feliz?
+                “Acho que com uma equipe qualificada, um(a) mentor(a) com
+                experiência e um belo investimento esse projeto poderia ajudar
+                muita gente e ainda me traria grandes benefícios?” Ou já se
+                imaginou em uma oportunidade de trabalhar com o que realmente
+                domina e se sente feliz?
               </p>
             </section>
             <section className="texto">
               <img src={lamp} alt="ideia" />
               <h4>
-              Imagina quantos projetos cheios de potencial estão “mofando na
-              gaveta” neste exato momento
+                Imagina quantos projetos cheios de potencial estão “mofando na
+                gaveta” neste exato momento
               </h4>
               <p>
-              Nós do Conectar estamos aqui para tirar a poeira dessas ideias e impulsionar o surgimento de
-              novos projetos, conectando essas ideias brilhantes e inovadoras aos times perfeitos e à
-              incríveis aliados para que sejam finalmente colocados em prática.
+                Nós do Conectar estamos aqui para tirar a poeira dessas ideias e
+                impulsionar o surgimento de novos projetos, conectando essas
+                ideias brilhantes e inovadoras aos times perfeitos e à incríveis
+                aliados para que sejam finalmente colocados em prática.
               </p>
             </section>
           </main>
@@ -117,10 +119,9 @@ const Home: React.FC = () => {
                 </label>
                 <div className="descricao">
                   <p>
-                  O idealizador disponibiliza aquela ideia inovadora,
-                  descreve os detalhes do seu projeto e busca o time
-                  perfeito para tirar sua ideia do papel colocando-a em
-                  prática.
+                    O idealizador disponibiliza aquela ideia inovadora, descreve
+                    os detalhes do seu projeto e busca o time perfeito para
+                    tirar sua ideia do papel colocando-a em prática.
                   </p>
                   <a href="#idealizador">
                     <Button theme="primary">Saiba mais</Button>
@@ -142,12 +143,11 @@ const Home: React.FC = () => {
                 </label>
                 <div className="descricao">
                   <p>
-                  Preenchendo o seu perfil com relatos de suas
-                  experiências e habilidades, o colaborador pode ser
-                  selecionado para fazer parte de um time incrível, com
-                  uma ideia e uma função que você sempre sonhou, além
-                  de aumentar as suas aptidões e embelezar o seu
-                  currículo com essa ótima oportunidade.
+                    Preenchendo o seu perfil com relatos de suas experiências e
+                    habilidades, o colaborador pode ser selecionado para fazer
+                    parte de um time incrível, com uma ideia e uma função que
+                    você sempre sonhou, além de aumentar as suas aptidões e
+                    embelezar o seu currículo com essa ótima oportunidade.
                   </p>
                   <a href="#colaborador">
                     <Button theme="primary">Saiba mais</Button>
@@ -164,10 +164,9 @@ const Home: React.FC = () => {
                 </label>
                 <div className="descricao">
                   <p>
-                  Com suas experiências e habilidades o aliado pode
-                  apoiar empreendedores e acompanhar a
-                  transformação de pequenas ideias em grandes
-                  realizações.
+                    Com suas experiências e habilidades o aliado pode apoiar
+                    empreendedores e acompanhar a transformação de pequenas
+                    ideias em grandes realizações.
                   </p>
                   <a href="#aliado">
                     <Button theme="primary">Saiba mais</Button>
@@ -188,11 +187,14 @@ const Home: React.FC = () => {
             <img src={idealizador} alt="Avatar fictício do idealizador" />
             <div className="area-texto">
               <p>
-              Basicamente, o idealizador é o ponto principal do projeto, é quem propõe a ideia visando fazer
-              dela um projeto ou até mesmo um produto. Se identificou com esse perfil? Possui ideias 
-              brilhantes que foram deixadas de lado? Nós podemos te ajudar a encontrar um time de
-              colaboradores com as habilidades necessárias para fazer acontecer, o apoio que precisa de um
-              aliado com experiência e até um investimento. Tudo isso de forma automatizada. Basta seguir o tutorial:
+                Basicamente, o idealizador é o ponto principal do projeto, é
+                quem propõe a ideia visando fazer dela um projeto ou até mesmo
+                um produto. Se identificou com esse perfil? Possui ideias
+                brilhantes que foram deixadas de lado? Nós podemos te ajudar a
+                encontrar um time de colaboradores com as habilidades
+                necessárias para fazer acontecer, o apoio que precisa de um
+                aliado com experiência e até um investimento. Tudo isso de forma
+                automatizada. Basta seguir o tutorial:
               </p>
               <aside>
                 <section>
@@ -202,15 +204,16 @@ const Home: React.FC = () => {
                 <section>
                   <legend>Passo 02</legend>
                   <p>
-                  Adiciona as vagas disponíveis no projeto e as habilidades que os candidatos devem
-                  dominar para a realização do projeto
+                    Adiciona as vagas disponíveis no projeto e as habilidades
+                    que os candidatos devem dominar para a realização do projeto
                   </p>
                 </section>
                 <section>
                   <legend>Passo 03</legend>
                   <p>
-                  Faça um convite para os candidatos que foram selecionados, e após o aceite o time
-                  estará completo e pronto para essa nova jornada 
+                    Faça um convite para os candidatos que foram selecionados, e
+                    após o aceite o time estará completo e pronto para essa nova
+                    jornada
                   </p>
                 </section>
               </aside>
@@ -234,29 +237,34 @@ const Home: React.FC = () => {
           <section>
             <div className="area-texto">
               <p>
-              Os colaboradores são responsáveis pelo desenvolvimento do projeto. Se identificou com esse
-              perfil? Uma equipe pode estar esperando pelas suas habilidades. O Conectar pode ajudar a
-              encontrar esse projeto que se encaixa perfeitamente com você, além disso é possível
-              demonstrar interesse em projetos públicos da aba “Explorar” e concorrer por vagas em áreas
-              diferentes da sua linha de atuação, mas que podem compensar o esforço para aprender algo
-              novo. Basta seguir o tutorial:
+                Os colaboradores são responsáveis pelo desenvolvimento do
+                projeto. Se identificou com esse perfil? Uma equipe pode estar
+                esperando pelas suas habilidades. O Conectar pode ajudar a
+                encontrar esse projeto que se encaixa perfeitamente com você,
+                além disso é possível demonstrar interesse em projetos públicos
+                da aba “Explorar” e concorrer por vagas em áreas diferentes da
+                sua linha de atuação, mas que podem compensar o esforço para
+                aprender algo novo. Basta seguir o tutorial:
               </p>
               <aside>
                 <section>
                   <legend>Passo 01</legend>
-                  <p>Crie uma conta e nos conte sobre você e suas experiências</p>
+                  <p>
+                    Crie uma conta e nos conte sobre você e suas experiências
+                  </p>
                 </section>
                 <section>
                   <legend>Passo 02</legend>
                   <p>
-                  Adicione suas áreas de atuação, suas habilidades e as ferramentas que possui domínio
+                    Adicione suas áreas de atuação, suas habilidades e as
+                    ferramentas que possui domínio
                   </p>
                 </section>
                 <section>
                   <legend>Passo 03</legend>
                   <p>
-                  Além de se tornar um candidato, passa a ser possível demonstrar interesse em
-                  projetos diferentes 
+                    Além de se tornar um candidato, passa a ser possível
+                    demonstrar interesse em projetos diferentes
                   </p>
                 </section>
               </aside>
@@ -282,28 +290,33 @@ const Home: React.FC = () => {
             <img src={aliado} alt="Avatar fictício do colaborador" />
             <div className="area-texto">
               <p>
-              O aliado é o apoiador do projeto, este apoio pode vir em forma de mentoria, consultoria, apoio
-              técnico ou até mesmo financeiro com uma proposta de investimento ao projeto. Se identificou
-              com esse perfil? Nós podemos te ajudar a encontrar um projeto que mereça a sua atenção, com
-              grandes potencias e que possam render bons frutos para a comunidade e até financeiramente.
-              Basta seguir o tutorial:
+                O aliado é o apoiador do projeto, este apoio pode vir em forma
+                de mentoria, consultoria, apoio técnico ou até mesmo financeiro
+                com uma proposta de investimento ao projeto. Se identificou com
+                esse perfil? Nós podemos te ajudar a encontrar um projeto que
+                mereça a sua atenção, com grandes potencias e que possam render
+                bons frutos para a comunidade e até financeiramente. Basta
+                seguir o tutorial:
               </p>
               <aside>
                 <section>
                   <legend>Passo 01</legend>
-                  <p>Crie uma conta e nos conte sobre você e suas experiências</p>
+                  <p>
+                    Crie uma conta e nos conte sobre você e suas experiências
+                  </p>
                 </section>
                 <section>
                   <legend>Passo 02</legend>
                   <p>
-                  Adicione sua área de atuação, suas habilidades e ferramentas que possui domínio
+                    Adicione sua área de atuação, suas habilidades e ferramentas
+                    que possui domínio
                   </p>
                 </section>
                 <section>
                   <legend>Passo 03</legend>
                   <p>
-                  Agora sim, você pode encontrar ideias promissoras e começar a transforma-las em
-                  grandes projetos
+                    Agora sim, você pode encontrar ideias promissoras e começar
+                    a transforma-las em grandes projetos
                   </p>
                 </section>
               </aside>
@@ -340,7 +353,7 @@ const Home: React.FC = () => {
               Crie sua conta
             </Button>
           </aside>
-          <Footer/>
+          <Footer />
         </div>
       </main>
     </BodyHome>
