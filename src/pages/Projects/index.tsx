@@ -97,6 +97,7 @@ const Projects: React.FC = () => {
     vaga: false,
     areas: false,
     habilidades: false,
+    mural: false,
   }
   const [modalContent, setModalContent] = useState(initialModalContent)
   const history = useHistory()
@@ -473,6 +474,13 @@ const Projects: React.FC = () => {
                     defaultValue={project.descricao}
                   />
                 )}
+                {modalContent.mural && (
+                  <Textarea
+                    name="descricao"
+                    label="Insira informações importantes para os participantes"
+                    defaultValue={''}
+                  />
+                )}
                 {modalContent.areas && (
                   <SelectArea
                     name="areas"
@@ -645,6 +653,29 @@ const Projects: React.FC = () => {
 
             <p>
               {project.descricao || (
+                <>
+                  <Skeleton width={300} />
+                  <Skeleton width={300} />
+                  <Skeleton width={300} />
+                </>
+              )}
+            </p>
+          </section>
+          <section>
+            <legend>
+              Mural de informações
+              {isOwner() && (
+                <IconEdit
+                  onClick={() => {
+                    setModalContent({ ...initialModalContent, mural: true })
+                    setOpenModal(true)
+                  }}
+                />
+              )}
+            </legend>
+
+            <p>
+              {' ' || (
                 <>
                   <Skeleton width={300} />
                   <Skeleton width={300} />
