@@ -89,10 +89,15 @@ const SignUp: React.FC = () => {
         username: Yup.string()
           .min(4, 'Deve conter no mínimo 4 caracteres')
           .max(20, 'Deve conter no máximo 20 caracteres')
+          .matches(
+            /(^[a-zA-Z0-9_]*$)/g,
+            'Não pode conter espaços em branco ou simbolos',
+          )
           .required('Usuário é obrigatório'),
         nome: Yup.string()
           .max(80)
           .matches(/(?=.*[ ])/g, 'Informe o nome completo')
+          .trim()
           .matches(
             /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/,
             'Informe um nome válido',

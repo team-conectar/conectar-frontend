@@ -71,9 +71,9 @@ const FirstForm: React.FC = () => {
         // Remove all previogeus errors
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
-          nome: Yup.string().required('Insira o nome do projeto!'),
-          descricao: Yup.string().required('Descrição é obrigatório'),
-          objetivo: Yup.string().required('Objetivo é obrigatório'),
+          nome: Yup.string().required('Insira o nome do projeto!').trim(),
+          descricao: Yup.string().required('Descrição é obrigatório').trim(),
+          objetivo: Yup.string().required('Objetivo é obrigatório').trim(),
           areas: Yup.array()
             .min(1, 'Seleciono pelo menos 1 item')
             .max(15, 'Seleciono no máximo 15'),

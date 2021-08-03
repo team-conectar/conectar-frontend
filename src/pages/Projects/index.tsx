@@ -226,7 +226,7 @@ const Projects: React.FC = () => {
         formRef.current?.setErrors({})
         const schema = Yup.object().shape({
           nome: modalContent.nome
-            ? Yup.string().required('Nome é obrigatório')
+            ? Yup.string().required('Nome é obrigatório').trim()
             : Yup.string(),
           img: modalContent.nome
             ? Yup.mixed()
@@ -246,10 +246,10 @@ const Projects: React.FC = () => {
                 )
             : Yup.mixed(),
           descricao: modalContent.descricao
-            ? Yup.string().required('Descrição é obrigatória')
+            ? Yup.string().required('Descrição é obrigatória').trim()
             : Yup.string(),
           objetivo: modalContent.objetivo
-            ? Yup.string().required('Objetivo é obrigatório')
+            ? Yup.string().required('Objetivo é obrigatório').trim()
             : Yup.string(),
           habilidades: modalContent.habilidades
             ? Yup.array()
@@ -501,10 +501,7 @@ const Projects: React.FC = () => {
                     })}
                   />
                 )}
-                <Button
-                  theme="primary"
-                  type="submit"
-                >
+                <Button theme="primary" type="submit">
                   Salvar
                 </Button>
               </Form>
