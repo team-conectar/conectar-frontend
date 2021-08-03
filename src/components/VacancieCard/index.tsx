@@ -10,6 +10,7 @@ import Button from '../UI/Button'
 import { GiHamburgerMenu } from 'react-icons/gi'
 import { TypeSituationVacancy } from '../Vacancy'
 import Alert from '../../utils/SweetAlert'
+import Swal from 'sweetalert2'
 export interface IVacancyCard {
   projeto_id: number
   pessoa_id: number
@@ -79,14 +80,53 @@ const VacancieCard: React.FC<Props> = ({ vacancy, ...rest }) => {
   }
   async function FindPeople() {
     const result = await Alert({
-      title: 'Deseja realmente efetuar uma nova busca?',
+      title: 'Como deseja efetuar a nova busca?',
       text: `${
         profile?.nome?.split(` `)[0]
       } não aparecerá mais para preencher essa vaga`,
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Nova busca',
+      confirmButtonText: 'Busca com o conectar',
+      showDenyButton:true,
+      denyButtonText:"Busca Manual",
+      denyButtonColor: `var(--green)`,
     })
+    if(result.isDenied){
+      Alert({
+        title: 'Insira o username',
+        input: 'text',
+        inputAttributes: {
+          autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Buscar',
+        showLoaderOnConfirm: true,
+        preConfirm: (login) => {
+          return api
+            .get(`/api/v1/pessoas/${login}`)
+            .then(response => {
+              return response.data
+            })
+            .catch(error => {
+              Swal.showValidationMessage(
+                `Request failed: ${error}`
+              )
+            })
+        },
+            allowOutsideClick: () => !Swal.isLoading()
+          }).then((result ) => {
+            if (result.isConfirmed) {
+              console.log(result.value);
+              
+              Alert({
+                title: `${result.value.nome}`,
+                imageUrl: result.value.foto_perfil
+                ? `https://conectar.s3.sa-east-1.amazonaws.com/uploads/${result.value?.foto_perfil}`
+                : userDefault,
+              })
+            }
+            })
+    }
     if (result.isConfirmed)
       api
         .get(`/api/v1/pessoa_projeto/similaridade_vaga/${vacancy.id}`)
