@@ -21,6 +21,7 @@ import { FormHandles } from '@unform/core'
 import getValidationErrors from '../../../utils/getValidationErrors'
 import useAuth from '../../../context/hooks/useAuth'
 import getBackendErrors from '../../../utils/getBackendErros'
+import { loading } from '../../../utils/loading'
 interface loginProps {
   onSuccessLogin(): void
 }
@@ -99,7 +100,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
           abortEarly: false,
         })
         // validation passed
-
+        loading.start()
         const data = new FormData()
         data.append('username', formData.email)
         data.append('password', formData.senha)
@@ -107,6 +108,7 @@ const Login: React.FC<loginProps> = ({ onSuccessLogin }) => {
         await api.post('/api/token', data)
         onSuccessLogin()
         handleLogin(true)
+        loading.stop()
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err)

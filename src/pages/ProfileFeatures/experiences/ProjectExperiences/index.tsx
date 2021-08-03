@@ -29,6 +29,8 @@ import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { OptionTypeBase, Props as SelectProps } from 'react-select'
 import { showToast } from '../../../../components/Toast/Toast'
 import Alert from '../../../../utils/SweetAlert'
+import { loading } from '../../../../utils/loading'
+
 export interface IExperienceProject {
   id: number
   nome: string
@@ -143,6 +145,7 @@ const ProjectExperiences: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const {
           nome,
           cargo,
@@ -210,6 +213,8 @@ const ProjectExperiences: React.FC = () => {
 
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
 
       // Do something
@@ -248,18 +253,18 @@ const ProjectExperiences: React.FC = () => {
     setCurrentilyProject(editStored.situacao === 'Em andamento')
   }, [editStored])
 
-  async function deleteExperience( experience: IExperienceProject){
+  async function deleteExperience(experience: IExperienceProject) {
     const delet = await Alert({
       title: `Deseja realmente excluir ${experience.nome}?`,
       text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
       showDenyButton: true,
-      showConfirmButton:false,
-      denyButtonText: "apagar",
-      icon: "warning",
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
     })
     if (delet.isDenied) {
-      console.log(experience);
+      console.log(experience)
       handleDeleteExperience(experience.id)
     }
   }

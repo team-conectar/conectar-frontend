@@ -10,6 +10,7 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import InputMask from '../../components/UI/InputMask'
 import logo from '../../assets/image/logo_icone.svg'
+import { loading } from '../../utils/loading'
 interface FirstFormData {
   email: string
 }
@@ -44,7 +45,7 @@ const ForgotPassword: React.FC = () => {
         abortEarly: false,
       })
       // Validation passed
-
+      loading.start()
       setfirstData(formData)
 
       setShownStep(2)
@@ -54,6 +55,8 @@ const ForgotPassword: React.FC = () => {
         const errors = getValidationErrors(err)
         formRef.current?.setErrors(errors)
       }
+    } finally {
+      loading.stop()
     }
   }, [])
 
@@ -74,7 +77,7 @@ const ForgotPassword: React.FC = () => {
         abortEarly: false,
       })
       // Validation passed
-
+      loading.start()
       setShownStep(3)
     } catch (err) {
       console.log(err)
@@ -84,6 +87,8 @@ const ForgotPassword: React.FC = () => {
         const errors = getValidationErrors(err)
         formRef.current?.setErrors(errors)
       }
+    } finally {
+      loading.stop()
     }
   }, [])
   const handleThirdSubmit = useCallback(async (formData: ThirdFormData) => {
@@ -104,7 +109,7 @@ const ForgotPassword: React.FC = () => {
         abortEarly: false,
       })
       // Validation passed
-
+      loading.start()
       await api.put(`/api/v1/pessoas`, formData, {
         withCredentials: true,
       })
@@ -116,6 +121,8 @@ const ForgotPassword: React.FC = () => {
         const errors = getValidationErrors(err)
         formRef.current?.setErrors(errors)
       }
+    } finally {
+      loading.stop()
     }
   }, [])
   return (

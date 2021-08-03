@@ -23,7 +23,10 @@ import getValidationErrors from '../../../../utils/getValidationErrors'
 import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { showToast } from '../../../../components/Toast/Toast'
 import Alert from '../../../../utils/SweetAlert'
+import { loading } from '../../../../utils/loading'
+
 /**
+ *
  * As this type is used from data that comes from the backend, it comes with
  * data_fim and data_inicio, but we need data_inicio and data_fim as placeholders
  * so we can create a full date from it and modify the state properly
@@ -128,6 +131,7 @@ const AcademicExperiences: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const {
           instituicao,
           escolaridade,
@@ -190,6 +194,8 @@ const AcademicExperiences: React.FC = () => {
 
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
 
       // Do something
@@ -227,18 +233,18 @@ const AcademicExperiences: React.FC = () => {
     setIsIncomplete(editStored.situacao === 'Incompleto')
   }, [editStored])
 
-  async function deleteExperience( experience: AcademicType){
+  async function deleteExperience(experience: AcademicType) {
     const delet = await Alert({
       title: `Deseja realmente excluir ${experience.curso}?`,
       text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
       showDenyButton: true,
-      showConfirmButton:false,
-      denyButtonText: "apagar",
-      icon: "warning",
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
     })
     if (delet.isDenied) {
-      console.log(experience);
+      console.log(experience)
       handleDeleteExperience(experience.id)
     }
   }

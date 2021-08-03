@@ -29,6 +29,7 @@ import { IconEdit, IconTrash } from '../../../../assets/icon'
 import { showToast } from '../../../../components/Toast/Toast'
 import Alert from '../../../../utils/SweetAlert'
 import { IExperienceProject } from '../ProjectExperiences'
+import { loading } from '../../../../utils/loading'
 export interface ProfessionalType {
   id: number
   organizacao: string
@@ -148,6 +149,7 @@ const ProfessionalExperiences: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const {
           vinculo,
           currentWorking,
@@ -216,6 +218,8 @@ const ProfessionalExperiences: React.FC = () => {
 
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
 
       // Do something
@@ -256,18 +260,18 @@ const ProfessionalExperiences: React.FC = () => {
     setCurrentilyWork(editStored.currentWorking)
   }, [editStored])
 
-  async function deleteExperience( experience: ProfessionalType){
+  async function deleteExperience(experience: ProfessionalType) {
     const delet = await Alert({
       title: `Deseja realmente excluir ${experience.cargo}?`,
       text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
       showDenyButton: true,
-      showConfirmButton:false,
-      denyButtonText: "apagar",
-      icon: "warning",
+      showConfirmButton: false,
+      denyButtonText: 'apagar',
+      icon: 'warning',
     })
     if (delet.isDenied) {
-      console.log(experience);
+      console.log(experience)
       handleDeleteExperience(experience.id)
     }
   }
@@ -312,7 +316,7 @@ const ProfessionalExperiences: React.FC = () => {
                 <IconTrash
                   onClick={() => {
                     deleteExperience(experience)
-                    //setOpenModal(true)
+                    // setOpenModal(true)
                     // setExperienceExcluded({
                     //   ...experience,
                     //   nome: experience.cargo,

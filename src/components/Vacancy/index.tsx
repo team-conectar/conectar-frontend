@@ -29,6 +29,7 @@ import ContainerScroll from '../UI/ContainerScroll'
 import { showToast } from '../Toast/Toast'
 import { ProfileType } from '../../pages/Profiles'
 import Alert from '../../utils/SweetAlert'
+import { loading } from '../../utils/loading'
 export type TypeSituationVacancy =
   | 'PENDENTE_IDEALIZADOR'
   | 'PENDENTE_COLABORADOR'
@@ -282,6 +283,7 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         if (editVacancy?.id) {
           await put_pessoa_projeto(formData, editVacancy?.id)
         } else {
@@ -295,6 +297,8 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [
@@ -307,16 +311,16 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
   )
 
   async function deleteVacancy(vacancy: VacanciesType) {
-    const delet = Alert(
-      {title: `Deseja realmente apagar a vaga ${vacancy.titulo}?`,
+    const delet = Alert({
+      title: `Deseja realmente apagar a vaga ${vacancy.titulo}?`,
       text: 'Todas as informações e registros serão perdidos',
       showCancelButton: true,
       showDenyButton: true,
       showConfirmButton: false,
       denyButtonText: 'apagar',
-      icon: 'warning',})
-    if((await delet).isDenied)
-      handleDeleteVacancy(vacancy)
+      icon: 'warning',
+    })
+    if ((await delet).isDenied) handleDeleteVacancy(vacancy)
   }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -348,7 +352,9 @@ const Vacancy: ForwardRefRenderFunction<handleVacancy, VacancyProps> = (
             <VacancieListItem
               key={vacancy.id}
               vacancy={vacancy}
-              onDelete={()=>{deleteVacancy(vacancy)}}
+              onDelete={() => {
+                deleteVacancy(vacancy)
+              }}
               onEdit={() => {
                 setShowRegister(true)
                 setEditVacancy(vacancy)

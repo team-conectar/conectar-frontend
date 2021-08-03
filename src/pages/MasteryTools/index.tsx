@@ -8,6 +8,7 @@ import api from '../../services/api'
 import * as Yup from 'yup'
 import { FormHandles } from '@unform/core'
 import getValidationErrors from '../../utils/getValidationErrors'
+import { loading } from '../../utils/loading'
 
 const MasteryTools: React.FC = () => {
   const history = useHistory()
@@ -27,6 +28,7 @@ const MasteryTools: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const data = {
           habilidades: formData.habilidades.map(habilidade => {
             return { nome: habilidade }
@@ -48,9 +50,12 @@ const MasteryTools: React.FC = () => {
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           // Validation failed
+          loading.start()
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [history],

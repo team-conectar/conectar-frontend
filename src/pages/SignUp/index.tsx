@@ -23,7 +23,7 @@ import { Form } from '@unform/web'
 import getValidationErrors from '../../utils/getValidationErrors'
 import { IoMdAlert } from 'react-icons/io'
 import { useContext, useEffect } from 'react'
-
+import { loading } from '../../utils/loading'
 import { Context } from '../../context/AuthContext'
 import ProfileTypeToogleSwitch from '../../components/UI/ProfileTypeToggleSwitch'
 import Alert from '../../utils/SweetAlert'
@@ -109,6 +109,7 @@ const SignUp: React.FC = () => {
         abortEarly: false,
       })
       // Validation passed
+      loading.start()
       setFirstData(formData)
 
       setShowNextStep(true)
@@ -119,6 +120,8 @@ const SignUp: React.FC = () => {
         formRef.current?.setErrors(errors)
         // alert(errors);
       }
+    } finally {
+      loading.stop()
     }
   }, [])
   const handleSecondSubmit = useCallback(
@@ -146,6 +149,7 @@ const SignUp: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         if (firstFormData) {
           const aliado = formData.profileType.includes('aliado')
           const colaborador = formData.profileType.includes('colaborador')
@@ -183,6 +187,8 @@ const SignUp: React.FC = () => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [firstFormData, handleLogin, history],

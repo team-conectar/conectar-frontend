@@ -35,6 +35,7 @@ import { type } from 'os'
 import Dropzone from '../../components/UI/Dropzone'
 import { ProfileType } from '../Profiles'
 import Alert from '../../utils/SweetAlert'
+import { loading } from '../../utils/loading'
 
 interface routeParms {
   id: string
@@ -87,6 +88,7 @@ const FormAreas: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const data = {
           areas: formData.areas.map(area => {
             return { descricao: area }
@@ -111,6 +113,8 @@ const FormAreas: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [updateProfile],
@@ -152,6 +156,7 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         const data = {
           habilidades: formData.habilidades.map(habilidade => {
             return { nome: habilidade }
@@ -177,8 +182,9 @@ const FormTools: React.FC<IEditForm> = ({ profile, updateProfile }) => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
-      console.log('Salvou')
     },
     [updateProfile],
   )
@@ -283,6 +289,9 @@ const EditProfile: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+
+        loading.start()
+
         // const { year, month, day, telefone } = formData
 
         // const data_nascimento = `${year}-${month}-${day}`
@@ -321,6 +330,8 @@ const EditProfile: React.FC = () => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [profile_id, updateProfile],

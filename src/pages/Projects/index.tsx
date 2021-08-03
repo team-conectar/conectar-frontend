@@ -54,6 +54,7 @@ import { IReaction } from '../../components/ProjectCard'
 import { BsFillStarFill } from 'react-icons/bs'
 import Alert from '../../utils/SweetAlert'
 import { icons } from 'react-icons'
+import { loading } from '../../utils/loading'
 interface projeto_id {
   id: string
 }
@@ -86,7 +87,12 @@ interface IParmsProps {
   step?: string
 }
 const Projects: React.FC = () => {
-  const { loading, isAuthenticated, user, handleLogout } = useContext(Context)
+  const {
+    loading: userLoading,
+    isAuthenticated,
+    user,
+    handleLogout,
+  } = useContext(Context)
   const projeto_id = useParams<IParmsProps>().id
   const { step } = useParams<IParmsProps>()
   // const [modalContent, setModalContent] = useState<ReactNode>(null);
@@ -102,7 +108,7 @@ const Projects: React.FC = () => {
   const [modalContent, setModalContent] = useState(initialModalContent)
   const history = useHistory()
   const [openModal, setOpenModal] = useState<boolean>(
-    loading && isAuthenticated,
+    userLoading && isAuthenticated,
   )
   const [projectOwner, setProjectOwner] = useState({} as IPeopleLink)
   const [project, setProject] = useState({} as ProjectType)
@@ -266,6 +272,7 @@ const Projects: React.FC = () => {
           abortEarly: false,
         })
         // Validation passed
+        loading.start()
         if (modalContent.areas) {
           const data = {
             areas: formData.areas.map(area => {
@@ -305,6 +312,8 @@ const Projects: React.FC = () => {
           const errors = getValidationErrors(err)
           formRef.current?.setErrors(errors)
         }
+      } finally {
+        loading.stop()
       }
     },
     [modalContent, projeto_id],
@@ -440,7 +449,7 @@ const Projects: React.FC = () => {
           vacancyComponentRef.current?.setEditVacancy({} as VacanciesType)
         }}
       >
-        {!loading && !isAuthenticated ? (
+        {!userLoading && !isAuthenticated ? (
           <>
             <h1>Para prosseguir, você precisa estar logado</h1>
             <Login onSuccessLogin={() => setOpenModal(isAuthenticated)} />
